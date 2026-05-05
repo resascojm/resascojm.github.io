@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Ads Deep Dive — Guspamar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --ink:#0a0e27; --paper:#f5f1e8; --paper-2:#ebe5d3; --rule:#d4cdb8;
+  --accent:#d62828; --accent2:#003049; --warn:#f77f00; --good:#3d8b3d;
+  --muted:#5a5a5a; --meta:#1877f2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;font-size:15px}
+.wrap{max-width:1320px;margin:0 auto;padding:48px 32px 96px}
+
+/* HEADER */
+.masthead{
+  border-top:6px solid var(--ink);border-bottom:1px solid var(--ink);
+  padding:24px 0 18px;margin-bottom:48px;
+  display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;
+}
+.masthead .brand{font-family:'Fraunces',serif;font-weight:800;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.masthead .date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+h1.hero{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(48px,7vw,96px);line-height:.92;letter-spacing:-.03em;margin-bottom:24px}
+h1.hero em{font-style:italic;color:var(--accent);font-weight:400}
+.lede{font-family:'Fraunces',serif;font-size:22px;line-height:1.4;max-width:780px;color:var(--ink);font-weight:400;margin-bottom:8px}
+.byline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:32px;padding-top:16px;border-top:1px solid var(--rule)}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;background:var(--paper);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin:48px -32px 48px;padding:14px 32px;
+  display:flex;gap:24px;overflow-x:auto;z-index:1000;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+}
+.nav a{color:var(--ink);text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:.2s}
+.nav a:hover{border-bottom-color:var(--accent)}
+
+/* CHAPTER OPENERS */
+.chapter-open{
+  display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:end;
+  margin-top:96px;margin-bottom:48px;padding-bottom:24px;border-bottom:3px solid var(--ink);
+}
+.chapter-open .num{
+  font-family:'Fraunces',serif;font-weight:200;font-size:140px;line-height:.8;color:var(--accent);
+}
+.chapter-open .titles h2{font-family:'Fraunces',serif;font-weight:400;font-size:64px;line-height:1;letter-spacing:-.02em}
+.chapter-open .titles h2 em{font-style:italic;color:var(--accent)}
+.chapter-open .titles .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+
+/* KPI BAND */
+.kpis{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+  border:1px solid var(--ink);background:var(--paper-2);margin-bottom:32px;
+}
+.kpi{padding:24px 20px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:6px}
+.kpi:last-child{border-right:none}
+.kpi .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted)}
+.kpi .value{font-family:'Fraunces',serif;font-size:42px;font-weight:300;line-height:1;letter-spacing:-.02em}
+.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi.alert .value{color:var(--accent)}
+.kpi.warn .value{color:var(--warn)}
+.kpi.good .value{color:var(--good)}
+
+/* SECTIONS */
+section{margin-bottom:72px;scroll-margin-top:80px}
+.section-head{margin-bottom:24px;border-bottom:1px solid var(--ink);padding-bottom:12px}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--accent);margin-bottom:6px;text-transform:uppercase}
+.section-head h3{font-family:'Fraunces',serif;font-weight:400;font-size:32px;line-height:1.1;letter-spacing:-.01em}
+.section-head h3 em{font-style:italic;color:var(--accent)}
+.section-lede{font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;margin-top:8px;color:#444;max-width:780px}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.grid-2-asym{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:880px){
+  .grid-2,.grid-2-asym,.grid-3,.kpis{grid-template-columns:1fr}
+  .kpi{border-right:none;border-bottom:1px solid var(--rule)}
+  .chapter-open{grid-template-columns:1fr}
+  .chapter-open .num{font-size:80px}
+  .chapter-open .titles h2{font-size:42px}
+}
+
+.chart-card{background:#fff;border:1px solid var(--ink);padding:20px}
+.chart-title{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:14px}
+.chart-wrap{position:relative;height:280px}
+.chart-wrap.short{height:220px}
+.chart-wrap.tall{height:380px}
+.map-wrap{height:480px;border:1px solid var(--ink);background:#fff}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);text-align:left;padding:10px 10px;border-bottom:1px solid var(--ink);font-weight:500}
+.tbl td{padding:10px}
+.tbl td.num{font-family:'JetBrains Mono',monospace;text-align:right}
+.tbl tr{border-bottom:1px solid var(--rule)}
+.tbl tr:hover{background:var(--paper-2)}
+
+/* CELL HEATMAP */
+.heat{padding:6px 10px;border-radius:2px;display:inline-block;min-width:48px;text-align:right;font-family:'JetBrains Mono',monospace}
+.heat-bad{background:#f5d0d0}.heat-bad-hi{background:#e88}.heat-bad-vhi{background:#d62828;color:#fff}
+.heat-good{background:#d0eed0}.heat-good-hi{background:#7cc77c;color:#fff}.heat-good-vhi{background:#3d8b3d;color:#fff}
+
+/* TOGGLE */
+.toggles{display:flex;gap:0;margin-bottom:14px;border:1px solid var(--ink);width:fit-content}
+.toggle{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;padding:8px 14px;background:var(--paper);border:none;cursor:pointer;border-right:1px solid var(--rule);color:var(--ink)}
+.toggle:last-child{border-right:none}
+.toggle.active{background:var(--ink);color:var(--paper)}
+
+/* FOOTER */
+.foot{margin-top:64px;padding-top:24px;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;text-align:center}
+
+/* META BADGE */
+.meta-tag{display:inline-block;background:var(--meta);color:#fff;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+
+/* LEAFLET TOOLTIPS */
+.leaflet-tooltip-custom{background:var(--ink)!important;color:var(--paper)!important;border:none!important;font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="brand">Guspamar · Meta Ads Deep Dive</div>
+  <div class="date">Vol. 02 / Análisis de canal / Enero–Abril 2026</div>
+</header>
+
+<h1 class="hero">Adentro de<br><em>Meta Ads.</em></h1>
+<p class="lede">Un análisis completo del canal que aporta dos de cada tres leads: por canal comercial, por velocidad de gestión, por geografía y por evolución temporal. Sin opiniones — solo data, asociaciones y dispersión.</p>
+<div class="byline">6.547 leads Meta · 53 ventas · 4 meses · Solo Guspamar</div>
+
+<nav class="nav">
+  <a href="#universo">Universo Meta</a>
+  <a href="#trad-open">Tradicional</a>
+  <a href="#trad-velocidad">↳ Velocidad</a>
+  <a href="#trad-evol">↳ Evolución</a>
+  <a href="#trad-mapa">↳ Mapa</a>
+  <a href="#trad-motivos">↳ Motivos</a>
+  <a href="#pa-open">Plan de Ahorro</a>
+  <a href="#pa-velocidad">↳ Velocidad</a>
+  <a href="#pa-evol">↳ Evolución</a>
+  <a href="#pa-mapa">↳ Mapa</a>
+  <a href="#pa-motivos">↳ Motivos</a>
+</nav>
+
+<!-- UNIVERSO -->
+<section id="universo">
+  <div class="section-head">
+    <div class="section-num">00 · Universo Meta</div>
+    <h3>El total del canal Meta Ads <em>en números crudos.</em></h3>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="label">Total leads</div><div class="value" id="u-leads">—</div><div class="sub">Período: Ene–Abr 2026</div></div>
+    <div class="kpi alert"><div class="label">Bad Leads</div><div class="value" id="u-bad">—</div><div class="sub" id="u-bad-sub">—% del total</div></div>
+    <div class="kpi"><div class="label">Good Leads</div><div class="value" id="u-good">—</div><div class="sub">Contactables</div></div>
+    <div class="kpi good"><div class="label">Ventas</div><div class="value" id="u-ventas">—</div><div class="sub" id="u-conv">Conv. Good —%</div></div>
+    <div class="kpi warn"><div class="label">Bad Lead Ratio</div><div class="value" id="u-ratio">—</div><div class="sub">Por cada Good Lead, X Bad</div></div>
+  </div>
+</section>
+
+<!-- ============ TRADICIONAL ============ -->
+<div class="chapter-open" id="trad-open">
+  <div class="num">01</div>
+  <div class="titles">
+    <span class="meta-tag">Filtro Origen = ADS-FACEBOOK · Canal Tradicional</span>
+    <h2>Canal <em>Tradicional.</em></h2>
+    <div class="sub">Suborigen "Tradicional" + variantes por sucursal · 1.933 leads · 20 ventas</div>
+  </div>
+</div>
+
+<section>
+  <div class="kpis" id="trad-kpis"></div>
+</section>
+
+<section id="trad-velocidad">
+  <div class="section-head">
+    <div class="section-num">01.1 · Velocidad de gestión</div>
+    <h3>Asociación entre tiempo de respuesta y <em>calidad/conversión.</em></h3>
+    <p class="section-lede">Tiempo medido desde "Creado el" hasta "Gestionado el" (primer registro de gestión por el vendedor). En leads sin "Gestionado el" cargado: descartados de este corte.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-title">% Bad Lead según velocidad de gestión</div>
+      <div class="chart-wrap"><canvas id="trad-vel-bad"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Conv. Good Lead según velocidad de gestión</div>
+      <div class="chart-wrap"><canvas id="trad-vel-conv"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-top:16px">
+    <div class="chart-title">Tabla cruzada — Velocidad × resultado</div>
+    <table class="tbl" id="trad-vel-tbl"></table>
+  </div>
+</section>
+
+<section id="trad-evol">
+  <div class="section-head">
+    <div class="section-num">01.2 · Evolución temporal</div>
+    <h3>¿Estamos mejorando o empeorando <em>mes a mes y semana a semana?</em></h3>
+  </div>
+  <div class="toggles">
+    <button class="toggle active" data-trad-evol="M">Mensual</button>
+    <button class="toggle" data-trad-evol="W">Semanal</button>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Volumen — Leads, Bad Leads, Good Leads</div>
+      <div class="chart-wrap tall"><canvas id="trad-evol-vol"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Calidad y eficiencia — % Bad y Conv. Good</div>
+      <div class="chart-wrap tall"><canvas id="trad-evol-eff"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section id="trad-mapa">
+  <div class="section-head">
+    <div class="section-num">01.3 · Dispersión geográfica</div>
+    <h3>De dónde vienen los leads, <em>de dónde vienen los Bad Leads.</em></h3>
+    <p class="section-lede">Tamaño de burbuja = volumen de leads. Color = % Bad Lead (rojo más intenso = más bad). Click sobre cada burbuja para ver detalle. Solo localidades con ≥5 leads.</p>
+  </div>
+  <div class="grid-2-asym">
+    <div class="map-wrap" id="trad-map"></div>
+    <div class="chart-card">
+      <div class="chart-title">Top 15 localidades — Tradicional</div>
+      <div style="max-height:480px;overflow-y:auto">
+        <table class="tbl" id="trad-loc-tbl"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trad-motivos">
+  <div class="section-head">
+    <div class="section-num">01.4 · Motivos de cierre</div>
+    <h3>¿Por qué se cierran los leads que <em>no compran?</em></h3>
+  </div>
+  <div class="chart-card">
+    <div class="chart-wrap tall"><canvas id="trad-motivos-ch"></canvas></div>
+  </div>
+</section>
+
+<!-- ============ PLAN DE AHORRO ============ -->
+<div class="chapter-open" id="pa-open">
+  <div class="num">02</div>
+  <div class="titles">
+    <span class="meta-tag">Filtro Origen = ADS-FACEBOOK · Canal Plan de Ahorro</span>
+    <h2>Canal <em>Plan de Ahorro.</em></h2>
+    <div class="sub">Suborigen "Plan de ahorro" + "Plan Ovalo Bahia/Santa Rosa" · 1.955 leads · 21 ventas</div>
+  </div>
+</div>
+
+<section>
+  <div class="kpis" id="pa-kpis"></div>
+</section>
+
+<section id="pa-velocidad">
+  <div class="section-head">
+    <div class="section-num">02.1 · Velocidad de gestión</div>
+    <h3>Asociación entre tiempo de respuesta y <em>calidad/conversión.</em></h3>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-title">% Bad Lead según velocidad de gestión</div>
+      <div class="chart-wrap"><canvas id="pa-vel-bad"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Conv. Good Lead según velocidad de gestión</div>
+      <div class="chart-wrap"><canvas id="pa-vel-conv"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-top:16px">
+    <div class="chart-title">Tabla cruzada — Velocidad × resultado</div>
+    <table class="tbl" id="pa-vel-tbl"></table>
+  </div>
+</section>
+
+<section id="pa-evol">
+  <div class="section-head">
+    <div class="section-num">02.2 · Evolución temporal</div>
+    <h3>¿Estamos mejorando o empeorando <em>mes a mes y semana a semana?</em></h3>
+  </div>
+  <div class="toggles">
+    <button class="toggle active" data-pa-evol="M">Mensual</button>
+    <button class="toggle" data-pa-evol="W">Semanal</button>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Volumen — Leads, Bad Leads, Good Leads</div>
+      <div class="chart-wrap tall"><canvas id="pa-evol-vol"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Calidad y eficiencia — % Bad y Conv. Good</div>
+      <div class="chart-wrap tall"><canvas id="pa-evol-eff"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section id="pa-mapa">
+  <div class="section-head">
+    <div class="section-num">02.3 · Dispersión geográfica</div>
+    <h3>De dónde vienen los leads, <em>de dónde vienen los Bad Leads.</em></h3>
+  </div>
+  <div class="grid-2-asym">
+    <div class="map-wrap" id="pa-map"></div>
+    <div class="chart-card">
+      <div class="chart-title">Top 15 localidades — Plan de Ahorro</div>
+      <div style="max-height:480px;overflow-y:auto">
+        <table class="tbl" id="pa-loc-tbl"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pa-motivos">
+  <div class="section-head">
+    <div class="section-num">02.4 · Motivos de cierre</div>
+    <h3>¿Por qué se cierran los leads que <em>no compran?</em></h3>
+  </div>
+  <div class="chart-card">
+    <div class="chart-wrap tall"><canvas id="pa-motivos-ch"></canvas></div>
+  </div>
+</section>
+
+<div class="foot">Fuente: Pilot CRM Guspamar · Procesado el 04/05/2026 · Ene–Abr 2026 · Origen=ADS-FACEBOOK</div>
+
+</div>
+
+<script>
+const D = {"tradicional": {"evol_mensual": [{"period": "2026-01", "leads": 504, "bad": 304, "ventas": 9, "good": 200, "pct_bad": 60.3, "conv_good": 4.5}, {"period": "2026-02", "leads": 457, "bad": 261, "ventas": 5, "good": 196, "pct_bad": 57.1, "conv_good": 2.55}, {"period": "2026-03", "leads": 475, "bad": 278, "ventas": 3, "good": 197, "pct_bad": 58.5, "conv_good": 1.52}, {"period": "2026-04", "leads": 497, "bad": 254, "ventas": 3, "good": 243, "pct_bad": 51.1, "conv_good": 1.23}], "evol_semanal": [{"period": "2025-12-29", "leads": 67, "bad": 36, "ventas": 1, "good": 31, "pct_bad": 53.7, "conv_good": 3.23}, {"period": "2026-01-05", "leads": 40, "bad": 24, "ventas": 0, "good": 16, "pct_bad": 60.0, "conv_good": 0.0}, {"period": "2026-01-12", "leads": 170, "bad": 100, "ventas": 3, "good": 70, "pct_bad": 58.8, "conv_good": 4.29}, {"period": "2026-01-19", "leads": 120, "bad": 70, "ventas": 4, "good": 50, "pct_bad": 58.3, "conv_good": 8.0}, {"period": "2026-01-26", "leads": 127, "bad": 89, "ventas": 1, "good": 38, "pct_bad": 70.1, "conv_good": 2.63}, {"period": "2026-02-02", "leads": 94, "bad": 55, "ventas": 0, "good": 39, "pct_bad": 58.5, "conv_good": 0.0}, {"period": "2026-02-09", "leads": 135, "bad": 77, "ventas": 2, "good": 58, "pct_bad": 57.0, "conv_good": 3.45}, {"period": "2026-02-16", "leads": 123, "bad": 71, "ventas": 1, "good": 52, "pct_bad": 57.7, "conv_good": 1.92}, {"period": "2026-02-23", "leads": 106, "bad": 57, "ventas": 2, "good": 49, "pct_bad": 53.8, "conv_good": 4.08}, {"period": "2026-03-02", "leads": 69, "bad": 39, "ventas": 2, "good": 30, "pct_bad": 56.5, "conv_good": 6.67}, {"period": "2026-03-09", "leads": 118, "bad": 73, "ventas": 1, "good": 45, "pct_bad": 61.9, "conv_good": 2.22}, {"period": "2026-03-16", "leads": 112, "bad": 57, "ventas": 0, "good": 55, "pct_bad": 50.9, "conv_good": 0.0}, {"period": "2026-03-23", "leads": 111, "bad": 70, "ventas": 0, "good": 41, "pct_bad": 63.1, "conv_good": 0.0}, {"period": "2026-03-30", "leads": 117, "bad": 71, "ventas": 0, "good": 46, "pct_bad": 60.7, "conv_good": 0.0}, {"period": "2026-04-06", "leads": 86, "bad": 44, "ventas": 0, "good": 42, "pct_bad": 51.2, "conv_good": 0.0}, {"period": "2026-04-13", "leads": 145, "bad": 75, "ventas": 2, "good": 70, "pct_bad": 51.7, "conv_good": 2.86}, {"period": "2026-04-20", "leads": 120, "bad": 58, "ventas": 1, "good": 62, "pct_bad": 48.3, "conv_good": 1.61}, {"period": "2026-04-27", "leads": 73, "bad": 31, "ventas": 0, "good": 42, "pct_bad": 42.5, "conv_good": 0.0}], "velocidad": [{"vel": "<1h", "leads": 255, "bad": 117, "ventas": 7, "pct_bad": 45.9, "good": 138, "conv_good": 5.07}, {"vel": "1-6h", "leads": 289, "bad": 142, "ventas": 4, "pct_bad": 49.1, "good": 147, "conv_good": 2.72}, {"vel": "6-24h", "leads": 844, "bad": 444, "ventas": 6, "pct_bad": 52.6, "good": 400, "conv_good": 1.5}, {"vel": "24-72h", "leads": 281, "bad": 170, "ventas": 0, "pct_bad": 60.5, "good": 111, "conv_good": 0.0}, {"vel": ">72h", "leads": 41, "bad": 24, "ventas": 0, "pct_bad": 58.5, "good": 17, "conv_good": 0.0}], "motivos": [{"motivo": "BL: Imposible de contactar", "count": 865, "pct": 44.7}, {"motivo": "Sin confirmación", "count": 357, "pct": 18.5}, {"motivo": "BL: Dato Erróneo", "count": 121, "pct": 6.3}, {"motivo": "Desistió por problemas económicos", "count": 101, "pct": 5.2}, {"motivo": "BL: Dato Duplicado", "count": 100, "pct": 5.2}, {"motivo": "No tomamos usado: fuera de Política", "count": 70, "pct": 3.6}, {"motivo": "PV - Desisto presupuesto", "count": 38, "pct": 2.0}, {"motivo": "Ganado", "count": 21, "pct": 1.1}, {"motivo": "Mejor tasación usado", "count": 14, "pct": 0.7}, {"motivo": "Fuera de zona", "count": 13, "pct": 0.7}], "mapa": [{"localidad": "Bahía Blanca", "lat": -38.7196, "lon": -62.2724, "leads": 214, "bad": 122, "good": 92, "ventas": 3, "pct_bad": 57.0, "conv_good": 3.26}, {"localidad": "Santa Rosa", "lat": -36.6168, "lon": -64.2906, "leads": 127, "bad": 58, "good": 69, "ventas": 1, "pct_bad": 45.7, "conv_good": 1.45}, {"localidad": "Neuquén", "lat": -38.9516, "lon": -68.0591, "leads": 85, "bad": 58, "good": 27, "ventas": 0, "pct_bad": 68.2, "conv_good": 0.0}, {"localidad": "General Pico", "lat": -35.6571, "lon": -63.7568, "leads": 50, "bad": 19, "good": 31, "ventas": 1, "pct_bad": 38.0, "conv_good": 3.23}, {"localidad": "Comodoro Rivadavia", "lat": -45.865, "lon": -67.5, "leads": 29, "bad": 15, "good": 14, "ventas": 0, "pct_bad": 51.7, "conv_good": 0.0}, {"localidad": "Trenque Lauquen", "lat": -35.9667, "lon": -62.7333, "leads": 29, "bad": 8, "good": 21, "ventas": 0, "pct_bad": 27.6, "conv_good": 0.0}, {"localidad": "Cipolletti", "lat": -38.9333, "lon": -67.9833, "leads": 28, "bad": 14, "good": 14, "ventas": 0, "pct_bad": 50.0, "conv_good": 0.0}, {"localidad": "Viedma", "lat": -40.8135, "lon": -62.9967, "leads": 28, "bad": 15, "good": 13, "ventas": 1, "pct_bad": 53.6, "conv_good": 7.69}, {"localidad": "Punta Alta", "lat": -38.8839, "lon": -62.0789, "leads": 26, "bad": 16, "good": 10, "ventas": 0, "pct_bad": 61.5, "conv_good": 0.0}, {"localidad": "General Roca", "lat": -39.0333, "lon": -67.5833, "leads": 24, "bad": 14, "good": 10, "ventas": 0, "pct_bad": 58.3, "conv_good": 0.0}, {"localidad": "Buenos Aires (CABA)", "lat": -34.6037, "lon": -58.3816, "leads": 21, "bad": 13, "good": 8, "ventas": 0, "pct_bad": 61.9, "conv_good": 0.0}, {"localidad": "Toay", "lat": -36.675, "lon": -64.3833, "leads": 21, "bad": 9, "good": 12, "ventas": 0, "pct_bad": 42.9, "conv_good": 0.0}, {"localidad": "25 de Mayo", "lat": -37.7833, "lon": -67.7167, "leads": 18, "bad": 8, "good": 10, "ventas": 0, "pct_bad": 44.4, "conv_good": 0.0}, {"localidad": "Catriel", "lat": -37.8833, "lon": -67.7833, "leads": 18, "bad": 11, "good": 7, "ventas": 0, "pct_bad": 61.1, "conv_good": 0.0}, {"localidad": "Coronel Suárez", "lat": -37.45, "lon": -61.9333, "leads": 17, "bad": 10, "good": 7, "ventas": 0, "pct_bad": 58.8, "conv_good": 0.0}, {"localidad": "Plottier", "lat": -38.9667, "lon": -68.2333, "leads": 17, "bad": 16, "good": 1, "ventas": 0, "pct_bad": 94.1, "conv_good": 0.0}, {"localidad": "Olavarría", "lat": -36.8833, "lon": -60.3167, "leads": 15, "bad": 6, "good": 9, "ventas": 0, "pct_bad": 40.0, "conv_good": 0.0}, {"localidad": "Carmen de Patagones", "lat": -40.8, "lon": -62.9833, "leads": 13, "bad": 10, "good": 3, "ventas": 0, "pct_bad": 76.9, "conv_good": 0.0}, {"localidad": "General Acha", "lat": -37.3833, "lon": -64.6, "leads": 13, "bad": 7, "good": 6, "ventas": 1, "pct_bad": 53.8, "conv_good": 16.67}, {"localidad": "Río Colorado", "lat": -39.0167, "lon": -64.0833, "leads": 13, "bad": 6, "good": 7, "ventas": 0, "pct_bad": 46.2, "conv_good": 0.0}, {"localidad": "Eduardo Castex", "lat": -35.9, "lon": -64.3, "leads": 11, "bad": 3, "good": 8, "ventas": 1, "pct_bad": 27.3, "conv_good": 12.5}, {"localidad": "Centenario", "lat": -38.8333, "lon": -68.1333, "leads": 10, "bad": 8, "good": 2, "ventas": 0, "pct_bad": 80.0, "conv_good": 0.0}, {"localidad": "Allen", "lat": -38.9833, "lon": -67.8167, "leads": 8, "bad": 6, "good": 2, "ventas": 0, "pct_bad": 75.0, "conv_good": 0.0}, {"localidad": "Puan", "lat": -37.55, "lon": -62.7667, "leads": 8, "bad": 3, "good": 5, "ventas": 0, "pct_bad": 37.5, "conv_good": 0.0}, {"localidad": "Coronel Dorrego", "lat": -38.7167, "lon": -61.2833, "leads": 7, "bad": 6, "good": 1, "ventas": 0, "pct_bad": 85.7, "conv_good": 0.0}, {"localidad": "Macachín", "lat": -37.15, "lon": -63.6667, "leads": 6, "bad": 1, "good": 5, "ventas": 0, "pct_bad": 16.7, "conv_good": 0.0}, {"localidad": "Realicó", "lat": -35.0333, "lon": -64.2333, "leads": 6, "bad": 4, "good": 2, "ventas": 0, "pct_bad": 66.7, "conv_good": 0.0}, {"localidad": "Choele Choel", "lat": -39.2833, "lon": -65.6667, "leads": 5, "bad": 3, "good": 2, "ventas": 0, "pct_bad": 60.0, "conv_good": 0.0}, {"localidad": "Monte Hermoso", "lat": -38.9833, "lon": -61.3, "leads": 5, "bad": 2, "good": 3, "ventas": 0, "pct_bad": 40.0, "conv_good": 0.0}], "totales": {"leads": 1933, "bad": 1097, "good": 836, "ventas": 20, "pct_bad": 56.8, "conv_good": 2.39}}, "plan_ahorro": {"evol_mensual": [{"period": "2026-01", "leads": 712, "bad": 367, "ventas": 6, "good": 345, "pct_bad": 51.5, "conv_good": 1.74}, {"period": "2026-02", "leads": 409, "bad": 186, "ventas": 5, "good": 223, "pct_bad": 45.5, "conv_good": 2.24}, {"period": "2026-03", "leads": 442, "bad": 241, "ventas": 6, "good": 201, "pct_bad": 54.5, "conv_good": 2.99}, {"period": "2026-04", "leads": 392, "bad": 174, "ventas": 4, "good": 218, "pct_bad": 44.4, "conv_good": 1.83}], "evol_semanal": [{"period": "2025-12-29", "leads": 114, "bad": 64, "ventas": 0, "good": 50, "pct_bad": 56.1, "conv_good": 0.0}, {"period": "2026-01-05", "leads": 145, "bad": 76, "ventas": 1, "good": 69, "pct_bad": 52.4, "conv_good": 1.45}, {"period": "2026-01-12", "leads": 175, "bad": 78, "ventas": 1, "good": 97, "pct_bad": 44.6, "conv_good": 1.03}, {"period": "2026-01-19", "leads": 165, "bad": 90, "ventas": 2, "good": 75, "pct_bad": 54.5, "conv_good": 2.67}, {"period": "2026-01-26", "leads": 126, "bad": 64, "ventas": 2, "good": 62, "pct_bad": 50.8, "conv_good": 3.23}, {"period": "2026-02-02", "leads": 71, "bad": 35, "ventas": 0, "good": 36, "pct_bad": 49.3, "conv_good": 0.0}, {"period": "2026-02-09", "leads": 131, "bad": 56, "ventas": 2, "good": 75, "pct_bad": 42.7, "conv_good": 2.67}, {"period": "2026-02-16", "leads": 116, "bad": 48, "ventas": 3, "good": 68, "pct_bad": 41.4, "conv_good": 4.41}, {"period": "2026-02-23", "leads": 92, "bad": 50, "ventas": 0, "good": 42, "pct_bad": 54.3, "conv_good": 0.0}, {"period": "2026-03-02", "leads": 122, "bad": 70, "ventas": 1, "good": 52, "pct_bad": 57.4, "conv_good": 1.92}, {"period": "2026-03-09", "leads": 88, "bad": 39, "ventas": 1, "good": 49, "pct_bad": 44.3, "conv_good": 2.04}, {"period": "2026-03-16", "leads": 95, "bad": 55, "ventas": 2, "good": 40, "pct_bad": 57.9, "conv_good": 5.0}, {"period": "2026-03-23", "leads": 93, "bad": 56, "ventas": 1, "good": 37, "pct_bad": 60.2, "conv_good": 2.7}, {"period": "2026-03-30", "leads": 102, "bad": 50, "ventas": 1, "good": 52, "pct_bad": 49.0, "conv_good": 1.92}, {"period": "2026-04-06", "leads": 79, "bad": 41, "ventas": 1, "good": 38, "pct_bad": 51.9, "conv_good": 2.63}, {"period": "2026-04-13", "leads": 110, "bad": 53, "ventas": 1, "good": 57, "pct_bad": 48.2, "conv_good": 1.75}, {"period": "2026-04-20", "leads": 84, "bad": 32, "ventas": 2, "good": 52, "pct_bad": 38.1, "conv_good": 3.85}, {"period": "2026-04-27", "leads": 47, "bad": 11, "ventas": 0, "good": 36, "pct_bad": 23.4, "conv_good": 0.0}], "velocidad": [{"vel": "<1h", "leads": 394, "bad": 154, "ventas": 8, "pct_bad": 39.1, "good": 240, "conv_good": 3.33}, {"vel": "1-6h", "leads": 303, "bad": 142, "ventas": 2, "pct_bad": 46.9, "good": 161, "conv_good": 1.24}, {"vel": "6-24h", "leads": 799, "bad": 391, "ventas": 5, "pct_bad": 48.9, "good": 408, "conv_good": 1.23}, {"vel": "24-72h", "leads": 293, "bad": 151, "ventas": 4, "pct_bad": 51.5, "good": 142, "conv_good": 2.82}, {"vel": ">72h", "leads": 37, "bad": 23, "ventas": 0, "pct_bad": 62.2, "good": 14, "conv_good": 0.0}], "motivos": [{"motivo": "BL: Imposible de contactar", "count": 739, "pct": 37.8}, {"motivo": "Sin confirmación", "count": 225, "pct": 11.5}, {"motivo": "No le Interesa el Plan de Ahorro", "count": 168, "pct": 8.6}, {"motivo": "BL: Dato Erróneo", "count": 160, "pct": 8.2}, {"motivo": "Desistió por problemas económicos", "count": 88, "pct": 4.5}, {"motivo": "BL: Dato Duplicado", "count": 54, "pct": 2.8}, {"motivo": "No tomamos usado: fuera de Política", "count": 43, "pct": 2.2}, {"motivo": "Desistió por mejor inversión", "count": 27, "pct": 1.4}, {"motivo": "Fuera de zona", "count": 26, "pct": 1.3}, {"motivo": "Compro otra marca", "count": 23, "pct": 1.2}], "mapa": [{"localidad": "Bahía Blanca", "lat": -38.7196, "lon": -62.2724, "leads": 278, "bad": 115, "good": 163, "ventas": 9, "pct_bad": 41.4, "conv_good": 5.52}, {"localidad": "Santa Rosa", "lat": -36.6168, "lon": -64.2906, "leads": 125, "bad": 65, "good": 60, "ventas": 0, "pct_bad": 52.0, "conv_good": 0.0}, {"localidad": "Neuquén", "lat": -38.9516, "lon": -68.0591, "leads": 66, "bad": 34, "good": 32, "ventas": 0, "pct_bad": 51.5, "conv_good": 0.0}, {"localidad": "General Pico", "lat": -35.6571, "lon": -63.7568, "leads": 63, "bad": 33, "good": 30, "ventas": 0, "pct_bad": 52.4, "conv_good": 0.0}, {"localidad": "Punta Alta", "lat": -38.8839, "lon": -62.0789, "leads": 45, "bad": 24, "good": 21, "ventas": 1, "pct_bad": 53.3, "conv_good": 4.76}, {"localidad": "Viedma", "lat": -40.8135, "lon": -62.9967, "leads": 41, "bad": 17, "good": 24, "ventas": 1, "pct_bad": 41.5, "conv_good": 4.17}, {"localidad": "Cipolletti", "lat": -38.9333, "lon": -67.9833, "leads": 24, "bad": 13, "good": 11, "ventas": 0, "pct_bad": 54.2, "conv_good": 0.0}, {"localidad": "Trenque Lauquen", "lat": -35.9667, "lon": -62.7333, "leads": 22, "bad": 7, "good": 15, "ventas": 0, "pct_bad": 31.8, "conv_good": 0.0}, {"localidad": "Toay", "lat": -36.675, "lon": -64.3833, "leads": 20, "bad": 10, "good": 10, "ventas": 1, "pct_bad": 50.0, "conv_good": 10.0}, {"localidad": "Buenos Aires (CABA)", "lat": -34.6037, "lon": -58.3816, "leads": 17, "bad": 10, "good": 7, "ventas": 0, "pct_bad": 58.8, "conv_good": 0.0}, {"localidad": "Coronel Suárez", "lat": -37.45, "lon": -61.9333, "leads": 16, "bad": 5, "good": 11, "ventas": 0, "pct_bad": 31.2, "conv_good": 0.0}, {"localidad": "General Roca", "lat": -39.0333, "lon": -67.5833, "leads": 15, "bad": 8, "good": 7, "ventas": 0, "pct_bad": 53.3, "conv_good": 0.0}, {"localidad": "Realicó", "lat": -35.0333, "lon": -64.2333, "leads": 15, "bad": 6, "good": 9, "ventas": 0, "pct_bad": 40.0, "conv_good": 0.0}, {"localidad": "Río Colorado", "lat": -39.0167, "lon": -64.0833, "leads": 13, "bad": 5, "good": 8, "ventas": 0, "pct_bad": 38.5, "conv_good": 0.0}, {"localidad": "Olavarría", "lat": -36.8833, "lon": -60.3167, "leads": 12, "bad": 7, "good": 5, "ventas": 0, "pct_bad": 58.3, "conv_good": 0.0}, {"localidad": "Centenario", "lat": -38.8333, "lon": -68.1333, "leads": 11, "bad": 5, "good": 6, "ventas": 0, "pct_bad": 45.5, "conv_good": 0.0}, {"localidad": "Comodoro Rivadavia", "lat": -45.865, "lon": -67.5, "leads": 11, "bad": 8, "good": 3, "ventas": 0, "pct_bad": 72.7, "conv_good": 0.0}, {"localidad": "Carmen de Patagones", "lat": -40.8, "lon": -62.9833, "leads": 10, "bad": 7, "good": 3, "ventas": 0, "pct_bad": 70.0, "conv_good": 0.0}, {"localidad": "Plottier", "lat": -38.9667, "lon": -68.2333, "leads": 10, "bad": 3, "good": 7, "ventas": 0, "pct_bad": 30.0, "conv_good": 0.0}, {"localidad": "Allen", "lat": -38.9833, "lon": -67.8167, "leads": 9, "bad": 5, "good": 4, "ventas": 0, "pct_bad": 55.6, "conv_good": 0.0}, {"localidad": "General Acha", "lat": -37.3833, "lon": -64.6, "leads": 9, "bad": 6, "good": 3, "ventas": 0, "pct_bad": 66.7, "conv_good": 0.0}, {"localidad": "Catriel", "lat": -37.8833, "lon": -67.7833, "leads": 8, "bad": 4, "good": 4, "ventas": 0, "pct_bad": 50.0, "conv_good": 0.0}, {"localidad": "Coronel Dorrego", "lat": -38.7167, "lon": -61.2833, "leads": 8, "bad": 3, "good": 5, "ventas": 0, "pct_bad": 37.5, "conv_good": 0.0}, {"localidad": "Eduardo Castex", "lat": -35.9, "lon": -64.3, "leads": 8, "bad": 2, "good": 6, "ventas": 1, "pct_bad": 25.0, "conv_good": 16.67}, {"localidad": "Puan", "lat": -37.55, "lon": -62.7667, "leads": 8, "bad": 5, "good": 3, "ventas": 0, "pct_bad": 62.5, "conv_good": 0.0}, {"localidad": "Monte Hermoso", "lat": -38.9833, "lon": -61.3, "leads": 6, "bad": 1, "good": 5, "ventas": 0, "pct_bad": 16.7, "conv_good": 0.0}, {"localidad": "25 de Mayo", "lat": -37.7833, "lon": -67.7167, "leads": 5, "bad": 3, "good": 2, "ventas": 0, "pct_bad": 60.0, "conv_good": 0.0}, {"localidad": "Carhué", "lat": -37.1833, "lon": -62.75, "leads": 5, "bad": 4, "good": 1, "ventas": 0, "pct_bad": 80.0, "conv_good": 0.0}], "totales": {"leads": 1955, "bad": 968, "good": 987, "ventas": 21, "pct_bad": 49.5, "conv_good": 2.13}}, "universo": {"total_leads": 6547, "total_bad": 3518, "total_good": 3029, "total_ventas": 53, "periodo": "Enero – Abril 2026"}};
+
+// Globals
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#1a1a1a';
+const COLORS = {accent:'#d62828',accent2:'#003049',warn:'#f77f00',good:'#3d8b3d',ink:'#0a0e27',muted:'#888'};
+const fmt = n => (n==null) ? '—' : n.toLocaleString('es-AR');
+const baseOpts = {
+  responsive:true,maintainAspectRatio:false,
+  plugins:{
+    legend:{labels:{usePointStyle:true,pointStyle:'circle',font:{size:10}}},
+    tooltip:{backgroundColor:'#0a0e27',titleFont:{family:'JetBrains Mono',size:11},bodyFont:{size:12},padding:12,cornerRadius:0}
+  },
+  scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#e0d9c4'},ticks:{font:{size:10}}}}
+};
+
+// === UNIVERSO ===
+const U = D.universo;
+document.getElementById('u-leads').textContent = fmt(U.total_leads);
+document.getElementById('u-bad').textContent = fmt(U.total_bad);
+document.getElementById('u-bad-sub').textContent = (U.total_bad/U.total_leads*100).toFixed(1)+'% del total';
+document.getElementById('u-good').textContent = fmt(U.total_good);
+document.getElementById('u-ventas').textContent = U.total_ventas;
+document.getElementById('u-conv').textContent = 'Conv. Good '+(U.total_ventas/U.total_good*100).toFixed(2)+'%';
+document.getElementById('u-ratio').textContent = (U.total_bad/U.total_good).toFixed(2);
+
+// === KPIs por canal ===
+function renderKpis(targetId, t){
+  const el = document.getElementById(targetId);
+  el.innerHTML = `
+    <div class="kpi"><div class="label">Leads totales</div><div class="value">${fmt(t.leads)}</div><div class="sub">Solo Meta Ads</div></div>
+    <div class="kpi alert"><div class="label">Bad Leads</div><div class="value">${fmt(t.bad)}</div><div class="sub">${t.pct_bad}% del canal</div></div>
+    <div class="kpi"><div class="label">Good Leads</div><div class="value">${fmt(t.good)}</div><div class="sub">${(100-t.pct_bad).toFixed(1)}% del canal</div></div>
+    <div class="kpi good"><div class="label">Ventas</div><div class="value">${t.ventas}</div><div class="sub">Conv. Good ${t.conv_good}%</div></div>
+    <div class="kpi warn"><div class="label">Bad/Good ratio</div><div class="value">${(t.bad/t.good).toFixed(2)}</div><div class="sub">Bad por Good Lead</div></div>
+  `;
+}
+renderKpis('trad-kpis', D.tradicional.totales);
+renderKpis('pa-kpis', D.plan_ahorro.totales);
+
+// === VELOCIDAD ===
+function renderVelocidad(canal, prefix){
+  const v = D[canal].velocidad;
+  // Bar chart % Bad
+  new Chart(document.getElementById(prefix+'-vel-bad'),{
+    type:'bar',
+    data:{labels:v.map(r=>r.vel),datasets:[{
+      label:'% Bad Lead',data:v.map(r=>r.pct_bad),
+      backgroundColor:v.map(r=>{
+        if(r.pct_bad<40)return COLORS.good;
+        if(r.pct_bad<55)return COLORS.warn;
+        return COLORS.accent;
+      })
+    }]},
+    options:{...baseOpts,plugins:{...baseOpts.plugins,legend:{display:false}},
+      scales:{...baseOpts.scales,y:{...baseOpts.scales.y,ticks:{...baseOpts.scales.y.ticks,callback:v=>v+'%'}}}}
+  });
+  // Line/bar Conv Good
+  new Chart(document.getElementById(prefix+'-vel-conv'),{
+    type:'bar',
+    data:{labels:v.map(r=>r.vel),datasets:[{
+      label:'Conv. Good (%)',data:v.map(r=>r.conv_good),
+      backgroundColor:COLORS.accent
+    }]},
+    options:{...baseOpts,plugins:{...baseOpts.plugins,legend:{display:false}},
+      scales:{...baseOpts.scales,y:{...baseOpts.scales.y,ticks:{...baseOpts.scales.y.ticks,callback:v=>v+'%'}}}}
+  });
+  // Tabla
+  const tbl = document.getElementById(prefix+'-vel-tbl');
+  tbl.innerHTML = `<thead><tr><th>Velocidad</th><th class="num">Leads</th><th class="num">Bad</th><th class="num">Good</th><th class="num">Ventas</th><th class="num">% Bad</th><th class="num">Conv. Good</th></tr></thead><tbody>
+    ${v.map(r=>{
+      let badClass='heat-bad';if(r.pct_bad>50)badClass='heat-bad-hi';if(r.pct_bad>60)badClass='heat-bad-vhi';
+      let goodClass='heat-good';if(r.conv_good>3)goodClass='heat-good-hi';if(r.conv_good>5)goodClass='heat-good-vhi';
+      return `<tr><td><strong>${r.vel}</strong></td><td class="num">${fmt(r.leads)}</td><td class="num">${fmt(r.bad)}</td><td class="num">${fmt(r.good)}</td><td class="num">${r.ventas}</td><td class="num"><span class="heat ${badClass}">${r.pct_bad}%</span></td><td class="num"><span class="heat ${goodClass}">${r.conv_good}%</span></td></tr>`;
+    }).join('')}
+  </tbody>`;
+}
+renderVelocidad('tradicional','trad');
+renderVelocidad('plan_ahorro','pa');
+
+// === EVOLUCIÓN ===
+const evolCharts = {};
+function renderEvol(canal, prefix, freq){
+  const evol = freq==='M' ? D[canal].evol_mensual : D[canal].evol_semanal;
+  const labels = evol.map(r=>{
+    if(freq==='M'){
+      const m = {'2026-01':'Enero','2026-02':'Febrero','2026-03':'Marzo','2026-04':'Abril'};
+      return m[r.period]||r.period;
+    }
+    return r.period;
+  });
+  
+  if(evolCharts[prefix+'_vol']) evolCharts[prefix+'_vol'].destroy();
+  if(evolCharts[prefix+'_eff']) evolCharts[prefix+'_eff'].destroy();
+  
+  evolCharts[prefix+'_vol'] = new Chart(document.getElementById(prefix+'-evol-vol'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Bad Leads',data:evol.map(r=>r.bad),backgroundColor:COLORS.accent,stack:'a'},
+      {label:'Good Leads',data:evol.map(r=>r.good),backgroundColor:COLORS.accent2,stack:'a'}
+    ]},
+    options:{...baseOpts,scales:{x:{...baseOpts.scales.x,stacked:true},y:{...baseOpts.scales.y,stacked:true}}}
+  });
+  
+  evolCharts[prefix+'_eff'] = new Chart(document.getElementById(prefix+'-evol-eff'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'% Bad Lead',data:evol.map(r=>r.pct_bad),borderColor:COLORS.accent,backgroundColor:'rgba(214,40,40,.1)',yAxisID:'y',borderWidth:2.5,tension:.3,pointRadius:4,fill:false},
+      {label:'Conv. Good (%)',data:evol.map(r=>r.conv_good),borderColor:COLORS.good,backgroundColor:'rgba(61,139,61,.1)',yAxisID:'y1',borderWidth:2.5,tension:.3,pointRadius:4,fill:false}
+    ]},
+    options:{...baseOpts,scales:{
+      x:{grid:{display:false},ticks:{font:{size:10}}},
+      y:{position:'left',title:{display:true,text:'% Bad',font:{size:10}},grid:{color:'#e0d9c4'},ticks:{callback:v=>v+'%'}},
+      y1:{position:'right',title:{display:true,text:'Conv. Good %',font:{size:10}},grid:{display:false},ticks:{callback:v=>v+'%'}}
+    }}
+  });
+}
+renderEvol('tradicional','trad','M');
+renderEvol('plan_ahorro','pa','M');
+
+document.querySelectorAll('[data-trad-evol]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-trad-evol]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');renderEvol('tradicional','trad',b.dataset.tradEvol);
+}));
+document.querySelectorAll('[data-pa-evol]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-pa-evol]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');renderEvol('plan_ahorro','pa',b.dataset.paEvol);
+}));
+
+// === MAPAS ===
+function renderMapa(canal, divId, tblId){
+  const data = D[canal].mapa;
+  const map = L.map(divId,{scrollWheelZoom:false}).setView([-38,-64],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+    attribution:'',maxZoom:18,subdomains:'abcd'
+  }).addTo(map);
+  
+  const maxLeads = Math.max(...data.map(r=>r.leads));
+  data.forEach(r=>{
+    const radius = 6 + Math.sqrt(r.leads/maxLeads)*30;
+    let color = COLORS.good;
+    if(r.pct_bad>=40) color = COLORS.warn;
+    if(r.pct_bad>=55) color = COLORS.accent;
+    if(r.pct_bad>=70) color = '#7a0000';
+    
+    L.circleMarker([r.lat,r.lon],{
+      radius,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:.7
+    }).bindTooltip(
+      `<strong>${r.localidad}</strong><br>${r.leads} leads · ${r.pct_bad}% bad<br>Ventas: ${r.ventas} · Conv: ${r.conv_good}%`,
+      {permanent:false,direction:'top',className:'leaflet-tooltip-custom'}
+    ).addTo(map);
+  });
+  
+  // Tabla
+  const tbl = document.getElementById(tblId);
+  const top15 = data.slice(0,15);
+  tbl.innerHTML = `<thead><tr><th>Localidad</th><th class="num">Leads</th><th class="num">% Bad</th><th class="num">Ventas</th><th class="num">Conv.</th></tr></thead><tbody>
+    ${top15.map(r=>{
+      let badClass='heat-bad';if(r.pct_bad>50)badClass='heat-bad-hi';if(r.pct_bad>65)badClass='heat-bad-vhi';
+      let goodClass='';if(r.conv_good>0&&r.conv_good<3)goodClass='heat-good';if(r.conv_good>=3&&r.conv_good<6)goodClass='heat-good-hi';if(r.conv_good>=6)goodClass='heat-good-vhi';
+      return `<tr><td>${r.localidad}</td><td class="num">${fmt(r.leads)}</td><td class="num"><span class="heat ${badClass}">${r.pct_bad}%</span></td><td class="num">${r.ventas}</td><td class="num">${r.conv_good>0?'<span class="heat '+goodClass+'">'+r.conv_good+'%</span>':r.conv_good+'%'}</td></tr>`;
+    }).join('')}
+  </tbody>`;
+}
+renderMapa('tradicional','trad-map','trad-loc-tbl');
+renderMapa('plan_ahorro','pa-map','pa-loc-tbl');
+
+// === MOTIVOS ===
+// Categorías:
+//   BAD_LEAD (rojo): problemas de calidad de dato — BL:* y Dato Duplicado
+//   GESTION (naranja): pérdida en gestión comercial — Sin confirmación
+//   CALIFICADO (azul): lead real que decidió no comprar — económico, competencia, producto, plan no interesa
+//   OTRO (gris): fuera de scope, ganado, etc.
+function categorizarMotivo(m){
+  const s = (m||'').toLowerCase();
+  if(s.startsWith('bl:') || s.includes('dato duplicado')) return 'bad';
+  if(s.includes('sin confirmaci')) return 'gestion';
+  if(s.includes('econ') || s.includes('mejor inversi') || s.includes('compro otra') || 
+     s.includes('producto no cumple') || s.includes('pv - desisto') || s.includes('plan de ahorro') ||
+     s.includes('mejor tasaci') || s.includes('compr')) return 'calificado';
+  return 'otro';
+}
+const COLOR_CAT = {
+  bad: '#d62828',
+  gestion: '#f77f00',
+  calificado: '#003049',
+  otro: '#888'
+};
+const LABEL_CAT = {
+  bad: 'Bad Lead (calidad de dato)',
+  gestion: 'Pérdida en gestión',
+  calificado: 'Decidió no comprar (calificado)',
+  otro: 'Otros'
+};
+
+function renderMotivos(canal, ctxId){
+  const m = D[canal].motivos;
+  const cats = m.map(r=>categorizarMotivo(r.motivo));
+  
+  new Chart(document.getElementById(ctxId),{
+    type:'bar',
+    data:{labels:m.map(r=>r.motivo),datasets:[{
+      label:'Cantidad',data:m.map(r=>r.count),
+      backgroundColor:cats.map(c=>COLOR_CAT[c])
+    }]},
+    options:{...baseOpts,indexAxis:'y',plugins:{...baseOpts.plugins,legend:{display:false},
+      tooltip:{...baseOpts.plugins.tooltip,callbacks:{
+        label:c=>c.parsed.x+' leads ('+m[c.dataIndex].pct+'% del canal)',
+        afterLabel:c=>'Categoría: '+LABEL_CAT[cats[c.dataIndex]]
+      }}
+    },
+    scales:{x:{grid:{color:'#e0d9c4'},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10,family:"'JetBrains Mono', monospace"}}}}}
+  });
+  
+  // Agregar leyenda manual debajo del canvas
+  const canvas = document.getElementById(ctxId);
+  const parent = canvas.closest('.chart-card');
+  if(parent && !parent.querySelector('.motiv-legend')){
+    const legend = document.createElement('div');
+    legend.className = 'motiv-legend';
+    legend.style.cssText = 'display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);font-family:Inter;font-size:12px';
+    legend.innerHTML = Object.keys(LABEL_CAT).map(k=>
+      `<div style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:${COLOR_CAT[k]};display:inline-block;border-radius:2px"></span>${LABEL_CAT[k]}</div>`
+    ).join('');
+    parent.appendChild(legend);
+  }
+}
+renderMotivos('tradicional','trad-motivos-ch');
+renderMotivos('plan_ahorro','pa-motivos-ch');
+</script>
+</body>
+</html>
