@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Guspamar v3 — YTD vs Último Mes · Q1 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0a0f1c;--card:#101830;--card2:#172242;--border:#243358;--text:#e6ecff;--muted:#8e9cc1;--accent:#3b82f6;--good:#22c55e;--bad:#ef4444;--warn:#f59e0b;--ford:#003478;--purple:#a855f7;}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45}
+  header{padding:18px 28px;background:linear-gradient(135deg,var(--ford) 0%,#0a4ca8 60%,#0066cc 100%);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  header .top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  header h1{margin:0 0 3px 0;font-size:21px;font-weight:700}
+  header .sub{color:#cfe1ff;font-size:12px}
+  .period-toggle{display:inline-flex;background:rgba(0,0,0,0.25);border-radius:8px;padding:3px;border:1px solid rgba(255,255,255,0.1)}
+  .period-btn{padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;color:#cfe1ff;font-weight:600;border:none;background:transparent}
+  .period-btn.active{background:#fff;color:var(--ford)}
+  .container{padding:18px 28px;max-width:1600px;margin:0 auto}
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(6,1fr)}
+  .row2{grid-template-columns:1fr 1fr}
+  .row3{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .kpi{padding:13px;position:relative}
+  .kpi .lbl{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .kpi .val{font-size:21px;font-weight:700;line-height:1.1}
+  .kpi .delta{font-size:10.5px;color:var(--muted);margin-top:5px}
+  .kpi .badge{position:absolute;top:10px;right:10px;font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(59,130,246,0.2);color:#93c5fd;text-transform:uppercase;letter-spacing:.4px}
+  .pos{color:var(--good)} .neg{color:var(--bad)} .mut{color:var(--muted)} .warn{color:var(--warn)}
+  h2{font-size:14px;margin:0 0 11px 0;color:#cfe1ff;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  h3{font-size:12px;margin:0 0 8px 0;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--border)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:500;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr.total{background:var(--card2);font-weight:700}
+  tr.subtotal{background:rgba(59,130,246,0.08);font-weight:600}
+  tr.minor td{color:var(--muted);padding-left:18px;font-size:11.5px}
+  tr.alert td{background:rgba(239,68,68,0.1)}
+  tr.up td{background:rgba(34,197,94,0.08)}
+  .chart-wrap{position:relative;height:260px}
+  .chart-tall{height:340px}
+  .alert{background:rgba(245,158,11,0.1);border-left:3px solid var(--warn);padding:11px 13px;border-radius:6px;font-size:12.5px;color:#fde6b3;margin-bottom:14px}
+  .alert b{color:var(--warn)}
+  .alert.danger{background:rgba(239,68,68,0.1);border-color:var(--bad);color:#fca5a5}
+  .alert.danger b{color:var(--bad)}
+  .alert.success{background:rgba(34,197,94,0.1);border-color:var(--good);color:#86efac}
+  .alert.success b{color:var(--good)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;white-space:nowrap}
+  .pill.good{background:rgba(34,197,94,.15);color:#86efac}
+  .pill.bad{background:rgba(239,68,68,.15);color:#fca5a5}
+  .pill.warn{background:rgba(245,158,11,.15);color:#fde6b3}
+  .pill.info{background:rgba(59,130,246,.15);color:#93c5fd}
+  .footer-note{margin-top:14px;padding:12px;background:var(--card2);border-radius:8px;font-size:11.5px;color:var(--muted);line-height:1.55}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin:0 -28px 18px -28px;padding:0 28px;overflow-x:auto;background:var(--card);position:sticky;top:80px;z-index:90}
+  .tab{padding:11px 14px;cursor:pointer;color:var(--muted);font-size:12px;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500}
+  .tab:hover{color:#cfe1ff;background:rgba(59,130,246,0.05)}
+  .tab.active{color:var(--text);border-bottom-color:var(--accent);background:rgba(59,130,246,0.08)}
+  .tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  .tab .dot.green{background:var(--good)} .tab .dot.red{background:var(--bad)}
+  .tab .dot.yellow{background:var(--warn)} .tab .dot.blue{background:var(--accent)}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+  .var-card{padding:11px 13px;background:var(--card2);border-radius:8px;border-left:3px solid;margin-bottom:8px;font-size:12px}
+  .var-card.up{border-color:var(--good)}
+  .var-card.down{border-color:var(--bad)}
+  .var-card.up.bad{border-color:var(--bad)}
+  .var-card.down.good{border-color:var(--good)}
+  .var-card .v-title{font-weight:700;margin-bottom:3px;font-size:12.5px}
+  .var-card .v-meta{color:var(--muted);font-size:11px}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .compare-box{padding:14px;border-radius:8px;background:var(--card2)}
+  .compare-box.ytd{border-top:3px solid var(--accent)}
+  .compare-box.month{border-top:3px solid var(--purple)}
+  .compare-box .ctitle{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;font-weight:600}
+  .compare-box .cval{font-size:22px;font-weight:700}
+  .compare-box .csub{font-size:11px;color:var(--muted);margin-top:3px}
+  .stat-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12px}
+  .stat-row:last-child{border-bottom:none}
+  .stat-row .label{color:var(--muted)}
+  .stat-row .value{font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div>
+      <h1>Guspamar S.A. — Dashboard de Decisiones</h1>
+      <div class="sub">Ford · YTD Jul25-Mar26 / Mar 2026 · ARS valores históricos · <b style="color:#fbbf24">⚠ Sin ajuste por inflación</b></div>
+    </div>
+    <div class="period-toggle">
+      <button class="period-btn active" data-period="ytd">📅 Acumulado YTD</button>
+      <button class="period-btn" data-period="mar">📊 Marzo 2026</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="resumen"><span class="dot blue"></span>Resumen</div>
+    <div class="tab" data-tab="margen"><span class="dot blue"></span>Evolución Margen Bruto</div>
+    <div class="tab" data-tab="modelos"><span class="dot blue"></span>Por Modelo</div>
+    <div class="tab" data-tab="mbcom"><span class="dot yellow"></span>💰 MB Comercial</div>
+    <div class="tab" data-tab="pe"><span class="dot yellow"></span>⚖️ Punto Equilibrio</div>
+    <div class="tab" data-tab="alertas"><span class="dot red"></span>Variaciones</div>
+    <div class="tab" data-tab="vntrad"><span class="dot green"></span>VN Tradic.</div>
+    <div class="tab" data-tab="vngc"><span class="dot red"></span>VN GC</div>
+    <div class="tab" data-tab="vnpo"><span class="dot green"></span>VN P.Óvalo</div>
+    <div class="tab" data-tab="vu"><span class="dot yellow"></span>VU</div>
+    <div class="tab" data-tab="ra"><span class="dot green"></span>R&amp;A</div>
+    <div class="tab" data-tab="se"><span class="dot yellow"></span>SE</div>
+    <div class="tab" data-tab="ql"><span class="dot red"></span>QL</div>
+    <div class="tab" data-tab="impuestos"><span class="dot yellow"></span>🧾 Impuestos</div>
+    <div class="tab" data-tab="acciones"><span class="dot yellow"></span>Plan Acción</div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="tab-content active" id="resumen">
+    <h2 id="resumen-title">📅 Vista — Acumulado YTD Jul 25 a Mar 26 (9 meses)</h2>
+    <div class="grid kpis" id="resumenKpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card">
+        <h2>YTD vs Marzo 2026 — Comparación</h2>
+        <div class="compare-grid" id="compareTop"></div>
+        <div class="footer-note" style="margin-top:10px">Marzo $7.327M vs proyectado $6.871M = 7% arriba en ventas pero -29% en resultado neto.</div>
+      </div>
+      <div class="card">
+        <h2>Mix Resultado Departamental — YTD vs Marzo</h2>
+        <div class="chart-wrap chart-tall"><canvas id="chartMixCompare"></canvas></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Tabla maestra — YTD y Marzo por unidad</h2>
+      <table id="tablaMaestra"></table>
+    </div>
+  </div>
+
+  <!-- EVOLUCIÓN MB -->
+  <div class="tab-content" id="margen">
+    <h2>Evolución del Margen Bruto por unidad — Q1 2026</h2>
+    <div class="alert"><b>📌 Lectura clave:</b> El MB <b>en pesos</b> de VN Tradicional bajó +3% Mar vs Feb pese a +71% en ventas. Mientras tanto, el MB <b>%</b> cayó de 12,3% a 7,5%. R&amp;A subió a 41,9% y VU a 17,6%. La rentabilidad depende cada vez más de posventa.</div>
+    <div class="grid row2">
+      <div class="card"><h2>Margen Bruto nominal (millones ARS)</h2><div class="chart-wrap chart-tall"><canvas id="chartMBNominal"></canvas></div></div>
+      <div class="card"><h2>Margen Bruto % sobre Ventas Netas</h2><div class="chart-wrap chart-tall"><canvas id="chartMBPct"></canvas></div></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Tabla — Margen Bruto mensual por unidad</h2>
+      <table>
+        <thead><tr><th>Unidad</th><th>Ene $M</th><th>Feb $M</th><th>Mar $M</th><th>Var Mar/Feb</th><th>Ene %</th><th>Feb %</th><th>Mar %</th><th>Δ pp</th></tr></thead>
+        <tbody id="tablaMBEvol"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODELOS -->
+  <div class="tab-content" id="modelos">
+    <div class="alert"><b>ℹ Limitación:</b> El detalle por modelo está disponible solo en el acumulado YTD (no hay desglose mensual por modelo en los archivos fuente).</div>
+    <h2>VN — Margen Bruto por modelo (YTD)</h2>
+    <div class="grid row2">
+      <div class="card"><h2>Volumen por modelo (unidades)</h2><div class="chart-wrap chart-tall"><canvas id="chartVolModelos"></canvas></div></div>
+      <div class="card"><h2>Margen Bruto por modelo</h2><div class="chart-wrap chart-tall"><canvas id="chartMBModelos"></canvas></div></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Tabla detallada por modelo VN — YTD</h2>
+      <table>
+        <thead><tr><th>Modelo</th><th>U. Tradic.</th><th>U. GC</th><th>U. P.Óvalo</th><th>Total</th><th>Vtas Brutas Tradic.</th><th>MB Total</th><th>MB / u</th><th>Margen %</th></tr></thead>
+        <tbody id="tablaModelos"></tbody>
+      </table>
+      <div class="footer-note" style="margin-top:10px"><b>F-150 es el modelo más rentable por unidad ($12,7M MB/u)</b> — bajo volumen (25u) pero altísimo ticket.</div>
+    </div>
+    <div style="height:14px"></div>
+    <h2>VU + R&amp;A + SE/QL</h2>
+    <div class="grid row2">
+      <div class="card">
+        <h2>VU — Mix Ford vs Otras Marcas</h2>
+        <table>
+          <thead><tr><th>Origen</th><th>Unid.</th><th>Vtas Netas</th><th>MB</th><th>MB %</th><th>MB / u</th></tr></thead>
+          <tbody>
+            <tr><td>Ford VU</td><td>120</td><td>$3.379 M</td><td>$503 M</td><td class="pos">14,9%</td><td>$4,2 M</td></tr>
+            <tr><td>Otras Marcas VU</td><td>165</td><td>$3.728 M</td><td>$477 M</td><td>12,8%</td><td>$2,9 M</td></tr>
+            <tr class="total"><td>Total</td><td>285</td><td>$7.107 M</td><td>$980 M</td><td>13,8%</td><td>$3,4 M</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>R&amp;A — Mix por canal</h2>
+        <table>
+          <thead><tr><th>Canal</th><th>Vtas Netas</th><th>MB %</th></tr></thead>
+          <tbody>
+            <tr><td>Por Taller</td><td>$1.872 M</td><td class="pos">43,5%</td></tr>
+            <tr><td>Quick Lane</td><td>$166 M</td><td class="pos">42,2%</td></tr>
+            <tr><td>Por Menor</td><td>$879 M</td><td>38,4%</td></tr>
+            <tr><td>Por Mayor</td><td>$1.918 M</td><td class="warn">36,4%</td></tr>
+            <tr class="total"><td>Total</td><td>$5.039 M</td><td>39,4%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MB COMERCIAL -->
+  <div class="tab-content" id="mbcom">
+    <h2>💰 Margen Bruto Comercial — la rentabilidad real por venta</h2>
+    <div class="alert success"><b>📌 Concepto:</b> El "Margen Bruto" del informe es contablemente correcto pero <b>no refleja la rentabilidad real</b>. Restando <b>Impuestos sobre venta</b> (IIBB + Tasa S&amp;H + Sellados) y <b>Comisiones a vendedores</b> obtenemos el <b>Margen Bruto Comercial</b> — el verdadero margen de cada venta antes de absorber gastos fijos.</div>
+
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">MB contable YTD</div><div class="val">$9.501 M</div><div class="delta">15,4% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">(-) Impuestos venta</div><div class="val neg">-$1.845 M</div><div class="delta neg">3,0% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">(-) Comisiones</div><div class="val neg">-$807 M</div><div class="delta neg">1,3% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">MB Comercial YTD</div><div class="val warn">$6.849 M</div><div class="delta warn">11,1% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">Erosión total</div><div class="val neg">-4,3 pp</div><div class="delta">Casi -28% del MB contable</div></div>
+      <div class="card kpi"><div class="lbl">$ por unidad VN</div><div class="val">$2,76 M</div><div class="delta">MB Com / 938 unid VN</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card"><h2>MB contable vs MB Comercial (apilado)</h2><div class="chart-wrap chart-tall"><canvas id="chartMBComBar"></canvas></div></div>
+      <div class="card"><h2>Comparación de % por unidad</h2><div class="chart-wrap chart-tall"><canvas id="chartMBErosion"></canvas></div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Tabla maestra MB Comercial — YTD</h2>
+      <table>
+        <thead><tr><th>Unidad</th><th>Vtas Netas</th><th>MB cont. $</th><th>MB %</th><th>(-) Imp.venta</th><th>(-) Comis.</th><th>MB Com. $</th><th>MB Com %</th><th>Erosión</th></tr></thead>
+        <tbody>
+          <tr><td><b>VN Tradicional</b></td><td>$39.255 M</td><td>$4.271 M</td><td>10,9%</td><td class="neg">-$1.298 M</td><td class="neg">-$385 M</td><td class="pos">$2.588 M</td><td class="pos">6,6%</td><td class="neg">-4,3pp</td></tr>
+          <tr><td><b>VN GC</b></td><td>$2.767 M</td><td>$169 M</td><td>6,1%</td><td class="neg">-$11 M</td><td class="neg">-$51 M</td><td class="warn">$107 M</td><td class="warn">3,9%</td><td>-2,2pp</td></tr>
+          <tr><td><b>VN Plan Óvalo</b></td><td>$6.183 M</td><td>$890 M</td><td>14,4%</td><td class="neg">-$149 M</td><td class="neg">-$150 M</td><td class="pos">$591 M</td><td class="pos">9,6%</td><td class="neg">-4,8pp</td></tr>
+          <tr><td><b>VU</b></td><td>$7.107 M</td><td>$980 M</td><td>13,8%</td><td class="neg">-$65 M</td><td class="neg">-$85 M</td><td class="pos">$830 M</td><td class="pos">11,7%</td><td>-2,1pp</td></tr>
+          <tr><td><b>R&amp;A</b></td><td>$5.039 M</td><td>$1.987 M</td><td class="pos">39,4%</td><td class="neg">-$234 M</td><td class="neg">-$135 M</td><td class="pos">$1.618 M</td><td class="pos">32,1%</td><td class="neg">-7,3pp</td></tr>
+          <tr><td><b>SE</b></td><td>$1.402 M</td><td>$1.137 M</td><td class="pos">81,1%</td><td class="neg">-$62 M</td><td class="neg">-$1 M</td><td class="pos">$1.074 M</td><td class="pos">76,6%</td><td>-4,5pp</td></tr>
+          <tr><td><b>QL</b></td><td>$88 M</td><td>$67 M</td><td class="pos">76,1%</td><td class="neg">-$26 M</td><td>-$0 M</td><td class="warn">$41 M</td><td class="warn">46,6%</td><td class="neg"><b>-29,5pp</b></td></tr>
+          <tr class="total"><td>TOTAL</td><td>$61.841 M</td><td>$9.501 M</td><td>15,4%</td><td>-$1.845 M</td><td>-$807 M</td><td>$6.849 M</td><td>11,1%</td><td>-4,3pp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>📊 Cómo cambia el ranking</h2>
+        <table>
+          <thead><tr><th>Pos.</th><th>Por MB contable</th><th>→</th><th>Por MB Comercial real</th></tr></thead>
+          <tbody>
+            <tr><td>1°</td><td>SE 81,1%</td><td></td><td>SE 76,6%</td></tr>
+            <tr style="background:rgba(239,68,68,0.1)"><td>2°</td><td><b>QL 76,1%</b></td><td>⬇⬇</td><td>R&amp;A 32,1%</td></tr>
+            <tr style="background:rgba(239,68,68,0.1)"><td>3°</td><td>R&amp;A 39,4%</td><td>⬆</td><td><b>QL 46,6%</b> (-30pp)</td></tr>
+            <tr style="background:rgba(245,158,11,0.1)"><td>4°</td><td><b>VN Plan Óvalo 14,4%</b></td><td>⬇</td><td>VU 11,7%</td></tr>
+            <tr style="background:rgba(245,158,11,0.1)"><td>5°</td><td>VU 13,8%</td><td>⬆</td><td><b>VN Plan Óvalo 9,6%</b></td></tr>
+            <tr><td>6°</td><td>VN Tradicional 10,9%</td><td></td><td>VN Tradicional 6,6%</td></tr>
+            <tr><td>7°</td><td>VN GC 6,1%</td><td></td><td>VN GC 3,9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>🎯 Lecturas para decisión</h2>
+        <div class="var-card down bad"><div class="v-title">VN Tradicional: 6,6% MB Comercial</div><div>Es el verdadero techo para descuentos. Si descontás 7%, vendés a pérdida bruta antes de absorber sueldos. <b>Cada peso de descuento es un peso menos de margen real.</b></div></div>
+        <div class="var-card down bad"><div class="v-title">QL erosiona 29,5pp</div><div>La "rentabilidad" del 76% es ilusoria. La base IIBB de QL incluye repuestos vendidos por QL ($166M YTD). <b>Es 30pp peor del informe.</b></div></div>
+        <div class="var-card up good"><div class="v-title">R&amp;A es robusto</div><div>Pierde 7,3pp pero queda en 32,1%. Sigue siendo el motor de rentabilidad por margen.</div></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Implicancias — política de descuentos VN Tradicional</h2>
+      <div class="footer-note" style="background:transparent;padding:0;font-size:13px;line-height:1.7">
+        Con MB Comercial 6,6%, la matemática es simple:<br><br>
+        <b>Descuento 0%</b> → MB Com 6,6% → cubre estructura<br>
+        <b>Descuento 4%</b> → MB Com ~2,9% → no cubre gastos fijos<br>
+        <b>Descuento 7%</b> (situación YTD) → MB Com ~-0,4% → <span class="neg"><b>VENDE A PÉRDIDA antes de estructura</b></span><br>
+        <b>Descuento 9%</b> (Marzo 2026) → MB Com ~-2,4% → <span class="neg"><b>PIERDE en cada operación</b></span><br><br>
+        <b>El "milagro" del Resultado Departamental positivo de $1.090M YTD viene de OTROS INGRESOS</b> (comisiones financiación, flete, gestoría = $1.061M YTD). Sin ese subsidio cruzado, VN Tradicional sería deficitario al precio de descuento actual.
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>P&amp;L gerencial reformateado YTD</h2>
+      <table>
+        <thead><tr><th>Concepto</th><th>$ M</th><th>%</th></tr></thead>
+        <tbody>
+          <tr class="total"><td>Ventas Netas</td><td>$61.841</td><td>100,0%</td></tr>
+          <tr><td>(-) Costo de Ventas + Incentivos</td><td>-$52.341</td><td>-84,6%</td></tr>
+          <tr class="subtotal"><td>= Margen Bruto Contable</td><td class="pos">$9.500</td><td class="pos">15,4%</td></tr>
+          <tr><td>(-) Impuestos sobre venta (IIBB + T S&amp;H + Sellados)</td><td class="neg">-$1.845</td><td>-3,0%</td></tr>
+          <tr><td>(-) Comisiones a vendedores</td><td class="neg">-$807</td><td>-1,3%</td></tr>
+          <tr class="subtotal" style="background:rgba(245,158,11,0.15)"><td><b>= Margen Bruto Comercial Real</b></td><td class="warn"><b>$6.849</b></td><td class="warn"><b>11,1%</b></td></tr>
+          <tr><td>(+) Otros Ingresos (comisiones financieras, flete, gestoría)</td><td class="pos">+$2.214</td><td>+3,6%</td></tr>
+          <tr><td>(-) Otros Egresos</td><td>-$760</td><td>-1,2%</td></tr>
+          <tr><td>(-) Otros Gastos Variables (preparación, IDC, etc.)</td><td>-$1.277</td><td>-2,1%</td></tr>
+          <tr class="subtotal"><td>= Margen de Contribución</td><td>$7.025</td><td>11,4%</td></tr>
+          <tr><td>(-) Gastos Fijos Asignados</td><td>-$2.493</td><td>-4,0%</td></tr>
+          <tr class="subtotal"><td>= Margen Neto</td><td class="pos">$4.532</td><td class="pos">7,3%</td></tr>
+          <tr><td>(-) Gastos Indirectos (estructura)</td><td>-$2.239</td><td>-3,6%</td></tr>
+          <tr class="subtotal"><td>= Resultado Departamental</td><td class="pos">$2.292</td><td class="pos">3,7%</td></tr>
+          <tr><td>(+/-) Resultado Financiero, No Operativo, IIGG</td><td>-$160</td><td>-0,3%</td></tr>
+          <tr class="total"><td>= Resultado Neto</td><td class="pos">$2.132</td><td class="pos">3,4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PUNTO DE EQUILIBRIO -->
+  <div class="tab-content" id="pe">
+    <h2>⚖️ Punto de Equilibrio por unidad — YTD Jul25-Mar26</h2>
+    <div class="alert"><b>📌 Concepto:</b> Punto de Equilibrio (PE) = Ventas necesarias para cubrir todos los costos. Calculado como <b>Costos Fijos / % Margen de Contribución</b>. Mostramos dos versiones: <b>PE Operativo</b> (cubre solo fijos asignados a la unidad) y <b>PE Total</b> (incluye también gastos indirectos / estructura). El <b>Margen de Seguridad</b> indica cuánto pueden caer las ventas antes de entrar en pérdida.</div>
+
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">PE Total YTD</div><div class="val">$41.662 M</div><div class="delta">consolidado</div></div>
+      <div class="card kpi"><div class="lbl">Ventas Netas YTD</div><div class="val pos">$61.841 M</div><div class="delta pos">+$20.179 M sobre PE</div></div>
+      <div class="card kpi"><div class="lbl">Mg Seguridad consolid.</div><div class="val pos">+32,6%</div><div class="delta pos">Saludable</div></div>
+      <div class="card kpi"><div class="lbl">Unidades en pérdida</div><div class="val warn">2 de 7</div><div class="delta warn">QL y VN GC</div></div>
+      <div class="card kpi"><div class="lbl">Unidad ajustada</div><div class="val warn">SE (+2,5%)</div><div class="delta neg">Casi en PE</div></div>
+      <div class="card kpi"><div class="lbl">Más sólida</div><div class="val pos">VN P.Óvalo</div><div class="delta pos">+55,9% mg seg.</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Ventas reales vs Punto de Equilibrio (YTD)</h2>
+        <div class="chart-wrap chart-tall"><canvas id="chartPE"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Margen de Seguridad por unidad (%)</h2>
+        <div class="chart-wrap chart-tall"><canvas id="chartMgSeg"></canvas></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Tabla maestra Punto de Equilibrio — YTD</h2>
+      <table>
+        <thead><tr><th>Unidad</th><th>V.Netas</th><th>MC %</th><th>Fijos asign.</th><th>Indirectos</th><th>PE Operativo</th><th>PE Total</th><th>Mg Seg %</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>VN Tradicional</b></td><td>$39.255 M</td><td>7,5%</td><td>$899 M</td><td>$973 M</td><td>$11.914 M</td><td>$24.809 M</td><td class="pos">+36,8%</td><td><span class="pill good">OK</span></td></tr>
+          <tr><td><b>VN Grandes Clientes</b></td><td>$2.767 M</td><td class="neg">3,8%</td><td>$95 M</td><td>$52 M</td><td>$2.528 M</td><td class="warn">$3.911 M</td><td class="neg"><b>-41,3%</b></td><td><span class="pill bad">PIERDE</span></td></tr>
+          <tr><td><b>VN Plan Óvalo</b></td><td>$6.183 M</td><td>14,0%</td><td>$220 M</td><td>$161 M</td><td>$1.576 M</td><td>$2.730 M</td><td class="pos"><b>+55,9%</b></td><td><span class="pill good">★ SÓLIDO</span></td></tr>
+          <tr><td><b>VU</b></td><td>$7.107 M</td><td>7,8%</td><td>$168 M</td><td>$212 M</td><td>$2.144 M</td><td>$4.849 M</td><td class="pos">+31,8%</td><td><span class="pill good">OK</span></td></tr>
+          <tr><td><b>R&amp;A</b></td><td>$5.039 M</td><td class="pos">23,7%</td><td>$325 M</td><td>$286 M</td><td>$1.370 M</td><td>$2.576 M</td><td class="pos"><b>+48,9%</b></td><td><span class="pill good">★ SÓLIDO</span></td></tr>
+          <tr><td><b>SE</b></td><td>$1.402 M</td><td class="pos">90,0%</td><td>$734 M</td><td>$497 M</td><td>$815 M</td><td class="warn">$1.368 M</td><td class="warn"><b>+2,5%</b></td><td><span class="pill warn">⚠ AJUSTADO</span></td></tr>
+          <tr><td><b>QL</b></td><td>$88 M</td><td class="pos">92,0%</td><td>$52 M</td><td>$58 M</td><td>$56 M</td><td class="warn">$120 M</td><td class="neg"><b>-35,8%</b></td><td><span class="pill bad">PIERDE</span></td></tr>
+          <tr class="total"><td>TOTAL</td><td>$61.841 M</td><td>11,4%</td><td>$2.493 M</td><td>$2.239 M</td><td>$21.949 M</td><td>$41.662 M</td><td class="pos">+32,6%</td><td><span class="pill good">OK</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Punto de Equilibrio en unidades vendidas</h2>
+        <table>
+          <thead><tr><th>Unidad</th><th>Ticket promedio</th><th>Unid YTD</th><th>Unid en PE</th><th>Δ vs PE</th></tr></thead>
+          <tbody>
+            <tr><td>VN Tradicional</td><td>$54,7 M/u</td><td>718</td><td>454</td><td class="pos"><b>+264 u</b></td></tr>
+            <tr><td>VN Grandes Clientes</td><td>$29,4 M/u</td><td>94</td><td>133</td><td class="neg"><b>-39 u</b></td></tr>
+            <tr><td>VN Plan Óvalo</td><td>$49,1 M/u</td><td>126</td><td>56</td><td class="pos"><b>+70 u</b></td></tr>
+            <tr><td>VU</td><td>$24,9 M/u</td><td>285</td><td>194</td><td class="pos"><b>+91 u</b></td></tr>
+          </tbody>
+        </table>
+        <div class="footer-note" style="margin-top:10px">
+          VN Tradicional vendió <b>264 unidades por encima del PE</b> en 9 meses — eso es el "exceso" que generó el resultado positivo de $1.090M YTD. Si los descuentos suben al 9% (Mar), el MC% cae a ~5,5% y el PE trepa a ~600 unid YTD: el "exceso" se reduce a 118 u.
+        </div>
+      </div>
+      <div class="card">
+        <h2>PE mensual equivalente vs Marzo 2026</h2>
+        <table>
+          <thead><tr><th>Unidad</th><th>PE mensual</th><th>Vtas Marzo</th><th>Δ vs PE</th></tr></thead>
+          <tbody>
+            <tr><td>VN Tradicional</td><td>$2.757 M</td><td>$4.393 M</td><td class="pos">+$1.636 M ✓</td></tr>
+            <tr><td>VN GC</td><td>$435 M</td><td>$546 M</td><td class="pos"><b>+$111 M ✓</b></td></tr>
+            <tr><td>VN Plan Óvalo</td><td>$303 M</td><td>$764 M</td><td class="pos">+$461 M ✓</td></tr>
+            <tr><td>VU</td><td>$539 M</td><td>$844 M</td><td class="pos">+$305 M ✓</td></tr>
+            <tr><td>R&amp;A</td><td>$286 M</td><td>$570 M</td><td class="pos">+$284 M ✓</td></tr>
+            <tr><td>SE</td><td>$152 M</td><td>$179 M</td><td class="pos">+$27 M ✓</td></tr>
+            <tr><td>QL</td><td>$13 M</td><td>$32 M</td><td class="pos"><b>+$19 M ✓</b></td></tr>
+          </tbody>
+        </table>
+        <div class="footer-note" style="margin-top:10px">
+          <b>En marzo todas las unidades cubrieron su PE mensual</b>, incluso las que están en pérdida YTD (QL y VN GC). Esto sugiere que el cierre Q1 Ford trae picos de venta puntuales que distorsionan el promedio. La pregunta crítica: ¿son sostenibles?
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>📊 Análisis del Margen de Contribución %</h2>
+      <table>
+        <thead><tr><th>Unidad</th><th>MC %</th><th>Lectura</th><th>Cada $100 más de venta deja...</th></tr></thead>
+        <tbody>
+          <tr><td>QL</td><td class="pos">92,0%</td><td>Servicio puro, casi sin costo variable</td><td class="pos"><b>$92 de margen</b></td></tr>
+          <tr><td>SE</td><td class="pos">90,0%</td><td>Servicio puro, costo variable mínimo</td><td class="pos"><b>$90 de margen</b></td></tr>
+          <tr><td>R&amp;A</td><td class="pos">23,7%</td><td>Repuestos: costo del producto alto pero margen sano</td><td>$24 de margen</td></tr>
+          <tr><td>VN Plan Óvalo</td><td>14,0%</td><td>Comisiones financieras potencian la MC</td><td>$14 de margen</td></tr>
+          <tr><td>VU</td><td>7,8%</td><td>Costo del producto alto, MC ajustada</td><td>$8 de margen</td></tr>
+          <tr><td>VN Tradicional</td><td>7,5%</td><td>Igual que VU — alta proporción de costo variable</td><td>$8 de margen</td></tr>
+          <tr><td>VN GC</td><td class="warn">3,8%</td><td>La menor — sin comisiones financieras propias</td><td class="warn">$4 de margen</td></tr>
+        </tbody>
+      </table>
+      <div class="footer-note" style="margin-top:10px">
+        <b>El MC% explica el modelo de negocio.</b> Las unidades con MC% bajo (VN/VU 8%, GC 4%) <b>necesitan volumen alto</b> para cubrir fijos. Las unidades con MC% alto (SE/QL 90%) tienen <b>apalancamiento operativo enorme</b> — pequeños incrementos de volumen disparan resultado, pero también pequeñas caídas hunden el resultado.
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>🚨 Sensibilidades — Qué pasa si...</h2>
+        <div class="var-card down bad">
+          <div class="v-title">VN Tradicional sube descuentos al 9% (escenario Marzo)</div>
+          <div>MC% cae de 7,5% a ~5,5%. PE Total sube de $24.809M a ~$34.000M. Margen seguridad: 36,8% → <b>13%</b>.</div>
+          <div class="v-meta">Riesgo: con 1 trimestre flojo, la unidad entra en pérdida.</div>
+        </div>
+        <div class="var-card down bad">
+          <div class="v-title">SE pierde 5% de volumen</div>
+          <div>De $1.402M cae a $1.332M. PE Total $1.368M. <b>Resultado: deficitario por $36M.</b></div>
+          <div class="v-meta">Margen de seguridad de 2,5% es muy frágil. Cualquier cierre temporal del taller, paro o falla de operación lo voltea.</div>
+        </div>
+        <div class="var-card down bad">
+          <div class="v-title">VN GC mantiene volumen actual</div>
+          <div>Pérdida estructural de -$42M YTD se proyecta a ~-$56M anual. Sin cambios, la pérdida acumulada del ejercicio cerrará en ese orden.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>🎯 Oportunidades — Apalancamiento</h2>
+        <div class="var-card up good">
+          <div class="v-title">SE aumenta 15% volumen</div>
+          <div>$1.402M → $1.612M (+$210M). MC 90% → +$189M de margen. Cubre todos los fijos cómodamente y deja $189M extra de Margen Neto.</div>
+          <div class="v-meta">Capacidad ociosa de SE permite crecer sin nuevos fijos.</div>
+        </div>
+        <div class="var-card up good">
+          <div class="v-title">R&amp;A aumenta 10% volumen</div>
+          <div>$5.039M → $5.543M (+$504M). MC 23,7% → +$120M de margen. Margen seguridad pasa de 48,9% a ~54%.</div>
+        </div>
+        <div class="var-card up good">
+          <div class="v-title">VN Plan Óvalo crece 30%</div>
+          <div>$6.183M → $8.038M. MC 14% → +$260M de margen. Refuerza la unidad más sólida del portfolio.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Notas metodológicas</h2>
+      <div class="footer-note" style="background:transparent;padding:0">
+        • <b>PE Operativo</b> = Gastos Fijos Asignados a la unidad / MC%. Es lo que la unidad necesita vender para cubrir solo sus propios fijos directos.<br>
+        • <b>PE Total</b> = (Fijos Asignados + Indirectos) / MC%. Incluye la asignación de gastos de estructura (administración, bienes inmuebles, etc.). Es el verdadero "no perder ni ganar".<br>
+        • <b>Margen de Contribución %</b> = (Vtas Netas + Otros Ingresos − Costo Ventas − Otros Egresos − Gastos Variables) / Vtas Netas.<br>
+        • <b>Margen de Seguridad</b> = (Vtas reales − PE Total) / Vtas reales. Cuánto pueden caer las ventas antes de pérdida.<br>
+        • Cálculos asumen estructura de costos lineal y mix constante. En realidad, escalar mucho el volumen suele requerir nuevos costos fijos (más vendedores, más mecánicos), por lo que las proyecciones de mejora son optimistas.<br>
+        • <b>Inflación:</b> los números a moneda histórica subestiman el PE real porque los gastos fijos (sueldos, alquileres) crecen mes a mes. Para precisión, reexpresar a moneda constante.
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERTAS -->
+  <div class="tab-content" id="alertas">
+    <h2>Variaciones significativas — Feb 2026 → Mar 2026</h2>
+    <div class="alert"><b>Criterio:</b> variaciones &gt;30% y &gt;$3M absolutos.</div>
+    <div class="grid row2">
+      <div>
+        <h3 style="color:#fca5a5">🔴 GASTOS QUE SUBIERON</h3>
+        <div class="var-card up bad"><div class="v-title">VN Trad. · Otros Gastos Fijos detalle <span class="pill bad">+367%</span></div><div>Feb $6,9M → Mar $32,2M · Δ <b class="neg">+$25,3M</b></div><div class="v-meta">Pólizas Berkley anuales <b>$21,8M</b> cargadas 100% en marzo. Devengado anualizado.</div></div>
+        <div class="var-card up bad"><div class="v-title">VN Trad. · Intereses Floor Plan <span class="pill bad">+172%</span></div><div>Feb $7,7M → Mar $21,0M · Δ <b class="neg">+$13,3M</b></div></div>
+        <div class="var-card up bad"><div class="v-title">VN Trad. · Otros Fijos total <span class="pill bad">+147%</span></div><div>Feb $27,8M → Mar $68,7M · Δ <b class="neg">+$40,9M</b></div></div>
+        <div class="var-card up bad"><div class="v-title">SE · Otros Gastos Fijos <span class="pill bad">+137%</span></div><div>Feb $11,2M → Mar $26,5M · Δ <b class="neg">+$15,3M</b></div></div>
+        <div class="var-card up bad"><div class="v-title">VN Trad. · Descuentos <span class="pill bad">+85%</span></div><div>Feb $234M → Mar $433M · Δ <b class="neg">+$199M</b><br>Descuento % sube de 8,3% a 9,0%.</div></div>
+      </div>
+      <div>
+        <h3 style="color:#86efac">🟢 PARTIDAS POSITIVAS</h3>
+        <div class="var-card up good"><div class="v-title">VU · Margen Neto <span class="pill good">+229%</span></div><div>Feb $28M → Mar $93M · Δ <b class="pos">+$64M</b></div></div>
+        <div class="var-card up good"><div class="v-title">VN Plan Óvalo · Margen Neto <span class="pill good">+173%</span></div><div>Feb $27M → Mar $75M · Δ <b class="pos">+$47M</b></div></div>
+        <div class="var-card up good"><div class="v-title">SE · Margen Neto <span class="pill good">+130%</span></div><div>Feb $35M → Mar $82M · Δ <b class="pos">+$46M</b></div></div>
+        <div class="var-card up good"><div class="v-title">VU · Margen Bruto <span class="pill good">+93%</span></div><div>Feb $77M → Mar $149M · MB% saltó 12,8% → 17,6%</div></div>
+
+        <h3 style="color:#fca5a5;margin-top:14px">🔴 ATENCIÓN</h3>
+        <div class="var-card down bad"><div class="v-title">VN Tradicional · Margen Neto <span class="pill bad">-68%</span></div><div>Feb $158M → Mar $50M · Δ <b class="neg">-$108M</b><br>Las ventas crecieron 70% pero el Mg Neto cayó 68%. Drivers: descuentos +85%, incentivos -60%, otros gastos fijos +147%.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VN TRADICIONAL -->
+  <div class="tab-content" id="vntrad">
+    <div class="grid kpis" id="vntrad-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="vntrad-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="vntradChart"></canvas></div><div class="footer-note" style="margin-top:10px"><b>MB en pesos:</b> Ene $707M → Feb $317M → Mar $328M (recuperación tibia pese a +70% ventas).<br><b>MB %:</b> 9,8% / 12,3% / 7,5% — máxima caída en cierre Q1 Ford.</div></div>
+    </div>
+  </div>
+
+  <!-- VN GC -->
+  <div class="tab-content" id="vngc">
+    <div class="alert danger"><b>🚨 Pierde plata YTD:</b> -$42M Result. Departamental. Mar mejor: Mg Neto $15M (+239% vs Feb).</div>
+    <div class="grid kpis" id="vngc-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="vngc-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="vngcChart"></canvas></div><div class="footer-note" style="margin-top:10px">El MB% es plano 6,1%. La palanca es <b>volumen</b>.</div></div>
+    </div>
+  </div>
+
+  <!-- VN PO -->
+  <div class="tab-content" id="vnpo">
+    <div class="alert success"><b>✓ Mejor unidad VN:</b> 14,4% MB en Mar, Mg Neto +173% vs Feb.</div>
+    <div class="grid kpis" id="vnpo-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="vnpo-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="vnpoChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- VU -->
+  <div class="tab-content" id="vu">
+    <div class="alert success"><b>✓ Recuperación fuerte:</b> MB% 17,6% en Mar (vs 12,8% Feb). Mg Neto +229%.</div>
+    <div class="grid kpis" id="vu-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="vu-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="vuChart"></canvas></div><div class="footer-note" style="margin-top:10px">Stock VU: 167 días. Capital atado en inflación.</div></div>
+    </div>
+  </div>
+
+  <!-- R&A -->
+  <div class="tab-content" id="ra">
+    <div class="alert success"><b>★ Estrella:</b> 41,9% MB Mar (mejor del trimestre).</div>
+    <div class="grid kpis" id="ra-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="ra-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="raChart"></canvas></div><div class="footer-note" style="margin-top:10px">Mejora MB% sugiere mix (más Por Taller / QL vs Por Mayor).</div></div>
+    </div>
+  </div>
+
+  <!-- SE -->
+  <div class="tab-content" id="se">
+    <div class="alert success"><b>✓ Apalancamiento operativo:</b> +30% MB y +130% Mg Neto Feb→Mar.</div>
+    <div class="grid kpis" id="se-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="se-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="seChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- QL -->
+  <div class="tab-content" id="ql">
+    <div class="alert danger"><b>🚨 Pierde sistemáticamente:</b> -$29M YTD. Mg Neto cae Ene $17M → Mar $12M.</div>
+    <div class="grid kpis" id="ql-kpis"></div>
+    <div style="height:14px"></div>
+    <div class="grid row2">
+      <div class="card"><h2>P&amp;L mensual + YTD</h2><table id="ql-pl"></table></div>
+      <div class="card"><h2>Evolución</h2><div class="chart-wrap"><canvas id="qlChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- IMPUESTOS -->
+  <div class="tab-content" id="impuestos">
+    <h2>🧾 Análisis impositivo — YTD Jul25-Mar26</h2>
+    <div class="alert"><b>⚠ Limitación:</b> Los archivos consolidan los impuestos como una partida única por unidad. <b>No hay desglose interno entre IIBB, T S&amp;H, Sellados, IDC y otros</b>. El análisis identifica la carga total y estima la composición.</div>
+
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Carga Total</div><div class="val warn">$2.175 M</div><div class="delta">12 partidas</div></div>
+      <div class="card kpi"><div class="lbl">% s/Ventas Brutas</div><div class="val">3,35%</div><div class="delta">$64.941 M base</div></div>
+      <div class="card kpi"><div class="lbl">% s/Ventas Netas</div><div class="val">3,52%</div><div class="delta">$61.841 M base</div></div>
+      <div class="card kpi"><div class="lbl">% s/Margen Bruto</div><div class="val warn">22,9%</div><div class="delta">$9.500 M base</div></div>
+      <div class="card kpi"><div class="lbl">% s/Result. Dpto</div><div class="val neg">94,9%</div><div class="delta neg">Por $1 ROI = $0,95 imp.</div></div>
+      <div class="card kpi"><div class="lbl">Imp. Ganancias</div><div class="val">$0 M</div><div class="delta warn">⚠ Verificar</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Detalle de partidas YTD</h2>
+        <table>
+          <thead><tr><th>Partida</th><th>Importe</th><th>%V.Netas</th></tr></thead>
+          <tbody>
+            <tr><td>Impuestos VN Tradicional</td><td>$1.298 M</td><td>2,10%</td></tr>
+            <tr><td>Impuestos VN Plan Óvalo</td><td>$149 M</td><td>0,24%</td></tr>
+            <tr><td>Impuestos VN GC</td><td>$11 M</td><td>0,02%</td></tr>
+            <tr><td>Impuestos VU</td><td>$65 M</td><td>0,11%</td></tr>
+            <tr><td>Patentes/Infracciones VU</td><td>$53 M</td><td>0,09%</td></tr>
+            <tr><td>Impuestos R&amp;A</td><td>$234 M</td><td>0,38%</td></tr>
+            <tr><td>Impuestos SE</td><td>$62 M</td><td>0,10%</td></tr>
+            <tr><td>Impuestos QL</td><td>$26 M</td><td>0,04%</td></tr>
+            <tr><td>Aranceles VN Tradic.</td><td>$48 M</td><td>0,08%</td></tr>
+            <tr><td>Imp. Indirectos</td><td>$226 M</td><td>0,37%</td></tr>
+            <tr><td>Imp. sobre Bienes Inmuebles</td><td>$4 M</td><td>0,01%</td></tr>
+            <tr><td>Impuesto a las Ganancias</td><td>$0 M</td><td>0,00%</td></tr>
+            <tr class="total"><td>TOTAL</td><td>$2.175 M</td><td>3,52%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Composición estimada</h2>
+        <div class="chart-wrap"><canvas id="chartImpEstim"></canvas></div>
+        <div class="footer-note" style="margin-top:10px"><b>Estimación:</b> IIBB 50-60%, T S&amp;H 20-25%, Sellados 7-12%, IDC 9-14%.</div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Tasa efectiva por canal</h2>
+      <table>
+        <thead><tr><th>Unidad</th><th>Imp.</th><th>V.Brutas</th><th>%V.Brutas</th><th>%MB</th><th>Régimen</th></tr></thead>
+        <tbody>
+          <tr><td>VN Tradicional</td><td>$1.298 M</td><td>$42.292 M</td><td class="pos">3,07%</td><td>30,4%</td><td>IIBB régimen especial Art. 191 CF BA + T S&amp;H</td></tr>
+          <tr><td>VN GC</td><td>$11 M</td><td>$2.767 M</td><td class="pos">0,38%</td><td>6,3%</td><td>Comisión, base imponible reducida</td></tr>
+          <tr><td>VN Plan Óvalo</td><td>$149 M</td><td>$6.183 M</td><td>2,40%</td><td>16,7%</td><td>Régimen mixto comisiones</td></tr>
+          <tr><td>VU</td><td>$118 M</td><td>$7.107 M</td><td>1,66%</td><td>12,0%</td><td>IIBB sobre margen + Patentes</td></tr>
+          <tr><td>R&amp;A</td><td>$234 M</td><td>$5.100 M</td><td class="warn">4,60%</td><td>11,8%</td><td>IIBB plena (4%) + T S&amp;H</td></tr>
+          <tr><td>SE</td><td>$62 M</td><td>$1.404 M</td><td class="warn">4,39%</td><td>5,4%</td><td>Idem R&amp;A</td></tr>
+          <tr><td>QL</td><td>$26 M</td><td>$88 M*</td><td class="bad">29,7%*</td><td>39,0%</td><td>*Base IIBB real incluye R&amp;A QL ($166M)</td></tr>
+          <tr class="total"><td>TOTAL</td><td>$2.175 M</td><td>$64.941 M</td><td>3,35%</td><td>22,9%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Posición fiscal (al 31-Mar-26)</h2>
+        <div class="stat-row"><span class="label">Anticipos de impuestos (Activo)</span><span class="value pos">$386 M</span></div>
+        <div class="stat-row"><span class="label">Impuestos a pagar (Pasivo)</span><span class="value">$153 M</span></div>
+        <div class="stat-row" style="border-top:2px solid var(--border)"><span class="label"><b>Posición neta a favor</b></span><span class="value pos"><b>$233 M</b></span></div>
+        <div class="footer-note" style="margin-top:10px;background:transparent;padding:0">Capital inmovilizado en AFIP/Rentas. En inflación pierde 4-5% mensual.<br><br><b>Auditar:</b> SIRCREB, Convenio Multilateral, IVA importaciones, anticipos IIBB.</div>
+      </div>
+      <div class="card">
+        <h2>Distribución del MB</h2>
+        <div class="chart-wrap"><canvas id="chartImpRD"></canvas></div>
+        <div class="footer-note" style="margin-top:10px">Por cada $100 de MB, $23 son impuestos operativos.</div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>🚨 Hallazgos y recomendaciones</h2>
+      <div class="grid row2">
+        <div>
+          <div class="var-card down bad"><div class="v-title">1. IIGG en $0 — verificar</div><div>$0 sobre RAI $2.132M. Si no es real, hay contingencia oculta ~$500-700M.</div></div>
+          <div class="var-card down bad"><div class="v-title">2. $233M posición a favor</div><div>Capital inmovilizado en AFIP/Rentas, pierde valor real $10-12M/mes.</div></div>
+          <div class="var-card down bad"><div class="v-title">3. R&amp;A y SE pagan 4,4-4,6%</div><div>Tasa correcta para BA. Confirmar régimen.</div></div>
+        </div>
+        <div>
+          <div class="var-card up good"><div class="v-title">4. Coeficientes Convenio Multilateral</div><div>Santa Rosa, Gral Pico, Bahía Blanca. Auditar coeficientes 2026.</div></div>
+          <div class="var-card up good"><div class="v-title">5. Devengar al mes</div><div>IIBB, T S&amp;H y Sellados al devengado, no al pago. Mejora la lectura mensual.</div></div>
+          <div class="var-card up good"><div class="v-title">6. Auditar T S&amp;H por municipio</div><div>Cada municipio tiene su ordenanza. Verificar topes mínimos / exenciones.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Estimación de composición</h2>
+      <table>
+        <thead><tr><th>Concepto</th><th>$M</th><th>%</th><th>Base imponible</th><th>Alícuota típica</th></tr></thead>
+        <tbody>
+          <tr><td><b>IIBB Provincia</b></td><td>$1.100-1.300</td><td>50-60%</td><td>VN: 1,5x MB · VU/RA/SE: Vtas plena</td><td>4%</td></tr>
+          <tr><td><b>Tasa Seguridad e Higiene</b></td><td>$400-600</td><td>20-25%</td><td>Ventas brutas total</td><td>0,6%-1,2%</td></tr>
+          <tr><td><b>Sellos</b></td><td>$150-250</td><td>7-12%</td><td>Contratos prendarios, financiación</td><td>1,2%-1,5%</td></tr>
+          <tr><td><b>IDC (Imp. Cheque)</b></td><td>$200-300</td><td>9-14%</td><td>Movimientos bancarios</td><td>1,2% efectivo</td></tr>
+          <tr><td>Otros</td><td>$50-100</td><td>2-5%</td><td>BBPP, Patentes, multas</td><td>Varios</td></tr>
+          <tr class="total"><td>TOTAL</td><td>$1.900-2.550</td><td>100%</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PLAN ACCIÓN -->
+  <div class="tab-content" id="acciones">
+    <h2>Plan de Acción priorizado — Q2 2026</h2>
+    <div class="grid row2">
+      <div class="card">
+        <h3 style="color:#fca5a5">🔴 Acciones críticas</h3>
+        <div class="var-card down bad"><div class="v-title">1. Política de descuentos VN Tradicional</div><div>Descuento neto 7,2% YTD vs benchmark BA 0,4%. <b>Cada 1pp = +$423M anuales.</b> Visto a través del lente MB Comercial: con 6,6% de margen real, cualquier descuento &gt;5% vende a pérdida.</div><div class="v-meta">Plazo 30 días · Impacto +$1.000-1.500M/año</div></div>
+        <div class="var-card down bad"><div class="v-title">2. Decisión sobre QL</div><div>-$29M YTD. MB Comercial real solo 46% (vs 76% contable). Cerrar/integrar.</div><div class="v-meta">Plazo 60 días · +$50-80M/año</div></div>
+        <div class="var-card down bad"><div class="v-title">3. Decisión sobre VN GC</div><div>-$42M YTD. MB Comercial 3,9% (mínimo). Si no hay pipeline 24m, integrar.</div><div class="v-meta">Plazo Q2 · +$50-100M/año</div></div>
+        <div class="var-card down bad"><div class="v-title">4. Reducir stock VU + R&amp;A</div><div>167 + 166 días. Reducir a 90 libera ~$1.500M.</div><div class="v-meta">Plazo 90 días · +$500-800M valor real anual</div></div>
+        <div class="var-card down bad"><div class="v-title">5. Recuperar $233M posición fiscal</div><div>SIRCREB, Convenio Multilateral, IVA importaciones.</div><div class="v-meta">Plazo Q2-Q3 · +$233M caja inmediata</div></div>
+      </div>
+      <div class="card">
+        <h3 style="color:#86efac">🟢 Apalancamiento + 🟡 Optimización</h3>
+        <div class="var-card up good"><div class="v-title">6. Mix premium VN</div><div>F-150 ($12,7M MB/u), Bronco, Everest. +50% Maverick = +$190M MB.</div><div class="v-meta">+$200-400M/año</div></div>
+        <div class="var-card up good"><div class="v-title">7. Capacidad SE / QL</div><div>SE Mar mostró +130% Mg Neto con +30% volumen. Apalancamiento operativo evidente.</div><div class="v-meta">+$150-250M/año</div></div>
+        <div class="var-card up good"><div class="v-title">8. R&amp;A Por Mayor → Por Taller</div><div>Por Mayor 36,4% mg vs Por Taller 43,5%. Cada $100M migrado = +$7M margen.</div><div class="v-meta">+$80-120M/año</div></div>
+        <div class="var-card up good"><div class="v-title">9. Plan Óvalo a 20 u/mes</div><div>Mar duplicó volumen. Sostener.</div><div class="v-meta">+$200-300M/año</div></div>
+        <div class="var-card up good"><div class="v-title">10. Devengar partidas anuales</div><div>Berkley $21,8M, T S&amp;H, IIBB CM. Mejora calidad de información mensual.</div></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Impacto agregado</h2>
+      <div style="font-size:13px;line-height:1.8">
+        Si se ejecuta el 60%: <b style="color:var(--good);font-size:18px">+$1.500–2.500M anuales</b> = +85% al +130% sobre el RN actual de $2.132M.<br>
+        Liberación de capital: <b style="color:var(--accent);font-size:16px">~$1.733M</b> (stock + posición fiscal).
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note" style="margin-top:18px"><b>Notas:</b> Importes en millones ARS valores históricos · YTD = Jul 25 a Mar 26 (9 meses) · Sin ajuste por inflación. La carga 100% de pólizas anuales en marzo (Berkley $21,8M) explica parte de los aumentos en "Otros Fijos" — recomendación: provisionar al devengado.</div>
+</div>
+
+<script>
+const meses = ['Enero','Febrero','Marzo'];
+const COLORS = {'VN Tradicional':'#3b82f6','VN Grandes Clientes':'#1e40af','VN Plan Ovalo':'#60a5fa','VU':'#22c55e','R&A':'#a855f7','SE':'#f59e0b','QL':'#ec4899'};
+
+const monthly = {
+  'VN Tradicional':{'Ventas Brutas':[7807,2809,4826],'Descuentos':[591,234,433],'Ventas Netas':[7217,2574,4393],'Costo Ventas':[6520,2352,4103],'Incentivos':[11,95,38],'Margen Bruto':[707,317,328],'Otros Ingresos':[187,101,102],'Otros Egresos':[32,33,31],'Gastos Variables':[327,165,239],'Sueldos':[39,35,41],'Otros Fijos':[45,28,69],'Margen Neto':[451,158,50]},
+  'VN Grandes Clientes':{'Ventas Netas':[300,367,546],'Margen Bruto':[18,22,33],'Gastos Variables':[6,11,9],'Sueldos':[8,7,9],'Otros Fijos':[0.4,0.03,0.03],'Margen Neto':[4,4,15]},
+  'VN Plan Ovalo':{'Ventas Netas':[692,365,764],'Margen Bruto':[99,51,110],'Otros Ingresos':[60,54,64],'Otros Egresos':[5,1,4],'Gastos Variables':[68,56,72],'Sueldos':[18,21,22],'Otros Fijos':[1,0.2,1.4],'Margen Neto':[66,27,75]},
+  'VU':{'Ventas Netas':[1306,602,844],'Costo Ventas':[1132,525,695],'Margen Bruto':[174,77,149],'Otros Ingresos':[0,1,0],'Otros Egresos':[1,0.3,1],'Gastos Variables':[62,34,34],'Sueldos':[11,12,13],'Otros Fijos':[6,4,8],'Margen Neto':[93,28,93]},
+  'R&A':{'Ventas Brutas':[585,470,577],'Descuentos':[7,7,7],'Ventas Netas':[578,463,570],'Costo Ventas':[376,308,349],'Incentivos':[24,14,18],'Margen Bruto':[226,168,239],'Otros Ingresos':[3,9,5],'Otros Egresos':[47,39,68],'Gastos Variables':[47,45,48],'Sueldos':[30,30,43],'Otros Fijos':[3,3,8],'Margen Neto':[102,61,78]},
+  'SE':{'Ventas Netas':[148,140,179],'Costo Ventas':[27,28,33],'Margen Bruto':[121,112,146],'Otros Ingresos':[50,49,73],'Otros Egresos':[6,8,7],'Gastos Variables':[32,36,37],'Sueldos':[66,71,67],'Otros Fijos':[10,11,27],'Margen Neto':[57,35,82]},
+  'QL':{'Ventas Netas':[38,31,32],'Costo Ventas':[18,13,14],'Margen Bruto':[20,17,18],'Otros Ingresos':[8,6,7],'Otros Egresos':[2,1,1],'Gastos Variables':[3,3,4],'Sueldos':[6,5,6],'Otros Fijos':[0,1,1],'Margen Neto':[17,14,12]}
+};
+
+const ytd = {
+  'VN Tradicional':{vbruta:42292,vneta:39255,mb:4271,mbpct:10.9,mc:2962,mn:2063,rd:1090,rdpct:2.8,unid:718},
+  'VN Grandes Clientes':{vbruta:2767,vneta:2767,mb:169,mbpct:6.1,mc:104,mn:9,rd:-42,rdpct:-1.5,unid:94},
+  'VN Plan Ovalo':{vbruta:6183,vneta:6183,mb:890,mbpct:14.4,mc:863,mn:643,rd:482,rdpct:7.8,unid:126},
+  'VU':{vbruta:7107,vneta:7107,mb:980,mbpct:13.8,mc:557,mn:388,rd:177,rdpct:2.5,unid:285},
+  'R&A':{vbruta:5100,vneta:5039,mb:1987,mbpct:39.4,mc:1195,mn:870,rd:583,rdpct:11.6,unid:null},
+  'SE':{vbruta:1404,vneta:1402,mb:1137,mbpct:81.1,mc:1262,mn:528,rd:31,rdpct:2.2,unid:null},
+  'QL':{vbruta:88,vneta:88,mb:67,mbpct:76.0,mc:81,mn:30,rd:-29,rdpct:-33,unid:null}
+};
+
+const totalYTD = {vbruta:64941,vneta:61841,mb:9500,mbpct:15.4,rd:2292,rdpct:3.7,rfin:-183,rno:23,rai:2132,rn:2132};
+const totalMar = {vbruta:7767,vneta:7327,mb:1023,mbpct:14.0,rd:155,rdpct:2.1,rfin:-46,rno:-2,rai:108,rn:108};
+
+const modelos = [
+  {nom:'Ranger',uTrad:344,uGC:82,uPO:52,vbTrad:22309,mbTotal:2615,mbU:5.47},
+  {nom:'Territory',uTrad:209,uGC:2,uPO:34,vbTrad:8903,mbTotal:1196,mbU:4.88},
+  {nom:'Maverick',uTrad:66,uGC:1,uPO:35,vbTrad:3317,mbTotal:613,mbU:6.01},
+  {nom:'Bronco',uTrad:36,uGC:0,uPO:2,vbTrad:1993,mbTotal:261,mbU:6.86},
+  {nom:'Everest',uTrad:30,uGC:0,uPO:0,vbTrad:2192,mbTotal:191,mbU:6.36},
+  {nom:'F-150',uTrad:25,uGC:0,uPO:0,vbTrad:3040,mbTotal:318,mbU:12.74},
+  {nom:'Transit',uTrad:8,uGC:7,uPO:3,vbTrad:537,mbTotal:124,mbU:6.89}
+];
+
+const fM = v => (v>=0?'$':'-$')+Math.abs(v).toLocaleString('es-AR',{maximumFractionDigits:0})+'M';
+const fPct = v => v.toFixed(1)+'%';
+const pctVar = (a,b) => b? ((a-b)/Math.abs(b)*100):0;
+
+let currentPeriod = 'ytd';
+
+const baseOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:'#cfe1ff', font:{size:11}}}},
+  scales:{
+    x:{ticks:{color:'#8e9cc1', font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'}},
+    y:{ticks:{color:'#8e9cc1', font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'}}
+  }
+};
+
+function renderKpis(){
+  const d = currentPeriod === 'ytd' ? totalYTD : totalMar;
+  const lbl = currentPeriod === 'ytd' ? 'YTD' : 'Mar 2026';
+  document.getElementById('resumen-title').textContent = currentPeriod === 'ytd' ?
+    '📅 Vista — Acumulado YTD Jul 25 a Mar 26 (9 meses)' : '📊 Vista — Marzo 2026 (último mes)';
+  document.getElementById('resumenKpis').innerHTML = `
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Ventas Brutas</div><div class="val">${fM(d.vbruta)}</div></div>
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Ventas Netas</div><div class="val">${fM(d.vneta)}</div></div>
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Margen Bruto</div><div class="val pos">${fM(d.mb)}</div><div class="delta pos">${fPct(d.mbpct)}</div></div>
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Result. Departamental</div><div class="val pos">${fM(d.rd)}</div><div class="delta pos">${fPct(d.rdpct)}</div></div>
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Result. Financiero</div><div class="val neg">${fM(d.rfin)}</div></div>
+    <div class="card kpi"><span class="badge">${lbl}</span><div class="lbl">Resultado Neto</div><div class="val pos">${fM(d.rn)}</div></div>`;
+}
+
+function renderCompare(){
+  document.getElementById('compareTop').innerHTML = `
+    <div class="compare-box ytd"><div class="ctitle">📅 ACUMULADO YTD (9 meses)</div><div class="cval">${fM(totalYTD.vneta)}</div><div class="csub">Vtas Netas — MB ${fPct(totalYTD.mbpct)} — RN ${fM(totalYTD.rn)} (${fPct(totalYTD.rn/totalYTD.vneta*100)})</div></div>
+    <div class="compare-box month"><div class="ctitle">📊 ÚLTIMO MES — Marzo 2026</div><div class="cval">${fM(totalMar.vneta)}</div><div class="csub">Vtas Netas — MB ${fPct(totalMar.mbpct)} — RN ${fM(totalMar.rn)} (${fPct(totalMar.rn/totalMar.vneta*100)})</div></div>`;
+}
+
+function renderTablaMaestra(){
+  let html = '<thead><tr><th>Unidad</th><th>YTD V.Netas</th><th>YTD MB</th><th>YTD MB%</th><th>YTD RD</th><th>Mar V.Netas</th><th>Mar MB</th><th>Mar MB%</th><th>Mar Mg Neto</th></tr></thead><tbody>';
+  Object.keys(ytd).forEach(u => {
+    const y = ytd[u];
+    const m = monthly[u] || {};
+    const marVN = (m['Ventas Netas']||[0,0,0])[2];
+    const marMB = (m['Margen Bruto']||[0,0,0])[2];
+    const marMN = (m['Margen Neto']||[0,0,0])[2];
+    const marMBpct = marVN ? marMB/marVN*100 : 0;
+    const rdClass = y.rd >= 0 ? 'pos' : 'neg';
+    const mnClass = marMN >= 0 ? 'pos' : 'neg';
+    html += `<tr><td><b>${u}</b></td><td>${fM(y.vneta)}</td><td>${fM(y.mb)}</td><td>${fPct(y.mbpct)}</td><td class="${rdClass}">${fM(y.rd)}</td><td>${fM(marVN)}</td><td>${fM(marMB)}</td><td>${fPct(marMBpct)}</td><td class="${mnClass}">${fM(marMN)}</td></tr>`;
+  });
+  html += `<tr class="total"><td>TOTAL</td><td>${fM(totalYTD.vneta)}</td><td>${fM(totalYTD.mb)}</td><td>${fPct(totalYTD.mbpct)}</td><td>${fM(totalYTD.rd)}</td><td>${fM(totalMar.vneta)}</td><td>${fM(totalMar.mb)}</td><td>${fPct(totalMar.mbpct)}</td><td>${fM(totalMar.rn)}</td></tr></tbody>`;
+  document.getElementById('tablaMaestra').innerHTML = html;
+}
+
+let chartMixCompareInst;
+function renderMixCompare(){
+  const labels = Object.keys(ytd);
+  const ytdData = labels.map(u => ytd[u].rd);
+  const marData = labels.map(u => (monthly[u]?.['Margen Neto']||[0,0,0])[2]);
+  if (chartMixCompareInst) chartMixCompareInst.destroy();
+  chartMixCompareInst = new Chart(document.getElementById('chartMixCompare'), {
+    type:'bar',
+    data:{labels, datasets:[
+      {label:'YTD Result. Dpto $M', data:ytdData, backgroundColor:'#3b82f6'},
+      {label:'Mar Mg Neto $M', data:marData, backgroundColor:'#a855f7'}
+    ]},
+    options:{...baseOpts, indexAxis:'y', plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fM(c.parsed.x)}}}}
+  });
+}
+
+new Chart(document.getElementById('chartMBNominal'), {
+  type:'line',
+  data:{labels: meses,
+    datasets: Object.keys(monthly).map(u => ({label: u, data: monthly[u]['Margen Bruto'], borderColor: COLORS[u], backgroundColor:'transparent', tension:0.25, borderWidth:2.5, pointRadius:4}))},
+  options:{...baseOpts, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fM(c.parsed.y)}}}}
+});
+
+new Chart(document.getElementById('chartMBPct'), {
+  type:'line',
+  data:{labels: meses,
+    datasets: Object.keys(monthly).map(u => ({label: u,
+      data: meses.map((_,i) => {const mb = monthly[u]['Margen Bruto'][i]; const vn = monthly[u]['Ventas Netas'][i]; return vn ? mb/vn*100 : 0;}),
+      borderColor: COLORS[u], backgroundColor:'transparent', tension:0.25, borderWidth:2.5, pointRadius:4}))},
+  options:{...baseOpts, scales:{...baseOpts.scales, y:{...baseOpts.scales.y, ticks:{...baseOpts.scales.y.ticks, callback:v=>v+'%'}}}, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fPct(c.parsed.y)}}}}
+});
+
+function renderMBEvol(){
+  let html = '';
+  Object.keys(monthly).forEach(u => {
+    const mb = monthly[u]['Margen Bruto'];
+    const vn = monthly[u]['Ventas Netas'];
+    const pcts = mb.map((m,i) => vn[i] ? m/vn[i]*100 : 0);
+    const var32 = pctVar(mb[2], mb[1]);
+    const deltaPp = pcts[2] - pcts[1];
+    const cls = var32 < 0 ? 'neg' : 'pos';
+    const cls2 = deltaPp < 0 ? 'neg' : 'pos';
+    html += `<tr><td><b>${u}</b></td><td>${fM(mb[0])}</td><td>${fM(mb[1])}</td><td>${fM(mb[2])}</td><td class="${cls}">${var32 >= 0 ? '+' : ''}${var32.toFixed(0)}%</td><td>${fPct(pcts[0])}</td><td>${fPct(pcts[1])}</td><td>${fPct(pcts[2])}</td><td class="${cls2}">${deltaPp >= 0 ? '+' : ''}${deltaPp.toFixed(1)}pp</td></tr>`;
+  });
+  document.getElementById('tablaMBEvol').innerHTML = html;
+}
+
+new Chart(document.getElementById('chartVolModelos'), {
+  type:'bar',
+  data:{labels: modelos.map(m => m.nom),
+    datasets:[
+      {label:'Tradicional', data: modelos.map(m=>m.uTrad), backgroundColor:'#3b82f6'},
+      {label:'Grandes Clientes', data: modelos.map(m=>m.uGC), backgroundColor:'#1e40af'},
+      {label:'Plan Óvalo', data: modelos.map(m=>m.uPO), backgroundColor:'#60a5fa'}
+    ]},
+  options:{...baseOpts, scales:{...baseOpts.scales, x:{...baseOpts.scales.x, stacked:true}, y:{...baseOpts.scales.y, stacked:true}}}
+});
+
+new Chart(document.getElementById('chartMBModelos'), {
+  type:'bar',
+  data:{labels: modelos.map(m => m.nom),
+    datasets:[
+      {label:'MB Total $M', data: modelos.map(m=>m.mbTotal), backgroundColor:'#22c55e', yAxisID:'y'},
+      {label:'MB / u $M', data: modelos.map(m=>m.mbU), backgroundColor:'#a855f7', yAxisID:'y1'}
+    ]},
+  options:{...baseOpts, scales:{
+    x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+    y:{position:'left', ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+    y1:{position:'right', ticks:{color:'#8e9cc1'}, grid:{display:false}}
+  }}
+});
+
+function renderTablaModelos(){
+  let html = '';
+  modelos.forEach(m => {
+    const total = m.uTrad + m.uGC + m.uPO;
+    const mbpct = m.vbTrad ? m.mbTotal/m.vbTrad*100 : 0;
+    html += `<tr><td><b>${m.nom}</b></td><td>${m.uTrad}</td><td>${m.uGC}</td><td>${m.uPO}</td><td><b>${total}</b></td><td>${fM(m.vbTrad)}</td><td class="pos">${fM(m.mbTotal)}</td><td>${m.mbU.toFixed(1)} M</td><td>${fPct(mbpct)}</td></tr>`;
+  });
+  const tot = modelos.reduce((a,m)=>({uTrad:a.uTrad+m.uTrad, uGC:a.uGC+m.uGC, uPO:a.uPO+m.uPO, vbTrad:a.vbTrad+m.vbTrad, mbTotal:a.mbTotal+m.mbTotal}), {uTrad:0,uGC:0,uPO:0,vbTrad:0,mbTotal:0});
+  html += `<tr class="total"><td>TOTAL VN</td><td>${tot.uTrad}</td><td>${tot.uGC}</td><td>${tot.uPO}</td><td>${tot.uTrad+tot.uGC+tot.uPO}</td><td>${fM(tot.vbTrad)}</td><td>${fM(tot.mbTotal)}</td><td>${(tot.mbTotal/(tot.uTrad+tot.uGC+tot.uPO)).toFixed(1)} M</td><td>${fPct(tot.mbTotal/tot.vbTrad*100)}</td></tr>`;
+  document.getElementById('tablaModelos').innerHTML = html;
+}
+
+// MB Comercial
+const mbcomData = [
+  {u:'VN Tradicional', mbc:4271, imp:1298, com:385, vneta:39255},
+  {u:'VN GC', mbc:169, imp:11, com:51, vneta:2767},
+  {u:'VN Plan Óvalo', mbc:890, imp:149, com:150, vneta:6183},
+  {u:'VU', mbc:980, imp:65, com:85, vneta:7107},
+  {u:'R&A', mbc:1987, imp:234, com:135, vneta:5039},
+  {u:'SE', mbc:1137, imp:62, com:1, vneta:1402},
+  {u:'QL', mbc:67, imp:26, com:0, vneta:88}
+];
+
+new Chart(document.getElementById('chartMBComBar'), {
+  type:'bar',
+  data:{labels: mbcomData.map(d=>d.u),
+    datasets:[
+      {label:'MB Comercial real', data: mbcomData.map(d=>d.mbc-d.imp-d.com), backgroundColor:'#22c55e'},
+      {label:'(-) Comisiones', data: mbcomData.map(d=>d.com), backgroundColor:'#a855f7'},
+      {label:'(-) Impuestos venta', data: mbcomData.map(d=>d.imp), backgroundColor:'#ef4444'}
+    ]},
+  options:{...baseOpts, scales:{
+    x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}, stacked:true},
+    y:{ticks:{color:'#8e9cc1', callback:v=>'$'+v.toLocaleString('es-AR')+'M'}, grid:{color:'rgba(255,255,255,0.05)'}, stacked:true}
+  }, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString('es-AR')+'M'}}}}
+});
+
+new Chart(document.getElementById('chartMBErosion'), {
+  type:'bar',
+  data:{labels: mbcomData.map(d=>d.u),
+    datasets:[
+      {label:'MB contable %', data: mbcomData.map(d=>d.mbc/d.vneta*100), backgroundColor:'#3b82f6'},
+      {label:'MB Comercial %', data: mbcomData.map(d=>(d.mbc-d.imp-d.com)/d.vneta*100), backgroundColor:'#22c55e'}
+    ]},
+  options:{...baseOpts, scales:{...baseOpts.scales, y:{...baseOpts.scales.y, ticks:{...baseOpts.scales.y.ticks, callback:v=>v+'%'}}}, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y.toFixed(1)+'%'}}}}
+});
+
+// PUNTO DE EQUILIBRIO
+const peData = [
+  {u:'VN Tradicional', vneta:39255, peTotal:24809, mgSeg:36.8},
+  {u:'VN GC', vneta:2767, peTotal:3911, mgSeg:-41.3},
+  {u:'VN P.Óvalo', vneta:6183, peTotal:2730, mgSeg:55.9},
+  {u:'VU', vneta:7107, peTotal:4849, mgSeg:31.8},
+  {u:'R&A', vneta:5039, peTotal:2576, mgSeg:48.9},
+  {u:'SE', vneta:1402, peTotal:1368, mgSeg:2.5},
+  {u:'QL', vneta:88, peTotal:120, mgSeg:-35.8}
+];
+
+new Chart(document.getElementById('chartPE'), {
+  type:'bar',
+  data:{labels: peData.map(d=>d.u),
+    datasets:[
+      {label:'Ventas Netas YTD', data: peData.map(d=>d.vneta), backgroundColor:'#3b82f6'},
+      {label:'PE Total', data: peData.map(d=>d.peTotal), backgroundColor:'#ef4444'}
+    ]},
+  options:{...baseOpts, scales:{
+    x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+    y:{ticks:{color:'#8e9cc1', callback:v=>'$'+v.toLocaleString('es-AR')+'M'}, grid:{color:'rgba(255,255,255,0.05)'}, type:'logarithmic'}
+  }, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString('es-AR')+'M'}}}}
+});
+
+new Chart(document.getElementById('chartMgSeg'), {
+  type:'bar',
+  data:{labels: peData.map(d=>d.u),
+    datasets:[{label:'Margen de Seguridad %', data: peData.map(d=>d.mgSeg),
+      backgroundColor: peData.map(d => d.mgSeg < 0 ? '#ef4444' : d.mgSeg < 10 ? '#f59e0b' : '#22c55e')}]},
+  options:{...baseOpts, indexAxis:'y',
+    plugins:{...baseOpts.plugins, legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.x.toFixed(1)+'%'}}},
+    scales:{x:{ticks:{color:'#8e9cc1', callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,0.05)'}},
+            y:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}}}
+  }
+});
+
+// IMPUESTOS
+new Chart(document.getElementById('chartImpEstim'), {
+  type:'doughnut',
+  data:{labels:['IIBB ~55%','T S&H ~22%','IDC ~12%','Sellados ~9%','Otros ~2%'],
+    datasets:[{data:[1200,475,260,200,40], backgroundColor:['#3b82f6','#a855f7','#f59e0b','#22c55e','#64748b'], borderColor:'#0a0f1c', borderWidth:2}]},
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{color:'#cfe1ff', font:{size:11}}}, tooltip:{callbacks:{label:c=>c.label+': $'+c.parsed.toLocaleString('es-AR')+'M'}}}}
+});
+
+new Chart(document.getElementById('chartImpRD'), {
+  type:'bar',
+  data:{labels:['Margen Bruto YTD'],
+    datasets:[
+      {label:'Impuestos venta', data:[2175], backgroundColor:'#ef4444'},
+      {label:'Sueldos+otros', data:[2793], backgroundColor:'#f59e0b'},
+      {label:'Margen Neto', data:[4532], backgroundColor:'#22c55e'}
+    ]},
+  options:{...baseOpts, scales:{
+    x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}, stacked:true},
+    y:{ticks:{color:'#8e9cc1', callback:v=>'$'+v.toLocaleString('es-AR')+'M'}, grid:{color:'rgba(255,255,255,0.05)'}, stacked:true}
+  }}
+});
+
+function renderUnit(unitId, unitName){
+  const m = monthly[unitName];
+  const y = ytd[unitName];
+  const marVN = (m['Ventas Netas']||[0,0,0])[2];
+  const marMB = (m['Margen Bruto']||[0,0,0])[2];
+  const marMN = (m['Margen Neto']||[0,0,0])[2];
+  const marMBpct = marVN ? marMB/marVN*100 : 0;
+
+  document.getElementById(`${unitId}-kpis`).innerHTML = `
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Ventas Netas</div><div class="val">${fM(y.vneta)}</div><div class="delta">${y.unid?y.unid+' u':''}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">Vtas Netas Mar</div><div class="val">${fM(marVN)}</div><div class="delta">${fPct(marVN/y.vneta*100)} del YTD</div></div>
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Margen Bruto</div><div class="val pos">${fM(y.mb)}</div><div class="delta pos">${fPct(y.mbpct)}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">MB Mar</div><div class="val pos">${fM(marMB)}</div><div class="delta">${fPct(marMBpct)} ${marMBpct>y.mbpct?'<span class="pos">↑ vs YTD</span>':'<span class="neg">↓ vs YTD</span>'}</div></div>
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Result. Departamental</div><div class="val ${y.rd>=0?'pos':'neg'}">${fM(y.rd)}</div><div class="delta">${fPct(y.rdpct)}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">Mg Neto Mar</div><div class="val ${marMN>=0?'pos':'neg'}">${fM(marMN)}</div></div>`;
+
+  let html = '<thead><tr><th>Concepto</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Q1</th></tr></thead><tbody>';
+  ['Ventas Brutas','Descuentos','Ventas Netas','Costo Ventas','Incentivos','Margen Bruto','Otros Ingresos','Otros Egresos','Gastos Variables','Sueldos','Otros Fijos','Margen Neto'].forEach(it => {
+    if (m[it]) {
+      const v = m[it];
+      const q1 = v[0]+v[1]+v[2];
+      const subtotalCls = ['Ventas Netas','Margen Bruto','Margen Neto'].includes(it) ? ' class="subtotal"' : '';
+      const varPct = v[1] ? (v[2]-v[1])/Math.abs(v[1])*100 : 0;
+      let alertCls = '';
+      if (Math.abs(varPct) > 50 && Math.abs(v[2]-v[1]) > 5) {
+        if (it === 'Margen Bruto' || it === 'Margen Neto' || it === 'Ventas Netas') {
+          alertCls = varPct > 0 ? ' class="up"' : ' class="alert"';
+        } else { alertCls = varPct > 0 ? ' class="alert"' : ' class="up"'; }
+      }
+      html += `<tr${alertCls || subtotalCls}><td>${it}</td><td>${fM(v[0])}</td><td>${fM(v[1])}</td><td>${fM(v[2])}</td><td>${fM(q1)}</td></tr>`;
+    }
+  });
+  html += '</tbody>';
+  document.getElementById(`${unitId}-pl`).innerHTML = html;
+
+  const ctx = document.getElementById(`${unitId}Chart`);
+  if (ctx) {
+    new Chart(ctx, {
+      type:'bar',
+      data:{labels: meses,
+        datasets:[
+          {label:'MB $M', data: m['Margen Bruto']||[0,0,0], backgroundColor:'#22c55e', yAxisID:'y'},
+          {label:'MB %', data: meses.map((_,i)=>{const v=m['Ventas Netas']?.[i]; return v?(m['Margen Bruto']?.[i]||0)/v*100:0}), type:'line', borderColor:'#a855f7', backgroundColor:'transparent', yAxisID:'y1', tension:0.25}
+        ]},
+      options:{...baseOpts, scales:{
+        x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+        y:{position:'left', ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+        y1:{position:'right', ticks:{color:'#8e9cc1', callback:v=>v+'%'}, grid:{display:false}}
+      }}
+    });
+  }
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    setTimeout(() => Object.values(Chart.instances).forEach(c => c.resize()), 50);
+  });
+});
+
+document.querySelectorAll('.period-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentPeriod = b.dataset.period;
+    renderKpis();
+  });
+});
+
+renderKpis();
+renderCompare();
+renderTablaMaestra();
+renderMixCompare();
+renderMBEvol();
+renderTablaModelos();
+renderUnit('vntrad','VN Tradicional');
+renderUnit('vngc','VN Grandes Clientes');
+renderUnit('vnpo','VN Plan Ovalo');
+renderUnit('vu','VU');
+renderUnit('ra','R&A');
+renderUnit('se','SE');
+renderUnit('ql','QL');
+</script>
+</body>
+</html>
+, stacked:true}
+  }}
+});
+
+function renderUnit(unitId, unitName){
+  const m = monthly[unitName];
+  const y = ytd[unitName];
+  const marVN = (m['Ventas Netas']||[0,0,0])[2];
+  const marMB = (m['Margen Bruto']||[0,0,0])[2];
+  const marMN = (m['Margen Neto']||[0,0,0])[2];
+  const marMBpct = marVN ? marMB/marVN*100 : 0;
+
+  document.getElementById(`${unitId}-kpis`).innerHTML = `
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Ventas Netas</div><div class="val">${fM(y.vneta)}</div><div class="delta">${y.unid?y.unid+' u':''}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">Vtas Netas Mar</div><div class="val">${fM(marVN)}</div><div class="delta">${fPct(marVN/y.vneta*100)} del YTD</div></div>
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Margen Bruto</div><div class="val pos">${fM(y.mb)}</div><div class="delta pos">${fPct(y.mbpct)}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">MB Mar</div><div class="val pos">${fM(marMB)}</div><div class="delta">${fPct(marMBpct)} ${marMBpct>y.mbpct?'<span class="pos">↑ vs YTD</span>':'<span class="neg">↓ vs YTD</span>'}</div></div>
+    <div class="card kpi"><span class="badge">YTD</span><div class="lbl">Result. Departamental</div><div class="val ${y.rd>=0?'pos':'neg'}">${fM(y.rd)}</div><div class="delta">${fPct(y.rdpct)}</div></div>
+    <div class="card kpi" style="border-color:#a855f7;border-top:2px solid #a855f7"><span class="badge" style="background:rgba(168,85,247,0.2);color:#c084fc">MARZO</span><div class="lbl">Mg Neto Mar</div><div class="val ${marMN>=0?'pos':'neg'}">${fM(marMN)}</div></div>`;
+
+  let html = '<thead><tr><th>Concepto</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Q1</th></tr></thead><tbody>';
+  ['Ventas Brutas','Descuentos','Ventas Netas','Costo Ventas','Incentivos','Margen Bruto','Otros Ingresos','Otros Egresos','Gastos Variables','Sueldos','Otros Fijos','Margen Neto'].forEach(it => {
+    if (m[it]) {
+      const v = m[it];
+      const q1 = v[0]+v[1]+v[2];
+      const subtotalCls = ['Ventas Netas','Margen Bruto','Margen Neto'].includes(it) ? ' class="subtotal"' : '';
+      const varPct = v[1] ? (v[2]-v[1])/Math.abs(v[1])*100 : 0;
+      let alertCls = '';
+      if (Math.abs(varPct) > 50 && Math.abs(v[2]-v[1]) > 5) {
+        if (it === 'Margen Bruto' || it === 'Margen Neto' || it === 'Ventas Netas') {
+          alertCls = varPct > 0 ? ' class="up"' : ' class="alert"';
+        } else { alertCls = varPct > 0 ? ' class="alert"' : ' class="up"'; }
+      }
+      html += `<tr${alertCls || subtotalCls}><td>${it}</td><td>${fM(v[0])}</td><td>${fM(v[1])}</td><td>${fM(v[2])}</td><td>${fM(q1)}</td></tr>`;
+    }
+  });
+  html += '</tbody>';
+  document.getElementById(`${unitId}-pl`).innerHTML = html;
+
+  const ctx = document.getElementById(`${unitId}Chart`);
+  if (ctx) {
+    new Chart(ctx, {
+      type:'bar',
+      data:{labels: meses,
+        datasets:[
+          {label:'MB $M', data: m['Margen Bruto']||[0,0,0], backgroundColor:'#22c55e', yAxisID:'y'},
+          {label:'MB %', data: meses.map((_,i)=>{const v=m['Ventas Netas']?.[i]; return v?(m['Margen Bruto']?.[i]||0)/v*100:0}), type:'line', borderColor:'#a855f7', backgroundColor:'transparent', yAxisID:'y1', tension:0.25}
+        ]},
+      options:{...baseOpts, scales:{
+        x:{ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+        y:{position:'left', ticks:{color:'#8e9cc1'}, grid:{color:'rgba(255,255,255,0.05)'}},
+        y1:{position:'right', ticks:{color:'#8e9cc1', callback:v=>v+'%'}, grid:{display:false}}
+      }}
+    });
+  }
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    setTimeout(() => Object.values(Chart.instances).forEach(c => c.resize()), 50);
+  });
+});
+
+document.querySelectorAll('.period-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentPeriod = b.dataset.period;
+    renderKpis();
+  });
+});
+
+renderKpis();
+renderCompare();
+renderTablaMaestra();
+renderMixCompare();
+renderMBEvol();
+renderTablaModelos();
+renderUnit('vntrad','VN Tradicional');
+renderUnit('vngc','VN Grandes Clientes');
+renderUnit('vnpo','VN Plan Ovalo');
+renderUnit('vu','VU');
+renderUnit('ra','R&A');
+renderUnit('se','SE');
+renderUnit('ql','QL');
+</script>
+</body>
+</html>
