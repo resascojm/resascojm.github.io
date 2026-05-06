@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Guspamar S.A. — Decisión por Canal · Q1 2026 / YTD Jul25-Mar26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0f1c; --card:#101830; --card2:#172242; --border:#243358;
+    --text:#e6ecff; --muted:#8e9cc1; --accent:#3b82f6; --good:#22c55e;
+    --bad:#ef4444; --warn:#f59e0b; --ford:#003478; --purple:#a855f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:22px 28px;background:linear-gradient(135deg,var(--ford) 0%,#0a4ca8 60%,#0066cc 100%);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  header h1{margin:0 0 3px 0;font-size:22px;font-weight:700;letter-spacing:.3px}
+  header .sub{color:#cfe1ff;font-size:12px}
+  .container{padding:18px 28px;max-width:1600px;margin:0 auto}
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(6,1fr)}
+  .row2{grid-template-columns:1fr 1fr}
+  .row3{grid-template-columns:1fr 1fr 1fr}
+  .row23{grid-template-columns:2fr 1fr}
+  .row14{grid-template-columns:1fr 4fr}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .kpi{padding:13px}
+  .kpi .lbl{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .kpi .val{font-size:21px;font-weight:700;line-height:1.1}
+  .kpi .delta{font-size:10.5px;color:var(--muted);margin-top:5px}
+  .pos{color:var(--good)} .neg{color:var(--bad)} .mut{color:var(--muted)} .warn{color:var(--warn)}
+  h2{font-size:14px;margin:0 0 11px 0;color:#cfe1ff;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  h3{font-size:12px;margin:0 0 8px 0;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--border)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:500;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr.total{background:var(--card2);font-weight:700}
+  tr.subtotal{background:rgba(59,130,246,0.08);font-weight:600}
+  tr.minor td{color:var(--muted);padding-left:20px}
+  .chart-wrap{position:relative;height:260px}
+  .chart-tall{height:340px}
+  .chart-short{height:200px}
+  .alert{background:rgba(245,158,11,0.1);border-left:3px solid var(--warn);padding:11px 13px;border-radius:6px;font-size:12.5px;color:#fde6b3;margin-bottom:14px}
+  .alert b{color:var(--warn)}
+  .alert.danger{background:rgba(239,68,68,0.1);border-color:var(--bad);color:#fca5a5}
+  .alert.danger b{color:var(--bad)}
+  .alert.success{background:rgba(34,197,94,0.1);border-color:var(--good);color:#86efac}
+  .alert.success b{color:var(--good)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;white-space:nowrap}
+  .pill.good{background:rgba(34,197,94,.15);color:#86efac}
+  .pill.bad{background:rgba(239,68,68,.15);color:#fca5a5}
+  .pill.warn{background:rgba(245,158,11,.15);color:#fde6b3}
+  .pill.info{background:rgba(59,130,246,.15);color:#93c5fd}
+  .footer-note{margin-top:18px;padding:13px;background:var(--card2);border-radius:8px;font-size:11.5px;color:var(--muted);line-height:1.55}
+  /* Tabs */
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin:0 -28px 18px -28px;padding:0 28px;overflow-x:auto;background:var(--card);position:sticky;top:64px;z-index:90}
+  .tab{padding:12px 16px;cursor:pointer;color:var(--muted);font-size:12.5px;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500}
+  .tab:hover{color:#cfe1ff;background:rgba(59,130,246,0.05)}
+  .tab.active{color:var(--text);border-bottom-color:var(--accent);background:rgba(59,130,246,0.08)}
+  .tab .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .tab .dot.green{background:var(--good)}
+  .tab .dot.red{background:var(--bad)}
+  .tab .dot.yellow{background:var(--warn)}
+  .tab .dot.blue{background:var(--accent)}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+  /* Decision cards */
+  .decision-card{padding:13px;border-radius:8px;border-left:3px solid;background:var(--card2);margin-bottom:10px}
+  .decision-card.crit{border-color:var(--bad)}
+  .decision-card.warn{border-color:var(--warn)}
+  .decision-card.opp{border-color:var(--good)}
+  .decision-card .title{font-weight:700;font-size:13px;margin-bottom:5px}
+  .decision-card .body{font-size:12px;color:#cfe1ff;line-height:1.5}
+  .decision-card .meta{font-size:11px;color:var(--muted);margin-top:5px}
+  /* Heatmap */
+  .heatmap{display:grid;gap:6px;grid-template-columns:120px repeat(7,1fr)}
+  .heat-cell{padding:8px 6px;text-align:center;border-radius:5px;font-size:11.5px;font-weight:600}
+  .heat-label{padding:8px 0;color:var(--muted);font-size:11px;text-align:left;font-weight:500}
+  .heat-header{padding:8px 6px;text-align:center;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;font-weight:500}
+  /* Misc */
+  .progress{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:4px}
+  .progress > div{height:100%;border-radius:3px}
+  .legend-item{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);margin-right:14px}
+  .legend-item .swatch{width:10px;height:10px;border-radius:2px}
+  .stat-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12px}
+  .stat-row:last-child{border-bottom:none}
+  .stat-row .label{color:var(--muted)}
+  .stat-row .value{font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Guspamar S.A. — Dashboard de Decisiones por Canal</h1>
+  <div class="sub">Concesionario Ford · Q1 2026 (Ene-Feb-Mar) · YTD Jul25-Mar26 (9 meses) · Valores históricos en ARS · <b style="color:#fbbf24">⚠ Sin ajuste por inflación</b></div>
+</header>
+
+<div class="container">
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="resumen"><span class="dot blue"></span>Resumen</div>
+    <div class="tab" data-tab="vntrad"><span class="dot green"></span>VN Tradicional</div>
+    <div class="tab" data-tab="vngc"><span class="dot red"></span>VN Grandes Clientes</div>
+    <div class="tab" data-tab="vnpo"><span class="dot green"></span>VN Plan Óvalo</div>
+    <div class="tab" data-tab="vu"><span class="dot yellow"></span>VU</div>
+    <div class="tab" data-tab="ra"><span class="dot green"></span>R&amp;A</div>
+    <div class="tab" data-tab="se"><span class="dot yellow"></span>SE</div>
+    <div class="tab" data-tab="ql"><span class="dot red"></span>QL</div>
+    <div class="tab" data-tab="balance"><span class="dot blue"></span>Capital y Stock</div>
+    <div class="tab" data-tab="decisiones"><span class="dot yellow"></span>Plan de Acción</div>
+  </div>
+
+  <!-- ===================== RESUMEN ===================== -->
+  <div class="tab-content active" id="resumen">
+
+    <h2>KPIs Consolidados — YTD Jul25-Mar26</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Ventas Brutas</div><div class="val">$64.941 M</div><div class="delta">9 meses · 938u VN + 285u VU</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto</div><div class="val">$9.500 M</div><div class="delta pos">15,4% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val">$2.292 M</div><div class="delta pos">3,7% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">Result. Financiero</div><div class="val neg">-$183 M</div><div class="delta neg">-8% del result. dpto.</div></div>
+      <div class="card kpi"><div class="lbl">Resultado Neto</div><div class="val pos">$2.132 M</div><div class="delta">3,4% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">Patrimonio Neto*</div><div class="val">$10.541 M</div><div class="delta">ROE anualizado ≈27%</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Semáforo por unidad — YTD</h2>
+        <table>
+          <thead><tr><th>Unidad</th><th>Ventas Netas</th><th>MB %</th><th>Result. Dpto $</th><th>RD %</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>VN Tradicional</td><td>$39.255 M</td><td>10,9%</td><td class="pos">$1.090 M</td><td class="pos">2,8%</td><td><span class="pill good">OK</span></td></tr>
+            <tr><td>VN Grandes Clientes</td><td>$2.767 M</td><td>6,1%</td><td class="neg">-$42 M</td><td class="neg">-1,5%</td><td><span class="pill bad">PIERDE</span></td></tr>
+            <tr><td>VN Plan Óvalo</td><td>$6.183 M</td><td>14,4%</td><td class="pos">$482 M</td><td class="pos">7,8%</td><td><span class="pill good">FUERTE</span></td></tr>
+            <tr><td>VU</td><td>$7.107 M</td><td>13,8%</td><td class="pos">$177 M</td><td class="warn">2,5%</td><td><span class="pill warn">REGULAR</span></td></tr>
+            <tr><td>R&A</td><td>$5.039 M</td><td class="pos">39,4%</td><td class="pos">$583 M</td><td class="pos">11,6%</td><td><span class="pill good">★ ESTRELLA</span></td></tr>
+            <tr><td>SE</td><td>$1.402 M</td><td class="pos">81,1%</td><td class="pos">$31 M</td><td class="warn">2,2%</td><td><span class="pill warn">SUBABSORBIDO</span></td></tr>
+            <tr><td>QL</td><td>$88 M</td><td>76,0%</td><td class="neg">-$29 M</td><td class="neg">-33%</td><td><span class="pill bad">PIERDE</span></td></tr>
+            <tr class="total"><td>TOTAL</td><td>$61.841 M</td><td>15,4%</td><td>$2.292 M</td><td>3,7%</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="footer-note" style="margin-top:10px">
+          MB% = Margen Bruto / Ventas Netas. RD% = Resultado Departamental / Ventas Netas. <b>R&amp;A es la unidad más rentable</b> en términos relativos; <b>QL pierde sistemáticamente</b>; <b>VN GC pierde</b> por estructura sin volumen.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Mix de Resultado Departamental ($ millones)</h2>
+        <div class="chart-wrap chart-tall"><canvas id="chartMixRD"></canvas></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Evolución mensual Q1 2026 — Ventas Netas vs Resultado Neto</h2>
+        <div class="chart-wrap"><canvas id="chartMensualVN"></canvas></div>
+        <div class="footer-note" style="margin-top:10px">
+          <b>Caída febrero:</b> -56% vs enero (estacionalidad vacacional argentina). <b>Recuperación marzo:</b> volumen +61% vs feb pero margen neto creció solo 66% — el resultado se está comprimiendo (mirar gastos fijos otros y financiamiento).
+        </div>
+      </div>
+      <div class="card">
+        <h2>Márgenes mensuales (%)</h2>
+        <div class="chart-wrap"><canvas id="chartMensualPct"></canvas></div>
+        <div class="footer-note" style="margin-top:10px">
+          El RN% cae de 5,4% (Ene) → 1,4% (Feb) → 1,5% (Mar). La estructura fija no escala con la baja de volumen — alta sensibilidad operativa.
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Matriz de prioridades</h2>
+      <div class="grid row3">
+        <div>
+          <h3 style="color:#fca5a5">🔴 Apagar incendios</h3>
+          <div class="decision-card crit"><div class="title">QL pierde -$29M YTD</div><div class="body">Margen Bruto altísimo (76%) pero sin volumen para absorber sueldos ($50M YTD). Resultado mensual negativo en 2 de 3 meses Q1.</div><div class="meta">Acción: redimensionar dotación o integrar a SE.</div></div>
+          <div class="decision-card crit"><div class="title">VN Grandes Clientes pierde -$42M YTD</div><div class="body">Sólo 94 unidades en 9 meses con descuento neto del 6,1% y sueldos asignados $93M. KPI margen neto/vendedor 4 vs benchmark BA 4,85 → equipo subutilizado.</div><div class="meta">Acción: aumentar volumen (×2) o reasignar dotación a Tradicional.</div></div>
+        </div>
+        <div>
+          <h3 style="color:#fde6b3">🟡 Optimizar</h3>
+          <div class="decision-card warn"><div class="title">VU rotación lenta — 143 días de stock</div><div class="body">$3.732 M en stock vs $7.107 M ventas YTD anualizadas implica 4,7 meses. En contexto inflacionario el costo de mantener stock es ALTO.</div><div class="meta">Acción: forzar rotación &lt;90 días, descuento agresivo &gt;120 días.</div></div>
+          <div class="decision-card warn"><div class="title">R&A stock 7 meses</div><div class="body">$2.315 M existencias vs costo ventas anualizado $4.070 M. Slow movers comen capital y deprecian.</div><div class="meta">Acción: identificar SKUs &gt;180 días, devolver/liquidar.</div></div>
+          <div class="decision-card warn"><div class="title">Descuentos VN Tradicional ↑</div><div class="body">Pasaron de 7,6% en Ene a 8,1% en Mar. KPI vs benchmark BA: 8,1% vs 1,5% (5x). Gran palanca de margen.</div><div class="meta">Acción: revisar política de descuentos por modelo, foco en Ranger.</div></div>
+        </div>
+        <div>
+          <h3 style="color:#86efac">🟢 Apalancar</h3>
+          <div class="decision-card opp"><div class="title">R&A es la estrella</div><div class="body">$1.987 M MB con 39,4% margen y $583 M result. dpto. (11,6% s/vtas). Por Mayor crece pero margen menor — mix inteligente.</div><div class="meta">Acción: invertir capacidad logística, mejorar disponibilidad SKUs.</div></div>
+          <div class="decision-card opp"><div class="title">Plan Óvalo subexplotado</div><div class="body">7,8% RD% (mejor que Tradicional) pero solo 126 unid YTD vs 718 Tradicional. Comisiones financieras ($488M) son margen "limpio".</div><div class="meta">Acción: aumentar suscripciones, KPI prospección.</div></div>
+          <div class="decision-card opp"><div class="title">Posventa absorbe 57% de gastos fijos</div><div class="body">Vs benchmark BA 38%. Tu posventa es eficiente trabajando, pero está cargando sobrecostos. Aumentar volumen mejora la absorción.</div><div class="meta">Acción: campañas de retención + capacidad SE/turnos.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== VN TRADICIONAL ===================== -->
+  <div class="tab-content" id="vntrad">
+
+    <h2>VN Tradicional — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Unidades vendidas</div><div class="val">718</div><div class="delta">80u/mes promedio</div></div>
+      <div class="card kpi"><div class="lbl">Ventas Netas</div><div class="val">$39.255 M</div><div class="delta">63,5% del total</div></div>
+      <div class="card kpi"><div class="lbl">Ticket promedio</div><div class="val">$54,7 M</div><div class="delta">por unidad</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto/Unidad</div><div class="val pos">$5,95 M</div><div class="delta">benchmark BA: $5,79 M</div></div>
+      <div class="card kpi"><div class="lbl">Descuento promedio</div><div class="val warn">7,2%</div><div class="delta neg">vs BA: 1,5% (5x)</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val pos">$1.090 M</div><div class="delta pos">2,8% s/Vtas Netas</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Mix de unidades por modelo (YTD)</h2>
+        <div class="chart-wrap"><canvas id="chartVNModelos"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Margen Bruto por modelo</h2>
+        <div class="chart-wrap"><canvas id="chartVNMargenModelo"></canvas></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>P&amp;L VN Tradicional — YTD (millones ARS)</h2>
+        <table>
+          <tr class="total"><td>Ventas Brutas</td><td>$42.292</td><td>100,0%</td></tr>
+          <tr><td>− Descuentos</td><td>$3.037</td><td>7,2%</td></tr>
+          <tr class="subtotal"><td>Ventas Netas</td><td>$39.255</td><td>92,8%</td></tr>
+          <tr><td>− Costo de Ventas</td><td>$34.376</td><td>87,6%</td></tr>
+          <tr><td>− Incentivos</td><td>$608</td><td>1,6%</td></tr>
+          <tr class="subtotal"><td>Margen Bruto</td><td class="pos">$4.271</td><td class="pos">10,9%</td></tr>
+          <tr class="minor"><td>+ Comisiones financieras</td><td>—</td><td>—</td></tr>
+          <tr class="minor"><td>+ Flete/Gestoría/Otros</td><td>$1.061</td><td>2,7%</td></tr>
+          <tr class="minor"><td>− Aranceles/Gestoría</td><td>$209</td><td>0,5%</td></tr>
+          <tr class="subtotal"><td>Utilidad Bruta</td><td>$5.123</td><td>13,1%</td></tr>
+          <tr><td>− Gastos Variables</td><td>$2.161</td><td>5,5%</td></tr>
+          <tr class="minor"><td>· de los cuales: Impuestos</td><td>$1.298</td><td>3,3%</td></tr>
+          <tr class="minor"><td>· Comisiones</td><td>$385</td><td>1,0%</td></tr>
+          <tr class="minor"><td>· Preparación/Entrega</td><td>$289</td><td>0,7%</td></tr>
+          <tr class="subtotal"><td>Margen Contribución</td><td>$2.962</td><td>7,5%</td></tr>
+          <tr><td>− Gastos Fijos Asignados</td><td>$899</td><td>2,3%</td></tr>
+          <tr class="minor"><td>· Sueldos VN</td><td>$414</td><td>1,1%</td></tr>
+          <tr class="minor"><td>· Intereses Floor Plan</td><td>$155</td><td>0,4%</td></tr>
+          <tr class="subtotal"><td>Margen Neto</td><td class="pos">$2.063</td><td class="pos">5,3%</td></tr>
+          <tr><td>− Gastos Indirectos</td><td>$973</td><td>2,5%</td></tr>
+          <tr class="total"><td>Resultado Departamental</td><td class="pos">$1.090</td><td class="pos">2,8%</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>KPI vs Benchmark Buenos Aires</h2>
+        <div class="stat-row"><span class="label">Margen Bruto / Unidad</span><span class="value">$5,32 M <span class="pill info">~ benchmark $5,78 M</span></span></div>
+        <div class="stat-row"><span class="label">Descuentos % Vtas Brutas</span><span class="value warn">8,1% <span class="pill bad">5x BA (1,5%)</span></span></div>
+        <div class="stat-row"><span class="label">Descuento Neto Concesionario</span><span class="value warn">7,2% <span class="pill bad">18x BA (0,4%)</span></span></div>
+        <div class="stat-row"><span class="label">Gastos Prospección / Unidad</span><span class="value warn">$107k <span class="pill bad">2,5x BA ($43k)</span></span></div>
+        <div style="height:10px"></div>
+        <h3>Decisiones VN Tradicional</h3>
+        <div class="decision-card crit"><div class="title">Política de descuentos</div><div class="body">Cada 1pp de descuento sobre $42.292 M = $423 M de margen perdido. Volver al promedio BA (1,5%) liberaría ~$2.450 M anuales (más que el resultado neto total).</div><div class="meta">Acción: tarifa por modelo + cap por vendedor + aprobación &gt;3% del gerente.</div></div>
+        <div class="decision-card warn"><div class="title">Concentración Ranger (66% del volumen)</div><div class="body">478u Ranger / 718 total. Si Ford ajusta cupo o precio Ranger, el negocio se desestabiliza.</div><div class="meta">Acción: empujar Maverick (102u) y Territory (245u) que son rentables.</div></div>
+        <div class="decision-card opp"><div class="title">Mix premium</div><div class="body">F-150, Bronco, Everest aportan margen sólido por unidad. Volúmenes bajos (25/36/30u) — oportunidad de crecer en segmento premium.</div><div class="meta">Acción: campaña test-drive premium + financiación dedicada.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== VN GRANDES CLIENTES ===================== -->
+  <div class="tab-content" id="vngc">
+    <div class="alert danger"><b>🚨 Pierde plata:</b> -$42M YTD. La unidad no genera el volumen mínimo para sostener su estructura.</div>
+
+    <h2>VN Grandes Clientes — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Unidades vendidas</div><div class="val">94</div><div class="delta">10,4 u/mes</div></div>
+      <div class="card kpi"><div class="lbl">Ventas Netas</div><div class="val">$2.767 M</div><div class="delta">4,5% del total</div></div>
+      <div class="card kpi"><div class="lbl">Ticket promedio</div><div class="val">$29,4 M</div><div class="delta">vs Tradic. $54,7 M</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto / Unidad</div><div class="val warn">$1,80 M</div><div class="delta neg">vs Tradic. $5,95 M</div></div>
+      <div class="card kpi"><div class="lbl">Sueldos VN GC</div><div class="val">$93 M</div><div class="delta">3,4% s/Vtas Netas</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val neg">-$42 M</div><div class="delta neg">-1,5% s/Vtas Netas</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Composición de unidades — Grandes Clientes</h2>
+        <table>
+          <tr><th>Modelo</th><th>Unid.</th><th>MB total</th><th>MB/u</th></tr>
+          <tr><td>Ranger</td><td>82</td><td>$132 M</td><td>$1,60 M</td></tr>
+          <tr><td>Transit</td><td>7</td><td>$22 M</td><td>$3,08 M</td></tr>
+          <tr><td>Mustang</td><td>2</td><td>$12 M</td><td>$6,07 M</td></tr>
+          <tr><td>Territory</td><td>2</td><td>$2 M</td><td>$1,10 M</td></tr>
+          <tr><td>Maverick</td><td>1</td><td>$1 M</td><td>$1,29 M</td></tr>
+          <tr class="total"><td>Total</td><td>94</td><td>$169 M</td><td>$1,80 M</td></tr>
+        </table>
+        <div class="footer-note" style="margin-top:10px">
+          Ranger absorbe 87% del volumen pero con MB/unidad de solo $1,60M (la mitad del Tradic.). Mustang sería rentable pero solo 2u.
+        </div>
+      </div>
+      <div class="card">
+        <h2>Por qué pierde — Análisis</h2>
+        <div class="stat-row"><span class="label">Margen Bruto YTD</span><span class="value">$169 M</span></div>
+        <div class="stat-row"><span class="label">+ Comisiones/Otros</span><span class="value">$0 M</span></div>
+        <div class="stat-row"><span class="label">− Gastos Variables</span><span class="value">$65 M</span></div>
+        <div class="stat-row"><span class="label">= Margen Contribución</span><span class="value">$104 M</span></div>
+        <div class="stat-row"><span class="label">− Sueldos VN GC</span><span class="value warn">$93 M</span></div>
+        <div class="stat-row"><span class="label">− Otros Gastos Fijos</span><span class="value">$2 M</span></div>
+        <div class="stat-row"><span class="label">= Margen Neto</span><span class="value pos">$9 M</span></div>
+        <div class="stat-row"><span class="label">− Gastos Indirectos asignados</span><span class="value warn">$52 M</span></div>
+        <div class="stat-row"><span class="label">= <b>Resultado Departamental</b></span><span class="value neg">-$42 M</span></div>
+        <div style="height:8px"></div>
+        <h3>Punto de equilibrio</h3>
+        <div class="footer-note" style="background:transparent;padding:0">
+          Para llegar a 0: <b>+23 unidades adicionales</b> al margen bruto promedio actual ($1,80M/u). O sea, pasar de 94 a 117 unid. YTD (+24%). Alternativa: <b>reducir sueldos en $42M anuales</b> (≈45% de la planta actual).
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Decisiones — Grandes Clientes</h2>
+      <div class="grid row3">
+        <div class="decision-card crit"><div class="title">Decisión de continuidad</div><div class="body">¿Mantener canal? Si la respuesta es sí, requiere plan agresivo de captación de licitaciones públicas/privadas. Si no hay pipeline visible para 2026 → consolidar con Tradicional.</div><div class="meta">Decisión gerencial Q2 2026.</div></div>
+        <div class="decision-card warn"><div class="title">Productividad por vendedor</div><div class="body">KPI Margen Neto/Vendedor: 4 vs benchmark BA 4,85 (-17%). Margen Neto/Total Vendedores: $1,2M vs $7,1M BA (×6 menos). Equipo subutilizado.</div><div class="meta">Acción: medir pipeline por vendedor; reasignar capacidad ociosa.</div></div>
+        <div class="decision-card opp"><div class="title">Mix de modelos</div><div class="body">Empujar utilitarios (Transit, F-150) que tienen MB/u superior. 87% Ranger es exposición a comoditización.</div><div class="meta">Acción: comisión variable por mix premium.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== VN PLAN OVALO ===================== -->
+  <div class="tab-content" id="vnpo">
+    <div class="alert success"><b>✓ Unidad fuerte:</b> 7,8% Resultado Departamental sobre ventas — el mayor ratio de las unidades VN. Margen "limpio" en comisiones financieras.</div>
+
+    <h2>VN Plan Óvalo — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Unidades vendidas</div><div class="val">126</div><div class="delta">14 u/mes</div></div>
+      <div class="card kpi"><div class="lbl">Ventas Netas</div><div class="val">$6.183 M</div><div class="delta">10% del total</div></div>
+      <div class="card kpi"><div class="lbl">Ticket promedio</div><div class="val">$49,1 M</div><div class="delta">por unidad</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto/Unidad</div><div class="val pos">$7,06 M</div><div class="delta pos">El más alto</div></div>
+      <div class="card kpi"><div class="lbl">Comisiones financieras</div><div class="val pos">$488 M</div><div class="delta pos">Margen "limpio"</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val pos">$482 M</div><div class="delta pos">7,8% s/Vtas Netas</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>P&amp;L Plan Óvalo (millones)</h2>
+        <table>
+          <tr class="subtotal"><td>Ventas Netas</td><td>$6.183</td><td>100%</td></tr>
+          <tr><td>− Costo Ventas + Incent.</td><td>$5.293</td><td>85,6%</td></tr>
+          <tr class="subtotal"><td>Margen Bruto</td><td class="pos">$890</td><td class="pos">14,4%</td></tr>
+          <tr class="minor"><td>+ Comisiones (Plan Óvalo)</td><td>$488</td><td>7,9%</td></tr>
+          <tr class="minor"><td>+ Otros</td><td>$54</td><td>0,9%</td></tr>
+          <tr class="minor"><td>− Otros egresos</td><td>$32</td><td>0,5%</td></tr>
+          <tr class="subtotal"><td>Utilidad Bruta</td><td class="pos">$1.400</td><td class="pos">22,6%</td></tr>
+          <tr><td>− Gastos Variables</td><td>$537</td><td>8,7%</td></tr>
+          <tr><td>− Gastos Fijos Asignados</td><td>$220</td><td>3,6%</td></tr>
+          <tr class="subtotal"><td>Margen Neto</td><td class="pos">$643</td><td class="pos">10,4%</td></tr>
+          <tr><td>− Gastos Indirectos</td><td>$161</td><td>2,6%</td></tr>
+          <tr class="total"><td>Resultado Departamental</td><td class="pos">$482</td><td class="pos">7,8%</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>KPI vs Benchmark + Decisiones</h2>
+        <div class="stat-row"><span class="label">Gastos prospección/Suscripción anual</span><span class="value warn">$702k <span class="pill bad">5x BA ($145k)</span></span></div>
+        <div class="stat-row"><span class="label">Gastos prospección/Suscripción Q1</span><span class="value warn">$303k <span class="pill warn">vs BA $359k</span></span></div>
+        <div style="height:10px"></div>
+        <h3>Composición de comisiones financieras</h3>
+        <div class="footer-note" style="background:transparent;padding:0">
+          Las comisiones de $488M YTD vienen del DCP (descuento por colocación al plan), bonificaciones Ford, retorno por adjudicaciones, intereses por mora, etc. Es ingreso operativo "no kilometrado" — puro margen.
+        </div>
+        <div style="height:10px"></div>
+        <div class="decision-card opp"><div class="title">Escalabilidad</div><div class="body">Pasar de 14 u/mes a 20 u/mes (+43%) elevaría las comisiones a ~$697M y el RD a ~$650M. Estructura fija ya está, marginalidad alta.</div><div class="meta">Acción: campaña suscripciones Q2-Q3, optimizar costo por lead.</div></div>
+        <div class="decision-card warn"><div class="title">Eficiencia comercial</div><div class="body">$702k de prospección por suscripción es 5x el promedio BA. Si se mantiene en niveles BA, se ahorrarían ~$70M/año.</div><div class="meta">Acción: auditar canales digitales y eficiencia agencia.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== VU ===================== -->
+  <div class="tab-content" id="vu">
+    <div class="alert"><b>⚠ Stock pesado:</b> 4,7 meses de existencias ($3.732 M) en contexto inflacionario erosiona margen real.</div>
+
+    <h2>VU — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Unidades vendidas</div><div class="val">285</div><div class="delta">31,7 u/mes</div></div>
+      <div class="card kpi"><div class="lbl">Ventas Netas</div><div class="val">$7.107 M</div><div class="delta">11,5% del total</div></div>
+      <div class="card kpi"><div class="lbl">Ticket promedio</div><div class="val">$24,9 M</div><div class="delta">por unidad</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto/Unidad</div><div class="val pos">$3,44 M</div><div class="delta">13,8% s/Vtas</div></div>
+      <div class="card kpi"><div class="lbl">Stock VU</div><div class="val warn">$3.732 M</div><div class="delta neg">≈ 143 días</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val pos">$177 M</div><div class="delta warn">2,5% s/Vtas Netas</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Mix Ford vs Otras Marcas</h2>
+        <div class="chart-wrap"><canvas id="chartVUMix"></canvas></div>
+        <div class="footer-note" style="margin-top:10px">
+          Ford 120u ($3.379 M, MB $503M = 14,9%) | Otras 165u ($3.728 M, MB $477M = 12,8%). Otras marcas tiene volumen mayor pero margen menor.
+        </div>
+      </div>
+      <div class="card">
+        <h2>Composición de gastos VU</h2>
+        <div class="chart-wrap"><canvas id="chartVUGastos"></canvas></div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Decisiones VU</h2>
+      <div class="grid row3">
+        <div class="decision-card crit"><div class="title">Rotación lenta</div><div class="body">143 días de stock vs target dealer típico 60-90 días. Cada 30 días extra de stock en contexto de inflación 4-5% mensual = -1pp de margen real.</div><div class="meta">Acción: clasificar stock por antigüedad; descuento agresivo &gt;120 días.</div></div>
+        <div class="decision-card warn"><div class="title">Arreglos y Mantenimiento</div><div class="body">$236M YTD en arreglos VU (53% de los gastos variables). ¿Tasación correcta al ingreso? Cada $20M/mes en reacondicionamiento son margen perdido.</div><div class="meta">Acción: revisar manual de tasación, descontar más en ingreso.</div></div>
+        <div class="decision-card opp"><div class="title">Capital atado al stock</div><div class="body">$3.732 M en VU + $801 M en señas/anticipos clientes = ~$2.930 M de capital propio invertido. Reducirlo en 30 días libera ~$580 M para Tradicional.</div><div class="meta">Acción: target rotación 90 días.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== R&A ===================== -->
+  <div class="tab-content" id="ra">
+    <div class="alert success"><b>★ Estrella del negocio:</b> $1.987M de margen bruto YTD (39,4%) y $583M de Resultado Departamental (11,6%). Es 25% del resultado total con 8% de las ventas.</div>
+
+    <h2>R&amp;A — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Ventas Brutas</div><div class="val">$5.100 M</div><div class="delta">9 meses · 567/mes</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto</div><div class="val pos">$1.987 M</div><div class="delta pos">39,4%</div></div>
+      <div class="card kpi"><div class="lbl">Stock R&A</div><div class="val warn">$2.315 M</div><div class="delta neg">≈ 208 días</div></div>
+      <div class="card kpi"><div class="lbl">Sueldos R&A</div><div class="val">$288 M</div><div class="delta">14% s/MB</div></div>
+      <div class="card kpi"><div class="lbl">Margen Neto</div><div class="val pos">$870 M</div><div class="delta pos">17,3% s/Vtas</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val pos">$583 M</div><div class="delta pos">11,6%</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Ventas R&amp;A por canal</h2>
+        <div class="chart-wrap"><canvas id="chartRACanal"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Margen por canal de venta R&amp;A</h2>
+        <table>
+          <tr><th>Canal</th><th>Vtas Netas</th><th>MB</th><th>MB %</th></tr>
+          <tr><td>Por Taller (interno SE)</td><td>$1.872</td><td>$814</td><td class="pos">43,5%</td></tr>
+          <tr><td>Por Mayor</td><td>$1.918</td><td>$699</td><td>36,4%</td></tr>
+          <tr><td>Por Menor (mostrador)</td><td>$879</td><td>$338</td><td>38,4%</td></tr>
+          <tr><td>Quick Lane</td><td>$166</td><td>$70</td><td class="pos">42,2%</td></tr>
+          <tr><td>Cargo Interno</td><td>$171</td><td>$52</td><td>30,3%</td></tr>
+          <tr><td>Otras Ventas</td><td>$34</td><td>$14</td><td>43,0%</td></tr>
+          <tr class="total"><td>Total</td><td>$5.039</td><td>$1.987</td><td>39,4%</td></tr>
+        </table>
+        <div class="footer-note" style="margin-top:10px">
+          <b>Por Taller</b> es el canal más rentable (43,5%). Crece cuando crece SE — ambos se retroalimentan.
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Decisiones R&amp;A</h2>
+      <div class="grid row3">
+        <div class="decision-card opp"><div class="title">Apalancar el motor</div><div class="body">R&A es la unidad más rentable. Cada peso adicional vendido en taller = $0,44 de margen. Aumentar 10% el volumen = +$87M de margen bruto.</div><div class="meta">Acción: capacidad SE (turnos); SLA disponibilidad SKUs core.</div></div>
+        <div class="decision-card warn"><div class="title">Stock 208 días — capital muerto</div><div class="body">$2.315M en stock vs costo de venta anualizado $4.070M. Slow movers comen capital. KPI Facturación R&A/MO directa: 36,7M vs BA 45,5M (-19%) = baja productividad por mecánico.</div><div class="meta">Acción: análisis ABC, devolución a Ford de slow movers, optimizar mix de stock.</div></div>
+        <div class="decision-card opp"><div class="title">Por Mayor — escalabilidad</div><div class="body">$1.918 M ventas por mayor con menor margen pero alto volumen. Si se canaliza a SE/Taller (margen +7pp), incrementa la ganancia consolidada.</div><div class="meta">Acción: revisar política comercial mayoristas vs taller propio.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SE ===================== -->
+  <div class="tab-content" id="se">
+    <div class="alert"><b>⚠ Subabsorbido:</b> Margen Bruto altísimo (81,1%) pero el Resultado Departamental cae a 2,2% por gastos fijos altos. Cada hora de taller adicional escala el resultado.</div>
+
+    <h2>SE — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Ventas Brutas</div><div class="val">$1.404 M</div><div class="delta">9 meses · 156/mes</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto</div><div class="val pos">$1.137 M</div><div class="delta pos">81,1%</div></div>
+      <div class="card kpi"><div class="lbl">Mg Bruto R&A canalizado</div><div class="val pos">$407 M</div><div class="delta">desde R&A</div></div>
+      <div class="card kpi"><div class="lbl">Sueldos SE</div><div class="val warn">$579 M</div><div class="delta neg">51% s/MB</div></div>
+      <div class="card kpi"><div class="lbl">Margen Neto</div><div class="val pos">$528 M</div><div class="delta">37,7% s/Vtas</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val pos">$31 M</div><div class="delta warn">2,2%</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Composición de ventas SE</h2>
+        <table>
+          <tr><th>Tipo</th><th>Vtas Brutas</th><th>MB</th><th>MB %</th></tr>
+          <tr><td>Cargo Cliente</td><td>$851</td><td>$689</td><td class="pos">81%</td></tr>
+          <tr><td>Garantía Ford</td><td>$431</td><td>$350</td><td class="pos">81%</td></tr>
+          <tr><td>Cargo Interno (VU/CP)</td><td>$121</td><td>$98</td><td>81%</td></tr>
+          <tr class="total"><td>Total</td><td>$1.404</td><td>$1.137</td><td>81%</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>KPI vs Benchmark</h2>
+        <div class="stat-row"><span class="label">Facturación (MO+R&A) / OR cerrada</span><span class="value">$319k <span class="pill warn">vs BA $369k (-14%)</span></span></div>
+        <div class="stat-row"><span class="label">Facturación MO / OR</span><span class="value">$137k <span class="pill warn">vs BA $145k (-5%)</span></span></div>
+        <div class="stat-row"><span class="label">Facturación R&A / OR</span><span class="value">$182k <span class="pill warn">vs BA $224k (-19%)</span></span></div>
+        <div class="stat-row"><span class="label">% Absorción gastos fijos posventa</span><span class="value pos">57% <span class="pill info">vs BA 38%</span></span></div>
+        <div style="height:8px"></div>
+        <div class="footer-note" style="background:transparent;padding:0">
+          La estructura SE absorbe más gastos fijos que el promedio (mejor) pero la facturación por OR está por debajo. Hay capacidad ociosa o tickets bajos.
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Decisiones SE</h2>
+      <div class="grid row3">
+        <div class="decision-card warn"><div class="title">Ticket por OR bajo</div><div class="body">$319k vs BA $369k. Si se llega a la media BA, sobre 4.400 OR estimadas/año = +$220M anuales de facturación.</div><div class="meta">Acción: upselling preventivo, R&A en cada OR (ratio R&A/MO ↑).</div></div>
+        <div class="decision-card opp"><div class="title">Capacidad ociosa</div><div class="body">81% margen bruto + estructura fija = cualquier hora vendida adicional va casi todo a margen. Aumentar 15% el volumen = +$170M de margen.</div><div class="meta">Acción: turnos sábado, fast-lane mantenimientos.</div></div>
+        <div class="decision-card opp"><div class="title">Retención posventa</div><div class="body">Cada cliente VN/VU debe pasar a SE. Auditar tasa de retención cliente vs flota Ford circulando en zona.</div><div class="meta">Acción: programa retención + recordatorios + planes de mantenimiento.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== QL ===================== -->
+  <div class="tab-content" id="ql">
+    <div class="alert danger"><b>🚨 Pierde plata sistemáticamente:</b> -$29M YTD. 2 de 3 meses Q1 con resultado negativo. Estructura sobredimensionada para el volumen actual.</div>
+
+    <h2>QL — KPIs YTD</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Ventas Brutas</div><div class="val">$88 M</div><div class="delta">9,7M/mes</div></div>
+      <div class="card kpi"><div class="lbl">Margen Bruto</div><div class="val pos">$67 M</div><div class="delta pos">76%</div></div>
+      <div class="card kpi"><div class="lbl">Mg Bruto R&A</div><div class="val pos">$35 M</div><div class="delta">desde R&A</div></div>
+      <div class="card kpi"><div class="lbl">Sueldos QL</div><div class="val warn">$50 M</div><div class="delta neg">75% s/MB</div></div>
+      <div class="card kpi"><div class="lbl">Margen Neto</div><div class="val pos">$30 M</div><div class="delta">33,9%</div></div>
+      <div class="card kpi"><div class="lbl">Result. Departamental</div><div class="val neg">-$29 M</div><div class="delta neg">-33%</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>P&amp;L QL — YTD (millones)</h2>
+        <table>
+          <tr class="subtotal"><td>Ventas Netas</td><td>$88</td><td>100%</td></tr>
+          <tr><td>− Costo Ventas</td><td>$21</td><td>24%</td></tr>
+          <tr class="subtotal"><td>Margen Bruto</td><td class="pos">$67</td><td class="pos">76%</td></tr>
+          <tr><td>+ Otros (R&A canalizado)</td><td>$54</td><td>61%</td></tr>
+          <tr><td>− Otros egresos</td><td>$13</td><td>15%</td></tr>
+          <tr class="subtotal"><td>Utilidad Bruta</td><td>$108</td><td>123%</td></tr>
+          <tr><td>− Gastos Variables</td><td>$26</td><td>30%</td></tr>
+          <tr><td>− Sueldos QL</td><td class="warn">$50</td><td class="warn">57%</td></tr>
+          <tr><td>− Otros Gastos Fijos</td><td>$2</td><td>2%</td></tr>
+          <tr class="subtotal"><td>Margen Neto</td><td class="pos">$30</td><td>34%</td></tr>
+          <tr><td>− Gastos Indirectos</td><td class="warn">$59</td><td class="warn">66%</td></tr>
+          <tr class="total"><td>Resultado Departamental</td><td class="neg">-$29</td><td class="neg">-33%</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Análisis y opciones</h2>
+        <h3>Punto de equilibrio</h3>
+        <div class="footer-note" style="background:transparent;padding:0">
+          Necesitaría duplicar el volumen para cubrir gastos indirectos: pasar de $88M a ≈$170M/año YTD (+93%). En la práctica: pasar de ~10 OR/mes a 20 OR/mes con ticket actual.
+        </div>
+        <div style="height:10px"></div>
+        <h3>Opciones de decisión</h3>
+        <div class="decision-card crit"><div class="title">A. Cerrar QL e integrar a SE</div><div class="body">Eliminar -$29M de pérdida. Sueldos QL ($50M) podrían reasignarse a SE (alto MB). Riesgo: perder cuota multimarca y servicios fuera de garantía.</div><div class="meta">Impacto neto estimado: +$50-80M anuales.</div></div>
+        <div class="decision-card warn"><div class="title">B. Redimensionar dotación</div><div class="body">Reducir 1-2 puestos QL (-$15-25M sueldos) y mantener servicio mínimo. Llevaría el resultado a 0 o ligeramente positivo.</div><div class="meta">Impacto: +$15-25M anuales.</div></div>
+        <div class="decision-card opp"><div class="title">C. Plan agresivo de captación multimarca</div><div class="body">Promociones, alianzas con flotas pequeñas, mantenimiento preventivo a precio fijo. Target: duplicar OR/mes en 6 meses.</div><div class="meta">Riesgo: exige inversión comercial sin garantía.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== BALANCE / CAPITAL ===================== -->
+  <div class="tab-content" id="balance">
+
+    <h2>Capital de trabajo y stock — situación al 31-Mar-2026</h2>
+    <div class="grid kpis">
+      <div class="card kpi"><div class="lbl">Disponible (Caja+Bcos+Inv)</div><div class="val">$2.026 M</div><div class="delta">Liquidez inmediata 0,59</div></div>
+      <div class="card kpi"><div class="lbl">Cuentas por Cobrar</div><div class="val">$2.882 M</div><div class="delta">Mayor: VN Trad $1.589M</div></div>
+      <div class="card kpi"><div class="lbl">Existencias totales</div><div class="val warn">$15.289 M</div><div class="delta">73% del activo corriente</div></div>
+      <div class="card kpi"><div class="lbl">Pasivo Corriente</div><div class="val">$8.267 M</div><div class="delta">Floor Plan $5.174M</div></div>
+      <div class="card kpi"><div class="lbl">Liquidez corriente</div><div class="val pos">2,45</div><div class="delta pos">vs BA 1,90</div></div>
+      <div class="card kpi"><div class="lbl">Endeudamiento</div><div class="val">0,75</div><div class="delta">vs BA 0,73</div></div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h2>Composición de existencias</h2>
+        <div class="chart-wrap"><canvas id="chartStock"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Días de stock por unidad</h2>
+        <table>
+          <tr><th>Unidad</th><th>Stock</th><th>Costo Vta YTD</th><th>Días</th><th>Status</th></tr>
+          <tr><td>VN Tradicional (propio)</td><td>$3.863</td><td>$34.983 / 9m</td><td>30</td><td><span class="pill good">OK</span></td></tr>
+          <tr><td>VN Tradicional (FP/NFP)</td><td>$4.414</td><td>—</td><td>34</td><td><span class="pill info">Financiado</span></td></tr>
+          <tr><td>VU</td><td>$3.732</td><td>$6.127 / 9m</td><td class="warn">165</td><td><span class="pill bad">LENTO</span></td></tr>
+          <tr><td>R&A propio</td><td>$1.847</td><td>$3.053 / 9m</td><td class="warn">163</td><td><span class="pill bad">LENTO</span></td></tr>
+          <tr><td>R&A financiado</td><td>$469</td><td>—</td><td>41</td><td><span class="pill info">Financiado</span></td></tr>
+          <tr><td>Trabajo en curso</td><td>$30</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Otras existencias</td><td>$760</td><td>—</td><td>—</td><td>—</td></tr>
+        </table>
+        <div class="footer-note" style="margin-top:8px">
+          <b>Capital propio en stock (no financiado):</b> ≈$10.232 M. Reducir 30 días en VU + R&A liberaría ≈$1.500 M para reinversión.
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Decisiones de capital</h2>
+      <div class="grid row3">
+        <div class="decision-card crit"><div class="title">Stock VU lento (165 días)</div><div class="body">$3.732M atado a stock que en inflación pierde 4-5% por mes. Costo financiero implícito ≈$300-400M anuales solo por mantenerlo.</div><div class="meta">Acción: campaña descuento agresiva &gt;120 días, target 90 días promedio.</div></div>
+        <div class="decision-card crit"><div class="title">Stock R&A 163 días</div><div class="body">Slow movers + obsoletos. Riesgo de discontinuación de modelos viejos. Negociar con Ford devolución de SKUs sin movimiento &gt;6 meses.</div><div class="meta">Acción: ABC con corte 90/180/365 días, plan de liquidación.</div></div>
+        <div class="decision-card opp"><div class="title">Cuentas por cobrar VN Tradicional</div><div class="body">$1.589M de saldo CXC. Si se reduce 15 días el ciclo de cobro = +$265M de caja inmediata.</div><div class="meta">Acción: cobrar al contado al despachar, financiación con cesión.</div></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      * <b>Patrimonio Neto</b> estimado = Activo total ($20.272M aprox.) − Pasivo total ($9.728M) = $10.544M. ROE anualizado ≈ ($2.132M × 12/9) / $10.544M = 27%. <b>Atención:</b> ROE en moneda histórica sobreestima rentabilidad real cuando hay inflación; el RECPAM lo corregiría.
+    </div>
+  </div>
+
+  <!-- ===================== PLAN DE ACCIÓN ===================== -->
+  <div class="tab-content" id="decisiones">
+
+    <h2>Plan de Acción — Top 10 palancas (Q2-Q3 2026)</h2>
+
+    <div class="grid row2">
+      <div class="card">
+        <h3 style="color:#fca5a5">🔴 Acciones críticas (impacto &gt;$50M anual)</h3>
+
+        <div class="decision-card crit">
+          <div class="title">1. Política de descuentos VN Tradicional</div>
+          <div class="body">Descuento neto 7,2% vs BA 0,4%. Cada 1pp = +$423M de margen. Reducir a 4% liberaría ~$1.350M anuales.</div>
+          <div class="meta"><b>Owner:</b> Gerente Comercial · <b>Plazo:</b> 30 días · <b>Impacto:</b> +$1.000-1.500M/año</div>
+        </div>
+
+        <div class="decision-card crit">
+          <div class="title">2. Decisión sobre QL</div>
+          <div class="body">Cerrar/integrar/reescalar. Cualquiera de las opciones suma. La situación actual es insostenible.</div>
+          <div class="meta"><b>Owner:</b> Dirección · <b>Plazo:</b> 60 días · <b>Impacto:</b> +$50-80M/año</div>
+        </div>
+
+        <div class="decision-card crit">
+          <div class="title">3. Decisión sobre VN Grandes Clientes</div>
+          <div class="body">Si no hay pipeline visible para 24 meses, consolidar con Tradicional. Si lo hay, plan agresivo con métricas claras de pipeline por vendedor.</div>
+          <div class="meta"><b>Owner:</b> Dirección · <b>Plazo:</b> Q2 2026 · <b>Impacto:</b> +$50-100M/año</div>
+        </div>
+
+        <div class="decision-card crit">
+          <div class="title">4. Reducir días de stock VU + R&A</div>
+          <div class="body">VU de 165 a 90 días + R&A de 163 a 90 días libera ≈$1.500M de capital propio. En contexto inflacionario este capital pierde 4-5%/mes.</div>
+          <div class="meta"><b>Owner:</b> Gerente Posventa + Gerente VU · <b>Plazo:</b> 90 días · <b>Impacto:</b> +$500-800M valor real anual</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="color:#fde6b3">🟡 Optimización (impacto $20-50M anual)</h3>
+
+        <div class="decision-card warn">
+          <div class="title">5. Mix VN Tradicional</div>
+          <div class="body">Empujar Maverick (+50% vol = +60u) y Territory (+25% = +60u). Reducir dependencia Ranger (66% del volumen).</div>
+          <div class="meta"><b>Owner:</b> Gerente Comercial · <b>Plazo:</b> Q2-Q3 · <b>Impacto:</b> +$100-200M/año</div>
+        </div>
+
+        <div class="decision-card warn">
+          <div class="title">6. Productividad SE</div>
+          <div class="body">Cerrar gap vs BA: ticket OR de $319k → $369k. Sobre 4.400 OR estimadas/año = +$220M.</div>
+          <div class="meta"><b>Owner:</b> Jefe SE · <b>Plazo:</b> 60 días · <b>Impacto:</b> +$150-250M/año</div>
+        </div>
+
+        <div class="decision-card warn">
+          <div class="title">7. Eficiencia prospección Plan Óvalo</div>
+          <div class="body">$702k/suscripción vs BA $145k. Auditar canales digitales y agencias.</div>
+          <div class="meta"><b>Owner:</b> Marketing · <b>Plazo:</b> Q2 · <b>Impacto:</b> +$50-100M/año</div>
+        </div>
+
+        <div class="decision-card warn">
+          <div class="title">8. Tasación VU al ingreso</div>
+          <div class="body">$236M YTD en arreglos VU es excesivo. Endurecer tasación, descontar más en ingreso.</div>
+          <div class="meta"><b>Owner:</b> Tasador VU · <b>Plazo:</b> 30 días · <b>Impacto:</b> +$80-150M/año</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="grid row2">
+      <div class="card">
+        <h3 style="color:#86efac">🟢 Apalancamiento (escalar lo que funciona)</h3>
+
+        <div class="decision-card opp">
+          <div class="title">9. Crecer R&A en taller</div>
+          <div class="body">Canal Por Taller tiene MB 43,5% (el mayor). Aumentar 10% el volumen = +$87M MB. Capacidad logística + disponibilidad SKUs core.</div>
+          <div class="meta"><b>Owner:</b> Gerente Posventa · <b>Plazo:</b> 90 días · <b>Impacto:</b> +$100-150M/año</div>
+        </div>
+
+        <div class="decision-card opp">
+          <div class="title">10. Plan Óvalo a 20 u/mes</div>
+          <div class="body">De 14 a 20 u/mes = +43%. Comisiones +$210M con estructura fija ya pagada.</div>
+          <div class="meta"><b>Owner:</b> Jefe Plan Óvalo · <b>Plazo:</b> Q2-Q3 · <b>Impacto:</b> +$200-300M/año</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="color:#93c5fd">🔵 Información para decidir mejor</h3>
+        <div class="decision-card" style="border-color:var(--accent)">
+          <div class="title">Reexpresar a moneda constante</div>
+          <div class="body">Construir el P&L Q1 2026 ajustado por IPC para distinguir resultado operativo real de resultado por tenencia. Detectaría si el "buen Enero" es real o efecto inflacionario.</div>
+          <div class="meta">Útil para forecast y ROI por unidad.</div>
+        </div>
+        <div class="decision-card" style="border-color:var(--accent)">
+          <div class="title">Modelo de proyección</div>
+          <div class="body">Activar la pestaña FFP del D10190 (hoy vacía). Proyectar 12 meses con escenarios.</div>
+        </div>
+        <div class="decision-card" style="border-color:var(--accent)">
+          <div class="title">KPIs operativos semanales</div>
+          <div class="body">Tablero semanal: u vendidas por canal, descuento promedio, días de stock, pipeline VN GC, OR cerradas SE/QL.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="card">
+      <h2>Impacto agregado esperado</h2>
+      <div style="font-size:13px;line-height:1.8">
+        Si se ejecuta el 60% del plan: <b style="color:var(--good);font-size:18px">+$1.500–2.500M anuales</b> de margen incremental (sobre la base actual de $2.132M de Resultado Neto YTD = +85% al +130%).<br>
+        Liberación de capital de trabajo: <b style="color:var(--accent);font-size:16px">~$1.500M</b> de stock + cuentas por cobrar.<br>
+        <span style="color:var(--muted);font-size:12px">Estimaciones a moneda histórica. Ajustar por inflación para contraste con costo de oportunidad real.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note" style="margin-top:18px">
+    <b>Notas metodológicas:</b><br>
+    • <b>Fuentes:</b> Informe Superflex Q1-2026 (Ene/Feb/Mar 2026, mensual) y D10190 marzo 2026 (acumulado del ejercicio Jul25-Mar26).<br>
+    • Importes monetarios en <b>millones de pesos argentinos a valores históricos</b> salvo indicación. <b>Sin ajuste por inflación.</b><br>
+    • <b>Resultado Departamental</b> = Margen Neto − Gastos Indirectos asignados (operacionales + bienes inmuebles).<br>
+    • <b>Inventory turnover</b> calculado como Costo de Ventas anualizado / Stock al cierre.<br>
+    • <b>Argentina/Inflación:</b> Para análisis sustantivo conviene reexpresar a moneda constante (CER/IPC) y aplicar RECPAM (RT 6 FACPCE). Parte del margen VN/VU puede ser resultado por tenencia, no eficiencia operativa real.<br>
+    • Las recomendaciones son indicativas y deben validarse con el equipo gerencial; no reemplazan asesoramiento contable/financiero profesional.
+  </div>
+</div>
+
+<script>
+// === Tab navigation ===
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    // resize charts in newly visible tab
+    setTimeout(() => Object.values(Chart.instances).forEach(c => c.resize()), 50);
+  });
+});
+
+const fmtM = v => (v >= 0 ? '$' : '-$') + Math.abs(v).toLocaleString('es-AR', {maximumFractionDigits:0}) + 'M';
+const fmtPct = v => v.toFixed(1) + '%';
+
+const baseOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{
+    legend:{labels:{color:'#cfe1ff', font:{size:11}}},
+  },
+  scales:{
+    x:{ticks:{color:'#8e9cc1', font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'}},
+    y:{ticks:{color:'#8e9cc1', font:{size:10}}, grid:{color:'rgba(255,255,255,0.05)'}}
+  }
+};
+
+// === RESUMEN: Mix Resultado Departamental ===
+new Chart(document.getElementById('chartMixRD'), {
+  type:'bar',
+  data:{
+    labels:['VN Tradic.','VN Plan Óvalo','R&A','VU','SE','VN GC','QL'],
+    datasets:[{
+      data:[1090,482,583,177,31,-42,-29],
+      backgroundColor:['#22c55e','#22c55e','#a855f7','#3b82f6','#f59e0b','#ef4444','#ef4444']
+    }]
+  },
+  options:{...baseOpts,
+    indexAxis:'y',
+    plugins:{...baseOpts.plugins, legend:{display:false}, tooltip:{callbacks:{label:c=>fmtM(c.parsed.x)}}}
+  }
+});
+
+// === RESUMEN: Mensual ===
+new Chart(document.getElementById('chartMensualVN'), {
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo'],
+    datasets:[
+      {label:'Ventas Netas', data:[10278,4542,7327], backgroundColor:'#3b82f6'},
+      {label:'Resultado Neto', data:[554,65,108], backgroundColor:'#22c55e'}
+    ]
+  },
+  options:{...baseOpts, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtM(c.parsed.y)}}}}
+});
+
+new Chart(document.getElementById('chartMensualPct'), {
+  type:'line',
+  data:{
+    labels:['Enero','Febrero','Marzo'],
+    datasets:[
+      {label:'Margen Bruto %', data:[13.3,16.9,14.0], borderColor:'#22c55e', backgroundColor:'rgba(34,197,94,0.1)', tension:0.3, fill:false},
+      {label:'Result. Departamental %', data:[5.84,1.55,2.12], borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.1)', tension:0.3, fill:false},
+      {label:'Resultado Neto %', data:[5.39,1.44,1.48], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.1)', tension:0.3, fill:false}
+    ]
+  },
+  options:{...baseOpts, scales:{...baseOpts.scales, y:{...baseOpts.scales.y, ticks:{...baseOpts.scales.y.ticks, callback:v=>v+'%'}}},
+    plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtPct(c.parsed.y)}}}}
+});
+
+// === VN TRAD: Modelos ===
+new Chart(document.getElementById('chartVNModelos'), {
+  type:'bar',
+  data:{
+    labels:['Ranger','Territory','Maverick','Bronco','Everest','F-150','Transit'],
+    datasets:[{
+      label:'Unidades VN Tradic.',
+      data:[344,209,66,36,30,25,8],
+      backgroundColor:'#3b82f6'
+    }]
+  },
+  options:{...baseOpts, plugins:{...baseOpts.plugins, legend:{display:false}}}
+});
+
+new Chart(document.getElementById('chartVNMargenModelo'), {
+  type:'bar',
+  data:{
+    labels:['Ranger','Territory','Maverick','Bronco','Everest','F-150','Transit'],
+    datasets:[{
+      label:'Margen Bruto $M',
+      data:[2072,984,384,244,191,318,77],
+      backgroundColor:'#22c55e'
+    },{
+      label:'MB / Unidad ($M)',
+      data:[6.02,4.71,5.82,6.79,6.36,12.74,9.67],
+      backgroundColor:'#a855f7',
+      yAxisID:'y1'
+    }]
+  },
+  options:{...baseOpts,
+    scales:{...baseOpts.scales,
+      y:{...baseOpts.scales.y, position:'left', title:{display:true, text:'$M total', color:'#8e9cc1'}},
+      y1:{position:'right', ticks:{color:'#8e9cc1'}, grid:{display:false}, title:{display:true, text:'$M / unidad', color:'#8e9cc1'}}
+    }
+  }
+});
+
+// === VU mix ===
+new Chart(document.getElementById('chartVUMix'), {
+  type:'doughnut',
+  data:{
+    labels:['Ford VU (120u)','Otras Marcas VU (165u)'],
+    datasets:[{data:[3379,3728], backgroundColor:['#003478','#a855f7'], borderColor:'#0a0f1c', borderWidth:2}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{color:'#cfe1ff'}}, tooltip:{callbacks:{label:c=>c.label+': '+fmtM(c.parsed)}}}}
+});
+
+new Chart(document.getElementById('chartVUGastos'), {
+  type:'bar',
+  data:{
+    labels:['Arreglos/Mant.','Comisiones','Impuestos','Patentes/Inf.','Seguros','Otros'],
+    datasets:[{data:[236,85,65,53,4,1], backgroundColor:'#f59e0b'}]
+  },
+  options:{...baseOpts, indexAxis:'y', plugins:{...baseOpts.plugins, legend:{display:false}, tooltip:{callbacks:{label:c=>fmtM(c.parsed.x)}}}}
+});
+
+// === R&A canal ===
+new Chart(document.getElementById('chartRACanal'), {
+  type:'bar',
+  data:{
+    labels:['Por Mayor','Por Taller','Por Menor','Cargo Int.','Quick Lane','Otras'],
+    datasets:[
+      {label:'Ventas Netas $M', data:[1918,1872,879,171,166,34], backgroundColor:'#3b82f6'},
+      {label:'Margen Bruto $M', data:[699,814,338,52,70,14], backgroundColor:'#22c55e'}
+    ]
+  },
+  options:{...baseOpts, plugins:{...baseOpts.plugins, tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtM(c.parsed.y)}}}}
+});
+
+// === Stock composition ===
+new Chart(document.getElementById('chartStock'), {
+  type:'pie',
+  data:{
+    labels:['VN propio','VN Floor Plan','VU','R&A propio','R&A FP','Otros'],
+    datasets:[{data:[3863,4414,3732,1847,469,790], backgroundColor:['#003478','#3b82f6','#f59e0b','#a855f7','#c084fc','#64748b']}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right', labels:{color:'#cfe1ff', font:{size:11}}}, tooltip:{callbacks:{label:c=>{
+    const total = c.dataset.data.reduce((a,b)=>a+b,0);
+    return c.label+': '+fmtM(c.parsed)+' ('+(c.parsed/total*100).toFixed(1)+'%)';
+  }}}}}
+});
+</script>
+</body>
+</html>
