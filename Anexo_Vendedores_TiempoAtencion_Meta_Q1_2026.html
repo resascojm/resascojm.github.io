@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Grupo Resasco · Vendedores y tiempo de atención · Meta · Q1 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=JetBrains+Mono:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --cream: #F4EFE6; --cream-2: #EBE4D5; --rule: #D8CFB8;
+  --ink: #1A1F2E; --ink-2: #3D3A33; --muted: #7A7568;
+  --green: #2D5A3D; --gold: #B87333; --accent: #C8102E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream); color: var(--ink);
+  font-family: 'Work Sans', -apple-system, system-ui, sans-serif;
+  line-height: 1.5; font-size: 15px;
+}
+.page { max-width: 880px; margin: 0 auto; padding: 60px 40px; }
+.serif { font-family: 'Fraunces', Georgia, serif; }
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+
+.eyebrow {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin-bottom: 16px;
+}
+h1 {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 56px; line-height: 1.05; letter-spacing: -0.025em;
+  color: var(--ink); margin-bottom: 20px;
+}
+h1 em { font-style: italic; font-weight: 400; }
+.lead {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 21px; line-height: 1.5; color: var(--ink-2);
+  letter-spacing: -0.005em; max-width: 720px;
+}
+.meta {
+  display: flex; gap: 32px; padding: 16px 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  margin: 32px 0 48px; font-size: 13px; color: var(--muted);
+}
+
+.summary {
+  background: var(--cream-2); padding: 32px 36px; border-radius: 2px;
+  margin-bottom: 56px;
+}
+.summary-title {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 700; margin-bottom: 14px;
+}
+.summary p {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 19px; line-height: 1.55; color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.summary p strong { font-weight: 500; color: var(--ink); }
+
+h2 {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 36px; line-height: 1.1; letter-spacing: -0.025em;
+  margin: 48px 0 8px;
+}
+h2 em { font-style: italic; font-weight: 400; }
+.soc-meta {
+  font-size: 13px; color: var(--muted); margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+
+table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+  margin-bottom: 24px;
+}
+th {
+  text-align: left; padding: 8px 10px; font-weight: 700;
+  color: var(--ink-2); border-bottom: 2px solid var(--ink);
+  font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+}
+th.num { text-align: right; }
+td {
+  padding: 10px; border-bottom: 1px solid var(--rule);
+  font-family: 'Work Sans', sans-serif;
+}
+td.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+.bar-cell { padding: 8px 10px; }
+.bar-wrap {
+  background: var(--cream-2); height: 22px;
+  position: relative; min-width: 100px; max-width: 240px;
+  border-radius: 2px;
+}
+.bar { height: 100%; border-radius: 2px; }
+.bar-lbl {
+  position: absolute; top: 0; left: 8px;
+  line-height: 22px; font-size: 11px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums;
+}
+
+.callout {
+  background: var(--ink); color: var(--cream);
+  padding: 32px 36px; margin: 48px 0;
+  border-radius: 2px;
+}
+.callout-eb {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); font-weight: 700; margin-bottom: 14px;
+}
+.callout p {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 19px; line-height: 1.55; letter-spacing: -0.005em;
+}
+.callout p strong { font-weight: 500; }
+
+footer {
+  margin-top: 64px; padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.legend {
+  display: inline-flex; gap: 18px; font-size: 11px; color: var(--muted);
+  margin: 8px 0 24px; align-items: center;
+}
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Grupo Resasco · Equipo de Marketing · Anexo</div>
+<h1>Vendedores y tiempo<br>de <em>atención</em></h1>
+<p class="lead">Cuadro comparativo de tiempo Asignado→Gestionado por vendedor — sólo leads de origen ADS Meta. Quién atiende rápido, quién no, y cómo se correlaciona con bad lead y conversión.</p>
+
+<div class="meta">
+  <span><strong>Período:</strong> Enero–abril 2026</span>
+  <span><strong>Origen:</strong> ADS – Facebook</span>
+  <span><strong>Universo:</strong> 8.885 leads · 45 vendedores con ≥30 leads</span>
+</div>
+
+<div class="summary">
+  <div class="summary-title">Lectura del cuadro</div>
+  <p>La <strong>mediana del tiempo Asignado→Gestionado</strong> es lo que tarda en promedio cada vendedor en empezar a trabajar un lead Meta. Genova encabeza con dos vendedores que atienden en minutos; Vernon arrastra a dos vendedores con tiempos absurdos (39h y 81h); Resasco no tiene a nadie en zona verde. Las tres marcas con peor mediana son justamente las tres con menor conversión Meta.</p>
+</div>
+
+<div class="legend">
+  <span style="color:var(--ink-2);font-weight:600;letter-spacing:0;text-transform:none;">Color de la barra:</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#2D5A3D"></span>menos de 3h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#B87333"></span>3–12h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#A32D2D"></span>12–24h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#791F1F"></span>1–2 días</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#501313"></span>+2 días</span>
+</div>
+
+<h2><span class="dot" style="background:#B22234;width:14px;height:14px;border-radius:0"></span>GENOVA</h2>
+<div class="soc-meta">9 vendedores con ≥30 leads Meta · mediana del grupo: 2.4 h · mejor: 11 min · peor: 22.7 h</div>
+
+<table>
+<thead>
+<tr>
+  <th style="width:30%">Vendedor</th>
+  <th class="num" style="width:60px">Leads</th>
+  <th style="width:30%">Mediana A→G</th>
+  <th class="num">≤30min</th>
+  <th class="num">% BL</th>
+  <th class="num">% Won</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Ramiro Osorio</td>
+  <td class="num">109</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:0.2%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">11 min</span>
+    </div>
+  </td>
+  <td class="num">81.7%</td>
+  <td class="num">72%</td>
+  <td class="num" style="color:var(--muted)">0.92%</td>
+</tr>
+<tr>
+  <td>Fredit Gironza</td>
+  <td class="num">221</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:0.5%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">26 min</span>
+    </div>
+  </td>
+  <td class="num">55.7%</td>
+  <td class="num">10%</td>
+  <td class="num" style="color:var(--green);font-weight:700">2.71%</td>
+</tr>
+<tr>
+  <td>Pablo Escudero</td>
+  <td class="num">165</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:1.7%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">1.4 h</span>
+    </div>
+  </td>
+  <td class="num">11.5%</td>
+  <td class="num">47%</td>
+  <td class="num" style="color:var(--green);font-weight:700">5.45%</td>
+</tr>
+<tr>
+  <td>Martin Carosio</td>
+  <td class="num">136</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:2.0%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">1.7 h</span>
+    </div>
+  </td>
+  <td class="num">12.5%</td>
+  <td class="num">59%</td>
+  <td class="num" style="color:var(--ink-2)">1.47%</td>
+</tr>
+<tr>
+  <td>Ruben Pereyra</td>
+  <td class="num">124</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:2.9%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">2.4 h</span>
+    </div>
+  </td>
+  <td class="num">6.5%</td>
+  <td class="num">67%</td>
+  <td class="num" style="color:var(--green);font-weight:700">3.23%</td>
+</tr>
+<tr>
+  <td>Tomas Mareque</td>
+  <td class="num">238</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:3.2%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">2.6 h</span>
+    </div>
+  </td>
+  <td class="num">35.3%</td>
+  <td class="num">29%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Mauro Lopez</td>
+  <td class="num">46</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:3.5%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">2.9 h</span>
+    </div>
+  </td>
+  <td class="num">19.6%</td>
+  <td class="num">33%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Pablo Carrazco</td>
+  <td class="num">195</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:10.4%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.5 h</span>
+    </div>
+  </td>
+  <td class="num">18.5%</td>
+  <td class="num">29%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Mario Gomez</td>
+  <td class="num">321</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:27.8%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">22.7 h</span>
+    </div>
+  </td>
+  <td class="num">0.6%</td>
+  <td class="num">49%</td>
+  <td class="num" style="color:var(--muted)">0.62%</td>
+</tr>
+</tbody>
+</table>
+<h2><span class="dot" style="background:#003478;width:14px;height:14px;border-radius:0"></span>GUSPAMAR</h2>
+<div class="soc-meta">23 vendedores con ≥30 leads Meta · mediana del grupo: 9.3 h · mejor: 2.5 h · peor: 19.2 h</div>
+
+<table>
+<thead>
+<tr>
+  <th style="width:30%">Vendedor</th>
+  <th class="num" style="width:60px">Leads</th>
+  <th style="width:30%">Mediana A→G</th>
+  <th class="num">≤30min</th>
+  <th class="num">% BL</th>
+  <th class="num">% Won</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Hernán Coronel</td>
+  <td class="num">102</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:3.0%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">2.5 h</span>
+    </div>
+  </td>
+  <td class="num">32.4%</td>
+  <td class="num">0%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Ariel Asprea</td>
+  <td class="num">343</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:3.6%; background:#2D5A3D;"></div>
+      <span class="bar-lbl" style="color:var(--ink)">2.9 h</span>
+    </div>
+  </td>
+  <td class="num">18.1%</td>
+  <td class="num">60%</td>
+  <td class="num" style="color:var(--muted)">0.87%</td>
+</tr>
+<tr>
+  <td>Jorge Campetella</td>
+  <td class="num">132</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:6.9%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">5.7 h</span>
+    </div>
+  </td>
+  <td class="num">8.3%</td>
+  <td class="num">81%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Hernan Rivarola</td>
+  <td class="num">43</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:8.5%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">6.9 h</span>
+    </div>
+  </td>
+  <td class="num">20.9%</td>
+  <td class="num">49%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Mariano Rodríguez</td>
+  <td class="num">162</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:9.1%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">7.5 h</span>
+    </div>
+  </td>
+  <td class="num">14.2%</td>
+  <td class="num">79%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Nicolas Braun</td>
+  <td class="num">295</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:9.4%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">7.7 h</span>
+    </div>
+  </td>
+  <td class="num">27.8%</td>
+  <td class="num">51%</td>
+  <td class="num" style="color:var(--green);font-weight:700">2.71%</td>
+</tr>
+<tr>
+  <td>Agustín Pignatta</td>
+  <td class="num">159</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:9.8%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.0 h</span>
+    </div>
+  </td>
+  <td class="num">25.2%</td>
+  <td class="num">12%</td>
+  <td class="num" style="color:var(--muted)">0.63%</td>
+</tr>
+<tr>
+  <td>Ezequiel Castillo</td>
+  <td class="num">144</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:10.2%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.3 h</span>
+    </div>
+  </td>
+  <td class="num">2.8%</td>
+  <td class="num">67%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Sebastian Murias</td>
+  <td class="num">342</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:10.5%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.6 h</span>
+    </div>
+  </td>
+  <td class="num">17.8%</td>
+  <td class="num">60%</td>
+  <td class="num" style="color:var(--muted)">0.88%</td>
+</tr>
+<tr>
+  <td>Gastón López Conca</td>
+  <td class="num">171</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:10.9%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.9 h</span>
+    </div>
+  </td>
+  <td class="num">7.0%</td>
+  <td class="num">4%</td>
+  <td class="num" style="color:var(--ink-2)">1.75%</td>
+</tr>
+<tr>
+  <td>Gastón Maceratesi</td>
+  <td class="num">224</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:11.3%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">9.3 h</span>
+    </div>
+  </td>
+  <td class="num">23.7%</td>
+  <td class="num">49%</td>
+  <td class="num" style="color:var(--muted)">0.89%</td>
+</tr>
+<tr>
+  <td>Julio Sánchez</td>
+  <td class="num">144</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:11.4%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">9.3 h</span>
+    </div>
+  </td>
+  <td class="num">6.9%</td>
+  <td class="num">53%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Laureano San José</td>
+  <td class="num">149</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:11.7%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">9.6 h</span>
+    </div>
+  </td>
+  <td class="num">14.8%</td>
+  <td class="num">63%</td>
+  <td class="num" style="color:var(--ink-2)">1.34%</td>
+</tr>
+<tr>
+  <td>Kevin Aguilar</td>
+  <td class="num">154</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:11.8%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">9.6 h</span>
+    </div>
+  </td>
+  <td class="num">7.8%</td>
+  <td class="num">54%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Emiliano Solla</td>
+  <td class="num">206</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:12.1%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">9.9 h</span>
+    </div>
+  </td>
+  <td class="num">28.6%</td>
+  <td class="num">44%</td>
+  <td class="num" style="color:var(--ink-2)">1.46%</td>
+</tr>
+<tr>
+  <td>Joaquin Gutierrez</td>
+  <td class="num">254</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:12.6%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.3 h</span>
+    </div>
+  </td>
+  <td class="num">20.9%</td>
+  <td class="num">39%</td>
+  <td class="num" style="color:var(--ink-2)">1.18%</td>
+</tr>
+<tr>
+  <td>Marcial Fernandez</td>
+  <td class="num">141</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:12.7%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.4 h</span>
+    </div>
+  </td>
+  <td class="num">6.4%</td>
+  <td class="num">44%</td>
+  <td class="num" style="color:var(--muted)">0.71%</td>
+</tr>
+<tr>
+  <td>Inaky Spikerman</td>
+  <td class="num">232</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:13.0%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.6 h</span>
+    </div>
+  </td>
+  <td class="num">12.9%</td>
+  <td class="num">75%</td>
+  <td class="num" style="color:var(--ink-2)">1.72%</td>
+</tr>
+<tr>
+  <td>Facundo González</td>
+  <td class="num">144</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:13.3%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.8 h</span>
+    </div>
+  </td>
+  <td class="num">16.7%</td>
+  <td class="num">44%</td>
+  <td class="num" style="color:var(--muted)">0.69%</td>
+</tr>
+<tr>
+  <td>Martín Espil</td>
+  <td class="num">119</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:14.7%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">12.0 h</span>
+    </div>
+  </td>
+  <td class="num">4.2%</td>
+  <td class="num">67%</td>
+  <td class="num" style="color:var(--ink-2)">1.68%</td>
+</tr>
+<tr>
+  <td>Alexis Favata</td>
+  <td class="num">125</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:15.6%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">12.7 h</span>
+    </div>
+  </td>
+  <td class="num">15.2%</td>
+  <td class="num">28%</td>
+  <td class="num" style="color:var(--muted)">0.80%</td>
+</tr>
+<tr>
+  <td>Pablo Castellano</td>
+  <td class="num">251</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:16.0%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">13.1 h</span>
+    </div>
+  </td>
+  <td class="num">8.0%</td>
+  <td class="num">39%</td>
+  <td class="num" style="color:var(--muted)">0.80%</td>
+</tr>
+<tr>
+  <td>Fabián Mocca</td>
+  <td class="num">223</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:23.5%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">19.2 h</span>
+    </div>
+  </td>
+  <td class="num">2.7%</td>
+  <td class="num">68%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+</tbody>
+</table>
+<h2><span class="dot" style="background:#2D5A3D;width:14px;height:14px;border-radius:0"></span>VERNON</h2>
+<div class="soc-meta">8 vendedores con ≥30 leads Meta · mediana del grupo: 12.6 h · mejor: 7.2 h · peor: 81.7 h</div>
+
+<table>
+<thead>
+<tr>
+  <th style="width:30%">Vendedor</th>
+  <th class="num" style="width:60px">Leads</th>
+  <th style="width:30%">Mediana A→G</th>
+  <th class="num">≤30min</th>
+  <th class="num">% BL</th>
+  <th class="num">% Won</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Pablo Benitez</td>
+  <td class="num">214</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:8.8%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">7.2 h</span>
+    </div>
+  </td>
+  <td class="num">24.3%</td>
+  <td class="num">83%</td>
+  <td class="num" style="color:var(--muted)">0.93%</td>
+</tr>
+<tr>
+  <td>Josue Miglia</td>
+  <td class="num">128</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:9.9%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.0 h</span>
+    </div>
+  </td>
+  <td class="num">7.8%</td>
+  <td class="num">75%</td>
+  <td class="num" style="color:var(--green);font-weight:700">3.12%</td>
+</tr>
+<tr>
+  <td>Juan Razzini</td>
+  <td class="num">232</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:12.9%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.6 h</span>
+    </div>
+  </td>
+  <td class="num">5.2%</td>
+  <td class="num">59%</td>
+  <td class="num" style="color:var(--muted)">0.43%</td>
+</tr>
+<tr>
+  <td>Mauricio Lucero</td>
+  <td class="num">408</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:13.8%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">11.2 h</span>
+    </div>
+  </td>
+  <td class="num">6.1%</td>
+  <td class="num">80%</td>
+  <td class="num" style="color:var(--muted)">0.98%</td>
+</tr>
+<tr>
+  <td>Matias Videla</td>
+  <td class="num">307</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:17.2%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">14.0 h</span>
+    </div>
+  </td>
+  <td class="num">7.2%</td>
+  <td class="num">74%</td>
+  <td class="num" style="color:var(--muted)">0.65%</td>
+</tr>
+<tr>
+  <td>Gabriel Tomaselli</td>
+  <td class="num">282</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:21.0%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">17.2 h</span>
+    </div>
+  </td>
+  <td class="num">1.8%</td>
+  <td class="num">7%</td>
+  <td class="num" style="color:var(--muted)">0.35%</td>
+</tr>
+<tr>
+  <td>Marcos Rodriguez</td>
+  <td class="num">164</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:48.8%; background:#791F1F;"></div>
+      <span class="bar-lbl" style="color:white">39.9 h</span>
+    </div>
+  </td>
+  <td class="num">0.0%</td>
+  <td class="num">72%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Guillermo Tonto</td>
+  <td class="num">113</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:100.0%; background:#501313;"></div>
+      <span class="bar-lbl" style="color:white">81.7 h ⚠</span>
+    </div>
+  </td>
+  <td class="num">5.3%</td>
+  <td class="num">0%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+</tbody>
+</table>
+<h2><span class="dot" style="background:#B87333;width:14px;height:14px;border-radius:0"></span>RESASCO</h2>
+<div class="soc-meta">5 vendedores con ≥30 leads Meta · mediana del grupo: 13.4 h · mejor: 8.9 h · peor: 25.4 h</div>
+
+<table>
+<thead>
+<tr>
+  <th style="width:30%">Vendedor</th>
+  <th class="num" style="width:60px">Leads</th>
+  <th style="width:30%">Mediana A→G</th>
+  <th class="num">≤30min</th>
+  <th class="num">% BL</th>
+  <th class="num">% Won</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Josue Miglia</td>
+  <td class="num">30</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:10.9%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">8.9 h</span>
+    </div>
+  </td>
+  <td class="num">13.3%</td>
+  <td class="num">67%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Ruth Abigail Muñoz</td>
+  <td class="num">36</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:12.3%; background:#B87333;"></div>
+      <span class="bar-lbl" style="color:white">10.1 h</span>
+    </div>
+  </td>
+  <td class="num">0.0%</td>
+  <td class="num">64%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Roman Matias Sarachaga</td>
+  <td class="num">42</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:16.4%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">13.4 h</span>
+    </div>
+  </td>
+  <td class="num">0.0%</td>
+  <td class="num">0%</td>
+  <td class="num" style="color:var(--muted)">0.00%</td>
+</tr>
+<tr>
+  <td>Braian Gimenez</td>
+  <td class="num">345</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:23.5%; background:#A32D2D;"></div>
+      <span class="bar-lbl" style="color:white">19.2 h</span>
+    </div>
+  </td>
+  <td class="num">1.7%</td>
+  <td class="num">0%</td>
+  <td class="num" style="color:var(--muted)">0.87%</td>
+</tr>
+<tr>
+  <td>Manuel Alexandre</td>
+  <td class="num">651</td>
+  <td class="bar-cell">
+    <div class="bar-wrap">
+      <div class="bar" style="width:31.1%; background:#791F1F;"></div>
+      <span class="bar-lbl" style="color:white">25.4 h</span>
+    </div>
+  </td>
+  <td class="num">2.2%</td>
+  <td class="num">69%</td>
+  <td class="num" style="color:var(--muted)">0.15%</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+  <div class="callout-eb">Outliers que ameritan revisión inmediata</div>
+  <p><strong>Guillermo Tonto</strong> (Vernon) — mediana 81,7h, cero ventas en 113 leads, 0% bad leads (raro). El patrón sugiere falla operativa o que esos leads no se trabajan realmente.<br>
+  <strong>Marcos Rodríguez</strong> (Vernon) — 39,9h mediana, 0% atendidos en ≤30min, cero ventas en 164 leads.<br>
+  <strong>Manuel Alexandre</strong> (Resasco) — 651 leads asignados (más que cualquier otro vendedor del grupo). Está saturado: la velocidad es imposible con ese volumen. Hay que redistribuir.<br>
+  <strong>Mario Gomez</strong> (Genova) — outlier dentro de su marca: 22,7h mediana cuando sus pares trabajan en menos de 3h. Algo no encaja.</p>
+</div>
+
+<h2>Los <em>referentes</em> a estudiar</h2>
+<p style="font-size:14px;line-height:1.65;color:var(--ink-2);margin-bottom:16px;max-width:720px">Tres vendedores combinan velocidad y conversión, todos en Genova. Vale la pena entender qué hacen distinto:</p>
+<table>
+<thead>
+<tr><th style="width:25%">Vendedor</th><th>Sociedad</th><th class="num">Mediana</th><th class="num">≤30min</th><th class="num">% Won</th><th>Lectura</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Pablo Escudero</strong></td><td>Genova</td><td class="num">1,4 h</td><td class="num">12%</td><td class="num" style="color:var(--green);font-weight:700">5,45%</td><td style="font-size:13px;color:var(--ink-2)">El mejor combinado del grupo. Atiende rápido y cierra mucho.</td></tr>
+<tr><td><strong>Fredit Gironza</strong></td><td>Genova</td><td class="num">26 min</td><td class="num">56%</td><td class="num" style="color:var(--green);font-weight:700">2,71%</td><td style="font-size:13px;color:var(--ink-2)">Excelente en todos los indicadores. BL muy bajo (10%).</td></tr>
+<tr><td><strong>Ruben Pereyra</strong></td><td>Genova</td><td class="num">2,4 h</td><td class="num">7%</td><td class="num" style="color:var(--green);font-weight:700">3,23%</td><td style="font-size:13px;color:var(--ink-2)">No es el más rápido pero su conversión está entre las mejores.</td></tr>
+</tbody>
+</table>
+
+<h2>Patrones <em>por sociedad</em></h2>
+<table>
+<thead>
+<tr><th style="width:18%">Marca</th><th class="num">Med. grupo</th><th>Lectura</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="dot" style="background:#B22234"></span><strong>Genova</strong></td>
+  <td class="num">2,4 h</td>
+  <td style="font-size:14px;color:var(--ink-2)">Cultura de respuesta rápida. Los dos vendedores más veloces del grupo y los dos mejores convertidores. La mediana está fuertemente bajada por Osorio y Gironza — sin ellos sería ~3h.</td>
+</tr>
+<tr>
+  <td><span class="dot" style="background:#003478"></span><strong>Guspamar</strong></td>
+  <td class="num">9,3 h</td>
+  <td style="font-size:14px;color:var(--ink-2)">Equipo grande (23 vendedores) con dispersión moderada. La mayoría entre 8 y 13h, sin outliers extremos. El volumen está mejor distribuido.</td>
+</tr>
+<tr>
+  <td><span class="dot" style="background:#2D5A3D"></span><strong>Vernon</strong></td>
+  <td class="num">12,6 h</td>
+  <td style="font-size:14px;color:var(--ink-2)">Cola muy larga: dos vendedores con tiempos absurdos (39h y 81h) suben fuerte la mediana. Si se sacaran del análisis, Vernon quedaría a nivel Guspamar. Hay un problema localizable.</td>
+</tr>
+<tr>
+  <td><span class="dot" style="background:#B87333"></span><strong>Resasco</strong></td>
+  <td class="num">13,4 h</td>
+  <td style="font-size:14px;color:var(--ink-2)">Nadie en zona verde. Todos tardan más de 8h. No hay un techo individual al que apuntar — el problema es estructural. Manuel Alexandre con 651 leads asignados es la prueba: el equipo no da abasto con el volumen.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+  <div class="callout-eb">Para llevar a la reunión comercial</div>
+  <p>El cuadro habilita tres conversaciones concretas: <strong>(1)</strong> revisar los outliers operativos (Tonto, M. Rodríguez) — pueden ser bajas técnicas, gente con otra función, o un problema real. <strong>(2)</strong> Redistribuir el volumen de Resasco — Manuel Alexandre con 651 leads no es escalable. <strong>(3)</strong> Estudiar el caso Genova — qué hacen Escudero, Gironza y Pereyra que el resto del grupo no.</p>
+</div>
+
+<footer>
+  <span>Grupo Resasco · MKT</span>
+  <span>Anexo · Vendedores y tiempo de atención · Meta Q1 2026</span>
+  <span>Confidencial · uso interno</span>
+</footer>
+
+</div>
+</body>
+</html>
