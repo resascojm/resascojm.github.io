@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grupo Resasco · Análisis Integral · Q1 2026 (v5)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,800&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4EFE6;
+  --cream-2:#EBE4D5;
+  --ink:#1A1F2E;
+  --ink-2:#2C3E50;
+  --muted:#7A7568;
+  --rule:#D8CFB8;
+  --accent:#C8102E;
+  --accent-soft:#E8C4C4;
+  --gold:#B87333;
+  --green:#2D5A3D;
+  --c-guspamar:#003478;
+  --c-genova:#B22234;
+  --c-vernon:#2D5A3D;
+  --c-resasco:#B87333;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Work Sans',sans-serif;
+  font-weight:400;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(184,115,51,0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(200,16,46,0.03) 0%, transparent 50%);
+}
+.page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:60px 56px;
+}
+.serif{font-family:'Fraunces',serif;font-optical-sizing:auto}
+.mono{font-family:'JetBrains Mono',monospace;font-feature-settings:"tnum"}
+
+/* HERO */
+.hero{
+  border-bottom:1px solid var(--ink);
+  padding-bottom:48px;
+  margin-bottom:64px;
+  position:relative;
+}
+.hero-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:48px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--rule);
+}
+.hero-meta strong{color:var(--ink);font-weight:600}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:clamp(48px,7vw,96px);
+  line-height:0.95;
+  letter-spacing:-0.03em;
+  margin-bottom:32px;
+  color:var(--ink);
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--accent);
+  font-weight:400;
+}
+.hero-sub{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:32px;
+  margin-top:48px;
+}
+.hero-stat{
+  border-top:2px solid var(--ink);
+  padding-top:14px;
+}
+.hero-stat .lbl{
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.hero-stat .val{
+  font-family:'Fraunces',serif;
+  font-size:38px;
+  font-weight:300;
+  line-height:1;
+  color:var(--ink);
+  letter-spacing:-0.02em;
+}
+.hero-stat .sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* TLDR */
+.tldr{
+  background:var(--ink);
+  color:var(--cream);
+  padding:56px 56px 48px;
+  margin:0 -56px 80px;
+  position:relative;
+}
+.tldr::before{
+  content:"01";
+  position:absolute;
+  top:24px;
+  right:56px;
+  font-family:'Fraunces',serif;
+  font-size:120px;
+  font-weight:300;
+  line-height:1;
+  color:rgba(244,239,230,0.06);
+  letter-spacing:-0.05em;
+}
+.tldr-eyebrow{
+  font-size:11px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent-soft);
+  margin-bottom:20px;
+}
+.tldr h2{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:42px;
+  line-height:1.15;
+  margin-bottom:32px;
+  letter-spacing:-0.02em;
+  max-width:850px;
+}
+.tldr h2 .hi{
+  background:var(--accent);
+  color:var(--cream);
+  padding:0 12px;
+  font-style:italic;
+  font-weight:400;
+}
+.tldr-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+  margin-top:40px;
+  padding-top:32px;
+  border-top:1px solid rgba(244,239,230,0.2);
+}
+.tldr-item .num{
+  font-family:'Fraunces',serif;
+  font-size:48px;
+  font-weight:300;
+  color:var(--accent-soft);
+  letter-spacing:-0.02em;
+  line-height:1;
+}
+.tldr-item .num em{
+  font-style:italic;
+  color:var(--cream);
+}
+.tldr-item .desc{
+  font-size:13px;
+  line-height:1.5;
+  margin-top:10px;
+  color:rgba(244,239,230,0.75);
+}
+
+/* SECTION */
+section{margin-bottom:96px}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:24px;
+  margin-bottom:40px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--ink);
+}
+.sec-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.15em;
+  color:var(--accent);
+  font-weight:700;
+}
+.sec-head h2{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:48px;
+  letter-spacing:-0.02em;
+  line-height:1;
+  flex:1;
+}
+.sec-head h2 em{font-style:italic;color:var(--accent)}
+.sec-kicker{
+  font-size:13px;
+  color:var(--muted);
+  letter-spacing:0.05em;
+}
+.lead{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:24px;
+  line-height:1.5;
+  margin-bottom:40px;
+  max-width:820px;
+  color:var(--ink-2);
+  letter-spacing:-0.005em;
+}
+.lead em{font-style:italic;color:var(--accent)}
+
+/* COMPONENTES */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+.card{
+  background:rgba(255,255,255,0.4);
+  border:1px solid var(--rule);
+  padding:32px;
+}
+.card-title{
+  font-size:11px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+  font-weight:600;
+}
+.card-num{
+  font-family:'Fraunces',serif;
+  font-size:56px;
+  font-weight:300;
+  letter-spacing:-0.03em;
+  line-height:1;
+  color:var(--ink);
+}
+.card-num.accent{color:var(--accent)}
+.card-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:10px;
+  line-height:1.4;
+}
+
+/* TABLE */
+table.rk{
+  width:100%;
+  border-collapse:collapse;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+}
+table.rk thead th{
+  text-align:left;
+  padding:14px 16px;
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:2px solid var(--ink);
+  font-weight:500;
+}
+table.rk thead th.num{text-align:right}
+table.rk tbody td{
+  padding:18px 16px;
+  border-bottom:1px solid var(--rule);
+  vertical-align:middle;
+}
+table.rk tbody td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.rk tbody tr:hover{background:rgba(255,255,255,0.4)}
+.soc-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Work Sans',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.guspamar{background:var(--c-guspamar)}
+.dot.genova{background:var(--c-genova)}
+.dot.vernon{background:var(--c-vernon)}
+.dot.resasco{background:var(--c-resasco)}
+.rank-pos{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:32px;
+  color:var(--accent);
+  font-style:italic;
+  width:50px;
+  display:inline-block;
+}
+
+/* PULL QUOTE */
+.pull{
+  border-left:3px solid var(--accent);
+  padding:8px 0 8px 32px;
+  margin:48px 0;
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:28px;
+  line-height:1.4;
+  color:var(--ink-2);
+  letter-spacing:-0.01em;
+  max-width:780px;
+}
+.pull .source{
+  display:block;
+  font-family:'Work Sans',sans-serif;
+  font-style:normal;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:16px;
+  font-weight:600;
+}
+
+/* CHART CONTAINER */
+.chart{
+  background:rgba(255,255,255,0.3);
+  border:1px solid var(--rule);
+  padding:32px;
+  margin-top:24px;
+}
+.chart-title{
+  font-family:'Fraunces',serif;
+  font-size:22px;
+  font-weight:400;
+  margin-bottom:6px;
+  letter-spacing:-0.01em;
+}
+.chart-sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:24px;
+  letter-spacing:0.03em;
+}
+svg{display:block;max-width:100%;height:auto}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  margin-top:20px;
+  font-size:12px;
+  font-family:'Work Sans',sans-serif;
+  color:var(--ink-2);
+}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+
+/* DIAGNOSIS CARDS */
+.diag{
+  background:rgba(255,255,255,0.5);
+  border-top:4px solid;
+  padding:36px 32px;
+  position:relative;
+}
+.diag.guspamar{border-color:var(--c-guspamar)}
+.diag.genova{border-color:var(--c-genova)}
+.diag.vernon{border-color:var(--c-vernon)}
+.diag.resasco{border-color:var(--c-resasco)}
+.diag-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:24px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--rule);
+}
+.diag-soc{
+  font-family:'Fraunces',serif;
+  font-size:32px;
+  font-weight:300;
+  letter-spacing:-0.02em;
+}
+.diag-marca{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:600;
+}
+.diag-block{margin-bottom:20px}
+.diag-block:last-child{margin-bottom:0}
+.diag-lbl{
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.diag-good .diag-lbl{color:var(--green)}
+.diag-bad .diag-lbl{color:var(--accent)}
+.diag-hyp .diag-lbl{color:var(--gold)}
+.diag-block p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+
+/* ACTION PLAN */
+.actions{
+  margin-top:40px;
+}
+.action{
+  display:grid;
+  grid-template-columns:60px 1fr;
+  gap:32px;
+  padding:32px 0;
+  border-bottom:1px solid var(--rule);
+}
+.action:last-child{border-bottom:none}
+.action-num{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:48px;
+  color:var(--accent);
+  line-height:1;
+  letter-spacing:-0.02em;
+}
+.action-body h4{
+  font-family:'Fraunces',serif;
+  font-weight:400;
+  font-size:24px;
+  margin-bottom:10px;
+  letter-spacing:-0.01em;
+  line-height:1.25;
+}
+.action-body .what{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+  font-weight:600;
+}
+.action-body p{font-size:15px;color:var(--ink-2);max-width:780px;line-height:1.55}
+.action-tag{
+  display:inline-block;
+  background:var(--ink);
+  color:var(--cream);
+  padding:4px 12px;
+  font-size:10px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  font-weight:600;
+  margin-top:14px;
+}
+.action-tag.priority{background:var(--accent)}
+.action-tag.observe{background:var(--gold)}
+
+/* TOC */
+.toc{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px 40px;
+  margin:32px 0 0;
+  padding-top:24px;
+  border-top:1px solid var(--rule);
+}
+.toc a{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  text-decoration:none;
+  color:var(--ink);
+  padding:10px 0;
+  border-bottom:1px solid var(--rule);
+  font-size:14px;
+  transition:color 0.2s;
+}
+.toc a:hover{color:var(--accent)}
+.toc a span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.toc a strong{font-weight:500;font-family:'Fraunces',serif;font-size:18px}
+
+/* FOOTER */
+footer{
+  margin-top:120px;
+  padding-top:32px;
+  border-top:1px solid var(--ink);
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* HORIZONTAL BAR (origen mix) */
+.hbar{
+  display:grid;
+  grid-template-columns:130px 1fr 60px;
+  gap:14px;
+  align-items:center;
+  margin-bottom:8px;
+  font-size:12px;
+}
+.hbar-lbl{font-family:'Work Sans',sans-serif;color:var(--ink-2);font-size:12px}
+.hbar-track{
+  height:14px;
+  background:var(--cream-2);
+  position:relative;
+  overflow:hidden;
+}
+.hbar-fill{
+  height:100%;
+  background:var(--ink);
+  position:relative;
+}
+.hbar-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+/* CALLOUT */
+.callout{
+  background:var(--cream-2);
+  border-left:4px solid var(--accent);
+  padding:24px 28px;
+  margin:32px 0;
+}
+.callout-eb{
+  font-size:10px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:8px;
+}
+.callout-tx{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:400;
+  line-height:1.5;
+  color:var(--ink);
+}
+.callout-tx strong{font-weight:600}
+
+@media (max-width:780px){
+  .page{padding:40px 24px}
+  .grid-2,.grid-3,.grid-4,.toc,.tldr-grid,.hero-sub{grid-template-columns:1fr}
+  .tldr{padding:40px 24px;margin:0 -24px 56px}
+  .hero h1{font-size:48px}
+  .sec-head h2{font-size:32px}
+  .lead{font-size:18px}
+  .pull{font-size:20px;padding-left:20px}
+  .hbar{grid-template-columns:90px 1fr 50px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-meta">
+    <span><strong>Grupo Resasco</strong> · Equipo de Marketing</span>
+    <span>Documento Interno · Confidencial</span>
+    <span>Q1 2026 · Edición 05 · Análisis Integral</span>
+  </div>
+  <h1>Síntesis<br><em>integral</em><br>del cuatrimestre</h1>
+  <p style="font-family:'Fraunces',serif;font-size:21px;font-weight:300;color:var(--ink-2);max-width:780px;line-height:1.5;letter-spacing:-0.005em">
+    Análisis cruzado de <strong style="font-weight:600">15.755 leads</strong> de los CRM (sólo 0 Km y Plan de Ahorro), <strong style="font-weight:600">$147,7M de inversión Meta</strong> en cuatro meses, distribución de ventas por canal y por vendedor, y una primera evaluación de la hipótesis de <em>efecto halo</em> de la pauta sobre las visitas al salón. Esta edición integra también la lectura del Consejo Asesor convocado en pleno proceso de análisis.
+  </p>
+  <div class="hero-sub">
+    <div class="hero-stat">
+      <div class="lbl">Inversión Q1 Meta</div>
+      <div class="val">$147,7<span style="font-size:24px">M</span></div>
+      <div class="sub">Sin usados ni Quickline · Ene–Abr</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Ventas totales grupo</div>
+      <div class="val">872</div>
+      <div class="sub">5,53% conversión global del CRM</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Costo por venta Meta</div>
+      <div class="val">$1,49<span style="font-size:24px">M</span></div>
+      <div class="sub">99 ventas atribuidas a Meta · 11% del total</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Ventas vía no-Meta</div>
+      <div class="val">89<span style="font-size:24px">%</span></div>
+      <div class="sub">Base de Clientes y Salón son los motores</div>
+    </div>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><strong>Volumen, evolución y mix</strong><span>02</span></a>
+    <a href="#s2"><strong>Análisis por canal</strong><span>03</span></a>
+    <a href="#s3"><strong>Pauta Meta · inversión y costo por venta</strong><span>04</span></a>
+    <a href="#s4"><strong>¿Meta empuja al Salón? Test de hipótesis</strong><span>05</span></a>
+    <a href="#sX"><strong>Calidad del lead, tiempo de respuesta y proceso</strong><span>06</span></a>
+    <a href="#s5"><strong>Dependencia de vendedores</strong><span>07</span></a>
+    <a href="#s6"><strong>Diagnóstico por marca</strong><span>08</span></a>
+    <a href="#s7"><strong>Plan de acción</strong><span>09</span></a>
+    <a href="#s8"><strong>Limitaciones y próximos pasos</strong><span>10</span></a>
+  </nav>
+</header>
+
+<!-- TLDR -->
+<div class="tldr">
+  <div class="tldr-eyebrow">Los tres hallazgos del cuatrimestre</div>
+  <h2>El grupo gasta <span class="hi">$147,7M en Meta</span> para captar 11% de las ventas. Las palancas reales del negocio son la <span class="hi">Base de Clientes</span> y el <span class="hi">Salón</span> — y el equipo comercial está peligrosamente concentrado en pocas personas en algunas marcas.</h2>
+  <div class="tldr-grid">
+    <div class="tldr-item">
+      <div class="num"><em>$5,40M</em></div>
+      <div class="desc">costo por venta Meta de Resasco. <em style="color:var(--cream);font-style:normal;font-weight:600">5 ventas</em> en cuatro meses con $27M de inversión. Insostenible</div>
+    </div>
+    <div class="tldr-item">
+      <div class="num"><em>76%</em></div>
+      <div class="desc">conversión de Resasco en Base de Clientes. <em style="color:var(--cream);font-style:normal;font-weight:600">50 ventas</em> en 66 leads — el canal infrautilizado de mayor ROI del grupo</div>
+    </div>
+    <div class="tldr-item">
+      <div class="num"><em>10,3h</em></div>
+      <div class="desc">mediana de tiempo Asignado→Gestionado en leads Meta. Los que se atienden en ≤5 min convierten <em style="color:var(--cream);font-style:normal;font-weight:600">7× más</em> que los que esperan +24h</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="sec-num">02 / 10</span>
+    <h2>Volumen, evolución y <em>mix</em></h2>
+    <span class="sec-kicker">El paisaje básico del grupo en Q1</span>
+  </div>
+
+  <p class="lead">Sobre la base limpia (sólo 0 Km y Plan de Ahorro), el grupo generó <em>15.755 leads</em> en el cuatrimestre. La estructura es similar entre marcas — Meta domina, Salón es segundo, todo lo demás es marginal — pero las diferencias en concentración revelan distintos perfiles de riesgo.</p>
+
+  <div class="chart">
+    <div class="chart-title">Volumen total de leads por sociedad</div>
+    <div class="chart-sub">Enero a abril 2026 · 15.755 leads · negocio 0Km + Plan de Ahorro</div>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="110" y1="20" x2="110" y2="250" stroke="#1A1F2E" stroke-width="1.5"/><rect x="110" y="35.6" width="550.0" height="38" fill="#003478"/><text x="100" y="59.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="670.0" y="59.6" font-size="14" fill="#1A1F2E" font-weight="700">7,402</text><text x="670.0" y="76.6" font-size="10" fill="#7A7568">47.0% del grupo</text><rect x="110" y="89.2" width="254.78924614968926" height="38" fill="#B22234"/><text x="100" y="113.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="374.78924614968923" y="113.2" font-size="14" fill="#1A1F2E" font-weight="700">3,429</text><text x="374.78924614968923" y="130.2" font-size="10" fill="#7A7568">21.8% del grupo</text><rect x="110" y="142.8" width="200.02701972439883" height="38" fill="#2D5A3D"/><text x="100" y="166.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="320.0270197243988" y="166.8" font-size="14" fill="#1A1F2E" font-weight="700">2,692</text><text x="320.0270197243988" y="183.8" font-size="10" fill="#7A7568">17.1% del grupo</text><rect x="110" y="196.4" width="165.84706835990272" height="38" fill="#B87333"/><text x="100" y="220.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="285.8470683599027" y="220.4" font-size="14" fill="#1A1F2E" font-weight="700">2,232</text><text x="285.8470683599027" y="237.4" font-size="10" fill="#7A7568">14.2% del grupo</text></svg>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">Evolución mensual de leads por sociedad</div>
+    <div class="chart-sub">Volumen mes a mes · enero–abril 2026</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="50" y1="280" x2="610" y2="280" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="284" text-anchor="end" font-size="10" fill="#7A7568">0</text><line x1="50" y1="215.0" x2="610" y2="215.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="219.0" text-anchor="end" font-size="10" fill="#7A7568">625</text><line x1="50" y1="150.0" x2="610" y2="150.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="154.0" text-anchor="end" font-size="10" fill="#7A7568">1,250</text><line x1="50" y1="85.0" x2="610" y2="85.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="89.0" text-anchor="end" font-size="10" fill="#7A7568">1,875</text><line x1="50" y1="20.0" x2="610" y2="20.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="24.0" text-anchor="end" font-size="10" fill="#7A7568">2,500</text><text x="50.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Ene</text><text x="236.66666666666666" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Feb</text><text x="423.3333333333333" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Mar</text><text x="610.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Abr</text><path d="M50.0,56.2 L236.7,110.1 L423.3,83.9 L610.0,100.1" fill="none" stroke="#003478" stroke-width="2.5"/><circle cx="50.0" cy="56.19200000000001" r="4.5" fill="#003478"/><circle cx="236.66666666666666" cy="110.06400000000002" r="4.5" fill="#003478"/><circle cx="423.3333333333333" cy="83.85600000000002" r="4.5" fill="#003478"/><circle cx="610.0" cy="100.08000000000001" r="4.5" fill="#003478"/><text x="622.0" y="104.08000000000001" font-size="11" fill="#003478" font-weight="700">GUSPAMAR</text><text x="622.0" y="118.08000000000001" font-size="10" fill="#7A7568">1,730</text><path d="M50.0,179.3 L236.7,170.7 L423.3,191.4 L610.0,222.0" fill="none" stroke="#B22234" stroke-width="2.5"/><circle cx="50.0" cy="179.328" r="4.5" fill="#B22234"/><circle cx="236.66666666666666" cy="170.696" r="4.5" fill="#B22234"/><circle cx="423.3333333333333" cy="191.392" r="4.5" fill="#B22234"/><circle cx="610.0" cy="221.968" r="4.5" fill="#B22234"/><text x="622.0" y="225.968" font-size="11" fill="#B22234" font-weight="700">GENOVA</text><text x="622.0" y="239.968" font-size="10" fill="#7A7568">558</text><path d="M50.0,209.9 L236.7,209.6 L423.3,204.2 L610.0,216.4" fill="none" stroke="#2D5A3D" stroke-width="2.5"/><circle cx="50.0" cy="209.904" r="4.5" fill="#2D5A3D"/><circle cx="236.66666666666666" cy="209.59199999999998" r="4.5" fill="#2D5A3D"/><circle cx="423.3333333333333" cy="204.184" r="4.5" fill="#2D5A3D"/><circle cx="610.0" cy="216.352" r="4.5" fill="#2D5A3D"/><text x="622.0" y="220.352" font-size="11" fill="#2D5A3D" font-weight="700">VERNON</text><text x="622.0" y="234.352" font-size="10" fill="#7A7568">612</text><path d="M50.0,215.3 L236.7,225.0 L423.3,221.3 L610.0,226.2" fill="none" stroke="#B87333" stroke-width="2.5"/><circle cx="50.0" cy="215.312" r="4.5" fill="#B87333"/><circle cx="236.66666666666666" cy="224.98399999999998" r="4.5" fill="#B87333"/><circle cx="423.3333333333333" cy="221.344" r="4.5" fill="#B87333"/><circle cx="610.0" cy="226.232" r="4.5" fill="#B87333"/><text x="622.0" y="230.232" font-size="11" fill="#B87333" font-weight="700">RESASCO</text><text x="622.0" y="244.232" font-size="10" fill="#7A7568">517</text></svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Observación de tendencia</div>
+    <div class="callout-tx"><strong>Genova mantiene la caída más pronunciada del grupo</strong> entre enero y abril. El resto se mantiene relativamente estable: Guspamar con un valle en febrero pero recupera, Vernon casi plana, Resasco en suave bajada.</div>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="sec-num">03 / 10</span>
+    <h2>Análisis <em>por canal</em></h2>
+    <span class="sec-kicker">Cómo se comporta cada origen y quién lo aprovecha mejor</span>
+  </div>
+
+  <p class="lead">En lugar de mirar las marcas, miramos los canales. Cada canal tiene una conversión global muy distinta, y cada marca explota cada canal de forma diferente. Entender esa matriz es la clave para reasignar inversión sin descuidar volumen.</p>
+
+  <div class="chart">
+    <div class="chart-title">Mapa de calor — conversión por canal y sociedad</div>
+    <div class="chart-sub">% leads cerrados como ganados · base limpia · cuanto más oscuro, mejor conversión</div>
+    <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><text x="231.25" y="48" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">GUSPAMAR</text><rect x="170.0" y="30" width="6" height="22" fill="#003478"/><text x="353.75" y="48" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">GENOVA</text><rect x="292.5" y="30" width="6" height="22" fill="#B22234"/><text x="476.25" y="48" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">VERNON</text><rect x="415.0" y="30" width="6" height="22" fill="#2D5A3D"/><text x="598.75" y="48" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">RESASCO</text><rect x="537.5" y="30" width="6" height="22" fill="#B87333"/><text x="158" y="88.16666666666667" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">ADS - FACEBOOK</text><rect x="172.0" y="62.0" width="118.5" height="44.333333333333336" fill="rgb(241,237,227)" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="82.16666666666667" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">1.0%</text><text x="231.25" y="99.16666666666667" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=4,885</text><rect x="294.5" y="62.0" width="118.5" height="44.333333333333336" fill="rgb(240,236,226)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="82.16666666666667" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">1.39%</text><text x="353.75" y="99.16666666666667" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=2,089</text><rect x="417.0" y="62.0" width="118.5" height="44.333333333333336" fill="rgb(242,237,228)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="82.16666666666667" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.7%</text><text x="476.25" y="99.16666666666667" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=2,278</text><rect x="539.5" y="62.0" width="118.5" height="44.333333333333336" fill="rgb(243,238,229)" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="82.16666666666667" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.29%</text><text x="598.75" y="99.16666666666667" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=1,738</text><text x="158" y="136.5" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">SALON</text><rect x="172.0" y="110.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(206,210,198)" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="130.5" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">14.32%</text><text x="231.25" y="147.5" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=1,306</text><rect x="294.5" y="110.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(226,225,215)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="130.5" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">6.64%</text><text x="353.75" y="147.5" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=512</text><rect x="417.0" y="110.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(158,175,157)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="130.5" text-anchor="middle" font-size="14" fill="white" font-weight="700">32.49%</text><text x="476.25" y="147.5" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=237</text><rect x="539.5" y="110.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(217,219,207)" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="130.5" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">9.97%</text><text x="598.75" y="147.5" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=331</text><text x="158" y="184.83333333333334" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">BASE DE CLIENTES</text><rect x="172.0" y="158.66666666666669" width="118.5" height="44.333333333333336" fill="rgb(144,164,145)" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="178.83333333333334" text-anchor="middle" font-size="14" fill="white" font-weight="700">37.98%</text><text x="231.25" y="195.83333333333334" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=574</text><rect x="294.5" y="158.66666666666669" width="118.5" height="44.333333333333336" fill="rgb(111,139,117)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="178.83333333333334" text-anchor="middle" font-size="14" fill="white" font-weight="700">50.5%</text><text x="353.75" y="195.83333333333334" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=202</text><rect x="417.0" y="158.66666666666669" width="118.5" height="44.333333333333336" fill="rgb(143,164,145)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="178.83333333333334" text-anchor="middle" font-size="14" fill="white" font-weight="700">38.1%</text><text x="476.25" y="195.83333333333334" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=21</text><rect x="539.5" y="158.66666666666669" width="118.5" height="44.333333333333336" fill="rgb(45,90,61)" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="178.83333333333334" text-anchor="middle" font-size="14" fill="white" font-weight="700">75.76%</text><text x="598.75" y="195.83333333333334" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=66</text><text x="158" y="233.16666666666669" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">PAGINA WEB</text><rect x="172.0" y="207.0" width="118.5" height="44.333333333333336" fill="rgb(235,233,223)" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="227.16666666666666" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">3.05%</text><text x="231.25" y="244.16666666666666" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=131</text><rect x="294.5" y="207.0" width="118.5" height="44.333333333333336" fill="rgb(242,237,228)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="227.16666666666666" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.57%</text><text x="353.75" y="244.16666666666666" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=174</text><rect x="417.0" y="207.0" width="118.5" height="44.333333333333336" fill="rgb(140,161,141)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="227.16666666666666" text-anchor="middle" font-size="14" fill="white" font-weight="700">39.47%</text><text x="476.25" y="244.16666666666666" text-anchor="middle" font-size="9" fill="white" opacity="0.85">n=38</text><rect x="539.5" y="207.0" width="118.5" height="44.333333333333336" fill="rgb(244,239,230)" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="227.16666666666666" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.0%</text><text x="598.75" y="244.16666666666666" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=64</text><text x="158" y="281.5" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">RRSS - FACEBOOK</text><rect x="172.0" y="255.33333333333334" width="118.5" height="44.333333333333336" fill="#EBE4D5" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="275.5" text-anchor="middle" font-size="14" fill="#7A7568" font-weight="700">0.0%</text><text x="231.25" y="292.5" text-anchor="middle" font-size="9" fill="#7A7568" opacity="0.85">n=5</text><rect x="294.5" y="255.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(236,233,223)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="275.5" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">2.97%</text><text x="353.75" y="292.5" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=370</text><rect x="417.0" y="255.33333333333334" width="118.5" height="44.333333333333336" fill="rgb(237,234,224)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="275.5" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">2.41%</text><text x="476.25" y="292.5" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=83</text><rect x="539.5" y="255.33333333333334" width="118.5" height="44.333333333333336" fill="#EBE4D5" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="275.5" text-anchor="middle" font-size="14" fill="#7A7568" font-weight="700">0.0%</text><text x="598.75" y="292.5" text-anchor="middle" font-size="9" fill="#7A7568" opacity="0.85">n=12</text><text x="158" y="329.83333333333337" text-anchor="end" font-size="11" fill="#1A1F2E" font-weight="600">RRSS - INSTAGRAM</text><rect x="172.0" y="303.6666666666667" width="118.5" height="44.333333333333336" fill="rgb(238,234,225)" stroke="#D8CFB8" stroke-width="0.5"/><text x="231.25" y="323.83333333333337" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">2.11%</text><text x="231.25" y="340.83333333333337" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=95</text><rect x="294.5" y="303.6666666666667" width="118.5" height="44.333333333333336" fill="rgb(244,239,230)" stroke="#D8CFB8" stroke-width="0.5"/><text x="353.75" y="323.83333333333337" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.0%</text><text x="353.75" y="340.83333333333337" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=20</text><rect x="417.0" y="303.6666666666667" width="118.5" height="44.333333333333336" fill="rgb(244,239,230)" stroke="#D8CFB8" stroke-width="0.5"/><text x="476.25" y="323.83333333333337" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.0%</text><text x="476.25" y="340.83333333333337" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=21</text><rect x="539.5" y="303.6666666666667" width="118.5" height="44.333333333333336" fill="rgb(244,239,230)" stroke="#D8CFB8" stroke-width="0.5"/><text x="598.75" y="323.83333333333337" text-anchor="middle" font-size="14" fill="#1A1F2E" font-weight="700">0.0%</text><text x="598.75" y="340.83333333333337" text-anchor="middle" font-size="9" fill="#1A1F2E" opacity="0.85">n=21</text></svg>
+    <p style="font-size:11px;color:var(--muted);margin-top:14px;letter-spacing:0.03em">Las celdas en <span style="background:#EBE4D5;padding:2px 6px;color:var(--muted)">color crema</span> indican menos de 20 leads en la cohorte — la conversión no es estadísticamente confiable.</p>
+  </div>
+
+  <div class="pull">
+    Las cuatro marcas convierten Salón al doble dígito y Base de Clientes en torno al 40–75%. La diferencia entre ellas no está en cómo cierran — está en a qué canales eligen exponerse.
+    <span class="source">— Lectura del cuatrimestre</span>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:32px;letter-spacing:-0.02em;margin:48px 0 20px;color:var(--ink)">Detalle canal por canal</h3>
+
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">Meta · ADS – Facebook</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">10,990</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 69.8% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">0.9% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">El gigante del mix. Aporta el 70% del volumen del grupo pero su conversión es la más baja: <strong>0,9%</strong>. Es donde se concentra la inversión y donde, a igual gasto, se obtiene el peor retorno.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">4,885</span> leads · <span class="mono">49</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">66.0%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">1.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">2,278</span> leads · <span class="mono">16</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">84.6%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.7%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">2,089</span> leads · <span class="mono">29</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">60.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">1.39%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">1,738</span> leads · <span class="mono">5</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">77.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.29%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">Salón · walk-in al concesionario</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">2,386</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 15.1% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">13.87% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">El walk-in al concesionario es el segundo canal por volumen y el segundo por conversión: <strong>13,87%</strong>. Cuando el cliente llega con intención real, el cierre es altísimo. <strong>Vernon</strong> aparece como el más eficiente (convierte un tercio de los walk-ins) — pero <strong style="color:var(--accent)">⚠ con caveat</strong>: Vernon tiene 2 sucursales y produce <em>menos</em> leads de Salón (237) que Resasco con 1 sucursal (331). Es probable que la operación esté <strong>sub-cargando</strong> walk-ins que no avanzan, lo que infla artificialmente su tasa de conversión. La conversión real de Vernon en Salón podría ser sustancialmente menor.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">1,306</span> leads · <span class="mono">187</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">17.6%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink);font-weight:700">14.32%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">512</span> leads · <span class="mono">34</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">14.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">6.64%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">331</span> leads · <span class="mono">33</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">14.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">9.97%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">237</span> leads · <span class="mono">77</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">8.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">32.49%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">Base de Clientes</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">863</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 5.5% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">43.8% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">Solo 5,5% del volumen pero <strong>43,8%</strong> de conversión. Cada lead que sale de la base existente vale, en términos de cierre, casi 50 veces lo que vale un lead de Meta. <strong style="color:var(--accent)">⚠ Caveat importante:</strong> esta tasa puede estar inflada en algunas sociedades — particularmente <strong>Vernon</strong> y <strong>Genova</strong> — porque parecen cargar al CRM solo los leads de Base de Clientes que cierran o tienen alto interés. Hasta validar la carga, los números son indicativos pero no estrictamente comparables entre marcas.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">574</span> leads · <span class="mono">218</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">7.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">37.98%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">202</span> leads · <span class="mono">102</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">5.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">50.5%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">66</span> leads · <span class="mono">50</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">3.0%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">75.76%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">21</span> leads · <span class="mono">8</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">38.1%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">Página Web propia</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">407</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 2.6% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">4.91% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">Volumen bajo. La conversión global es modesta (4,9%), pero las diferencias entre marcas son enormes: <strong>Vernon</strong> convierte 39% mientras <strong>Resasco</strong> y <strong>Genova</strong> tienen casi cero. Canal de oportunidad para algunos, agujero de fuga para otros.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">174</span> leads · <span class="mono">1</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">5.1%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.57%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">131</span> leads · <span class="mono">4</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">1.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">3.05%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">64</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">2.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">38</span> leads · <span class="mono">15</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">1.4%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--green);font-weight:700">39.47%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">RRSS – Facebook (orgánico)</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">470</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 3.0% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">2.77% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">Facebook orgánico (no pago). <strong>Genova</strong> es la única que lo aprovecha (10,8% de su mix). Conversión modesta pero sin costo de pauta.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">370</span> leads · <span class="mono">11</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">10.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">2.97%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">83</span> leads · <span class="mono">2</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">3.1%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">2.41%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">12</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.5%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:#7A7568">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">5</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.1%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:#7A7568">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Canal</div>
+          <h3 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;letter-spacing:-0.02em;line-height:1">RRSS – Instagram (orgánico)</h3>
+        </div>
+        <div style="text-align:right">
+          <div class="mono" style="font-size:28px;font-weight:700;color:var(--ink)">157</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:4px">leads · 1.0% del grupo</div>
+          <div class="mono" style="font-size:13px;color:var(--green);font-weight:700;margin-top:6px">1.27% conv. global</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:14px">Instagram orgánico (no pago) — canal marginal en todas las marcas, con conversión cercana a cero. Si tiene costo de community management, no se está justificando con resultados de venta directa. Su rol probable es de marca, no de captación.</p>
+      
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#003478"></span> GUSPAMAR<span style="background:var(--green);color:white;font-size:9px;padding:2px 6px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-left:6px">Líder</span></div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">95</span> leads · <span class="mono">2</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">1.3%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--ink-2);font-weight:600">2.11%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#2D5A3D"></span> VERNON</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">21</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.8%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B87333"></span> RESASCO</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">21</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.9%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:140px 1fr 80px 70px;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center">
+          <div style="font-weight:600;font-family:Work Sans,sans-serif;font-size:13px"><span class="dot" style="background:#B22234"></span> GENOVA</div>
+          <div style="font-size:12px;color:var(--muted)">
+            <span class="mono">20</span> leads · <span class="mono">0</span> vtas · <span class="mono" style="color:var(--ink-2);font-weight:600">0.6%</span> de la soc
+          </div>
+          <div class="mono" style="text-align:right;font-size:18px;color:var(--accent);font-weight:700">0.0%</div>
+          <div style="text-align:right;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">conv.</div>
+        </div>
+        
+    </div>
+    
+  <div class="callout">
+    <div class="callout-eb">La oportunidad escondida</div>
+    <div class="callout-tx">Si el grupo lograra que <strong>Base de Clientes pase del 5,5% actual al 10-15% del mix</strong>, podría sumar centenares de ventas adicionales — pero <em>con dos asteriscos importantes</em>: (1) Hay que validar que la conversión actual del 43,8% no esté inflada por carga selectiva (especialmente en Vernon y Genova). (2) Aumentar el volumen del canal sin replicar el filtro actual probablemente baje la tasa de conversión, porque hoy el CRM puede estar capturando solo los leads "buenos" de la base. Aún con conversión a la mitad, sigue siendo el mejor canal del mix.</div>
+  </div>
+</section>
+
+<!-- SECTION 3: META INVESTMENT -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="sec-num">04 / 10</span>
+    <h2>Pauta Meta — <em>inversión y costo por venta</em></h2>
+    <span class="sec-kicker">El número que el análisis previo no podía calcular</span>
+  </div>
+
+  <p class="lead">Con los datos de inversión finalmente integrados, podemos pasar de <em>"conversión"</em> a <em>"costo real por venta"</em> — la métrica que importa para tomar decisiones de presupuesto. Las cifras son contundentes.</p>
+
+  <div class="chart">
+    <div class="chart-title">Inversión Meta Q1 por sociedad y canal</div>
+    <div class="chart-sub">Enero a abril 2026 · sin usados ni Quickline · Ford Pro sumado a 0 Km de Guspamar</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><rect x="110" y="46.4" width="300.8462013588635" height="42" fill="#003478"/><rect x="410.8462013588635" y="46.4" width="229.1537986411365" height="42" fill="#B87333"/><text x="100" y="72.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">Guspamar</text><text x="260.42310067943174" y="72.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">$36.8M</text><text x="525.4231006794317" y="72.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">$28.0M</text><text x="650.0" y="72.4" font-size="13" fill="#1A1F2E" font-weight="700">$64.8M</text><rect x="110" y="104.8" width="87.24212476837553" height="42" fill="#003478"/><rect x="197.24212476837553" y="104.8" width="152.38727609635578" height="42" fill="#B87333"/><text x="100" y="130.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">Vernon</text><text x="153.62106238418778" y="130.8" text-anchor="middle" font-size="11" fill="white" font-weight="700">$10.7M</text><text x="273.4357628165534" y="130.8" text-anchor="middle" font-size="11" fill="white" font-weight="700">$18.6M</text><text x="359.62940086473134" y="130.8" font-size="13" fill="#1A1F2E" font-weight="700">$29.3M</text><rect x="110" y="163.2" width="121.12415071031502" height="42" fill="#003478"/><rect x="231.124150710315" y="163.2" width="99.84558369363805" height="42" fill="#B87333"/><text x="100" y="189.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">Resasco</text><text x="170.5620753551575" y="189.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">$14.8M</text><text x="281.046942557134" y="189.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">$12.2M</text><text x="340.96973440395305" y="189.2" font-size="13" fill="#1A1F2E" font-weight="700">$27.0M</text><rect x="110" y="221.6" width="103.73301420630018" height="42" fill="#003478"/><rect x="213.7330142063002" y="221.6" width="114.62804972205065" height="42" fill="#B87333"/><text x="100" y="247.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">Genova</text><text x="161.8665071031501" y="247.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">$12.7M</text><text x="271.0470390673255" y="247.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">$14.0M</text><text x="338.36106392835086" y="247.6" font-size="13" fill="#1A1F2E" font-weight="700">$26.7M</text><rect x="110" y="7" width="10" height="10" fill="#003478"/><text x="125" y="16" font-size="11" fill="#1A1F2E">0 Km (incl. Ford Pro en Guspamar)</text><rect x="360" y="7" width="10" height="10" fill="#B87333"/><text x="375" y="16" font-size="11" fill="#1A1F2E">Plan de Ahorro</text></svg>
+  </div>
+
+  <div style="margin:32px 0">
+    <h3 class="serif" style="font-weight:300;font-size:28px;letter-spacing:-0.02em;margin-bottom:14px">Inversión, leads y costo por venta — Q1</h3>
+    <div style="overflow-x:auto">
+    <table class="rk">
+      <thead>
+        <tr>
+          <th style="width:25%">Sociedad / Canal</th>
+          <th class="num">Inversión</th>
+          <th class="num">Leads Meta</th>
+          <th class="num">CPL</th>
+          <th class="num">Ventas</th>
+          <th class="num">Costo / venta</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr>
+      <td><span class="dot" style="background:#B22234"></span> <strong>Genova</strong></td>
+      <td class="num">$26.681.250</td>
+      <td class="num">2,089</td>
+      <td class="num">$12.772</td>
+      <td class="num">29</td>
+      <td class="num" style="color:var(--green);font-weight:700">$920.043</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ 0 Km</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$12.675.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">1,198</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$10.580</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">7</td>
+      <td class="num" style="font-size:12px;color:var(--ink);font-weight:700">$1.810.714</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ Plan Ahorro</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$14.006.250</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">891</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$15.720</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">22</td>
+      <td class="num" style="font-size:12px;color:var(--green);font-weight:700">$636.648</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#003478"></span> <strong>Guspamar</strong></td>
+      <td class="num">$64.760.000</td>
+      <td class="num">4,885</td>
+      <td class="num">$13.257</td>
+      <td class="num">49</td>
+      <td class="num" style="color:var(--ink);font-weight:700">$1.321.633</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ 0 Km</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$36.760.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">2,983</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$12.323</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">19</td>
+      <td class="num" style="font-size:12px;color:var(--ink);font-weight:700">$1.934.737</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ Plan Ahorro</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$28.000.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">1,902</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$14.721</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">30</td>
+      <td class="num" style="font-size:12px;color:var(--green);font-weight:700">$933.333</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#2D5A3D"></span> <strong>Vernon</strong></td>
+      <td class="num">$29.280.000</td>
+      <td class="num">2,278</td>
+      <td class="num">$12.853</td>
+      <td class="num">16</td>
+      <td class="num" style="color:var(--ink);font-weight:700">$1.830.000</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ 0 Km</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$10.660.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">697</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$15.294</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">5</td>
+      <td class="num" style="font-size:12px;color:var(--gold);font-weight:700">$2.132.000</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ Plan Ahorro</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$18.620.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">1,581</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$11.777</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">11</td>
+      <td class="num" style="font-size:12px;color:var(--ink);font-weight:700">$1.692.727</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#B87333"></span> <strong>Resasco</strong></td>
+      <td class="num">$27.000.000</td>
+      <td class="num">1,738</td>
+      <td class="num">$15.535</td>
+      <td class="num">5</td>
+      <td class="num" style="color:var(--accent);font-weight:700">$5.400.000</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ 0 Km</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$14.800.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">1,128</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$13.121</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">3</td>
+      <td class="num" style="font-size:12px;color:var(--accent);font-weight:700">$4.933.333</td>
+    </tr>
+    <tr style="background:rgba(0,0,0,0.02)">
+      <td style="padding-left:36px;font-size:12px;color:var(--muted)">↳ Plan Ahorro</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$12.200.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">610</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">$20.000</td>
+      <td class="num" style="font-size:12px;color:var(--muted)">2</td>
+      <td class="num" style="font-size:12px;color:var(--accent);font-weight:700">$6.100.000</td>
+    </tr>
+    
+        <tr style="border-top:2px solid var(--ink)">
+          <td><strong>GRUPO</strong></td>
+          <td class="num"><strong>$147.721.250</strong></td>
+          <td class="num"><strong>10,990</strong></td>
+          <td class="num"><strong>$13.441</strong></td>
+          <td class="num"><strong>99</strong></td>
+          <td class="num"><strong>$1.492.134</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">Costo por venta Meta — comparativo por sociedad y canal</div>
+    <div class="chart-sub">Cuanto más bajo, más eficiente · base Q1 limpia</div>
+    <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="80" y1="300.0" x2="670" y2="300.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="304.0" text-anchor="end" font-size="10" fill="#7A7568">$0M</text><line x1="80" y1="262.8571428571429" x2="670" y2="262.8571428571429" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="266.8571428571429" text-anchor="end" font-size="10" fill="#7A7568">$1M</text><line x1="80" y1="225.71428571428572" x2="670" y2="225.71428571428572" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="229.71428571428572" text-anchor="end" font-size="10" fill="#7A7568">$2M</text><line x1="80" y1="188.57142857142858" x2="670" y2="188.57142857142858" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="192.57142857142858" text-anchor="end" font-size="10" fill="#7A7568">$3M</text><line x1="80" y1="151.42857142857144" x2="670" y2="151.42857142857144" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="155.42857142857144" text-anchor="end" font-size="10" fill="#7A7568">$4M</text><line x1="80" y1="114.28571428571428" x2="670" y2="114.28571428571428" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="118.28571428571428" text-anchor="end" font-size="10" fill="#7A7568">$5M</text><line x1="80" y1="77.14285714285717" x2="670" y2="77.14285714285717" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="81.14285714285717" text-anchor="end" font-size="10" fill="#7A7568">$6M</text><line x1="80" y1="40.0" x2="670" y2="40.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="44.0" text-anchor="end" font-size="10" fill="#7A7568">$7M</text><rect x="102.55" y="228.13834586466166" width="47.2" height="71.86165413533834" fill="#003478"/><text x="126.15" y="222.13834586466166" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">$1.93M</text><rect x="157.75" y="265.3333333333333" width="47.2" height="34.666666666666664" fill="#B87333"/><text x="181.35" y="259.3333333333333" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">$0.93M</text><text x="153.75" y="322" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="153.75" y="338" text-anchor="middle" font-size="10" fill="#7A7568">19 + 30 = 49 ventas Meta</text><rect x="250.05" y="232.74489795918367" width="47.2" height="67.25510204081633" fill="#003478"/><text x="273.65000000000003" y="226.74489795918367" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">$1.81M</text><rect x="305.25" y="276.3530844155844" width="47.2" height="23.646915584415588" fill="#B87333"/><text x="328.85" y="270.3530844155844" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">$0.64M</text><text x="301.25" y="322" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="301.25" y="338" text-anchor="middle" font-size="10" fill="#7A7568">7 + 22 = 29 ventas Meta</text><rect x="397.55" y="220.81142857142856" width="47.2" height="79.18857142857144" fill="#003478"/><text x="421.15000000000003" y="214.81142857142856" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">$2.13M</text><rect x="452.75" y="237.12727272727273" width="47.2" height="62.87272727272727" fill="#B87333"/><text x="476.35" y="231.12727272727273" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">$1.69M</text><text x="448.75" y="322" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="448.75" y="338" text-anchor="middle" font-size="10" fill="#7A7568">5 + 11 = 16 ventas Meta</text><rect x="545.05" y="116.76190476190479" width="47.2" height="183.2380952380952" fill="#003478"/><text x="568.65" y="110.76190476190479" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">$4.93M</text><rect x="600.25" y="73.42857142857144" width="47.2" height="226.57142857142856" fill="#B87333"/><text x="623.85" y="67.42857142857144" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">$6.10M</text><text x="596.25" y="322" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="596.25" y="338" text-anchor="middle" font-size="10" fill="#7A7568">3 + 2 = 5 ventas Meta</text><rect x="80" y="10" width="10" height="10" fill="#003478"/><text x="95" y="19" font-size="11" fill="#1A1F2E">0 Km</text><rect x="160" y="10" width="10" height="10" fill="#B87333"/><text x="175" y="19" font-size="11" fill="#1A1F2E">Plan de Ahorro</text></svg>
+  </div>
+
+  <div class="pull">
+    Plan de Ahorro convierte el doble que 0 Km en Meta: $1,12M vs $2,20M por venta a nivel grupo. Y eso pasa con presupuestos casi idénticos ($72,8M vs $74,9M).
+    <span class="source">— Lectura clave del cuatrimestre</span>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:26px;line-height:1.15;margin-bottom:14px;letter-spacing:-0.01em">Lo que ganan los líderes</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.65;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>🥇 Genova</strong> — costo/venta total de <span class="mono" style="color:var(--green);font-weight:700">$920K</span>. Líder absoluto. En Plan de Ahorro logra <span class="mono" style="color:var(--green);font-weight:700">$636K</span>: el referente del grupo.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>🥈 Guspamar</strong> — $1,32M. Buena performance considerando volumen. PA muy eficiente ($933K).</li>
+        <li style="padding:10px 0"><strong>🥉 Vernon</strong> — $1,83M. Costo alto en ambos canales pero el equipo cierra Salón espectacular cuando el lead llega.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:26px;line-height:1.15;margin-bottom:14px;letter-spacing:-0.01em">El alarma del grupo</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.65;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Resasco</strong> tiene <span class="mono" style="color:var(--accent);font-weight:700">$5,40M</span> de costo por venta Meta — casi 6 veces el líder.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)">En Plan de Ahorro Meta, Resasco gasta <span class="mono">$12,2M para 2 ventas</span> = <span class="mono" style="color:var(--accent);font-weight:700">$6,1M</span> por unidad.</li>
+        <li style="padding:10px 0">Solo el <strong>5,7% de las ventas de Resasco vienen de Meta</strong>. La inversión está completamente desacoplada del retorno.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Para llevar a Dirección</div>
+    <div class="callout-tx">En cuatro meses se gastaron <strong>$147,7M en pauta Meta</strong> para producir <strong>99 ventas atribuidas</strong> al canal. Costo de adquisición promedio del grupo: <strong>$1,49M por venta</strong>. Mientras tanto, el <strong>89% de las 872 ventas totales</strong> del grupo vienen de canales no-Meta (principalmente Base de Clientes y Salón). La inversión publicitaria está mayoritariamente desalineada con las palancas reales de venta.</div>
+  </div>
+</section>
+
+<!-- SECTION 4: HALO HYPOTHESIS -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="sec-num">05 / 10</span>
+    <h2>¿Meta empuja al Salón? <em>Test de hipótesis</em></h2>
+    <span class="sec-kicker">¿La pauta digital genera visitas espontáneas al concesionario?</span>
+  </div>
+
+  <p class="lead">La hipótesis razonable: <em>"no toda la inversión Meta se traduce en leads Meta — mucha gente ve la publicidad y aparece directo en el salón"</em>. Es la pregunta clásica de atribución multi-touch. Con la data del cuatrimestre podemos buscar señales que la sustenten o la debiliten — pero no podemos demostrar causalidad sin un experimento.</p>
+
+  <div class="chart">
+    <div class="chart-title">Inversión Meta vs. leads de Salón — 16 puntos (4 sociedades × 4 meses)</div>
+    <div class="chart-sub">Si Meta empujara al Salón, esperaríamos ver una correlación positiva. No la vemos.</div>
+    <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="70" y1="300.0" x2="690" y2="300.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="62" y="304.0" text-anchor="end" font-size="10" fill="#7A7568">0</text><line x1="70" y1="235.9448139935945" x2="690" y2="235.9448139935945" stroke="#D8CFB8" stroke-width="0.5"/><text x="62" y="239.9448139935945" text-anchor="end" font-size="10" fill="#7A7568">100</text><line x1="70" y1="171.88962798718896" x2="690" y2="171.88962798718896" stroke="#D8CFB8" stroke-width="0.5"/><text x="62" y="175.88962798718896" text-anchor="end" font-size="10" fill="#7A7568">200</text><line x1="70" y1="107.83444198078345" x2="690" y2="107.83444198078345" stroke="#D8CFB8" stroke-width="0.5"/><text x="62" y="111.83444198078345" text-anchor="end" font-size="10" fill="#7A7568">300</text><line x1="70" y1="43.77925597437792" x2="690" y2="43.77925597437792" stroke="#D8CFB8" stroke-width="0.5"/><text x="62" y="47.77925597437792" text-anchor="end" font-size="10" fill="#7A7568">400</text><line x1="70.0" y1="40" x2="70.0" y2="300" stroke="#D8CFB8" stroke-width="0.5"/><text x="70.0" y="318" text-anchor="middle" font-size="10" fill="#7A7568">$0M</text><line x1="234.1123375420207" y1="40" x2="234.1123375420207" y2="300" stroke="#D8CFB8" stroke-width="0.5"/><text x="234.1123375420207" y="318" text-anchor="middle" font-size="10" fill="#7A7568">$5M</text><line x1="398.2246750840414" y1="40" x2="398.2246750840414" y2="300" stroke="#D8CFB8" stroke-width="0.5"/><text x="398.2246750840414" y="318" text-anchor="middle" font-size="10" fill="#7A7568">$10M</text><line x1="562.337012626062" y1="40" x2="562.337012626062" y2="300" stroke="#D8CFB8" stroke-width="0.5"/><text x="562.337012626062" y="318" text-anchor="middle" font-size="10" fill="#7A7568">$15M</text><text x="380.0" y="345" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Inversión Meta del mes</text><text x="20" y="170.0" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600" transform="rotate(-90 20 170.0)">Leads Salón del mes</text><circle cx="607.3037931125758" cy="63.636363636363654" r="6" fill="#003478" opacity="0.85"/><text x="616.3037931125758" y="67.63636363636365" font-size="9" fill="#7A7568">Ene</text><circle cx="660.4761904761905" cy="109.11554570091158" r="6" fill="#003478" opacity="0.85"/><text x="669.4761904761905" y="113.11554570091158" font-size="9" fill="#7A7568">Feb</text><circle cx="568.901506127743" cy="78.36905641783693" r="6" fill="#003478" opacity="0.85"/><text x="577.901506127743" y="82.36905641783693" font-size="9" fill="#7A7568">Mar</text><circle cx="568.901506127743" cy="112.31830500123183" r="6" fill="#003478" opacity="0.85"/><text x="577.901506127743" y="116.31830500123183" font-size="9" fill="#7A7568">Abr</text><circle cx="278.01238783451123" cy="189.18452820891846" r="6" fill="#B22234" opacity="0.85"/><text x="287.01238783451123" y="193.18452820891846" font-size="9" fill="#7A7568">Ene</text><circle cx="278.01238783451123" cy="242.35033259423503" r="6" fill="#B22234" opacity="0.85"/><text x="287.01238783451123" y="246.35033259423503" font-size="9" fill="#7A7568">Feb</text><circle cx="278.01238783451123" cy="210.32273959103227" r="6" fill="#B22234" opacity="0.85"/><text x="287.01238783451123" y="214.32273959103227" font-size="9" fill="#7A7568">Mar</text><circle cx="321.7072977050742" cy="230.179847253018" r="6" fill="#B22234" opacity="0.85"/><text x="330.7072977050742" y="234.179847253018" font-size="9" fill="#7A7568">Abr</text><circle cx="310.2604621615183" cy="248.7558511948756" r="6" fill="#2D5A3D" opacity="0.85"/><text x="319.2604621615183" y="252.7558511948756" font-size="9" fill="#7A7568">Ene</text><circle cx="310.2604621615183" cy="266.05075141660507" r="6" fill="#2D5A3D" opacity="0.85"/><text x="319.2604621615183" y="270.05075141660507" font-size="9" fill="#7A7568">Feb</text><circle cx="310.2604621615183" cy="261.5668883961567" r="6" fill="#2D5A3D" opacity="0.85"/><text x="319.2604621615183" y="265.5668883961567" font-size="9" fill="#7A7568">Mar</text><circle cx="310.2604621615183" cy="271.81571815718155" r="6" fill="#2D5A3D" opacity="0.85"/><text x="319.2604621615183" y="275.81571815718155" font-size="9" fill="#7A7568">Abr</text><circle cx="283.3460388046269" cy="237.2259177137226" r="6" fill="#B87333" opacity="0.85"/><text x="292.3460388046269" y="241.2259177137226" font-size="9" fill="#7A7568">Ene</text><circle cx="283.3460388046269" cy="251.31805863513182" r="6" fill="#B87333" opacity="0.85"/><text x="292.3460388046269" y="255.31805863513182" font-size="9" fill="#7A7568">Feb</text><circle cx="283.3460388046269" cy="251.31805863513182" r="6" fill="#B87333" opacity="0.85"/><text x="292.3460388046269" y="255.31805863513182" font-size="9" fill="#7A7568">Mar</text><circle cx="316.168506313031" cy="248.11529933481154" r="6" fill="#B87333" opacity="0.85"/><text x="325.168506313031" y="252.11529933481154" font-size="9" fill="#7A7568">Abr</text><circle cx="75" cy="15" r="5" fill="#003478"/><text x="85" y="19" font-size="10" fill="#1A1F2E">GUSPAMAR</text><circle cx="205" cy="15" r="5" fill="#B22234"/><text x="215" y="19" font-size="10" fill="#1A1F2E">GENOVA</text><circle cx="335" cy="15" r="5" fill="#2D5A3D"/><text x="345" y="19" font-size="10" fill="#1A1F2E">VERNON</text><circle cx="465" cy="15" r="5" fill="#B87333"/><text x="475" y="19" font-size="10" fill="#1A1F2E">RESASCO</text></svg>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:24px;margin-bottom:14px;letter-spacing:-0.01em">Lo que dicen los números</h3>
+      <table class="rk" style="margin-top:8px">
+        <thead><tr><th>Test</th><th class="num">Resultado</th></tr></thead>
+        <tbody>
+          <tr><td>Correlación grupo Inv ↔ Salón</td><td class="num" style="color:var(--accent);font-weight:700">−0,67</td></tr>
+          <tr><td>Correlación grupo Inv ↔ Meta</td><td class="num" style="color:var(--accent);font-weight:700">−0,60</td></tr>
+          <tr><td>Correlación grupo Inv ↔ Base Cl.</td><td class="num" style="color:var(--accent);font-weight:700">−0,86</td></tr>
+          <tr><td>Pares mes-a-mes en misma dirección</td><td class="num">1 de 12</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:13px;color:var(--muted);margin-top:14px;line-height:1.55">Cuando la inversión sube, los leads de Salón <strong>no</strong> suben — incluso bajan ligeramente. Pero las cuatro mediciones tienen sample chico y muchas sociedades mantuvieron inversión constante: el test no es definitivo.</p>
+    </div>
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:24px;margin-bottom:14px;letter-spacing:-0.01em">Lo que la data no puede decir</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.65;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Sin variación, no hay test.</strong> Vernon mantuvo $7,32M cada mes. Sin meses con/sin Meta no se puede medir el efecto.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>El efecto halo lleva tiempo.</strong> Una persona que ve un anuncio en enero puede llegar al salón en marzo. Con 4 meses, el lag se confunde con seasonalidad.</li>
+        <li style="padding:10px 0"><strong>No tenemos contrafáctico.</strong> No sabemos cómo sería el Salón <em>sin</em> Meta. Esa es la pregunta del millón.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pull">
+    Con esta data, la hipótesis no se sostiene — pero tampoco queda refutada. Mientras no se valide, no se puede usar como justificación para mantener el budget actual.
+    <span class="source">— Conclusión metodológica</span>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">La prueba que cerraría la pregunta</div>
+    <div class="callout-tx">
+      Tres formas, de la más rigurosa a la más rápida:<br><br>
+      <strong>1. Geo-test estructurado.</strong> Apagar Meta en una sucursal o región durante 4-6 semanas y medir Salón. La candidata natural es Resasco (peor performance, una sola sucursal).<br>
+      <strong>2. Encuesta en salón.</strong> Una sola pregunta al cliente: "¿Cómo nos conociste hoy?". En dos semanas se tienen 200-300 respuestas por marca.<br>
+      <strong>3. Recorte parcial.</strong> Reducir 50% el budget Meta de Resasco un mes. Versión menos costosa pero igual mide señal.
+    </div>
+  </div>
+
+  <p style="font-size:14px;color:var(--ink-2);margin-top:24px;line-height:1.6">La encuesta en salón es la mejor relación costo/beneficio para arrancar. Tarjeta impresa, dos semanas de captura, datos en mano. Si los clientes responden mayoritariamente <em>"vi una publicidad"</em>, la hipótesis gana fuerza. Si responden <em>"conocía la marca"</em> o <em>"me recomendaron"</em>, la decisión sobre Meta queda más clara.</p>
+</section>
+
+<!-- SECTION X: CALIDAD DEL LEAD, TIEMPO DE RESPUESTA, PROCESO -->
+<section id="sX">
+  <div class="sec-head">
+    <span class="sec-num">06 / 10</span>
+    <h2>Calidad del lead, tiempo de <em>respuesta</em> y proceso</h2>
+    <span class="sec-kicker">El estado real del embudo · qué registra y qué no el CRM</span>
+  </div>
+
+  <p class="lead">El análisis previo se concentró en cantidad: cuántos leads, cuánto se gasta, cuánto convierte. Esta sección entra al corazón cualitativo: <em>qué pasa con cada lead desde que entra al CRM</em>. Bad leads, tiempo de asignación, proceso comercial — variables operativas que explican gran parte del retorno.</p>
+
+  <h3 class="serif" style="font-weight:300;font-size:30px;letter-spacing:-0.02em;margin:32px 0 16px;color:var(--ink)">El % de bad leads</h3>
+  <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">El CRM clasifica explícitamente algunos leads como "BL:" (Bad Lead): imposible de contactar, dato erróneo, dato duplicado. Es un indicador directo de calidad del lead que recibe la marca.</p>
+
+  <div class="chart">
+    <div class="chart-title">% Bad Lead por sociedad</div>
+    <div class="chart-sub">Leads marcados como BL en CRM (imposible contactar, dato erróneo, dato duplicado) sobre el total · base limpia</div>
+    <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><rect x="110" y="32.4" width="420.97142857142853" height="32" fill="#B87333"/><text x="100" y="53.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="540.9714285714285" y="53.4" font-size="14" fill="#1A1F2E" font-weight="700">55.6%</text><text x="540.9714285714285" y="70.4" font-size="10" fill="#7A7568">1,240 de 2,232 leads</text><rect x="110" y="76.8" width="419.4571428571428" height="32" fill="#2D5A3D"/><text x="100" y="97.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="539.4571428571428" y="97.8" font-size="14" fill="#1A1F2E" font-weight="700">55.4%</text><text x="539.4571428571428" y="114.8" font-size="10" fill="#7A7568">1,491 de 2,692 leads</text><rect x="110" y="121.19999999999999" width="328.6" height="32" fill="#B22234"/><text x="100" y="142.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="448.6" y="142.2" font-size="14" fill="#1A1F2E" font-weight="700">43.4%</text><text x="448.6" y="159.2" font-size="10" fill="#7A7568">1,488 de 3,429 leads</text><rect x="110" y="165.6" width="318.75714285714287" height="32" fill="#003478"/><text x="100" y="186.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="438.75714285714287" y="186.6" font-size="14" fill="#1A1F2E" font-weight="700">42.1%</text><text x="438.75714285714287" y="203.6" font-size="10" fill="#7A7568">3,116 de 7,402 leads</text></svg>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">% Bad Lead por origen del lead</div>
+    <div class="chart-sub">A nivel grupo · agrupa los 4 CRMs</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><rect x="160" y="40.0" width="45.760000000000005" height="30" fill="#2D5A3D"/><text x="150" y="60.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">BASE DE CLIENTES</text><text x="215.76" y="60.0" font-size="13" fill="#1A1F2E" font-weight="700">10.4%</text><text x="265.76" y="60.0" font-size="10" fill="#7A7568">n=863</text><rect x="160" y="80.0" width="67.76" height="30" fill="#2D5A3D"/><text x="150" y="100.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">SALON</text><text x="237.76" y="100.0" font-size="13" fill="#1A1F2E" font-weight="700">15.4%</text><text x="287.76" y="100.0" font-size="10" fill="#7A7568">n=2,386</text><rect x="160" y="120.0" width="179.51999999999998" height="30" fill="#C8102E"/><text x="150" y="140.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">RRSS - INSTAGRAM</text><text x="349.52" y="140.0" font-size="13" fill="#1A1F2E" font-weight="700">40.8%</text><text x="399.52" y="140.0" font-size="10" fill="#7A7568">n=157</text><rect x="160" y="160.0" width="221.76" height="30" fill="#C8102E"/><text x="150" y="180.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">PAGINA WEB</text><text x="391.76" y="180.0" font-size="13" fill="#1A1F2E" font-weight="700">50.4%</text><text x="441.76" y="180.0" font-size="10" fill="#7A7568">n=407</text><rect x="160" y="200.0" width="242.88000000000002" height="30" fill="#C8102E"/><text x="150" y="220.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">ADS - FACEBOOK</text><text x="412.88" y="220.0" font-size="13" fill="#1A1F2E" font-weight="700">55.2%</text><text x="462.88" y="220.0" font-size="10" fill="#7A7568">n=10,990</text><rect x="160" y="240.0" width="330.43999999999994" height="30" fill="#8B0F1E"/><text x="150" y="260.0" text-anchor="end" font-size="12" fill="#1A1F2E" font-weight="600">RRSS - FACEBOOK</text><text x="500.43999999999994" y="260.0" font-size="13" fill="#1A1F2E" font-weight="700">75.1%</text><text x="550.4399999999999" y="260.0" font-size="10" fill="#7A7568">n=470</text><text x="380.0" y="20" text-anchor="middle" font-size="11" fill="#7A7568">% leads marcados como BL en CRM (BL: imposible contactar / dato erróneo / duplicado)</text></svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Hallazgo crítico</div>
+    <div class="callout-tx">Más de la <strong>mitad de los leads de Meta son bad leads</strong> (55%). En RRSS-Facebook orgánico, tres cuartos. En contraste, Base de Clientes y Salón tienen apenas 10-15% de BL. La pauta digital no solo convierte poco — también captura mucha basura. Reducir el % BL en Meta es el palanca más directa para mejorar la eficiencia del canal.</div>
+  </div>
+
+  <div class="pull">
+    Vernon y Resasco tienen 55% de bad leads. Guspamar y Genova, 42%. Esa diferencia <em>13 puntos</em> es estructural — sugiere también una diferencia en cómo cada marca filtra o califica el lead que entra al CRM.
+    <span class="source">— Lectura comparativa</span>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:30px;letter-spacing:-0.02em;margin:48px 0 16px;color:var(--ink)">Tiempo de respuesta y resultado</h3>
+
+  <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">El CRM tiene dos timestamps relevantes: <code class="mono" style="background:var(--cream-2);padding:2px 6px">Asignado el</code> (cuándo el sistema asigna el lead al vendedor) y <code class="mono" style="background:var(--cream-2);padding:2px 6px">Gestionado el</code> (cuándo el vendedor empezó efectivamente a trabajar el lead). El tiempo entre ambos es la métrica operativa real: <strong>cuánto tarda el equipo comercial en empezar a atender un lead Meta</strong>. Filtrando solo a leads de origen ADS — Facebook con ambos timestamps poblados, tenemos 8.885 leads para analizar.</p>
+
+  <div class="chart">
+    <div class="chart-title">Mediana del tiempo Asignado → Gestionado por sociedad (solo Meta)</div>
+    <div class="chart-sub">Cuánto tarda en promedio el equipo comercial en empezar a atender un lead</div>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><rect x="110" y="48.4" width="52.00996019947246" height="32" fill="#B22234"/><text x="100" y="69.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="172.00996019947246" y="62.400000000000006" font-size="13" fill="#1A1F2E" font-weight="700">2.2h</text><text x="172.00996019947246" y="79.4" font-size="10" fill="#7A7568">24.7% en ≤30min · won 1.56%</text><rect x="110" y="98.8" width="221.17763921794983" height="32" fill="#003478"/><text x="100" y="119.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="341.17763921794983" y="112.8" font-size="13" fill="#1A1F2E" font-weight="700">9.5h</text><text x="341.17763921794983" y="129.8" font-size="10" fill="#7A7568">15.5% en ≤30min · won 0.91%</text><rect x="110" y="149.2" width="313.14222815836985" height="32" fill="#2D5A3D"/><text x="100" y="170.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="433.14222815836985" y="163.2" font-size="13" fill="#1A1F2E" font-weight="700">13.5h</text><text x="433.14222815836985" y="180.2" font-size="10" fill="#7A7568">7.1% en ≤30min · won 0.76%</text><rect x="110" y="199.6" width="480.0" height="32" fill="#B87333"/><text x="100" y="220.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="600.0" y="213.6" font-size="13" fill="#1A1F2E" font-weight="700">20.7h</text><text x="600.0" y="230.6" font-size="10" fill="#7A7568">2.3% en ≤30min · won 0.35%</text></svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">El primer dato grueso</div>
+    <div class="callout-tx">A nivel grupo, la <strong>mediana del tiempo de gestión es de 10,3 horas</strong>. Más de la mitad de los leads de Meta esperan medio día hasta el primer contacto humano. <strong>Genova lo hace en 2,3 horas (mediana)</strong>; <strong>Resasco en 20,7 horas</strong>. La diferencia entre marcas es de casi un orden de magnitud.</div>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">% Bad Lead y % Ganado por velocidad de gestión — solo Meta</div>
+    <div class="chart-sub">Tiempo desde asignación hasta primera gestión humana · n=8.885 leads</div>
+    <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="60" y1="290.0" x2="660" y2="290.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="294.0" text-anchor="end" font-size="10" fill="#C8102E">0%</text><line x1="60" y1="251.66666666666669" x2="660" y2="251.66666666666669" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="255.66666666666669" text-anchor="end" font-size="10" fill="#C8102E">10%</text><line x1="60" y1="213.33333333333334" x2="660" y2="213.33333333333334" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="217.33333333333334" text-anchor="end" font-size="10" fill="#C8102E">20%</text><line x1="60" y1="175.0" x2="660" y2="175.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="179.0" text-anchor="end" font-size="10" fill="#C8102E">30%</text><line x1="60" y1="136.66666666666669" x2="660" y2="136.66666666666669" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="140.66666666666669" text-anchor="end" font-size="10" fill="#C8102E">40%</text><line x1="60" y1="98.33333333333331" x2="660" y2="98.33333333333331" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="102.33333333333331" text-anchor="end" font-size="10" fill="#C8102E">50%</text><line x1="60" y1="60.0" x2="660" y2="60.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="52" y="64.0" text-anchor="end" font-size="10" fill="#C8102E">60%</text><text x="668" y="294.0" font-size="10" fill="#2D5A3D">0%</text><text x="668" y="236.5" font-size="10" fill="#2D5A3D">1%</text><text x="668" y="179.0" font-size="10" fill="#2D5A3D">2%</text><text x="668" y="121.5" font-size="10" fill="#2D5A3D">3%</text><text x="668" y="64.0" font-size="10" fill="#2D5A3D">4%</text><text x="102.85714285714286" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">≤5min</text><text x="102.85714285714286" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=322 (3.6%)</text><text x="188.57142857142856" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">5-30min</text><text x="188.57142857142856" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=897 (10.1%)</text><text x="274.2857142857143" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">30-60min</text><text x="274.2857142857143" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=619 (7.0%)</text><text x="360.0" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">1-4h</text><text x="360.0" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=1,459 (16.4%)</text><text x="445.71428571428567" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">4-24h</text><text x="445.71428571428567" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=3,482 (39.2%)</text><text x="531.4285714285713" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">1-7d</text><text x="531.4285714285713" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=1,955 (22.0%)</text><text x="617.1428571428571" y="312" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">>7d</text><text x="617.1428571428571" y="328" text-anchor="middle" font-size="9" fill="#7A7568">n=151 (1.7%)</text><rect x="79.28571428571429" y="142.37833333333336" width="47.142857142857146" height="147.62166666666664" fill="#C8102E" opacity="0.7"/><text x="102.85714285714286" y="136.37833333333336" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">38.5%</text><rect x="164.99999999999997" y="116.92500000000001" width="47.142857142857146" height="173.075" fill="#C8102E" opacity="0.7"/><text x="188.57142857142856" y="110.92500000000001" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">45.1%</text><rect x="250.7142857142857" y="114.74000000000001" width="47.142857142857146" height="175.26" fill="#C8102E" opacity="0.7"/><text x="274.2857142857143" y="108.74000000000001" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">45.7%</text><rect x="336.42857142857144" y="102.93333333333337" width="47.142857142857146" height="187.06666666666663" fill="#C8102E" opacity="0.7"/><text x="360.0" y="96.93333333333337" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">48.8%</text><rect x="422.1428571428571" y="96.22500000000002" width="47.142857142857146" height="193.77499999999998" fill="#C8102E" opacity="0.7"/><text x="445.71428571428567" y="90.22500000000002" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">50.5%</text><rect x="507.8571428571428" y="80.00999999999999" width="47.142857142857146" height="209.99" fill="#C8102E" opacity="0.7"/><text x="531.4285714285713" y="74.00999999999999" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">54.8%</text><rect x="593.5714285714286" y="76.75166666666667" width="47.142857142857146" height="213.24833333333333" fill="#C8102E" opacity="0.7"/><text x="617.1428571428571" y="70.75166666666667" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">55.6%</text><path d="M102.9,129.0 L188.6,212.9 L274.3,178.4 L360.0,215.2 L445.7,253.8 L531.4,266.4 L617.1,290.0" fill="none" stroke="#2D5A3D" stroke-width="3"/><circle cx="102.85714285714286" cy="129.0" r="5" fill="#2D5A3D"/><text x="102.85714285714286" y="119.0" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">2.80%</text><circle cx="188.57142857142856" cy="212.95" r="5" fill="#2D5A3D"/><text x="188.57142857142856" y="202.95" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">1.34%</text><circle cx="274.2857142857143" cy="178.45" r="5" fill="#2D5A3D"/><text x="274.2857142857143" y="168.45" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">1.94%</text><circle cx="360.0" cy="215.25" r="5" fill="#2D5A3D"/><text x="360.0" y="205.25" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">1.30%</text><circle cx="445.71428571428567" cy="253.775" r="5" fill="#2D5A3D"/><text x="445.71428571428567" y="243.775" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">0.63%</text><circle cx="531.4285714285713" cy="266.425" r="5" fill="#2D5A3D"/><text x="531.4285714285713" y="256.425" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">0.41%</text><circle cx="617.1428571428571" cy="290.0" r="5" fill="#2D5A3D"/><text x="617.1428571428571" y="280.0" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">0.00%</text><rect x="60" y="20" width="12" height="12" fill="#C8102E" opacity="0.7"/><text x="78" y="30" font-size="11" fill="#1A1F2E">% Bad Lead (eje izq.)</text><line x1="260" y1="26" x2="280" y2="26" stroke="#2D5A3D" stroke-width="3"/><circle cx="270" cy="26" r="4" fill="#2D5A3D"/><text x="288" y="30" font-size="11" fill="#1A1F2E">% Ganado (eje der.)</text><text x="360.0" y="35" text-anchor="middle" font-size="11" fill="#7A7568">Tiempo entre asignación y primera gestión humana · solo leads Meta · n=8.885</text></svg>
+  </div>
+
+  <div class="grid-2">
+    <div class="card" style="border-top:4px solid var(--green)">
+      <div class="card-title" style="color:var(--green)">Atención inmediata</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:30px;margin:6px 0 16px;letter-spacing:-0.02em">≤5 minutos</h4>
+      <p style="font-size:14px;line-height:1.6;color:var(--ink-2)">Solo el <strong>3,6%</strong> de los leads Meta. Bad lead: <span class="mono" style="color:var(--green);font-weight:700">38,5%</span> · Won: <span class="mono" style="color:var(--green);font-weight:700">2,80%</span></p>
+    </div>
+    <div class="card" style="border-top:4px solid var(--accent)">
+      <div class="card-title" style="color:var(--accent)">Atención tardía</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:30px;margin:6px 0 16px;letter-spacing:-0.02em">Más de 24h</h4>
+      <p style="font-size:14px;line-height:1.6;color:var(--ink-2)"><strong>23,7%</strong> de los leads. Bad lead: <span class="mono" style="color:var(--accent);font-weight:700">55-56%</span> · Won: <span class="mono" style="color:var(--accent);font-weight:700">0,4%</span></p>
+    </div>
+  </div>
+
+  <p style="font-family:Fraunces,serif;font-style:italic;font-size:18px;color:var(--ink-2);margin-top:24px;line-height:1.55">El patrón es <em>monotónico</em>: cuanto más se demora la gestión, más bad leads y menos cierre. Pasar de <em>≤5 min</em> a <em>+24h</em> reduce la conversión <strong>de 2,8% a 0,4%</strong> y eleva el bad lead de 38% a 56%. La velocidad de respuesta no es un detalle operativo — es una palanca directa de revenue.</p>
+
+  <h3 class="serif" style="font-weight:300;font-size:30px;letter-spacing:-0.02em;margin:48px 0 16px;color:var(--ink)">Test drive — el palanca operativa más fuerte del proceso</h3>
+
+  <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">Con los datos de test drive integrados (2.707 registros con status "Ofrecido No Realizado" o "Realizado") podemos medir un paso operativo concreto del embudo. La asimetría entre marcas es la primera observación:</p>
+
+  <div class="chart">
+    <div class="chart-title">% de good leads con algún test drive cargado en CRM</div>
+    <div class="chart-sub">Sobre good leads (excluye bad leads) · indicador de uso del TD como herramienta comercial</div>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><rect x="110" y="56.4" width="470.46249761435206" height="32" fill="#003478"/><text x="100" y="77.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="590.4624976143521" y="70.4" font-size="13" fill="#1A1F2E" font-weight="700">53.9%</text><text x="590.4624976143521" y="87.4" font-size="10" fill="#7A7568">2,311 de 4,287 good leads</text><rect x="110" y="104.8" width="92.2211808809747" height="32" fill="#B22234"/><text x="100" y="125.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="212.2211808809747" y="118.8" font-size="13" fill="#1A1F2E" font-weight="700">10.6%</text><text x="212.2211808809747" y="135.8" font-size="10" fill="#7A7568">205 de 1,940 good leads</text><rect x="110" y="153.2" width="22.01632877717641" height="32" fill="#B87333"/><text x="100" y="174.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="142.0163287771764" y="167.2" font-size="13" fill="#1A1F2E" font-weight="700">2.5%</text><text x="142.0163287771764" y="184.2" font-size="10" fill="#7A7568">25 de 991 good leads</text><rect x="110" y="201.6" width="13.806676254636288" height="32" fill="#2D5A3D"/><text x="100" y="222.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="133.80667625463627" y="215.6" font-size="13" fill="#1A1F2E" font-weight="700">1.6%</text><text x="133.80667625463627" y="232.6" font-size="10" fill="#7A7568">19 de 1,201 good leads</text><text x="350.0" y="20" text-anchor="middle" font-size="11" fill="#7A7568">% de good leads con algún test drive cargado en CRM (Realizado u Ofrecido)</text></svg>
+  </div>
+
+  <p style="font-size:14px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">Solo <strong>Guspamar</strong> usa el TD como herramienta sistemática del proceso comercial. <strong>Genova</strong> lo usa esporádicamente, y <strong>Vernon y Resasco prácticamente no</strong>. Resasco tiene un patrón curioso: solo carga TDs <em>realizados</em> (88% del total), nunca los meramente "ofrecidos" — sugiere que el CRM se llena post-facto para confirmar la actividad, no como gestión.</p>
+
+  <h3 class="serif" style="font-weight:300;font-size:26px;letter-spacing:-0.02em;margin:32px 0 14px;color:var(--ink)">Pero cuando se hace, funciona</h3>
+
+  <div class="chart">
+    <div class="chart-title">Conversión a venta — good leads CON vs SIN test drive</div>
+    <div class="chart-sub">Comparación dentro de cada marca · n grupo: 13.354 sin TD · 2.560 con TD</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="90" y1="260.0" x2="670" y2="260.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="264.0" text-anchor="end" font-size="10" fill="#7A7568">0%</text><line x1="90" y1="227.69230769230768" x2="670" y2="227.69230769230768" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="231.69230769230768" text-anchor="end" font-size="10" fill="#7A7568">10%</text><line x1="90" y1="195.3846153846154" x2="670" y2="195.3846153846154" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="199.3846153846154" text-anchor="end" font-size="10" fill="#7A7568">20%</text><line x1="90" y1="163.07692307692307" x2="670" y2="163.07692307692307" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="167.07692307692307" text-anchor="end" font-size="10" fill="#7A7568">30%</text><line x1="90" y1="130.76923076923077" x2="670" y2="130.76923076923077" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="134.76923076923077" text-anchor="end" font-size="10" fill="#7A7568">40%</text><line x1="90" y1="98.46153846153845" x2="670" y2="98.46153846153845" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="102.46153846153845" text-anchor="end" font-size="10" fill="#7A7568">50%</text><line x1="90" y1="66.15384615384613" x2="670" y2="66.15384615384613" stroke="#D8CFB8" stroke-width="0.5"/><text x="82" y="70.15384615384613" text-anchor="end" font-size="10" fill="#7A7568">60%</text><rect x="112.1" y="239.0" width="46.4" height="21.0" fill="#7A7568"/><text x="135.29999999999998" y="233.0" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">6.5%</text><rect x="166.5" y="213.15384615384616" width="46.4" height="46.84615384615385" fill="#003478"/><text x="189.7" y="207.15384615384616" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">14.5%</text><text x="162.5" y="282" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><rect x="257.1" y="242.55384615384617" width="46.4" height="17.446153846153845" fill="#7A7568"/><text x="280.3" y="236.55384615384617" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">5.4%</text><rect x="311.5" y="108.80000000000001" width="46.4" height="151.2" fill="#B22234"/><text x="334.7" y="102.80000000000001" text-anchor="middle" font-size="11" fill="#B22234" font-weight="700">46.8%</text><text x="307.5" y="282" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><rect x="402.1" y="227.36923076923077" width="46.4" height="32.630769230769225" fill="#7A7568"/><text x="425.3" y="221.36923076923077" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">10.1%</text><rect x="456.5" y="90.06153846153848" width="46.4" height="169.93846153846152" fill="#2D5A3D"/><text x="479.7" y="84.06153846153848" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">52.6%</text><text x="452.5" y="282" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><rect x="547.1" y="235.44615384615383" width="46.4" height="24.553846153846152" fill="#7A7568"/><text x="570.3000000000001" y="229.44615384615383" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="700">7.6%</text><rect x="601.5" y="66.15384615384613" width="46.4" height="193.84615384615387" fill="#B87333"/><text x="624.7" y="60.15384615384613" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">60.0%</text><text x="597.5" y="282" text-anchor="middle" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><rect x="90" y="15" width="12" height="12" fill="#7A7568"/><text x="108" y="25" font-size="11" fill="#1A1F2E">Conv. sin TD</text><rect x="240" y="15" width="12" height="12" fill="#003478"/><text x="258" y="25" font-size="11" fill="#1A1F2E">Conv. con TD</text></svg>
+  </div>
+
+  <table class="rk" style="margin:16px 0">
+    <thead>
+      <tr>
+        <th>Sociedad</th>
+        <th class="num">Conv. sin TD</th>
+        <th class="num">Conv. con TD</th>
+        <th class="num">Uplift (pp)</th>
+        <th class="num">% ventas con TD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="dot" style="background:#003478"></span> <strong>GUSPAMAR</strong></td><td class="num">6,5%</td><td class="num" style="color:var(--green);font-weight:700">14,5%</td><td class="num" style="color:var(--green);font-weight:700">+8,0pp</td><td class="num">72,3%</td></tr>
+      <tr><td><span class="dot" style="background:#B22234"></span> <strong>GENOVA</strong></td><td class="num">5,4%</td><td class="num" style="color:var(--green);font-weight:700">46,8%</td><td class="num" style="color:var(--green);font-weight:700">+41,4pp</td><td class="num">50,5%</td></tr>
+      <tr><td><span class="dot" style="background:#2D5A3D"></span> <strong>VERNON</strong></td><td class="num">10,1%</td><td class="num" style="color:var(--green);font-weight:700">52,6%</td><td class="num" style="color:var(--green);font-weight:700">+42,6pp</td><td class="num">7,8%</td></tr>
+      <tr><td><span class="dot" style="background:#B87333"></span> <strong>RESASCO</strong></td><td class="num">7,6%</td><td class="num" style="color:var(--green);font-weight:700">60,0%</td><td class="num" style="color:var(--green);font-weight:700">+52,4pp</td><td class="num">17,0%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pull">
+    Test drive es el indicador operativo más fuerte del proceso. La conversión con TD es entre 2 y 8 veces mayor que sin TD. Pero solo Guspamar lo aprovecha — Vernon y Resasco prácticamente no lo registran.
+    <span class="source">— Lectura crítica</span>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:26px;letter-spacing:-0.02em;margin:32px 0 14px;color:var(--ink)">Test drives en leads de Meta</h3>
+
+  <p style="font-size:14px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">Filtrando a leads Meta (good leads, base limpia), la asimetría se acentúa:</p>
+
+  <table class="rk" style="margin:16px 0">
+    <thead>
+      <tr>
+        <th>Sociedad</th>
+        <th class="num">Meta good leads</th>
+        <th class="num">Con TD</th>
+        <th class="num">% TD</th>
+        <th class="num">Conv. sin TD</th>
+        <th class="num">Conv. con TD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>GUSPAMAR</strong></td><td class="num">2.263</td><td class="num">1.004</td><td class="num">44,4%</td><td class="num">0,6%</td><td class="num" style="color:var(--green);font-weight:700">4,1%</td></tr>
+      <tr><td><strong>GENOVA</strong></td><td class="num">1.104</td><td class="num">46</td><td class="num">4,2%</td><td class="num">1,0%</td><td class="num" style="color:var(--green);font-weight:700">39,1%</td></tr>
+      <tr><td><strong>VERNON</strong></td><td class="num">889</td><td class="num">8</td><td class="num">0,9%</td><td class="num">1,5%</td><td class="num" style="color:var(--green);font-weight:700">37,5%</td></tr>
+      <tr><td><strong>RESASCO</strong></td><td class="num">667</td><td class="num" style="color:var(--accent);font-weight:700">0</td><td class="num" style="color:var(--accent);font-weight:700">0,0%</td><td class="num">0,7%</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-eb">El hueco más obvio del análisis</div>
+    <div class="callout-tx">De los <strong>667 good leads de Meta de Resasco</strong> en el cuatrimestre, <strong>cero</strong> pasaron por un test drive registrado. Es la sociedad con mayor costo por venta Meta del grupo ($5,4M), y a la vez la única que no usa la herramienta operativa de mayor uplift. Si Resasco lograra penetración de TD sobre Meta similar a Guspamar (44%) y un uplift parecido al que muestran Genova/Vernon, podría estar dejando decenas de ventas sobre la mesa.</div>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:30px;letter-spacing:-0.02em;margin:48px 0 16px;color:var(--ink)">El resto del proceso sigue en la oscuridad</h3>
+
+  <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:16px">Test drive es el único paso del embudo comercial que tenemos data integrada. El resto sigue sin registrarse de forma estructurada:</p>
+
+  <table class="rk" style="margin:16px 0">
+    <thead>
+      <tr>
+        <th>Indicador del proceso</th>
+        <th class="num">Cobertura</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Test drive (CSV separado)</td><td class="num" style="color:var(--green);font-weight:700">2.707 registros</td><td>✓ Datos disponibles</td></tr>
+      <tr><td>Análisis de necesidad realizado</td><td class="num">No estructurado</td><td>"Producto de interés" llenado en 94,8% pero es proxy débil</td></tr>
+      <tr><td>Presupuesto digital enviado</td><td class="num" style="color:var(--accent);font-weight:700">0,11%</td><td>Sin campo dedicado · solo notas libres</td></tr>
+      <tr><td>Re-contacto a 48h</td><td class="num" style="color:var(--accent);font-weight:700">No registrado</td><td>Sin tracking sistemático</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-family:Fraunces,serif;font-style:italic;font-size:18px;color:var(--ink-2);margin-top:24px;line-height:1.55">La acción directa: replicar el modelo del CSV de test drive (campos estructurados, status, fecha, vendedor) para los otros tres pasos del embudo. En 90 días podemos tener visibilidad completa de un embudo hoy mayoritariamente invisible.</p>
+</section>
+
+<!-- SECTION 5: VENDOR DEPENDENCY -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="sec-num">07 / 10</span>
+    <h2>Dependencia de <em>vendedores</em></h2>
+    <span class="sec-kicker">Cuán frágil es cada equipo comercial ante una renuncia</span>
+  </div>
+
+  <p class="lead">Pregunta práctica: <em>si te renuncia un vendedor, te duele o no te duele?</em> Cuanto más concentrada está la operación de ventas en pocas personas, más vulnerable es la marca a una salida. La data del CRM permite medirlo de forma directa contando cuántos vendedores cierran ventas y qué proporción concentra cada uno.</p>
+
+  <div class="chart">
+    <div class="chart-title">Concentración de ventas por vendedor — Q1 2026</div>
+    <div class="chart-sub">% de ventas que aporta cada tier · top 1, top 2-3, top 4-5, resto del equipo</div>
+    <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="110.0" y1="50" x2="110.0" y2="290" stroke="#D8CFB8" stroke-width="0.5"/><text x="110.0" y="42" text-anchor="middle" font-size="10" fill="#7A7568">0%</text><line x1="255.0" y1="50" x2="255.0" y2="290" stroke="#D8CFB8" stroke-width="0.5"/><text x="255.0" y="42" text-anchor="middle" font-size="10" fill="#7A7568">25%</text><line x1="400.0" y1="50" x2="400.0" y2="290" stroke="#D8CFB8" stroke-width="0.5"/><text x="400.0" y="42" text-anchor="middle" font-size="10" fill="#7A7568">50%</text><line x1="545.0" y1="50" x2="545.0" y2="290" stroke="#D8CFB8" stroke-width="0.5"/><text x="545.0" y="42" text-anchor="middle" font-size="10" fill="#7A7568">75%</text><line x1="690.0" y1="50" x2="690.0" y2="290" stroke="#D8CFB8" stroke-width="0.5"/><text x="690.0" y="42" text-anchor="middle" font-size="10" fill="#7A7568">100%</text><rect x="110" y="64.4" width="184.54545454545453" height="42" fill="#C8102E"/><text x="202.27272727272725" y="90.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">32%</text><rect x="294.5454545454545" y="64.4" width="250.4545454545455" height="42" fill="#F39C92"/><rect x="545.0" y="64.4" width="118.63636363636363" height="42" fill="#EBE4D5"/><rect x="663.6363636363636" y="64.4" width="26.363636363636374" height="42" fill="#D8CFB8"/><text x="100" y="83.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="100" y="99.4" text-anchor="end" font-size="10" fill="#7A7568">8 vendedores</text><rect x="110" y="120.80000000000001" width="139.3798449612403" height="42" fill="#C8102E"/><text x="179.68992248062017" y="146.8" text-anchor="middle" font-size="11" fill="white" font-weight="700">24%</text><rect x="249.3798449612403" y="120.80000000000001" width="143.87596899224803" height="42" fill="#F39C92"/><rect x="393.2558139534883" y="120.80000000000001" width="116.8992248062016" height="42" fill="#EBE4D5"/><rect x="510.1550387596899" y="120.80000000000001" width="179.84496124031003" height="42" fill="#D8CFB8"/><text x="100" y="139.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="100" y="155.8" text-anchor="end" font-size="10" fill="#7A7568">9 vendedores</text><rect x="110" y="177.2" width="116.0" height="42" fill="#C8102E"/><text x="168.0" y="203.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">20%</text><rect x="226.0" y="177.2" width="143.4736842105263" height="42" fill="#F39C92"/><rect x="369.4736842105263" y="177.2" width="109.89473684210525" height="42" fill="#EBE4D5"/><rect x="479.36842105263156" y="177.2" width="210.63157894736844" height="42" fill="#D8CFB8"/><text x="100" y="196.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="100" y="212.2" text-anchor="end" font-size="10" fill="#7A7568">13 vendedores</text><rect x="110" y="233.6" width="48.64516129032259" height="42" fill="#C8102E"/><text x="134.32258064516128" y="259.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">8%</text><rect x="158.6451612903226" y="233.6" width="86.06451612903226" height="42" fill="#F39C92"/><rect x="244.70967741935485" y="233.6" width="68.60215053763442" height="42" fill="#EBE4D5"/><rect x="313.31182795698925" y="233.6" width="376.68817204301075" height="42" fill="#D8CFB8"/><text x="100" y="252.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="100" y="268.6" text-anchor="end" font-size="10" fill="#7A7568">33 vendedores</text><rect x="110" y="306" width="10" height="10" fill="#C8102E"/><text x="125" y="315" font-size="10" fill="#1A1F2E">Top 1 vendedor</text><rect x="225" y="306" width="10" height="10" fill="#F39C92"/><text x="240" y="315" font-size="10" fill="#1A1F2E">Top 2-3</text><rect x="310" y="306" width="10" height="10" fill="#EBE4D5" stroke="#D8CFB8"/><text x="325" y="315" font-size="10" fill="#1A1F2E">Top 4-5</text><rect x="385" y="306" width="10" height="10" fill="#D8CFB8"/><text x="400" y="315" font-size="10" fill="#1A1F2E">Resto del equipo</text></svg>
+  </div>
+
+  <div style="margin:32px 0;overflow-x:auto">
+    <table class="rk">
+      <thead>
+        <tr>
+          <th style="width:25%">Sociedad</th>
+          <th class="num">Vendedores con ventas</th>
+          <th class="num">Top 1</th>
+          <th class="num">Top 3</th>
+          <th class="num">Top 5</th>
+          <th class="num">HHI</th>
+          <th class="num">Si renuncia top 1</th>
+        </tr>
+      </thead>
+      <tbody>
+
+    <tr>
+      <td><span class="dot" style="background:#B87333"></span> <strong>RESASCO</strong></td>
+      <td class="num">8</td>
+      <td class="num">31.8%</td>
+      <td class="num">75.0%</td>
+      <td class="num">95.5%</td>
+      <td class="num">2278</td>
+      <td class="num" style="color:var(--accent);font-weight:700">−31.8%</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#2D5A3D"></span> <strong>VERNON</strong></td>
+      <td class="num">9</td>
+      <td class="num">24.0%</td>
+      <td class="num">48.8%</td>
+      <td class="num">69.0%</td>
+      <td class="num">1336</td>
+      <td class="num" style="color:var(--gold);font-weight:600">−24.0%</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#B22234"></span> <strong>GENOVA</strong></td>
+      <td class="num">13</td>
+      <td class="num">20.0%</td>
+      <td class="num">44.7%</td>
+      <td class="num">63.7%</td>
+      <td class="num">1098</td>
+      <td class="num" style="color:var(--gold);font-weight:600">−20.0%</td>
+    </tr>
+    
+    <tr>
+      <td><span class="dot" style="background:#003478"></span> <strong>GUSPAMAR</strong></td>
+      <td class="num">33</td>
+      <td class="num">8.4%</td>
+      <td class="num">23.2%</td>
+      <td class="num">35.1%</td>
+      <td class="num">485</td>
+      <td class="num" style="color:var(--ink-2)">−8.4%</td>
+    </tr>
+    
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card" style="border-top:4px solid var(--accent)">
+      <div class="card-title" style="color:var(--accent)">Riesgo crítico</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;margin:6px 0 16px;letter-spacing:-0.02em">Resasco</h4>
+      <p style="font-size:14px;line-height:1.55;color:var(--ink-2)">8 vendedores con ventas. <strong>Top 1 cierra 31,8% de las ventas</strong> (28 ventas en Q1). <strong>Top 3 concentran 75%</strong>. Si renuncia el top, se cae casi un tercio del negocio. Si renuncian dos de los tres principales, la operación queda en cuidados intensivos.</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5">Producto premium con ciclo largo: tiene sentido un equipo más chico, pero la concentración actual es estructural y no operativa.</p>
+    </div>
+    <div class="card" style="border-top:4px solid var(--gold)">
+      <div class="card-title" style="color:var(--gold)">Riesgo alto</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;margin:6px 0 16px;letter-spacing:-0.02em">Vernon</h4>
+      <p style="font-size:14px;line-height:1.55;color:var(--ink-2)">9 vendedores con ventas. Top 1 cierra 24%. <strong>Top 3 concentran 49%</strong>. La concentración es alta pero el equipo está más balanceado que Resasco. Riesgo medio: una salida duele, dos salidas cambian el negocio.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #2C3E50">
+      <div class="card-title">Riesgo moderado</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;margin:6px 0 16px;letter-spacing:-0.02em">Genova</h4>
+      <p style="font-size:14px;line-height:1.55;color:var(--ink-2)">13 vendedores con ventas. Top 1 cierra 20%, top 3 cierran 45%. La concentración está en línea con un equipo profesional balanceado. Una renuncia individual se absorbe sin sobresaltos.</p>
+    </div>
+    <div class="card" style="border-top:4px solid var(--green)">
+      <div class="card-title" style="color:var(--green)">Estructura robusta</div>
+      <h4 style="font-family:Fraunces,serif;font-weight:300;font-size:28px;margin:6px 0 16px;letter-spacing:-0.02em">Guspamar</h4>
+      <p style="font-size:14px;line-height:1.55;color:var(--ink-2)"><strong>33 vendedores con ventas</strong>. Top 1 solo concentra 8,4%, top 3 apenas 23%. Tres sucursales, equipos distribuidos, ningún vendedor es indispensable. <strong>Si se va el top, pierde menos del 10% de la operación</strong>. La estructura más sana del grupo en este eje.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Lectura combinada con los hallazgos previos</div>
+    <div class="callout-tx">El caso de <strong>Vernon</strong> es paradigmático: ya sabíamos que su equipo cierra Salón al 32% (mejor del grupo) y Página Web al 39%. Esa habilidad comercial, sin embargo, vive concentrada en pocas personas. <strong>El know-how de cierre es el activo y a la vez el cuello de botella.</strong> Cualquier plan de crecimiento de Vernon depende, antes que de la pauta, de profesionalizar el conocimiento que hoy reside en cabezas individuales.</div>
+  </div>
+</section>
+
+<!-- SECTION 6: DIAGNÓSTICO POR MARCA -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="sec-num">08 / 10</span>
+    <h2>Diagnóstico <em>por marca</em></h2>
+    <span class="sec-kicker">Síntesis integral con todos los hallazgos del análisis</span>
+  </div>
+
+  <p class="lead">Lectura individualizada de cada sociedad, integrando volumen, mix de canales, costo Meta, dependencia comercial y diagnóstico operacional.</p>
+
+  <div class="grid-2">
+
+    <!-- GUSPAMAR -->
+    <div class="diag guspamar">
+      <div class="diag-head">
+        <div class="diag-soc">Guspamar</div>
+        <div class="diag-marca">Ford · 7.402 leads · 465 ventas</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Volumen sostenido (47% del grupo). Conversión global del 6,28% — la mejor del grupo en base limpia. <strong>Estructura comercial robusta</strong>: 33 vendedores activos, top 1 concentra solo 8,4%. Mix de canales relativamente diversificado. Costo por venta Meta dentro del rango defendible ($1,32M).</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p>$64,8M de inversión Meta en Q1 produjeron 49 ventas Meta — solo 10,5% de las ventas totales. La conversión Meta sigue en 1,0%. Su Página Web convierte 3,05%, lejos del 39% de Vernon — el funnel digital propio está desperdiciado. Bahía Blanca concentra ~60% de los leads.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis y acción</div>
+        <p>Segmentar Meta por modelo (Ranger, Territory, Maverick, Transit) y por sucursal de destino. Auditar la página web — con el tráfico que tiene Ford como marca, su web debería convertir mejor. Probar redirigir un % de Meta a campañas específicas a la base de clientes (que ya aporta 47% de las ventas).</p>
+      </div>
+    </div>
+
+    <!-- GENOVA -->
+    <div class="diag genova">
+      <div class="diag-head">
+        <div class="diag-soc">Genova</div>
+        <div class="diag-marca">Fiat · 3.429 leads · 190 ventas</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p><strong>Líder absoluto en eficiencia de Meta</strong>: $920K costo/venta total, $636K en Plan de Ahorro. Mejor mix del grupo (HHI más bajo). Es la única marca que aprovecha RRSS-Facebook orgánico. Conversión global mejora mes a mes. Estructura comercial profesional con 13 vendedores.</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p>Caída sostenida de volumen entre Ene y Abr (transversal a todos los canales, especialmente Meta). Su Salón convierte solo 6,64% — la mitad que Guspamar. Su Página Web convierte 0,57% (174 leads, 1 venta) — algo está roto en ese funnel. Es la sociedad más volátil del grupo (CV 31%+).</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis y acción</div>
+        <p>Investigar la caída antes de cualquier decisión: ¿se redujo budget? ¿hubo problema con campañas? Auditar el funnel web (174 leads, 1 venta es señal de algo roto técnicamente). Si la conversión sigue mejorando, vale reinvertir un piloto modesto antes de perder posicionamiento — Genova tiene la mejor maquinaria de cierre Meta del grupo.</p>
+      </div>
+    </div>
+
+    <!-- VERNON -->
+    <div class="diag vernon">
+      <div class="diag-head">
+        <div class="diag-soc">Vernon</div>
+        <div class="diag-marca">Peugeot / Citroën · 2.692 leads · 129 ventas</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Es la sociedad más estable del cuatrimestre. <strong>Convierte Salón al 32,5% — el mejor del grupo</strong>. Página Web convierte al 39% — también el mejor. El equipo comercial cierra excepcionalmente bien cuando le llega un lead calificado. Plan de Ahorro robusto (62% del negocio).</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p><strong>Concentración extrema en Meta (85% y creciendo)</strong>. HHI de mix: 7.300+. Costo Meta por venta de $1,83M para 16 ventas. Casi no usa Base de Clientes (0,8%, 21 leads en 4 meses). <strong>Top 3 vendedores concentran 49% de las ventas</strong> — concentración alta. Los canales que mejor cierra (Salón, Web) son los que menos volumen reciben.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis y acción</div>
+        <p>El equipo comercial cierra muy bien y la web convierte espectacular, pero el funnel se inunda de leads de Meta de baja calidad. <strong>La acción no es "mejorar Meta" — es reducir Meta y trasladar inversión a Salón (eventos, test drives), Base de Clientes y SEO/contenido para alimentar la web</strong>. Profesionalizar el conocimiento de cierre que hoy reside en pocas cabezas.</p>
+      </div>
+    </div>
+
+    <!-- RESASCO -->
+    <div class="diag resasco">
+      <div class="diag-head">
+        <div class="diag-soc">Resasco</div>
+        <div class="diag-marca">Jeep / RAM · 2.232 leads · 88 ventas</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p><strong>Convierte Base de Clientes al 75,8%</strong> — el mejor índice individual del grupo en cualquier canal. 50 ventas sobre 66 leads. Volumen estable mes a mes. La operación es muy eficiente cuando el lead llega calificado.</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p>Cuatro alarmas simultáneas: (1) <strong>Costo Meta de $5,40M por venta</strong> ($27M para 5 ventas), insostenible. (2) <strong>Página Web 0% de conversión</strong> en 64 leads. (3) <strong>Top 3 vendedores concentran 75%</strong> de las ventas. (4) <strong>Mediana de tiempo de gestión de 20,7 horas</strong> en leads Meta y <strong>cero test drives ofrecidos</strong> a los 667 leads Meta good. La operación deja flujos enteros sin trabajar.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis y acción</div>
+        <p>El producto premium (Jeep, RAM) no calza con captación masiva en Meta. Plan: <strong>(a)</strong> recortar 30% el budget Meta y redirigir a content marketing premium + audiencias lookalike acotadas; <strong>(b)</strong> potenciar agresivamente Base de Clientes (campañas mensuales a la base existente); <strong>(c)</strong> reparar el funnel de Página Web; <strong>(d)</strong> diversificar el equipo comercial — formar a 2-3 personas más en producto premium.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 7: PLAN DE ACCIÓN -->
+<section id="s7">
+  <div class="sec-head">
+    <span class="sec-num">09 / 10</span>
+    <h2>Plan de <em>acción</em></h2>
+    <span class="sec-kicker">Recomendaciones priorizadas para mayo–junio 2026</span>
+  </div>
+
+  <p class="lead">Cinco acciones a nivel grupo y una específica por marca. Criterio: capitalizar los canales que sí convierten, validar la hipótesis del halo Meta-Salón antes de seguir invirtiendo, y reducir el riesgo estructural de concentración comercial.</p>
+
+  <h3 class="serif" style="font-weight:300;font-size:32px;letter-spacing:-0.01em;margin:40px 0 8px;color:var(--ink)">A nivel grupo</h3>
+  <p style="font-size:13px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:16px">Nueve prioridades transversales</p>
+
+  <div class="actions">
+    <div class="action">
+      <div class="action-num">01</div>
+      <div class="action-body">
+        <div class="what">Auditar y estandarizar la carga del CRM</div>
+        <h4>Antes de cualquier optimización, validar que los CRMs son comparables</h4>
+        <p>Hay sospechas razonables de carga selectiva: Vernon y Genova parecen registrar Base de Clientes solo cuando cierran; Vernon parece sub-cargar walk-ins de Salón que no avanzan. Sin validar esto, todas las comparaciones de conversión están sesgadas. Plan en una semana: (a) pedir a cada gerente la lista de leads "Sin Gestión" o "En Gestión > 7 días" para confirmar carga completa; (b) confirmar que "Vendido SI", "Cerrado", "Ganado" significan lo mismo en los cuatro CRMs; (c) instruir carga obligatoria de todo lead, vendido o no, con motivo de pérdida.</p>
+        <span class="action-tag priority">Prioridad máxima</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">02</div>
+      <div class="action-body">
+        <div class="what">SLA de primera gestión &lt;1 hora</div>
+        <h4>Atacar la mediana de 10,3h — el problema operativo más grande del grupo</h4>
+        <p>Sobre 8.885 leads de Meta con timestamps de Asignación y Gestión, la mediana de tiempo entre ambos es <strong>10,3 horas</strong> a nivel grupo y va de 2,3h en Genova a 20,7h en Resasco. Solo 3,6% se gestiona en ≤5 min — y son los que mejor convierten (2,80% won vs 0,4% en los que esperan más de un día). Plan: (a) establecer SLA grupo de 60 minutos para leads Meta en horario comercial; (b) Resasco como caso especial — su mediana de 20,7h y conversión de 0,35% son inaceptables, requiere intervención inmediata; (c) revisar guardia/rotación de leads y carga de trabajo en horarios de baja cobertura.</p>
+        <span class="action-tag priority">Prioridad máxima</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">03</div>
+      <div class="action-body">
+        <div class="what">Cerrar el hueco de test drive en Vernon y Resasco</div>
+        <h4>Es la herramienta operativa de mayor uplift y la usan asimétricamente</h4>
+        <p>El test drive levanta la conversión entre 2x y 8x (Guspamar +8pp, Genova +41pp, Vernon +43pp, Resasco +52pp). Pero la penetración del TD sobre good leads es: Guspamar 54%, Genova 11%, Vernon 1,6%, Resasco 2,5%. <strong>Resasco no ofreció test drive a ninguno de los 667 leads Meta good del cuatrimestre</strong>. Plan: (a) instrumentar tablero de seguimiento semanal por vendedor con % de leads que recibieron oferta de TD; (b) target inicial — Vernon y Resasco al 25% de TD ofrecido sobre good leads en 90 días (vs el 1-2% actual); (c) revisar si la baja carga refleja el proceso real o falta de uso del módulo TD del CRM.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">04</div>
+      <div class="action-body">
+        <div class="what">Instrumentar los demás pasos del embudo comercial</div>
+        <h4>Replicar el modelo del CSV de TD para presupuesto, análisis de necesidad y re-contacto</h4>
+        <p>El CRM tiene el módulo de test drive estructurado (status, fecha, vendedor, modelo) — eso permite hacer este análisis. Los demás pasos no: presupuesto digital aparece en 0,11% de los leads (texto libre), análisis de necesidad en 0,23%, re-contacto a 48h no se registra. Plan: agregar al CRM campos estructurados — análisis de necesidad realizado (sí/no + fecha), presupuesto digital enviado (sí/no + fecha + monto), re-contacto a 48h (sí/no + fecha + resultado). En 90 días tenemos visibilidad completa de un embudo hoy mayoritariamente invisible.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">05</div>
+      <div class="action-body">
+        <div class="what">Validar el halo Meta-Salón</div>
+        <h4>Encuesta de origen al cliente que llega al salón</h4>
+        <p>Los datos cruzados no respaldan la hipótesis de que Meta empuja al Salón, pero la pregunta queda abierta. Antes de aprobar otro cuatrimestre con $147M de inversión, validar con una encuesta simple: "¿Cómo nos conociste hoy?". Tarjeta impresa, dos semanas, 200-300 respuestas por marca. Si los clientes responden mayoritariamente "vi una publicidad", la inversión queda justificada. Si no, hay que recalibrar.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">06</div>
+      <div class="action-body">
+        <div class="what">Calidad del lead Meta</div>
+        <h4>Endurecer formularios y testear audiencias calificadas</h4>
+        <p>El 55% de los leads de Meta son bad leads (imposible contactar / dato erróneo / duplicado). Ese es el corazón del problema. Test A/B en mayo: (a) formularios con preguntas calificadoras (presupuesto, plazo, modelo) versus formularios actuales; (b) audiencias lookalike sobre clientes que efectivamente compraron versus audiencias amplias actuales. Hipótesis: bajará el volumen, subirá la conversión. Lo que importa es el costo por venta, no por lead.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">07</div>
+      <div class="action-body">
+        <div class="what">Crecimiento responsable de Base de Clientes</div>
+        <h4>Pilotear campañas a la base de clientes existente</h4>
+        <p>Es probablemente el canal de mayor ROI del grupo (43,8% conversión), pero la cifra puede estar inflada por carga selectiva. Plan piloto antes de escalar: campañas mensuales acotadas (200-300 contactos por marca) de email/whatsapp con propuesta de upgrade, recompra y plan. Medir conversión real con la base completa para distinguir el efecto canal del efecto carga selectiva. Vernon (0,8%) y Resasco (3% del mix) son las que más espacio tienen para crecer.</p>
+        <span class="action-tag observe">Optimización</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">08</div>
+      <div class="action-body">
+        <div class="what">Auditoría de páginas web</div>
+        <h4>Entender por qué Vernon convierte 39% y las demás no</h4>
+        <p>Asimetría inexplicable: Vernon convierte 4 de cada 10 leads de su web; Genova 0,57%; Resasco 0%; Guspamar 3%. Hay algo técnico o de UX detrás. Auditoría comparada: cómo es el formulario, dónde aterriza el tráfico, qué calificación se hace. Es la mejora más barata posible y posiblemente de alto impacto.</p>
+        <span class="action-tag observe">Investigación</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">09</div>
+      <div class="action-body">
+        <div class="what">Reducir riesgo de concentración comercial</div>
+        <h4>Plan de transferencia de conocimiento en Vernon y Resasco</h4>
+        <p>Top 3 vendedores en Resasco concentran 75% de las ventas. En Vernon, 49%. Una renuncia hoy es un golpe estructural. Plan: identificar al top vendedor de cada marca y armar plan de transferencia (procesos documentados, mentoría, calidad de leads asignados al equipo emergente). Tiempo razonable: 90 días para que un nuevo vendedor pueda absorber 50% del rendimiento del top.</p>
+        <span class="action-tag observe">Riesgo estructural</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:32px;letter-spacing:-0.01em;margin:64px 0 8px;color:var(--ink)">Por marca</h3>
+  <p style="font-size:13px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:16px">Acciones específicas que no aplican al resto</p>
+
+  <div class="actions">
+    <div class="action">
+      <div class="action-num" style="color:var(--c-guspamar)">G</div>
+      <div class="action-body">
+        <div class="what">Guspamar · Ford</div>
+        <h4>Segmentar Meta por modelo y por sucursal</h4>
+        <p>Con el volumen que maneja Ford, no tiene sentido tirar campañas genéricas. Crear pautas separadas para utilitarios (Ranger, Transit), autos (Focus, Maverick) y plan de ahorro, con creativos diferenciados y direccionando al landing del modelo correspondiente. Y campañas geo-segmentadas por sucursal para descomprimir Bahía Blanca.</p>
+        <span class="action-tag">Optimización</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num" style="color:var(--c-genova)">G</div>
+      <div class="action-body">
+        <div class="what">Genova · Fiat</div>
+        <h4>Investigar caída de volumen y arreglar la web antes de reinvertir</h4>
+        <p>Antes de cualquier decisión de pauta: (1) confirmar si la caída del 51% Ene-Abr fue por recorte deliberado o problema operativo; (2) auditar la página web — 174 leads y 1 venta indica algo técnicamente roto. Si Genova logra convertir su web como Vernon, podría compensar parte de la caída sin más inversión.</p>
+        <span class="action-tag priority">Investigación urgente</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num" style="color:var(--c-vernon)">V</div>
+      <div class="action-body">
+        <div class="what">Vernon · Peugeot / Citroën</div>
+        <h4>Trasladar 20% del budget Meta a Salón, Base y SEO</h4>
+        <p>Equipo comercial que cierra Salón al 32% y página web que convierte al 39%, pero un funnel inundado de leads de Meta de baja calidad. <strong>La acción no es mejorar Meta — es reducirlo</strong>. Redistribuir 15-20% del budget Meta a (a) eventos en concesionario y test drives, (b) campañas a Base de Clientes (que casi no se usa), (c) SEO y contenido para alimentar la web que ya convierte. Métrica de éxito: bajar dependencia de Meta del 85% al 70% en 90 días, manteniendo volumen total.</p>
+        <span class="action-tag priority">Prioridad máxima</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num" style="color:var(--c-resasco)">R</div>
+      <div class="action-body">
+        <div class="what">Resasco · Jeep / RAM</div>
+        <h4>Pivotear de captación masiva a fidelización + premium</h4>
+        <p>$5,40M de costo por venta Meta y 0% en Página Web es señal clara: el funnel digital de captación masiva no funciona para producto premium. Lo que sí funciona: Base de Clientes al 75,8%. Plan: (a) recortar 30% el budget Meta; (b) redirigir a content marketing premium (test drives, audiovisual) y audiencias lookalike acotadas a compradores reales; (c) campañas mensuales a la base de clientes (recompra, fidelidad, eventos exclusivos); (d) reparar funnel web. Si la conversión Meta no sube al 1% en 90 días, evaluar bajar a inversión de mantenimiento.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:48px">
+    <div class="callout-eb">Métricas a monitorear en mayo y junio</div>
+    <div class="callout-tx">
+      <strong>1.</strong> Mediana de tiempo Asignado→Gestionado en leads Meta — meta: bajar grupo de 10,3h a &lt;2h. Resasco prioridad (de 20,7h a &lt;4h).<br>
+      <strong>2.</strong> % de good leads con test drive ofrecido — meta: Vernon y Resasco del 1-2% al 25% en 90 días.<br>
+      <strong>3.</strong> % Bad Lead por sociedad — meta: bajar Vernon y Resasco del 55% al 45% en 90 días.<br>
+      <strong>4.</strong> Costo por venta por sociedad y canal (no costo por lead).<br>
+      <strong>5.</strong> Cobertura del CRM en presupuesto digital, análisis de necesidad y re-contacto a 48h — meta: 70%+ en 90 días.<br>
+      <strong>6.</strong> Conversión Meta por sociedad — meta: subir al 1,5% en todas las marcas.<br>
+      <strong>7.</strong> Conversión de Página Web por sociedad — meta: ninguna debajo del 5%.<br>
+      <strong>8.</strong> Top 1 vendedor en Resasco — meta: bajar de 31,8% a menos de 25% en 90 días.<br>
+      <strong>9.</strong> Resultados de la encuesta en salón sobre origen del cliente — primera lectura en julio.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: LIMITATIONS -->
+<section id="s8">
+  <div class="sec-head">
+    <span class="sec-num">10 / 10</span>
+    <h2>Limitaciones <em>y próximos pasos</em></h2>
+    <span class="sec-kicker">Lo que esta data no dice y cómo cubrirlo</span>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px;letter-spacing:-0.01em">Limitaciones del análisis</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Sospecha abierta de carga selectiva.</strong> Las altas conversiones de Vernon en Salón (32%) y Resasco en Base de Clientes (76%) podrían ser reales o reflejar carga incompleta de leads no concretados. No se valida con esta data.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Tiempo de respuesta — ahora medible vía "Gestionado el".</strong> Esta versión corrigió el cálculo: en lugar de "Asignado − Creado" (que es asignación automática), ahora usamos "Gestionado − Asignado" (intervención humana real). Cobertura: 84% de los leads Meta tienen ambos timestamps. Sigue habiendo un 16% que no llegó a estado "Gestionado", probablemente bad leads filtrados antes de gestión.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Atribución multi-touch.</strong> No sabemos qué leads "Salón" o "Base de Clientes" fueron originalmente impactados por Meta. La atribución actual es last-touch.</li>
+        <li style="padding:10px 0"><strong>Vacío operacional parcial.</strong> Test drive ahora medible vía CSV separado (con asimetría enorme entre marcas). Análisis de necesidades, presupuesto digital y re-contacto a 48h siguen sin instrumentación estructurada — requieren mistery shopping o agregar campos al CRM.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px;letter-spacing:-0.01em">Datos que faltan para cerrar el cuadro</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Encuesta de origen en salón.</strong> Una sola pregunta al cliente: "¿Cómo nos conociste hoy?". 200-300 respuestas por marca en dos semanas.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Mistery shopping comercial.</strong> Auditar tiempo real de respuesta, oferta de test drive, calidad del análisis de necesidades, re-contacto.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Geo-test Meta.</strong> Apagar pauta una región/sucursal por 4-6 semanas para medir efecto halo real.</li>
+        <li style="padding:10px 0"><strong>Validación de carga CRM.</strong> Pedir a cada gerente la lista de leads "Sin Gestión" del último mes. Confirmar (o no) la sospecha de carga selectiva.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pull" style="margin-top:48px">
+    Este informe ya tiene suficiente material para una conversación estratégica con Dirección. Lo que no podemos contestar todavía requiere salir del CRM y entrar al piso del salón.
+    <span class="source">— Cierre del análisis</span>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Síntesis del Consejo Asesor convocado durante el proceso</div>
+    <div class="callout-tx">
+      A mitad del análisis se convocó un consejo de cinco perspectivas sobre la siguiente decisión: <em>"¿hacia dónde dirigir el siguiente esfuerzo — análisis cuantitativo, validación de datos, o auditoría comercial?"</em><br><br>
+      <strong>Recomendación del consejo:</strong> "Pivotear de análisis cuantitativo a auditoría operacional. El problema del grupo no es marketing, es el embudo. Solo el 10% de las ventas viene de Meta a pesar del 70% del volumen y casi todo el budget. Antes de seguir invirtiendo, hay que validar la calidad de los datos del CRM, las definiciones de 'Vendido' entre los cuatro CRMs, y medir tiempo real de contacto humano (que no es lo que registra el CRM)."<br><br>
+      Las acciones del plan en este informe respetan esa orientación: priorizan validación operacional y mejora de proceso por encima de optimización de pauta.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Grupo Resasco · Equipo de Marketing</span>
+  <span>Edición Q1 2026 · v5.0 · Análisis Integral</span>
+  <span>Documento confidencial · uso interno</span>
+</footer>
+
+</div>
+</body>
+</html>
