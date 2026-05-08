@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Guspamar · Vendedores y Plan · Meta Q1 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=JetBrains+Mono:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --cream: #F4EFE6; --cream-2: #EBE4D5; --rule: #D8CFB8;
+  --ink: #1A1F2E; --ink-2: #3D3A33; --muted: #7A7568;
+  --ford: #003478; --green: #2D5A3D; --gold: #B87333; --accent: #C8102E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream); color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  line-height: 1.5; font-size: 15px;
+}
+.page { max-width: 880px; margin: 0 auto; padding: 60px 40px; }
+.serif { font-family: 'Fraunces', Georgia, serif; }
+.mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ford); font-weight: 700; margin-bottom: 16px;
+}
+h1 {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 52px; line-height: 1.05; letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+h1 em { font-style: italic; font-weight: 400; }
+.lead {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 19px; line-height: 1.5; color: var(--ink-2);
+  letter-spacing: -0.005em; max-width: 740px;
+}
+.hero-meta {
+  display: flex; gap: 32px; padding: 14px 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  margin: 28px 0 48px; font-size: 12px; color: var(--muted);
+}
+
+section { margin-bottom: 64px; }
+.sec-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 2px solid var(--ink); padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+.sec-title { display: flex; align-items: baseline; gap: 16px; }
+.sec-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--accent); font-weight: 700;
+  letter-spacing: 0.1em;
+}
+h2 {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: 32px; line-height: 1; letter-spacing: -0.025em;
+}
+h2 em { font-style: italic; font-weight: 400; }
+
+.totals {
+  display: flex; gap: 24px; font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted); text-align: right;
+}
+.totals strong { color: var(--ink); font-weight: 700; font-size: 13px; display: block; }
+
+.txt { font-size: 14px; line-height: 1.55; color: var(--ink-2); margin-bottom: 18px; max-width: 760px; }
+.txt strong { color: var(--ink); }
+
+table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+th {
+  text-align: left; padding: 10px; font-weight: 700;
+  color: var(--ink-2); border-bottom: 2px solid var(--ink);
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+th.num { text-align: right; }
+td {
+  padding: 9px 10px; border-bottom: 1px solid var(--rule);
+}
+td.num {
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+.bar-cell { padding: 7px 10px; }
+.bar-wrap {
+  background: var(--cream-2); height: 22px;
+  position: relative; min-width: 100px; max-width: 240px;
+  border-radius: 2px;
+}
+.bar { height: 100%; border-radius: 2px; }
+.bar-lbl {
+  position: absolute; top: 0; left: 8px;
+  line-height: 22px; font-size: 11px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: white;
+}
+
+.legend {
+  display: inline-flex; gap: 16px; font-size: 11px; color: var(--muted);
+  margin: 4px 0 20px; align-items: center; flex-wrap: wrap;
+}
+.legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+footer {
+  margin-top: 56px; padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Guspamar · Ford · Vendedores · Meta Q1 2026</div>
+<h1>Tiempo de gestión,<br>bad lead, <em>conversión</em></h1>
+<p class="lead">Cuadro comparativo del equipo comercial de Guspamar sobre leads de origen ADS Meta. Mismo análisis aplicado al universo total y al subset filtrado a leads creados sábado o domingo, para ver dónde se rompe la performance del finde.</p>
+
+<div class="hero-meta">
+  <span><strong>Período:</strong> Enero–abril 2026</span>
+  <span><strong>Origen:</strong> ADS – Facebook</span>
+  <span><strong>Universo:</strong> 4.294 leads Meta · 23 vendedores con ≥30 leads</span>
+</div>
+
+<div class="legend">
+  <span style="color:var(--ink-2); font-weight:600">Color de la barra (mediana A→G):</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#2D5A3D"></span>&lt;3h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#5C8A4F"></span>3–8h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#B87333"></span>8–16h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#A32D2D"></span>16–24h</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#791F1F"></span>1–2 días</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#501313"></span>+2 días</span>
+</div>
+
+<!-- BLOQUE 1: TODOS LOS LEADS META -->
+<section>
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="sec-num">01</span>
+      <h2>Universo <em>completo</em></h2>
+    </div>
+    <div class="totals">
+      <div><strong>4,294</strong>leads Meta</div>
+      <div><strong>9.5h</strong>mediana grupo</div>
+      <div><strong>50.7%</strong>BL grupo</div>
+      <div><strong>0.91%</strong>Won grupo</div>
+    </div>
+  </div>
+  <p class="txt">23 vendedores con al menos 30 leads Meta en Q1, ordenados por mediana de tiempo Asignado→Gestionado.</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Vendedor</th>
+        <th class="num" style="width:65px">Leads</th>
+        <th style="width:38%">Mediana A→G</th>
+        <th class="num" style="width:90px">% Bad lead</th>
+        <th class="num" style="width:90px">% Ganados</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>Hernán Coronel</td>
+          <td class="num">102</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:5.9%; background:#2D5A3D;"></div>
+              <span class="bar-lbl">2.5 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">0.0%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Ariel Asprea</td>
+          <td class="num">343</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:7.0%; background:#2D5A3D;"></div>
+              <span class="bar-lbl">2.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">60.3%</td>
+          <td class="num" style="color:var(--ink-2)">0.87%</td>
+        </tr>
+        <tr>
+          <td>Jorge Campetella</td>
+          <td class="num">132</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:13.5%; background:#5C8A4F;"></div>
+              <span class="bar-lbl">5.7 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">81.1%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Hernan Rivarola</td>
+          <td class="num">43</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:16.5%; background:#5C8A4F;"></div>
+              <span class="bar-lbl">6.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">48.8%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Mariano Rodríguez</td>
+          <td class="num">162</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:17.8%; background:#5C8A4F;"></div>
+              <span class="bar-lbl">7.5 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">79.0%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Nicolas Braun</td>
+          <td class="num">295</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:18.3%; background:#5C8A4F;"></div>
+              <span class="bar-lbl">7.7 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">50.8%</td>
+          <td class="num" style="color:var(--green); font-weight:700">2.71%</td>
+        </tr>
+        <tr>
+          <td>Agustín Pignatta</td>
+          <td class="num">159</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:19.2%; background:#B87333;"></div>
+              <span class="bar-lbl">8.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">11.9%</td>
+          <td class="num" style="color:var(--ink-2)">0.63%</td>
+        </tr>
+        <tr>
+          <td>Ezequiel Castillo</td>
+          <td class="num">144</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:19.9%; background:#B87333;"></div>
+              <span class="bar-lbl">8.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">67.4%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Sebastian Murias</td>
+          <td class="num">342</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:20.5%; background:#B87333;"></div>
+              <span class="bar-lbl">8.6 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">59.6%</td>
+          <td class="num" style="color:var(--ink-2)">0.88%</td>
+        </tr>
+        <tr>
+          <td>Gastón López Conca</td>
+          <td class="num">171</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:21.2%; background:#B87333;"></div>
+              <span class="bar-lbl">8.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">3.5%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.75%</td>
+        </tr>
+        <tr>
+          <td>Gastón Maceratesi</td>
+          <td class="num">224</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:22.1%; background:#B87333;"></div>
+              <span class="bar-lbl">9.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">49.1%</td>
+          <td class="num" style="color:var(--ink-2)">0.89%</td>
+        </tr>
+        <tr>
+          <td>Julio Sánchez</td>
+          <td class="num">144</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:22.3%; background:#B87333;"></div>
+              <span class="bar-lbl">9.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">52.8%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Laureano San José</td>
+          <td class="num">149</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:22.8%; background:#B87333;"></div>
+              <span class="bar-lbl">9.6 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">63.1%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.34%</td>
+        </tr>
+        <tr>
+          <td>Kevin Aguilar</td>
+          <td class="num">154</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:22.9%; background:#B87333;"></div>
+              <span class="bar-lbl">9.6 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">53.9%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Emiliano Solla</td>
+          <td class="num">206</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:23.6%; background:#B87333;"></div>
+              <span class="bar-lbl">9.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">44.2%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.46%</td>
+        </tr>
+        <tr>
+          <td>Joaquin Gutierrez</td>
+          <td class="num">254</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:24.6%; background:#B87333;"></div>
+              <span class="bar-lbl">10.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">39.0%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.18%</td>
+        </tr>
+        <tr>
+          <td>Marcial Fernandez</td>
+          <td class="num">141</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:24.8%; background:#B87333;"></div>
+              <span class="bar-lbl">10.4 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">44.0%</td>
+          <td class="num" style="color:var(--ink-2)">0.71%</td>
+        </tr>
+        <tr>
+          <td>Inaky Spikerman</td>
+          <td class="num">232</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:25.3%; background:#B87333;"></div>
+              <span class="bar-lbl">10.6 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">75.0%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.72%</td>
+        </tr>
+        <tr>
+          <td>Facundo González</td>
+          <td class="num">144</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:25.8%; background:#B87333;"></div>
+              <span class="bar-lbl">10.8 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">44.4%</td>
+          <td class="num" style="color:var(--ink-2)">0.69%</td>
+        </tr>
+        <tr>
+          <td>Martín Espil</td>
+          <td class="num">119</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:28.6%; background:#B87333;"></div>
+              <span class="bar-lbl">12.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">67.2%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.68%</td>
+        </tr>
+        <tr>
+          <td>Alexis Favata</td>
+          <td class="num">125</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:30.3%; background:#B87333;"></div>
+              <span class="bar-lbl">12.7 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">28.0%</td>
+          <td class="num" style="color:var(--ink-2)">0.80%</td>
+        </tr>
+        <tr>
+          <td>Pablo Castellano</td>
+          <td class="num">251</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:31.2%; background:#B87333;"></div>
+              <span class="bar-lbl">13.1 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">39.4%</td>
+          <td class="num" style="color:var(--ink-2)">0.80%</td>
+        </tr>
+        <tr>
+          <td>Fabián Mocca</td>
+          <td class="num">223</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:45.7%; background:#A32D2D;"></div>
+              <span class="bar-lbl">19.2 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">67.7%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- BLOQUE 2: SOLO FINDE -->
+<section>
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="sec-num">02</span>
+      <h2>Sólo <em>fin de semana</em></h2>
+    </div>
+    <div class="totals">
+      <div><strong>1,144</strong>leads finde</div>
+      <div><strong>21.5h</strong>mediana grupo</div>
+      <div><strong>56.1%</strong>BL grupo</div>
+      <div><strong>0.44%</strong>Won grupo</div>
+    </div>
+  </div>
+  <p class="txt">Mismo equipo, mismas métricas — pero filtrando exclusivamente a los leads Meta <strong>creados en sábado o domingo</strong>. Vendedores con ≥10 leads de finde para que las medianas sean significativas.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Vendedor</th>
+        <th class="num" style="width:65px">Leads</th>
+        <th style="width:38%">Mediana A→G</th>
+        <th class="num" style="width:90px">% Bad lead</th>
+        <th class="num" style="width:90px">% Ganados</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>Hernan Rivarola</td>
+          <td class="num">11</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:32.2%; background:#B87333;"></div>
+              <span class="bar-lbl">13.5 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">54.5%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Hernán Coronel</td>
+          <td class="num">30</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:33.2%; background:#B87333;"></div>
+              <span class="bar-lbl">13.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">0.0%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Marcial Fernandez</td>
+          <td class="num">30</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:34.2%; background:#B87333;"></div>
+              <span class="bar-lbl">14.4 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">53.3%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Ariel Asprea</td>
+          <td class="num">80</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:35.2%; background:#B87333;"></div>
+              <span class="bar-lbl">14.8 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">62.5%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Emiliano Solla</td>
+          <td class="num">62</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:41.0%; background:#A32D2D;"></div>
+              <span class="bar-lbl">17.2 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">48.4%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Gastón López Conca</td>
+          <td class="num">52</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:41.4%; background:#A32D2D;"></div>
+              <span class="bar-lbl">17.4 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">7.7%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Nicolas Braun</td>
+          <td class="num">72</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:42.9%; background:#A32D2D;"></div>
+              <span class="bar-lbl">18.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">55.6%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Sebastian Murias</td>
+          <td class="num">90</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:45.4%; background:#A32D2D;"></div>
+              <span class="bar-lbl">19.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">73.3%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.11%</td>
+        </tr>
+        <tr>
+          <td>Jorge Campetella</td>
+          <td class="num">35</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:46.0%; background:#A32D2D;"></div>
+              <span class="bar-lbl">19.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">91.4%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Mariano Rodríguez</td>
+          <td class="num">39</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:46.5%; background:#A32D2D;"></div>
+              <span class="bar-lbl">19.5 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">84.6%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Gastón Maceratesi</td>
+          <td class="num">55</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:50.7%; background:#A32D2D;"></div>
+              <span class="bar-lbl">21.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">61.8%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Ezequiel Castillo</td>
+          <td class="num">34</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:52.4%; background:#A32D2D;"></div>
+              <span class="bar-lbl">22.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">79.4%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Inaky Spikerman</td>
+          <td class="num">70</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:52.7%; background:#A32D2D;"></div>
+              <span class="bar-lbl">22.1 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">77.1%</td>
+          <td class="num" style="color:var(--green); font-weight:700">4.29%</td>
+        </tr>
+        <tr>
+          <td>Facundo González</td>
+          <td class="num">44</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:53.2%; background:#A32D2D;"></div>
+              <span class="bar-lbl">22.3 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">59.1%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Joaquin Gutierrez</td>
+          <td class="num">76</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:53.4%; background:#A32D2D;"></div>
+              <span class="bar-lbl">22.4 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">44.7%</td>
+          <td class="num" style="color:var(--ink); font-weight:600">1.32%</td>
+        </tr>
+        <tr>
+          <td>Kevin Aguilar</td>
+          <td class="num">38</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:54.2%; background:#A32D2D;"></div>
+              <span class="bar-lbl">22.7 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">55.3%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Julio Sánchez</td>
+          <td class="num">37</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:54.7%; background:#A32D2D;"></div>
+              <span class="bar-lbl">23.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">59.5%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Agustín Pignatta</td>
+          <td class="num">46</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:57.3%; background:#791F1F;"></div>
+              <span class="bar-lbl">24.1 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--green); font-weight:700">10.9%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Alexis Favata</td>
+          <td class="num">31</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:62.3%; background:#791F1F;"></div>
+              <span class="bar-lbl">26.1 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">45.2%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Martín Espil</td>
+          <td class="num">31</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:73.6%; background:#791F1F;"></div>
+              <span class="bar-lbl">30.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">74.2%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Pablo Castellano</td>
+          <td class="num">69</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:76.1%; background:#791F1F;"></div>
+              <span class="bar-lbl">31.9 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--ink-2); font-weight:600">49.3%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Laureano San José</td>
+          <td class="num">41</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:78.2%; background:#791F1F;"></div>
+              <span class="bar-lbl">32.8 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">63.4%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+        <tr>
+          <td>Fabián Mocca</td>
+          <td class="num">65</td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar" style="width:100.0%; background:#791F1F;"></div>
+              <span class="bar-lbl">42.0 h</span>
+            </div>
+          </td>
+          <td class="num" style="color:var(--accent); font-weight:700">64.6%</td>
+          <td class="num" style="color:var(--muted)">0.00%</td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p class="txt" style="margin-top:24px"><strong>Comparación rápida:</strong> mediana del grupo pasa de 9,5h a <strong>21,5h</strong> en finde. La conversión cae de 0,91% a <strong>0,44%</strong>. La performance se rompe en sábado y domingo de forma sistemática — no es un problema de un vendedor en particular, es estructural.</p>
+</section>
+
+
+<!-- BLOQUE 3: Comparativo agregado -->
+<section>
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="sec-num">03</span>
+      <h2>Lun-vie vs <em>sáb-dom</em></h2>
+    </div>
+    <div class="totals">
+      <div><strong>3.150</strong>leads lun-vie</div>
+      <div><strong>1.144</strong>leads finde</div>
+    </div>
+  </div>
+  <p class="txt">Visualización agregada de cómo cambia el rendimiento entre las dos ventanas. La mediana de gestión se cuadruplica, la conversión se parte a la mitad, el bad lead sube 7 puntos.</p>
+
+  <div style="margin: 24px 0;">
+    <div style="font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.03em; margin-bottom: 4px;">Comparativo lun-vie vs sáb-dom</div>
+    <div style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">Leads creados en cada ventana · base Meta Guspamar</div>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><text x="98" y="63" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="700">gestión (h)</text><rect x="110" y="30" width="110.24000000000001" height="24" fill="#003478"/><text x="230.24" y="47" font-size="14" fill="#003478" font-weight="700">5.2h</text><text x="230.24" y="61" font-size="10" fill="#7A7568">lun-vie</text><rect x="110" y="60" width="455.8" height="24" fill="#C8102E"/><text x="575.8" y="77" font-size="14" fill="#C8102E" font-weight="700">21.5h</text><text x="575.8" y="91" font-size="10" fill="#7A7568">sáb-dom</text><text x="98" y="133" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="700">% Won</text><rect x="110" y="100" width="381.6" height="24" fill="#003478"/><text x="501.6" y="117" font-size="14" fill="#003478" font-weight="700">1.08%</text><text x="501.6" y="131" font-size="10" fill="#7A7568">lun-vie</text><rect x="110" y="130" width="155.46666666666667" height="24" fill="#C8102E"/><text x="275.4666666666667" y="147" font-size="14" fill="#C8102E" font-weight="700">0.44%</text><text x="275.4666666666667" y="161" font-size="10" fill="#7A7568">sáb-dom</text><text x="98" y="203" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="700">% Bad lead</text><rect x="110" y="170" width="397.9076923076923" height="24" fill="#003478"/><text x="517.9076923076923" y="187" font-size="14" fill="#003478" font-weight="700">48.8%</text><text x="517.9076923076923" y="201" font-size="10" fill="#7A7568">lun-vie</text><rect x="110" y="200" width="457.4307692307692" height="24" fill="#C8102E"/><text x="577.4307692307692" y="217" font-size="14" fill="#C8102E" font-weight="700">56.1%</text><text x="577.4307692307692" y="231" font-size="10" fill="#7A7568">sáb-dom</text></svg>
+  </div>
+
+  <div style="background: var(--ink); color: var(--cream); padding: 28px 32px; margin: 32px 0; border-radius: 2px;">
+    <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px;">Plan de acción finde</div>
+    <p style="font-family: 'Fraunces', serif; font-weight: 300; font-size: 18px; line-height: 1.6; letter-spacing: -0.005em;">
+      <strong style="font-weight: 500;">1.</strong> Definir guardia mínima de domingo (1-2 personas rotativas) para captar la cola de 14% del volumen Meta que hoy se difiere al lunes.<br>
+      <strong style="font-weight: 500;">2.</strong> Reasignar los leads de finde a los 5 vendedores con cobertura demostrada — Gastón López Conca, Ariel Asprea, Joaquin Gutierrez y Sebastián Murias ya operan en esa ventana.<br>
+      <strong style="font-weight: 500;">3.</strong> Medir conversión específica del subset finde a 60 días — meta: igualar la conversión de día de semana (1,08%) reduciendo la mediana de 21,5h a menos de 6h.
+    </p>
+  </div>
+</section>
+
+<!-- BLOQUE 4: Plan específico -->
+<section>
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="sec-num">04</span>
+      <h2>Plan específico <em>para Guspamar</em></h2>
+    </div>
+    <div style="font-size: 13px; color: var(--muted); font-style: italic;">Tres prioridades para Q2</div>
+  </div>
+
+  <ul style="list-style: none; padding: 0;">
+    <li style="display: grid; grid-template-columns: 50px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--rule);">
+      <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 28px; color: var(--ford); line-height: 1;">01</div>
+      <div>
+        <h4 style="font-family: 'Fraunces', serif; font-weight: 400; font-size: 19px; margin-bottom: 6px; letter-spacing: -0.01em; color: var(--ink);">SLA de gestión de leads Meta &lt;1h en horario comercial</h4>
+        <p style="font-size: 14px; color: var(--ink-2); line-height: 1.55;">Mediana actual: 9,5h. Meta razonable: bajar a menos de 1 hora en lunes a viernes 9-19h, y 4 horas en finde. Requiere asignación dinámica por carga del vendedor y guardia mínima de domingo.</p>
+      </div>
+    </li>
+    <li style="display: grid; grid-template-columns: 50px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--rule);">
+      <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 28px; color: var(--ford); line-height: 1;">02</div>
+      <div>
+        <h4 style="font-family: 'Fraunces', serif; font-weight: 400; font-size: 19px; margin-bottom: 6px; letter-spacing: -0.01em; color: var(--ink);">Calidad de lead Meta — pasar del 53,7% al 40% de bad leads</h4>
+        <p style="font-size: 14px; color: var(--ink-2); line-height: 1.55;">El 53,7% de los leads Meta son inutilizables. Test A/B con formularios calificadores (modelo, presupuesto, plazo) y audiencias lookalike sobre compradores reales. Hipótesis: bajará el volumen, mejorará el costo por venta.</p>
+      </div>
+    </li>
+    <li style="display: grid; grid-template-columns: 50px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--rule);">
+      <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 28px; color: var(--ford); line-height: 1;">03</div>
+      <div>
+        <h4 style="font-family: 'Fraunces', serif; font-weight: 400; font-size: 19px; margin-bottom: 6px; letter-spacing: -0.01em; color: var(--ink);">Cubrir el agujero del finde</h4>
+        <p style="font-size: 14px; color: var(--ink-2); line-height: 1.55;">El 26,6% del volumen Meta entra en sáb/dom y rinde la mitad. Plan: guardia rotativa de 2 personas los domingos durante 60 días, redirigir el 100% de leads creados ese día a esa guardia, medir conversión y decidir si el modelo escala.</p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<footer>
+  <span>Guspamar · Ford</span>
+  <span>Vendedores · Tiempo, BL, Won · Meta Q1 2026</span>
+  <span>Confidencial · uso interno</span>
+</footer>
+
+</div>
+</body>
+</html>
