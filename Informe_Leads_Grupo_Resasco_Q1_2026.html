@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grupo Resasco · Análisis de Leads · Q1 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,800&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4EFE6;
+  --cream-2:#EBE4D5;
+  --ink:#1A1F2E;
+  --ink-2:#2C3E50;
+  --muted:#7A7568;
+  --rule:#D8CFB8;
+  --accent:#C8102E;
+  --accent-soft:#E8C4C4;
+  --gold:#B87333;
+  --green:#2D5A3D;
+  --c-guspamar:#003478;
+  --c-genova:#B22234;
+  --c-vernon:#2D5A3D;
+  --c-resasco:#B87333;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Work Sans',sans-serif;
+  font-weight:400;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(184,115,51,0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(200,16,46,0.03) 0%, transparent 50%);
+}
+.page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:60px 56px;
+}
+.serif{font-family:'Fraunces',serif;font-optical-sizing:auto}
+.mono{font-family:'JetBrains Mono',monospace;font-feature-settings:"tnum"}
+
+/* HERO */
+.hero{
+  border-bottom:1px solid var(--ink);
+  padding-bottom:48px;
+  margin-bottom:64px;
+  position:relative;
+}
+.hero-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:48px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--rule);
+}
+.hero-meta strong{color:var(--ink);font-weight:600}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:clamp(48px,7vw,96px);
+  line-height:0.95;
+  letter-spacing:-0.03em;
+  margin-bottom:32px;
+  color:var(--ink);
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--accent);
+  font-weight:400;
+}
+.hero-sub{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:32px;
+  margin-top:48px;
+}
+.hero-stat{
+  border-top:2px solid var(--ink);
+  padding-top:14px;
+}
+.hero-stat .lbl{
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.hero-stat .val{
+  font-family:'Fraunces',serif;
+  font-size:38px;
+  font-weight:300;
+  line-height:1;
+  color:var(--ink);
+  letter-spacing:-0.02em;
+}
+.hero-stat .sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* TLDR */
+.tldr{
+  background:var(--ink);
+  color:var(--cream);
+  padding:56px 56px 48px;
+  margin:0 -56px 80px;
+  position:relative;
+}
+.tldr::before{
+  content:"01";
+  position:absolute;
+  top:24px;
+  right:56px;
+  font-family:'Fraunces',serif;
+  font-size:120px;
+  font-weight:300;
+  line-height:1;
+  color:rgba(244,239,230,0.06);
+  letter-spacing:-0.05em;
+}
+.tldr-eyebrow{
+  font-size:11px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent-soft);
+  margin-bottom:20px;
+}
+.tldr h2{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:42px;
+  line-height:1.15;
+  margin-bottom:32px;
+  letter-spacing:-0.02em;
+  max-width:850px;
+}
+.tldr h2 .hi{
+  background:var(--accent);
+  color:var(--cream);
+  padding:0 12px;
+  font-style:italic;
+  font-weight:400;
+}
+.tldr-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+  margin-top:40px;
+  padding-top:32px;
+  border-top:1px solid rgba(244,239,230,0.2);
+}
+.tldr-item .num{
+  font-family:'Fraunces',serif;
+  font-size:48px;
+  font-weight:300;
+  color:var(--accent-soft);
+  letter-spacing:-0.02em;
+  line-height:1;
+}
+.tldr-item .num em{
+  font-style:italic;
+  color:var(--cream);
+}
+.tldr-item .desc{
+  font-size:13px;
+  line-height:1.5;
+  margin-top:10px;
+  color:rgba(244,239,230,0.75);
+}
+
+/* SECTION */
+section{margin-bottom:96px}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:24px;
+  margin-bottom:40px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--ink);
+}
+.sec-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.15em;
+  color:var(--accent);
+  font-weight:700;
+}
+.sec-head h2{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:48px;
+  letter-spacing:-0.02em;
+  line-height:1;
+  flex:1;
+}
+.sec-head h2 em{font-style:italic;color:var(--accent)}
+.sec-kicker{
+  font-size:13px;
+  color:var(--muted);
+  letter-spacing:0.05em;
+}
+.lead{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:24px;
+  line-height:1.5;
+  margin-bottom:40px;
+  max-width:820px;
+  color:var(--ink-2);
+  letter-spacing:-0.005em;
+}
+.lead em{font-style:italic;color:var(--accent)}
+
+/* COMPONENTES */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+.card{
+  background:rgba(255,255,255,0.4);
+  border:1px solid var(--rule);
+  padding:32px;
+}
+.card-title{
+  font-size:11px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+  font-weight:600;
+}
+.card-num{
+  font-family:'Fraunces',serif;
+  font-size:56px;
+  font-weight:300;
+  letter-spacing:-0.03em;
+  line-height:1;
+  color:var(--ink);
+}
+.card-num.accent{color:var(--accent)}
+.card-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:10px;
+  line-height:1.4;
+}
+
+/* TABLE */
+table.rk{
+  width:100%;
+  border-collapse:collapse;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+}
+table.rk thead th{
+  text-align:left;
+  padding:14px 16px;
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:2px solid var(--ink);
+  font-weight:500;
+}
+table.rk thead th.num{text-align:right}
+table.rk tbody td{
+  padding:18px 16px;
+  border-bottom:1px solid var(--rule);
+  vertical-align:middle;
+}
+table.rk tbody td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.rk tbody tr:hover{background:rgba(255,255,255,0.4)}
+.soc-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Work Sans',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.guspamar{background:var(--c-guspamar)}
+.dot.genova{background:var(--c-genova)}
+.dot.vernon{background:var(--c-vernon)}
+.dot.resasco{background:var(--c-resasco)}
+.rank-pos{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-size:32px;
+  color:var(--accent);
+  font-style:italic;
+  width:50px;
+  display:inline-block;
+}
+
+/* PULL QUOTE */
+.pull{
+  border-left:3px solid var(--accent);
+  padding:8px 0 8px 32px;
+  margin:48px 0;
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:28px;
+  line-height:1.4;
+  color:var(--ink-2);
+  letter-spacing:-0.01em;
+  max-width:780px;
+}
+.pull .source{
+  display:block;
+  font-family:'Work Sans',sans-serif;
+  font-style:normal;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:16px;
+  font-weight:600;
+}
+
+/* CHART CONTAINER */
+.chart{
+  background:rgba(255,255,255,0.3);
+  border:1px solid var(--rule);
+  padding:32px;
+  margin-top:24px;
+}
+.chart-title{
+  font-family:'Fraunces',serif;
+  font-size:22px;
+  font-weight:400;
+  margin-bottom:6px;
+  letter-spacing:-0.01em;
+}
+.chart-sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:24px;
+  letter-spacing:0.03em;
+}
+svg{display:block;max-width:100%;height:auto}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  margin-top:20px;
+  font-size:12px;
+  font-family:'Work Sans',sans-serif;
+  color:var(--ink-2);
+}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+
+/* DIAGNOSIS CARDS */
+.diag{
+  background:rgba(255,255,255,0.5);
+  border-top:4px solid;
+  padding:36px 32px;
+  position:relative;
+}
+.diag.guspamar{border-color:var(--c-guspamar)}
+.diag.genova{border-color:var(--c-genova)}
+.diag.vernon{border-color:var(--c-vernon)}
+.diag.resasco{border-color:var(--c-resasco)}
+.diag-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:24px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--rule);
+}
+.diag-soc{
+  font-family:'Fraunces',serif;
+  font-size:32px;
+  font-weight:300;
+  letter-spacing:-0.02em;
+}
+.diag-marca{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:600;
+}
+.diag-block{margin-bottom:20px}
+.diag-block:last-child{margin-bottom:0}
+.diag-lbl{
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.diag-good .diag-lbl{color:var(--green)}
+.diag-bad .diag-lbl{color:var(--accent)}
+.diag-hyp .diag-lbl{color:var(--gold)}
+.diag-block p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+
+/* ACTION PLAN */
+.actions{
+  margin-top:40px;
+}
+.action{
+  display:grid;
+  grid-template-columns:60px 1fr;
+  gap:32px;
+  padding:32px 0;
+  border-bottom:1px solid var(--rule);
+}
+.action:last-child{border-bottom:none}
+.action-num{
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:48px;
+  color:var(--accent);
+  line-height:1;
+  letter-spacing:-0.02em;
+}
+.action-body h4{
+  font-family:'Fraunces',serif;
+  font-weight:400;
+  font-size:24px;
+  margin-bottom:10px;
+  letter-spacing:-0.01em;
+  line-height:1.25;
+}
+.action-body .what{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+  font-weight:600;
+}
+.action-body p{font-size:15px;color:var(--ink-2);max-width:780px;line-height:1.55}
+.action-tag{
+  display:inline-block;
+  background:var(--ink);
+  color:var(--cream);
+  padding:4px 12px;
+  font-size:10px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  font-weight:600;
+  margin-top:14px;
+}
+.action-tag.priority{background:var(--accent)}
+.action-tag.observe{background:var(--gold)}
+
+/* TOC */
+.toc{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px 40px;
+  margin:32px 0 0;
+  padding-top:24px;
+  border-top:1px solid var(--rule);
+}
+.toc a{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  text-decoration:none;
+  color:var(--ink);
+  padding:10px 0;
+  border-bottom:1px solid var(--rule);
+  font-size:14px;
+  transition:color 0.2s;
+}
+.toc a:hover{color:var(--accent)}
+.toc a span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.toc a strong{font-weight:500;font-family:'Fraunces',serif;font-size:18px}
+
+/* FOOTER */
+footer{
+  margin-top:120px;
+  padding-top:32px;
+  border-top:1px solid var(--ink);
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* HORIZONTAL BAR (origen mix) */
+.hbar{
+  display:grid;
+  grid-template-columns:130px 1fr 60px;
+  gap:14px;
+  align-items:center;
+  margin-bottom:8px;
+  font-size:12px;
+}
+.hbar-lbl{font-family:'Work Sans',sans-serif;color:var(--ink-2);font-size:12px}
+.hbar-track{
+  height:14px;
+  background:var(--cream-2);
+  position:relative;
+  overflow:hidden;
+}
+.hbar-fill{
+  height:100%;
+  background:var(--ink);
+  position:relative;
+}
+.hbar-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+/* CALLOUT */
+.callout{
+  background:var(--cream-2);
+  border-left:4px solid var(--accent);
+  padding:24px 28px;
+  margin:32px 0;
+}
+.callout-eb{
+  font-size:10px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:8px;
+}
+.callout-tx{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:400;
+  line-height:1.5;
+  color:var(--ink);
+}
+.callout-tx strong{font-weight:600}
+
+@media (max-width:780px){
+  .page{padding:40px 24px}
+  .grid-2,.grid-3,.grid-4,.toc,.tldr-grid,.hero-sub{grid-template-columns:1fr}
+  .tldr{padding:40px 24px;margin:0 -24px 56px}
+  .hero h1{font-size:48px}
+  .sec-head h2{font-size:32px}
+  .lead{font-size:18px}
+  .pull{font-size:20px;padding-left:20px}
+  .hbar{grid-template-columns:90px 1fr 50px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-meta">
+    <span><strong>Grupo Resasco</strong> · Equipo de Marketing</span>
+    <span>Documento Interno · Confidencial</span>
+    <span>Q1 2026 · Edición 01</span>
+  </div>
+  <h1>Anatomía de los<br><em>leads del grupo</em><br>Enero — Abril 2026</h1>
+  <p style="font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--ink-2);max-width:760px;line-height:1.45;letter-spacing:-0.005em">
+    Análisis integrado de <strong style="font-weight:600">18.978 leads</strong> ingresados a los CRM de las cuatro sociedades durante el primer cuatrimestre. Sin sesgo de prioridad histórica: las marcas se evalúan únicamente por sus números.
+  </p>
+  <div class="hero-sub">
+    <div class="hero-stat">
+      <div class="lbl">Leads totales</div>
+      <div class="val">18.978</div>
+      <div class="sub">Ene – Abr 2026, agregado del grupo</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Sociedades</div>
+      <div class="val">4</div>
+      <div class="sub">Guspamar · Genova · Vernon · Resasco</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Conversión grupo</div>
+      <div class="val">5,61<span style="font-size:24px">%</span></div>
+      <div class="sub">1.066 leads cerrados como ganados</div>
+    </div>
+    <div class="hero-stat">
+      <div class="lbl">Origen dominante</div>
+      <div class="val">69,6<span style="font-size:24px">%</span></div>
+      <div class="sub">Meta (ADS – Facebook) sobre el total</div>
+    </div>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><strong>Análisis general — todos los orígenes</strong><span>02</span></a>
+    <a href="#s2"><strong>Deep dive — origen Meta</strong><span>03</span></a>
+    <a href="#s3"><strong>Rankings comparativos</strong><span>04</span></a>
+    <a href="#s4"><strong>Diagnóstico por marca</strong><span>05</span></a>
+    <a href="#s5"><strong>Plan de acción</strong><span>06</span></a>
+    <a href="#s6"><strong>Limitaciones del análisis</strong><span>07</span></a>
+  </nav>
+</header>
+
+<!-- TLDR -->
+<div class="tldr">
+  <div class="tldr-eyebrow">El hallazgo crítico</div>
+  <h2>El grupo está acumulando volumen sobre un canal que <span class="hi">convierte 15 a 30 veces peor</span> que el resto. Cada peso invertido en Meta genera leads, pero pocos cierran.</h2>
+  <div class="tldr-grid">
+    <div class="tldr-item">
+      <div class="num"><em>69,6%</em></div>
+      <div class="desc">de los leads del grupo en Q1 vinieron de Meta — <em style="color:var(--cream);font-style:normal;font-weight:600">13.202</em> consultas en cuatro meses</div>
+    </div>
+    <div class="tldr-item">
+      <div class="num"><em>0,82%</em></div>
+      <div class="desc">conversión de los leads de Meta a venta. Versus <em style="color:var(--cream);font-style:normal;font-weight:600">15–26%</em> en los demás canales</div>
+    </div>
+    <div class="tldr-item">
+      <div class="num"><em>84%</em></div>
+      <div class="desc">la dependencia de Meta de Vernon, la más expuesta del grupo. Y la tendencia es a seguir creciendo</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="sec-num">02 / 07</span>
+    <h2>Análisis general — <em>todos los orígenes</em></h2>
+    <span class="sec-kicker">Volumen, mix de canales y dinámica mensual</span>
+  </div>
+
+  <p class="lead">El grupo generó <em>18.978 leads</em> en cuatro meses, pero el volumen está fuertemente concentrado: Guspamar aporta más de la mitad del total, mientras que Resasco aporta apenas uno de cada ocho leads. Más allá del tamaño, el dato relevante es que las cuatro sociedades dependen de los mismos dos canales: Meta y Salón.</p>
+
+  <div class="chart">
+    <div class="chart-title">Volumen total de leads por sociedad</div>
+    <div class="chart-sub">Enero a abril 2026 · 18.978 leads agregados</div>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="110" y1="20" x2="110" y2="250" stroke="#1A1F2E" stroke-width="1.5"/><rect x="110" y="35.6" width="550.0" height="38" fill="#003478"/><text x="100" y="59.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="670.0" y="59.6" font-size="14" fill="#1A1F2E" font-weight="700">10,067</text><text x="670.0" y="76.6" font-size="10" fill="#7A7568">53.0% del grupo</text><rect x="110" y="89.2" width="211.43339624515747" height="38" fill="#B22234"/><text x="100" y="113.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="331.4333962451575" y="113.2" font-size="14" fill="#1A1F2E" font-weight="700">3,870</text><text x="331.4333962451575" y="130.2" font-size="10" fill="#7A7568">20.4% del grupo</text><rect x="110" y="142.8" width="149.58776199463594" height="38" fill="#2D5A3D"/><text x="100" y="166.8" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><text x="269.5877619946359" y="166.8" font-size="14" fill="#1A1F2E" font-weight="700">2,738</text><text x="269.5877619946359" y="183.8" font-size="10" fill="#7A7568">14.4% del grupo</text><rect x="110" y="196.4" width="125.82199264925002" height="38" fill="#B87333"/><text x="100" y="220.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="245.82199264925003" y="220.4" font-size="14" fill="#1A1F2E" font-weight="700">2,303</text><text x="245.82199264925003" y="237.4" font-size="10" fill="#7A7568">12.1% del grupo</text></svg>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">Evolución mensual de leads por sociedad</div>
+    <div class="chart-sub">Volumen mes a mes · enero–abril 2026</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="50" y1="280" x2="610" y2="280" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="284" text-anchor="end" font-size="10" fill="#7A7568">0</text><line x1="50" y1="215.0" x2="610" y2="215.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="219.0" text-anchor="end" font-size="10" fill="#7A7568">750</text><line x1="50" y1="150.0" x2="610" y2="150.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="154.0" text-anchor="end" font-size="10" fill="#7A7568">1,500</text><line x1="50" y1="85.0" x2="610" y2="85.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="89.0" text-anchor="end" font-size="10" fill="#7A7568">2,250</text><line x1="50" y1="20.0" x2="610" y2="20.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="24.0" text-anchor="end" font-size="10" fill="#7A7568">3,000</text><text x="50.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Ene</text><text x="236.66666666666666" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Feb</text><text x="423.3333333333333" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Mar</text><text x="610.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Abr</text><path d="M50.0,47.8 L236.7,113.3 L423.3,31.7 L610.0,54.8" fill="none" stroke="#003478" stroke-width="2.5"/><circle cx="50.0" cy="47.81999999999999" r="4.5" fill="#003478"/><circle cx="236.66666666666666" cy="113.25333333333333" r="4.5" fill="#003478"/><circle cx="423.3333333333333" cy="31.700000000000017" r="4.5" fill="#003478"/><circle cx="610.0" cy="54.75333333333336" r="4.5" fill="#003478"/><text x="622.0" y="58.75333333333336" font-size="11" fill="#003478" font-weight="700">GUSPAMAR</text><text x="622.0" y="72.75333333333336" font-size="10" fill="#7A7568">2,599</text><path d="M50.0,179.7 L236.7,172.1 L423.3,201.8 L610.0,230.9" fill="none" stroke="#B22234" stroke-width="2.5"/><circle cx="50.0" cy="179.7266666666667" r="4.5" fill="#B22234"/><circle cx="236.66666666666666" cy="172.10000000000002" r="4.5" fill="#B22234"/><circle cx="423.3333333333333" cy="201.82666666666665" r="4.5" fill="#B22234"/><circle cx="610.0" cy="230.94666666666666" r="4.5" fill="#B22234"/><text x="622.0" y="234.94666666666666" font-size="11" fill="#B22234" font-weight="700">GENOVA</text><text x="622.0" y="248.94666666666666" font-size="10" fill="#7A7568">566</text><path d="M50.0,221.2 L236.7,220.5 L423.3,215.7 L610.0,225.4" fill="none" stroke="#2D5A3D" stroke-width="2.5"/><circle cx="50.0" cy="221.15333333333334" r="4.5" fill="#2D5A3D"/><circle cx="236.66666666666666" cy="220.46" r="4.5" fill="#2D5A3D"/><circle cx="423.3333333333333" cy="215.69333333333333" r="4.5" fill="#2D5A3D"/><circle cx="610.0" cy="225.4" r="4.5" fill="#2D5A3D"/><text x="622.0" y="229.4" font-size="11" fill="#2D5A3D" font-weight="700">VERNON</text><text x="622.0" y="243.4" font-size="10" fill="#7A7568">630</text><path d="M50.0,224.5 L236.7,232.9 L423.3,229.5 L610.0,233.5" fill="none" stroke="#B87333" stroke-width="2.5"/><circle cx="50.0" cy="224.53333333333333" r="4.5" fill="#B87333"/><circle cx="236.66666666666666" cy="232.85333333333332" r="4.5" fill="#B87333"/><circle cx="423.3333333333333" cy="229.47333333333333" r="4.5" fill="#B87333"/><circle cx="610.0" cy="233.54666666666668" r="4.5" fill="#B87333"/><text x="622.0" y="237.54666666666668" font-size="11" fill="#B87333" font-weight="700">RESASCO</text><text x="622.0" y="251.54666666666668" font-size="10" fill="#7A7568">536</text></svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Observación de tendencia</div>
+    <div class="callout-tx"><strong>Genova cae un 51% entre enero y abril</strong> (de 1.157 a 566 leads). Es la única sociedad con una caída sostenida. El resto se mantiene estable o levemente decreciente: Guspamar –3%, Vernon –7%, Resasco –16%.</div>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">Mix de orígenes por sociedad</div>
+    <div class="chart-sub">% sobre el total de leads de cada sociedad · Q1 2026</div>
+    <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><text x="90" y="98.6" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><rect x="100" y="69.6" width="391.76000000000005" height="48" fill="#1877F2"/><text x="295.88" y="98.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">66%</text><rect x="491.76000000000005" y="69.6" width="98.52999999999999" height="48" fill="#2D5A3D"/><text x="541.0250000000001" y="98.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">17%</text><rect x="590.2900000000001" y="69.6" width="36.58" height="48" fill="#B87333"/><text x="608.58" y="98.6" text-anchor="middle" font-size="11" fill="white" font-weight="700">6%</text><rect x="626.8700000000001" y="69.6" width="15.340000000000002" height="48" fill="#7A7568"/><rect x="642.2100000000002" y="69.6" width="1.18" height="48" fill="#3B5998"/><rect x="643.3900000000001" y="69.6" width="13.57" height="48" fill="#FFE600"/><rect x="656.9600000000002" y="69.6" width="22.419999999999998" height="48" fill="#003478"/><rect x="679.3800000000001" y="69.6" width="10.620000000000001" height="48" fill="#D8CFB8"/><text x="90" y="186.2" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">GENOVA</text><rect x="100" y="157.2" width="378.18999999999994" height="48" fill="#1877F2"/><text x="289.09499999999997" y="186.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">64%</text><rect x="478.18999999999994" y="157.2" width="80.82999999999998" height="48" fill="#2D5A3D"/><text x="518.6049999999999" y="186.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">14%</text><rect x="559.02" y="157.2" width="31.860000000000003" height="48" fill="#B87333"/><text x="574.9499999999999" y="186.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">5%</text><rect x="590.88" y="157.2" width="26.55" height="48" fill="#7A7568"/><rect x="617.43" y="157.2" width="57.82" height="48" fill="#3B5998"/><text x="646.3399999999999" y="186.2" text-anchor="middle" font-size="11" fill="white" font-weight="700">10%</text><rect x="675.25" y="157.2" width="14.75" height="48" fill="#D8CFB8"/><text x="90" y="273.79999999999995" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">VERNON</text><rect x="100" y="244.79999999999998" width="495.59999999999997" height="48" fill="#1877F2"/><text x="347.79999999999995" y="273.79999999999995" text-anchor="middle" font-size="11" fill="white" font-weight="700">84%</text><rect x="595.5999999999999" y="244.79999999999998" width="55.46" height="48" fill="#2D5A3D"/><text x="623.3299999999999" y="273.79999999999995" text-anchor="middle" font-size="11" fill="white" font-weight="700">9%</text><rect x="651.06" y="244.79999999999998" width="4.72" height="48" fill="#B87333"/><rect x="655.78" y="244.79999999999998" width="8.85" height="48" fill="#7A7568"/><rect x="664.63" y="244.79999999999998" width="17.7" height="48" fill="#3B5998"/><rect x="682.33" y="244.79999999999998" width="7.670000000000001" height="48" fill="#D8CFB8"/><text x="90" y="361.4" text-anchor="end" font-size="13" fill="#1A1F2E" font-weight="600">RESASCO</text><rect x="100" y="332.4" width="445.45" height="48" fill="#1877F2"/><text x="322.725" y="361.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">76%</text><rect x="545.45" y="332.4" width="89.67999999999999" height="48" fill="#2D5A3D"/><text x="590.2900000000001" y="361.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">15%</text><rect x="635.13" y="332.4" width="29.5" height="48" fill="#B87333"/><text x="649.88" y="361.4" text-anchor="middle" font-size="11" fill="white" font-weight="700">5%</text><rect x="664.63" y="332.4" width="17.11" height="48" fill="#7A7568"/><rect x="681.74" y="332.4" width="2.95" height="48" fill="#3B5998"/><rect x="684.69" y="332.4" width="5.3100000000000005" height="48" fill="#D8CFB8"/><rect x="100" y="442" width="10" height="10" fill="#1877F2"/><text x="115" y="451" font-size="10" fill="#1A1F2E">ADS - FACEBOOK</text><rect x="265" y="442" width="10" height="10" fill="#2D5A3D"/><text x="280" y="451" font-size="10" fill="#1A1F2E">SALON</text><rect x="430" y="442" width="10" height="10" fill="#B87333"/><text x="445" y="451" font-size="10" fill="#1A1F2E">BASE DE CLIENTES</text><rect x="595" y="442" width="10" height="10" fill="#7A7568"/><text x="610" y="451" font-size="10" fill="#1A1F2E">PAGINA WEB</text><rect x="100" y="460" width="10" height="10" fill="#3B5998"/><text x="115" y="469" font-size="10" fill="#1A1F2E">RRSS - FACEBOOK</text><rect x="265" y="460" width="10" height="10" fill="#FFE600"/><text x="280" y="469" font-size="10" fill="#1A1F2E">EC - MERCADO LIBRE</text><rect x="430" y="460" width="10" height="10" fill="#003478"/><text x="445" y="469" font-size="10" fill="#1A1F2E">FORD</text><rect x="595" y="460" width="10" height="10" fill="#D8CFB8"/><text x="610" y="469" font-size="10" fill="#1A1F2E">Otros</text></svg>
+  </div>
+
+  <p class="lead" style="margin-top:48px">Los cuatro mix tienen una estructura similar: Meta domina, Salón es el segundo canal, todo lo demás es marginal. La diferencia está en <em>cuánto domina Meta</em>. Vernon es el caso extremo, con 84% de sus leads provenientes de un único canal pago.</p>
+
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title">HHI Guspamar</div>
+      <div class="card-num">4.756</div>
+      <div class="card-sub">Concentración media. Mix más diversificado del grupo (junto a Genova) gracias a aportes consistentes de Salón, Base de clientes y MercadoLibre.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">HHI Genova</div>
+      <div class="card-num">4.446</div>
+      <div class="card-sub">Mix más sano del grupo. Suma RRSS-Facebook orgánico, Llamado entrante y Stand como diversificadores secundarios.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">HHI Resasco</div>
+      <div class="card-num accent">5.962</div>
+      <div class="card-sub">Concentración alta. Solo dos canales relevantes (Meta y Salón) capturan el 91% de los leads.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">HHI Vernon</div>
+      <div class="card-num accent">7.152</div>
+      <div class="card-sub">Concentración crítica. Riesgo extremo de canal único: si Meta cae, cae todo el embudo.</div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:14px;letter-spacing:0.05em">HHI = Índice de Herfindahl-Hirschman aplicado al mix de orígenes. Valores 0–10.000 · &lt;1.500 = baja concentración · 1.500–2.500 = moderada · &gt;2.500 = alta · &gt;6.000 = crítica.</p>
+</section>
+
+<!-- SECTION 2: META -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="sec-num">03 / 07</span>
+    <h2>Deep dive — <em>origen Meta</em></h2>
+    <span class="sec-kicker">El canal que más aporta — y el que peor convierte</span>
+  </div>
+
+  <p class="lead">Meta concentra el <em>69,6% de los leads</em> del grupo en el cuatrimestre. Es, por lejos, la principal fuente de demanda del CRM. Pero esa misma concentración revela el problema: los leads de Meta convierten a venta entre 15 y 30 veces peor que los del resto de los canales.</p>
+
+  <div class="chart">
+    <div class="chart-title">Conversión a venta · Meta vs. resto del mix</div>
+    <div class="chart-sub">% leads cerrados como ganados · por sociedad · Q1 2026</div>
+    <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="80" y1="310.0" x2="680" y2="310.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="314.0" text-anchor="end" font-size="10" fill="#7A7568">0%</text><line x1="80" y1="260.0" x2="680" y2="260.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="264.0" text-anchor="end" font-size="10" fill="#7A7568">5%</text><line x1="80" y1="210.0" x2="680" y2="210.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="214.0" text-anchor="end" font-size="10" fill="#7A7568">10%</text><line x1="80" y1="160.0" x2="680" y2="160.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="164.0" text-anchor="end" font-size="10" fill="#7A7568">15%</text><line x1="80" y1="110.0" x2="680" y2="110.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="114.0" text-anchor="end" font-size="10" fill="#7A7568">20%</text><line x1="80" y1="60.0" x2="680" y2="60.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="72" y="64.0" text-anchor="end" font-size="10" fill="#7A7568">25%</text><rect x="103.0" y="301.8" width="48.0" height="8.2" fill="#C8102E"/><text x="127.0" y="295.8" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">0.82%</text><rect x="159.0" y="154.8" width="48.0" height="155.2" fill="#003478"/><text x="183.0" y="148.8" text-anchor="middle" font-size="11" fill="#003478" font-weight="700">15.52%</text><text x="155.0" y="332" text-anchor="middle" font-size="12" fill="#1A1F2E" font-weight="600">GUSPAMAR</text><text x="155.0" y="348" text-anchor="middle" font-size="10" fill="#7A7568">19× más eficiente</text><rect x="253.0" y="297.1" width="48.0" height="12.9" fill="#C8102E"/><text x="277.0" y="291.1" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">1.29%</text><rect x="309.0" y="176.1" width="48.0" height="133.9" fill="#B22234"/><text x="333.0" y="170.1" text-anchor="middle" font-size="11" fill="#B22234" font-weight="700">13.39%</text><text x="305.0" y="332" text-anchor="middle" font-size="12" fill="#1A1F2E" font-weight="600">GENOVA</text><text x="305.0" y="348" text-anchor="middle" font-size="10" fill="#7A7568">10× más eficiente</text><rect x="403.0" y="303.0" width="48.0" height="6.999999999999999" fill="#C8102E"/><text x="427.0" y="297.0" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">0.7%</text><rect x="459.0" y="48.0" width="48.0" height="262.0" fill="#2D5A3D"/><text x="483.0" y="42.0" text-anchor="middle" font-size="11" fill="#2D5A3D" font-weight="700">26.2%</text><text x="455.0" y="332" text-anchor="middle" font-size="12" fill="#1A1F2E" font-weight="600">VERNON</text><text x="455.0" y="348" text-anchor="middle" font-size="10" fill="#7A7568">37× más eficiente</text><rect x="553.0" y="307.1" width="48.0" height="2.9" fill="#C8102E"/><text x="577.0" y="301.1" text-anchor="middle" font-size="11" fill="#C8102E" font-weight="700">0.29%</text><rect x="609.0" y="76.4" width="48.0" height="233.6" fill="#B87333"/><text x="633.0" y="70.4" text-anchor="middle" font-size="11" fill="#B87333" font-weight="700">23.36%</text><text x="605.0" y="332" text-anchor="middle" font-size="12" fill="#1A1F2E" font-weight="600">RESASCO</text><text x="605.0" y="348" text-anchor="middle" font-size="10" fill="#7A7568">81× más eficiente</text><rect x="80" y="10" width="10" height="10" fill="#C8102E"/><text x="95" y="19" font-size="11" fill="#1A1F2E">Meta</text><rect x="150" y="10" width="10" height="10" fill="#1A1F2E"/><text x="165" y="19" font-size="11" fill="#1A1F2E">No-Meta (resto del mix)</text></svg>
+  </div>
+
+  <div class="pull">
+    El embudo del grupo gasta su volumen en el peor canal. <em>Resasco recibe 1.738 leads de Meta y solo cierra 5</em>. Vernon recibe 2.299 y cierra 16. Guspamar, 6.684 y cierra 55.
+    <span class="source">— Lectura del cuatrimestre</span>
+  </div>
+
+  <div class="chart">
+    <div class="chart-title">Dependencia de Meta por mes</div>
+    <div class="chart-sub">% del total de leads de cada sociedad provenientes de Meta · Q1 2026</div>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace"><line x1="50" y1="280.0" x2="610" y2="280.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="284.0" text-anchor="end" font-size="10" fill="#7A7568">0%</text><line x1="50" y1="215.0" x2="610" y2="215.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="219.0" text-anchor="end" font-size="10" fill="#7A7568">25%</text><line x1="50" y1="150.0" x2="610" y2="150.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="154.0" text-anchor="end" font-size="10" fill="#7A7568">50%</text><line x1="50" y1="85.0" x2="610" y2="85.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="89.0" text-anchor="end" font-size="10" fill="#7A7568">75%</text><line x1="50" y1="20.0" x2="610" y2="20.0" stroke="#D8CFB8" stroke-width="0.5"/><text x="42" y="24.0" text-anchor="end" font-size="10" fill="#7A7568">100%</text><text x="50.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Ene</text><text x="236.66666666666666" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Feb</text><text x="423.3333333333333" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Mar</text><text x="610.0" y="302" text-anchor="middle" font-size="11" fill="#1A1F2E" font-weight="600">Abr</text><path d="M50.0,105.5 L236.7,113.3 L423.3,109.7 L610.0,102.4" fill="none" stroke="#003478" stroke-width="2.5"/><circle cx="50.0" cy="105.54000000000002" r="4.5" fill="#003478"/><circle cx="236.66666666666666" cy="113.34000000000003" r="4.5" fill="#003478"/><circle cx="423.3333333333333" cy="109.69999999999999" r="4.5" fill="#003478"/><circle cx="610.0" cy="102.42000000000002" r="4.5" fill="#003478"/><text x="622.0" y="106.42000000000002" font-size="11" fill="#003478" font-weight="700">GUSPAMAR</text><text x="622.0" y="120.42000000000002" font-size="10" fill="#7A7568">68.3%</text><path d="M50.0,93.6 L236.7,127.6 L423.3,107.9 L610.0,131.3" fill="none" stroke="#B22234" stroke-width="2.5"/><circle cx="50.0" cy="93.57999999999998" r="4.5" fill="#B22234"/><circle cx="236.66666666666666" cy="127.64000000000001" r="4.5" fill="#B22234"/><circle cx="423.3333333333333" cy="107.88" r="4.5" fill="#B22234"/><circle cx="610.0" cy="131.27999999999997" r="4.5" fill="#B22234"/><text x="622.0" y="135.27999999999997" font-size="11" fill="#B22234" font-weight="700">GENOVA</text><text x="622.0" y="149.27999999999997" font-size="10" fill="#7A7568">57.2%</text><path d="M50.0,89.4 L236.7,45.5 L423.3,56.9 L610.0,55.6" fill="none" stroke="#2D5A3D" stroke-width="2.5"/><circle cx="50.0" cy="89.42000000000002" r="4.5" fill="#2D5A3D"/><circle cx="236.66666666666666" cy="45.47999999999999" r="4.5" fill="#2D5A3D"/><circle cx="423.3333333333333" cy="56.920000000000016" r="4.5" fill="#2D5A3D"/><circle cx="610.0" cy="55.620000000000005" r="4.5" fill="#2D5A3D"/><text x="622.0" y="59.620000000000005" font-size="11" fill="#2D5A3D" font-weight="700">VERNON</text><text x="622.0" y="73.62" font-size="10" fill="#7A7568">86.3%</text><path d="M50.0,81.4 L236.7,87.3 L423.3,79.3 L610.0,87.9" fill="none" stroke="#B87333" stroke-width="2.5"/><circle cx="50.0" cy="81.35999999999999" r="4.5" fill="#B87333"/><circle cx="236.66666666666666" cy="87.34" r="4.5" fill="#B87333"/><circle cx="423.3333333333333" cy="79.28" r="4.5" fill="#B87333"/><circle cx="610.0" cy="87.85999999999999" r="4.5" fill="#B87333"/><text x="622.0" y="91.85999999999999" font-size="11" fill="#B87333" font-weight="700">RESASCO</text><text x="622.0" y="105.85999999999999" font-size="10" fill="#7A7568">73.9%</text></svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Tendencia preocupante en Vernon</div>
+    <div class="callout-tx">Vernon <strong>aumentó</strong> su dependencia de Meta de 73% en enero a 86% en abril. En vez de diversificar, está profundizando el riesgo. Es la única sociedad cuya concentración de canal único crece dentro del cuatrimestre.</div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:32px;line-height:1.15;margin-bottom:20px;letter-spacing:-0.01em">Lecturas posibles del fenómeno Meta</h3>
+      <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:14px">La conversión históricamente baja de Meta vs. otros canales puede deberse a una mezcla de factores que el dato del CRM no separa por sí mismo:</p>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>1. Calidad de lead.</strong> Los formularios de Meta capturan curiosos sin intención de compra real, mucho más que el walk-in al salón.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>2. Segmentación amplia.</strong> Si la pauta busca volumen y no audiencias calificadas, baja el costo por lead pero también la calidad.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>3. Velocidad y proceso de gestión.</strong> Un lead de Meta enfría rápido; sin un SLA agresivo de primera respuesta, se pierde.</li>
+        <li style="padding:10px 0"><strong>4. Mix de creativos.</strong> Las campañas que ofrecen "consultá precio" o "saber más" generan leads de baja intención por diseño.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="serif" style="font-weight:300;font-size:32px;line-height:1.15;margin-bottom:20px;letter-spacing:-0.01em">Lo que el dato sí dice</h3>
+      <p style="font-size:15px;line-height:1.6;color:var(--ink-2);margin-bottom:14px">Sin necesidad de hipótesis, los números muestran tres realidades incómodas:</p>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Resasco</strong> tiene la peor conversión Meta del grupo: <span class="mono" style="color:var(--accent);font-weight:700">0,29%</span>. 5 ventas en 1.738 leads.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Vernon</strong> tiene la mayor dependencia: <span class="mono" style="color:var(--accent);font-weight:700">84%</span> del volumen viene de un solo canal pago.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Genova</strong> es la mejor en conversión Meta: <span class="mono" style="font-weight:700">1,29%</span> — bajísima en absoluto, pero el doble que el resto.</li>
+        <li style="padding:10px 0"><strong>Base de clientes</strong> convierte al <span class="mono" style="color:var(--green);font-weight:700">48,4%</span>. Es el canal de mayor ROI del grupo, y está infrautilizado.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: Rankings -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="sec-num">04 / 07</span>
+    <h2>Rankings <em>comparativos</em></h2>
+    <span class="sec-kicker">8 KPIs · score agregado al final</span>
+  </div>
+
+  <p class="lead">Ranking de las cuatro sociedades en los KPIs operativos del cuatrimestre. <em style="font-weight:600;color:var(--green)">Verde</em> indica liderazgo en el KPI; <em style="font-weight:600;color:var(--accent)">rojo</em>, último puesto. Cada KPI usa el criterio explicitado en su descripción (más alto es mejor, salvo los que indican lo contrario).</p>
+
+  <div style="overflow-x:auto;margin:32px 0">
+  <table class="rk">
+    <thead>
+      <tr>
+        <th style="width:38%">KPI</th>
+        <th class="num">Guspamar</th>
+        <th class="num">Genova</th>
+        <th class="num">Vernon</th>
+        <th class="num">Resasco</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td style="font-weight:600">Volumen total de leads</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>10,067</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>3,870</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>2,738</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>2,303</td></tr><tr><td style="font-weight:600">Conversión global a venta</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>5.76%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>5.63%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>4.78%</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>5.95%</td></tr><tr><td style="font-weight:600">Crecimiento Ene → Abr</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>-3.0%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>-51.1%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>-7.2%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>-16.2%</td></tr><tr><td style="font-weight:600">Diversificación (HHI inverso)</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>4,756</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>4,446</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>7,152</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>5,962</td></tr><tr><td style="font-weight:600">Dependencia de Meta (menor=mejor)</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>66.4%</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>64.1%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>84.0%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>75.5%</td></tr><tr><td style="font-weight:600">Estabilidad mensual (menor CV=mejor)</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>16.3%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>31.5%</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>6.7%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>8.3%</td></tr><tr><td style="font-weight:600">Conversión de leads Meta</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>0.82%</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>1.29%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>0.70%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>0.29%</td></tr><tr><td style="font-weight:600">Conversión de leads No-Meta</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">3°</span>15.52%</td><td class="num" style="color:var(--accent);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">4°</span>13.39%</td><td class="num" style="color:var(--green);font-weight:700"><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">1°</span>26.20%</td><td class="num" ><span style="font-family:Fraunces,serif;font-size:18px;font-style:italic;margin-right:10px">2°</span>23.36%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-eb">Score agregado · suma de rankings (menor = mejor)</div>
+    <div class="callout-tx">
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,31,46,0.1)"><span style="font-family:Fraunces,serif;font-size:22px;font-weight:400">🥇 1° <strong>GUSPAMAR</strong></span><span class="mono" style="font-size:16px">16 pts</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,31,46,0.1)"><span style="font-family:Fraunces,serif;font-size:22px;font-weight:400">🥈 2° <strong>GENOVA</strong></span><span class="mono" style="font-size:16px">20 pts</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,31,46,0.1)"><span style="font-family:Fraunces,serif;font-size:22px;font-weight:400">🥉 3° <strong>VERNON</strong></span><span class="mono" style="font-size:16px">22 pts</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,31,46,0.1)"><span style="font-family:Fraunces,serif;font-size:22px;font-weight:400">4° <strong>RESASCO</strong></span><span class="mono" style="font-size:16px">22 pts</span></div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted);margin-top:24px;line-height:1.6">El score agregado es una primera aproximación: pondera todos los KPIs por igual, lo cual sobreestima el peso de la conversión Meta (que arrastra a todas las marcas hacia abajo). Para decisiones específicas conviene mirar el KPI relevante en cada caso, no el agregado.</p>
+</section>
+
+<!-- SECTION 4: Diagnostic per brand -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="sec-num">05 / 07</span>
+    <h2>Diagnóstico <em>por marca</em></h2>
+    <span class="sec-kicker">Qué hace bien, qué hace mal, hipótesis</span>
+  </div>
+
+  <p class="lead">Lectura individualizada de cada sociedad. Cada tarjeta resume los hallazgos del cuatrimestre y propone hipótesis a validar antes de actuar.</p>
+
+  <div class="grid-2">
+
+    <!-- GUSPAMAR -->
+    <div class="diag guspamar">
+      <div class="diag-head">
+        <div class="diag-soc">Guspamar</div>
+        <div class="diag-marca">Ford · 10.067 leads</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Volumen sostenido y mix relativamente diversificado: Salón aporta 16,7%, Base de clientes 6,2% y MercadoLibre 2,3% — una estructura de canales más sana que el resto. Es la única sociedad con una operación robusta en usados (26,5% del negocio). Recupera con fuerza luego del bajón de febrero.</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p>La conversión Meta (0,82%) es prácticamente igual a la del resto del grupo, pese a ser la sociedad de mayor inversión y la marca con más reconocimiento. La caída de febrero (–28% mes a mes) no fue investigada como evento aislado. Bahía Blanca concentra 58% de los leads de la red — riesgo geográfico no gestionado.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis a testear</div>
+        <p>Es probable que el alto volumen de Meta esté reciclando audiencias ya impactadas. Vale segmentar por sucursal de destino y testear creativos diferenciados por modelo (utilitarios vs. autos vs. usados) para ver si la conversión mejora.</p>
+      </div>
+    </div>
+
+    <!-- GENOVA -->
+    <div class="diag genova">
+      <div class="diag-head">
+        <div class="diag-soc">Genova</div>
+        <div class="diag-marca">Fiat · 3.870 leads</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Mejor mix del grupo (HHI 4.446) gracias al aporte real de RRSS-Facebook orgánico (9,8%), Llamado entrante y otros canales secundarios. Mejor conversión Meta del grupo (1,29% — bajísima en absoluto pero el doble que el resto). Su conversión global mejora mes a mes: 5,7% → 7,4%.</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p><strong>Caída del 51% en volumen entre enero y abril</strong> (1.157 → 566). Es la más volátil del grupo (CV 31,5%). La caída es transversal a todos los canales pero especialmente fuerte en Meta (–61% Ene-Abr), lo que sugiere un problema de inversión, no de calidad.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis a testear</div>
+        <p>La caída coincide con un patrón típico de recorte progresivo de pauta. Hay que confirmar con el área de inversión si se redujo el budget o si fue un problema de campañas. Si la conversión sigue mejorando, sería razonable reinvertir antes de perder posicionamiento.</p>
+      </div>
+    </div>
+
+    <!-- VERNON -->
+    <div class="diag vernon">
+      <div class="diag-head">
+        <div class="diag-soc">Vernon</div>
+        <div class="diag-marca">Peugeot / Citroën · 2.738 leads</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Es la sociedad más estable del cuatrimestre (CV 6,7%, primer puesto). Cuando logra leads no-Meta, los convierte espectacularmente bien: 26,2% — el mejor índice del grupo en ese segmento. Tiene una operación de Plan de Ahorro muy fuerte (61,6% del negocio).</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p><strong>Concentración crítica en Meta (84% y creciendo a 86% en abril).</strong> HHI 7.152, el peor del grupo. La conversión Meta es de 0,70% — apenas 16 ventas en 2.299 leads. Casi no usa Base de clientes (0,8%) ni Página Web (1,5%). Si Meta se cae, Vernon se queda sin embudo.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis a testear</div>
+        <p>El contraste entre conversión No-Meta extraordinariamente alta y dependencia extrema de Meta sugiere que el equipo comercial sí sabe cerrar — el cuello está en la calidad de la demanda entrante. Posibles causas: creatividad genérica, audiencia muy amplia, formularios poco calificadores. Urge diversificar.</p>
+      </div>
+    </div>
+
+    <!-- RESASCO -->
+    <div class="diag resasco">
+      <div class="diag-head">
+        <div class="diag-soc">Resasco</div>
+        <div class="diag-marca">Jeep / RAM · 2.303 leads</div>
+      </div>
+      <div class="diag-block diag-good">
+        <div class="diag-lbl">↑ Lo que hace bien</div>
+        <p>Mejor conversión global del grupo (5,95%). Conversión No-Meta de 23,4%, segunda del grupo. Volumen estable mes a mes (CV 8,3%). Su operación parece eficiente cuando el lead llega calificado, especialmente vía Salón y Base de clientes (que aportan 20% combinado).</p>
+      </div>
+      <div class="diag-block diag-bad">
+        <div class="diag-lbl">↓ Lo que hace mal</div>
+        <p><strong>La peor conversión Meta del grupo: 0,29%.</strong> 5 ventas en 1.738 leads del canal — una alarma seria. Caída de –16% en volumen entre enero y abril. Toda la operación pasa por Casa Central; no hay diversificación geográfica.</p>
+      </div>
+      <div class="diag-block diag-hyp">
+        <div class="diag-lbl">≈ Hipótesis a testear</div>
+        <p>El producto premium (Jeep, RAM) probablemente no calza con audiencias amplias de Meta — el comprador es de ticket alto y proceso de compra largo. La pauta debería pivotear hacia audiencias de patrimonio alto, content marketing y nurturing largo, no captación masiva de leads fríos.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 5: Action plan -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="sec-num">06 / 07</span>
+    <h2>Plan de <em>acción</em></h2>
+    <span class="sec-kicker">Recomendaciones concretas para mayo–junio 2026</span>
+  </div>
+
+  <p class="lead">Cinco acciones a nivel grupo y dos por marca prioritaria. El criterio: maximizar conversión sin perder cobertura, y diversificar antes de que Vernon o Resasco choquen contra un cambio de algoritmo de Meta.</p>
+
+  <h3 class="serif" style="font-weight:300;font-size:34px;letter-spacing:-0.01em;margin:40px 0 8px;color:var(--ink)">A nivel grupo</h3>
+  <p style="font-size:13px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:16px">Cinco prioridades transversales</p>
+
+  <div class="actions">
+    <div class="action">
+      <div class="action-num">01</div>
+      <div class="action-body">
+        <div class="what">Reasignación de inversión</div>
+        <h4>Auditar el ROI real de cada peso invertido en Meta</h4>
+        <p>El grupo gastó pauta para generar 13.202 leads que produjeron 108 ventas. Antes de seguir invirtiendo, hay que cruzar inversión por sociedad con CPL y costo por venta. Un canal con 0,82% de conversión global solo se justifica si el costo por venta es menor que el de Salón o Base de clientes — hay que demostrarlo, no asumirlo.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">02</div>
+      <div class="action-body">
+        <div class="what">Recuperar el canal de mayor ROI</div>
+        <h4>Activar campañas de Base de clientes en las cuatro marcas</h4>
+        <p>Base de clientes convierte al 48,4% — es el canal de mejor performance del grupo, lejos. Y está infrautilizado: solo aporta 5% del volumen. Vernon (0,8%) y Genova (5,4%) tienen el mayor margen para crecer ahí. Plan: campañas de email/whatsapp segmentadas a clientes existentes con propuestas de upgrade, recompra y plan de ahorro.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">03</div>
+      <div class="action-body">
+        <div class="what">Mejora de calidad del lead Meta</div>
+        <h4>Endurecer formularios y testear audiencias calificadas</h4>
+        <p>Dos pruebas A/B simultáneas en mayo: (a) formularios con preguntas calificadoras (presupuesto, plazo, modelo concreto) versus formularios actuales; (b) audiencias lookalike sobre clientes que efectivamente compraron versus audiencias amplias actuales. Hipótesis: bajará el volumen, subirá la conversión. Lo que importa es el costo por venta, no por lead.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">04</div>
+      <div class="action-body">
+        <div class="what">SLA de gestión de leads</div>
+        <h4>Tiempo de primer contacto bajo 30 minutos para leads de Meta</h4>
+        <p>Un lead pago se enfría rápido. Si la primera respuesta tarda más que el navegar del usuario hacia el siguiente concesionario, el lead se pierde. El CRM ya tiene la columna "Asignado el" — calcular delta entre creación y asignación, identificar las sucursales con mayor demora y atacar el punto. Es la mejora más barata de implementar y suele tener el mayor retorno inmediato.</p>
+        <span class="action-tag observe">Operativo</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num">05</div>
+      <div class="action-body">
+        <div class="what">Diversificación de canales digitales</div>
+        <h4>Pilotear Google Ads (search) en Vernon y Resasco</h4>
+        <p>Las dos sociedades más concentradas en Meta no tienen presencia significativa en Google. Search tiene un perfil de intención más alta — los usuarios ya están buscando un modelo concreto. Empezar con un piloto de pauta mensual modesta enfocado en queries de modelos premium (Jeep Compass, RAM 1500, Peugeot 2008) y comparar conversión vs. Meta a los 60 días.</p>
+        <span class="action-tag">Test</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="serif" style="font-weight:300;font-size:34px;letter-spacing:-0.01em;margin:64px 0 8px;color:var(--ink)">Por marca prioritaria</h3>
+  <p style="font-size:13px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:16px">Acciones específicas que no aplican al resto</p>
+
+  <div class="actions">
+    <div class="action">
+      <div class="action-num" style="color:var(--c-genova)">G1</div>
+      <div class="action-body">
+        <div class="what">Genova · Fiat</div>
+        <h4>Investigar la caída de –51% antes de seguir achicando</h4>
+        <p>La conversión de Genova mejora mes a mes mientras el volumen colapsa. Esto puede ser bueno (depuración natural) o malo (estamos perdiendo top of funnel). Hay que confirmar: ¿se redujo la inversión? ¿Cambió el modelo en pauta? ¿Hubo problema con campañas? Si la conversión está mejorando porque solo quedan leads de alta intención, conviene reinvertir un piloto modesto en mayo para validar que el costo por venta también está mejorando.</p>
+        <span class="action-tag priority">Investigación urgente</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num" style="color:var(--c-vernon)">V1</div>
+      <div class="action-body">
+        <div class="what">Vernon · Peugeot / Citroën</div>
+        <h4>Forzar diversificación: bajar dependencia de Meta a 70% en 90 días</h4>
+        <p>Vernon es el riesgo sistémico del grupo. Tiene la conversión No-Meta más alta (26,2%) — lo que muestra que cuando el lead es de calidad, el equipo cierra. Plan: redistribuir 15–20% del budget de Meta a Base de clientes activa (campañas a la base actual), Página Web (SEO + landings de modelos) y Google Search. Métrica de éxito: volumen total estable + conversión global subiendo del 4,78% actual al 6%.</p>
+        <span class="action-tag priority">Prioridad máxima</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-num" style="color:var(--c-resasco)">R1</div>
+      <div class="action-body">
+        <div class="what">Resasco · Jeep / RAM</div>
+        <h4>Pivotear pauta de Meta hacia audiencia premium o reducirla</h4>
+        <p>0,29% de conversión Meta es insostenible para una marca premium. La hipótesis fuerte es que Meta no es el canal natural para un comprador de ticket alto y deliberación larga. Plan: en mayo, recortar 30% el budget de Meta y redirigirlo a (a) content marketing (test drive + producción audiovisual), (b) audiencias premium muy acotadas en Meta (lookalike de clientes que efectivamente compraron Jeep o RAM en los últimos 12 meses), (c) Google Search en queries de modelos. Si la conversión Meta no sube al 1% en 90 días, evaluar bajar la inversión en ese canal a un mínimo de mantenimiento.</p>
+        <span class="action-tag priority">Prioridad alta</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout" style="margin-top:48px">
+    <div class="callout-eb">Métricas a monitorear en mayo y junio</div>
+    <div class="callout-tx">
+      Cinco indicadores para validar las acciones:<br>
+      <strong>1.</strong> Costo por venta (no costo por lead) por sociedad y por origen.<br>
+      <strong>2.</strong> Conversión Meta por sociedad — meta: subir al menos al 1,5% en todas.<br>
+      <strong>3.</strong> Share de Base de clientes — meta: pasar del 5% actual al 10% en el grupo.<br>
+      <strong>4.</strong> HHI de Vernon — meta: bajar de 7.152 a menos de 6.000.<br>
+      <strong>5.</strong> Tiempo medio de primera respuesta a leads de Meta — meta: &lt; 30 minutos.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Limitations -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="sec-num">07 / 07</span>
+    <h2>Limitaciones <em>del análisis</em></h2>
+    <span class="sec-kicker">Datos faltantes y supuestos asumidos</span>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px;letter-spacing:-0.01em">Lo que el dato no dice</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Inversión publicitaria.</strong> Sin el dato de gasto por sociedad y por canal, no es posible calcular CPL ni costo por venta — todos los rankings son de eficiencia relativa, no de retorno.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Estado del lead más allá de "Vendido SI/NO".</strong> No discriminamos entre "no contactado", "contactado y enfriado", "en gestión activa" — la conversión real podría mejorar a medida que las cohortes recientes maduren.</li>
+        <li style="padding:10px 0"><strong>Mix de modelos por origen.</strong> No analizamos qué modelos genera cada canal, lo cual es relevante para entender por qué Meta convierte mal: tal vez genera leads para modelos de alta consideración que tienen ciclo largo.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px;letter-spacing:-0.01em">Supuestos de este informe</h3>
+      <ul style="list-style:none;padding:0;font-size:14px;line-height:1.7;color:var(--ink-2)">
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>"Vendido SI" = venta efectiva.</strong> Tomamos esa columna como verdad. Si hay leads marcados como vendidos que no terminaron de cerrar, las conversiones están sobreestimadas.</li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong>Period de maduración.</strong> Leads creados en abril tuvieron menos tiempo para convertir que los de enero — la conversión de abril podría subir cuando esos leads maduren. El sesgo es leve pero existe.</li>
+        <li style="padding:10px 0"><strong>Equivalencia de canales entre CRMs.</strong> Asumimos que "ADS - FACEBOOK" significa lo mismo en los 4 CRMs. Si una sociedad tagea ahí también campañas de Instagram pago y otra no, hay ruido.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin-top:48px;font-family:Fraunces,serif;font-size:18px;font-style:italic;color:var(--muted);max-width:780px;line-height:1.5">El próximo paso natural — antes de ejecutar el plan completo — es cruzar este análisis con la inversión real por canal y sociedad. Solo así se podrá pasar de "conversión" a "rentabilidad".</p>
+</section>
+
+<footer>
+  <span>Grupo Resasco · Equipo de Marketing</span>
+  <span>Edición Q1 2026 · v1.0</span>
+  <span>Documento confidencial · uso interno</span>
+</footer>
+
+</div>
+</body>
+</html>
