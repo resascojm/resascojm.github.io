@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Mercado Libre · Guspamar Usados</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1116;--panel:#161b22;--panel-2:#1c232c;--border:#262d36;
+    --text:#e6edf3;--muted:#8b949e;
+    --accent:#fff159;       /* amarillo Mercado Libre */
+    --accent-dark:#3483fa;  /* azul Mercado Libre */
+    --good:#22c55e;--bad:#ef4444;--warn:#facc15;--blue:#3b82f6;--orange:#f97316;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0;
+    background:radial-gradient(1200px 600px at 10% -10%,#1a2230 0%,transparent 60%),
+               radial-gradient(900px 500px at 110% 10%,#2a2410 0%,transparent 55%),
+               var(--bg);
+    color:var(--text);
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:32px 24px 60px}
+
+  /* HEADER */
+  header.hero{
+    border:1px solid var(--border);
+    background:linear-gradient(135deg,rgba(255,241,89,.08),rgba(52,131,250,.05));
+    border-radius:16px;padding:26px 30px;margin-bottom:24px;
+    position:relative;overflow:hidden;
+  }
+  header.hero::before{
+    content:"";position:absolute;top:-40px;right:-40px;width:200px;height:200px;
+    border-radius:50%;background:radial-gradient(circle,rgba(255,241,89,.15),transparent 70%);
+    pointer-events:none;
+  }
+  .ml-logo{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--accent);color:#000;
+    padding:6px 14px;border-radius:6px;
+    font-weight:700;font-size:13px;letter-spacing:-.01em;
+    margin-bottom:14px;
+  }
+  .ml-logo .dot{width:8px;height:8px;background:var(--accent-dark);border-radius:50%}
+  h1{font-family:"Playfair Display",serif;font-weight:600;font-size:36px;margin:0 0 8px;letter-spacing:-.01em;line-height:1.1}
+  .subtitle{color:var(--muted);font-size:15px;max-width:780px}
+  .meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+  .meta b{color:var(--text)}
+
+  /* TABS */
+  .tabs{
+    display:flex;gap:6px;margin:18px 0 22px;
+    background:var(--panel);padding:6px;border-radius:12px;
+    border:1px solid var(--border);
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:1;min-width:130px;padding:10px 16px;
+    background:transparent;color:var(--muted);
+    border:none;border-radius:8px;cursor:pointer;
+    font-family:"JetBrains Mono",monospace;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.08em;font-weight:500;
+    transition:all .2s;
+    white-space:nowrap;
+  }
+  .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab.active{
+    background:var(--accent);color:#000;
+    box-shadow:0 2px 12px rgba(255,241,89,.15);
+  }
+  .tab-content{display:none;animation:fadeIn .3s}
+  .tab-content.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  /* KPIs grandes interactivos */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 22px}
+  .kpi{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:12px;padding:18px 20px;
+    position:relative;overflow:hidden;
+    transition:transform .2s, border-color .2s;
+    cursor:default;
+  }
+  .kpi:hover{transform:translateY(-2px);border-color:rgba(255,241,89,.3)}
+  .kpi-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-bottom:8px}
+  .kpi-val{font-size:30px;font-weight:600;font-family:"Playfair Display",serif;letter-spacing:-.02em;line-height:1.1}
+  .kpi-sub{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .kpi.good .kpi-val{color:var(--good)}
+  .kpi.bad .kpi-val{color:var(--bad)}
+  .kpi.warn .kpi-val{color:var(--warn)}
+  .kpi.accent .kpi-val{color:var(--accent)}
+  .kpi.blue .kpi-val{color:var(--accent-dark)}
+
+  /* Panels */
+  h2{
+    font-family:"Playfair Display",serif;font-weight:600;font-size:24px;
+    margin:32px 0 6px;letter-spacing:-.01em;
+    display:flex;align-items:baseline;gap:12px;
+  }
+  h2 .num{
+    font-family:"JetBrains Mono",monospace;font-size:11px;color:#000;
+    background:var(--accent);padding:3px 9px;border-radius:4px;font-weight:600;
+  }
+  .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px;max-width:880px}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;margin:14px 0}
+  .chart-box{position:relative;height:320px;margin-top:6px}
+  .chart-tall{height:380px}
+
+  /* Funnel visualization */
+  .funnel{display:flex;flex-direction:column;gap:10px;margin:20px auto;max-width:680px}
+  .funnel-step{
+    background:var(--panel-2);border:1px solid var(--border);
+    border-radius:10px;padding:16px 22px;
+    display:flex;align-items:center;justify-content:space-between;
+    transition:all .2s;
+    position:relative;
+  }
+  .funnel-step:hover{transform:translateX(4px);border-color:var(--accent)}
+  .funnel-step .label{flex:1}
+  .funnel-step .num{font-family:"Playfair Display",serif;font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+  .funnel-step .pct{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);margin-top:2px;display:block}
+  .funnel-step.s1{background:linear-gradient(90deg,rgba(52,131,250,.15),transparent)}
+  .funnel-step.s2{background:linear-gradient(90deg,rgba(52,131,250,.12),transparent);width:90%;margin-left:5%}
+  .funnel-step.s3{background:linear-gradient(90deg,rgba(250,204,21,.15),transparent);width:75%;margin-left:12.5%}
+  .funnel-step.s4{background:linear-gradient(90deg,rgba(239,68,68,.15),transparent);width:55%;margin-left:22.5%}
+  .funnel-step.s5{background:linear-gradient(90deg,rgba(239,68,68,.2),transparent);width:35%;margin-left:32.5%}
+  .funnel-arrow{text-align:center;color:var(--muted);font-size:11px;font-family:"JetBrains Mono",monospace}
+
+  /* Problemas tipo cards */
+  .problems{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:14px 0}
+  .problem{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:12px;padding:18px 20px;
+    border-left:4px solid var(--warn);
+    transition:transform .2s;
+  }
+  .problem:hover{transform:translateY(-2px)}
+  .problem.critical{border-left-color:var(--bad)}
+  .problem.high{border-left-color:var(--orange)}
+  .problem.med{border-left-color:var(--warn)}
+  .problem.low{border-left-color:var(--muted)}
+  .problem .severity{
+    display:inline-block;padding:2px 8px;border-radius:4px;
+    font-size:10px;font-family:"JetBrains Mono",monospace;
+    text-transform:uppercase;letter-spacing:.08em;font-weight:600;
+    margin-bottom:8px;
+  }
+  .problem.critical .severity{background:rgba(239,68,68,.2);color:var(--bad)}
+  .problem.high .severity{background:rgba(249,115,22,.2);color:var(--orange)}
+  .problem.med .severity{background:rgba(250,204,21,.2);color:var(--warn)}
+  .problem.low .severity{background:rgba(139,148,158,.2);color:var(--muted)}
+  .problem h4{margin:0 0 8px;font-size:15px}
+  .problem p{margin:0;font-size:13.5px;color:var(--muted)}
+  .problem .impact{
+    margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
+    font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--text);
+  }
+
+  /* KPI tracker table */
+  .kpi-table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .kpi-table th,.kpi-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  .kpi-table th{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:"JetBrains Mono",monospace;font-weight:500}
+  .kpi-table td.num{font-family:"JetBrains Mono",monospace;text-align:right}
+  .kpi-table td.kpi-name{font-weight:500}
+  .progress-bar{
+    background:var(--panel-2);border-radius:4px;height:6px;overflow:hidden;margin-top:4px;
+  }
+  .progress-fill{height:100%;border-radius:4px;transition:width .6s ease}
+  .progress-fill.good{background:linear-gradient(90deg,var(--good),#16a34a)}
+  .progress-fill.warn{background:linear-gradient(90deg,var(--warn),#eab308)}
+  .progress-fill.bad{background:linear-gradient(90deg,var(--bad),#dc2626)}
+
+  /* Action items */
+  .actions{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .action-row{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:10px;padding:14px 18px;
+    display:flex;align-items:flex-start;gap:14px;
+    transition:all .2s;cursor:pointer;
+  }
+  .action-row:hover{border-color:var(--accent);background:var(--panel-2)}
+  .action-check{
+    width:22px;height:22px;border:2px solid var(--border);border-radius:5px;
+    flex-shrink:0;margin-top:1px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s;
+  }
+  .action-check.checked{background:var(--good);border-color:var(--good)}
+  .action-check.checked::after{
+    content:"✓";color:#000;font-weight:700;font-size:14px;
+  }
+  .action-body{flex:1}
+  .action-body .label{font-size:14px;line-height:1.4}
+  .action-tag{
+    display:inline-block;padding:2px 8px;border-radius:4px;
+    font-size:10px;font-family:"JetBrains Mono",monospace;
+    text-transform:uppercase;letter-spacing:.06em;font-weight:600;
+    margin-right:8px;
+  }
+  .action-tag.urgent{background:rgba(239,68,68,.2);color:var(--bad)}
+  .action-tag.short{background:rgba(249,115,22,.2);color:var(--orange)}
+  .action-tag.medium{background:rgba(52,131,250,.2);color:var(--accent-dark)}
+
+  /* Comparativa CRM */
+  .compare-box{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:24px;margin:14px 0;
+    display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;
+  }
+  .compare-side{text-align:center}
+  .compare-side .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-bottom:6px}
+  .compare-side .num{font-family:"Playfair Display",serif;font-size:42px;font-weight:600;line-height:1}
+  .compare-side .sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .compare-side.ml .num{color:var(--accent-dark)}
+  .compare-side.pilot .num{color:var(--accent)}
+  .compare-arrow{
+    font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--bad);
+    text-align:center;
+  }
+  .compare-arrow .gap{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+
+  /* Note Pampita / box info */
+  .info-box{
+    background:rgba(52,131,250,.06);border:1px solid rgba(52,131,250,.25);
+    border-radius:10px;padding:14px 18px;margin:12px 0;font-size:13.5px;
+  }
+  .info-box b{color:var(--accent-dark)}
+  .alert-box{
+    background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);
+    border-radius:10px;padding:14px 18px;margin:12px 0;font-size:13.5px;
+  }
+  .alert-box b{color:var(--bad)}
+
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;text-align:center;font-family:"JetBrains Mono",monospace}
+
+  @media (max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .problems{grid-template-columns:1fr}
+    .compare-box{grid-template-columns:1fr;gap:14px}
+    .funnel-step{padding:14px 16px;font-size:13px}
+    .funnel-step .num{font-size:20px}
+    h1{font-size:26px}
+    .tabs{padding:4px}
+    .tab{padding:8px 12px;font-size:10.5px;min-width:auto}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="ml-logo">
+    <span class="dot"></span>
+    MERCADO LIBRE · GUSPAMAR USADOS
+  </div>
+  <h1>Dashboard Mercado Libre · Diagnóstico operativo</h1>
+  <p class="subtitle">Análisis cruzado entre el panel de Mercado Libre Autos y los datos de Pilot CRM. Funnel de leads, calidad de publicaciones, problemas detectados y plan de acción priorizado para los próximos 90 días.</p>
+  <div class="meta">
+    <span>Período: <b>Últimos 60 días</b></span>
+    <span>Publicaciones activas: <b>~58</b></span>
+    <span>CRM: <b>Pilot · WhatsApp integrado</b></span>
+  </div>
+</header>
+
+<!-- ============ TABS ============ -->
+<div class="tabs" role="tablist">
+  <button class="tab active" data-tab="overview">📊 Overview</button>
+  <button class="tab" data-tab="funnel">🔻 Funnel</button>
+  <button class="tab" data-tab="problems">⚠️ Problemas</button>
+  <button class="tab" data-tab="inventory">📦 Inventario</button>
+  <button class="tab" data-tab="actions">✅ Acciones</button>
+  <button class="tab" data-tab="economia">💰 Economía</button>
+  <button class="tab" data-tab="kpis">🎯 KPIs</button>
+</div>
+
+<!-- ============ OVERVIEW ============ -->
+<div class="tab-content active" id="overview">
+
+  <div class="kpis">
+    <div class="kpi blue"><div class="kpi-label">Visitas totales</div><div class="kpi-val">28.792</div><div class="kpi-sub">en 135 publicaciones activas</div></div>
+    <div class="kpi bad"><div class="kpi-label">Contactos generados</div><div class="kpi-val">4</div><div class="kpi-sub">Conv. visita→contacto 0,01%</div></div>
+    <div class="kpi warn"><div class="kpi-label">Publicaciones activas</div><div class="kpi-val">135</div><div class="kpi-sub">de 232 totales (58%)</div></div>
+    <div class="kpi bad"><div class="kpi-label">Score promedio</div><div class="kpi-val">44,6</div><div class="kpi-sub">70% en "calidad básica" (33)</div></div>
+  </div>
+
+  <div class="compare-box">
+    <div class="compare-side ml">
+      <div class="label">Panel Mercado Libre</div>
+      <div class="num">325</div>
+      <div class="sub">leads recibidos en 60 días</div>
+    </div>
+    <div class="compare-arrow">→<span class="gap">Brecha: 81 leads (25%)</span></div>
+    <div class="compare-side pilot">
+      <div class="label">CRM Pilot</div>
+      <div class="num">244</div>
+      <div class="sub">leads registrados últimos 60 días</div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <b>Cruce CRM vs ML:</b> hay una brecha de 81 leads entre el panel de Mercado Libre (325 reportados) y el CRM Pilot (244 registrados) en los últimos 60 días. Eso significa que <b>1 de cada 4 leads no aparece en Pilot</b>: o se pierden en la integración WhatsApp→Pilot, o se reciben en otro canal (DM, llamado) y no se cargan al CRM.
+  </div>
+
+  <div style="background:linear-gradient(135deg,rgba(255,241,89,.08),rgba(239,68,68,.06));border:1px solid var(--accent);border-radius:12px;padding:20px 24px;margin:14px 0;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center">
+    <div style="font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:var(--accent);line-height:1">💰</div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Costo del canal</div>
+      <div style="font-size:18px;margin-bottom:4px"><b>$3.357.446,59 por mes</b> en Mercado Libre para toda la red Resasco. Anualizado: <b>$40.289.359</b>.</div>
+      <div style="font-size:13.5px;color:var(--muted)">Con margen bruto del 10% y precio promedio $27,8M, el canal necesita <b>1,2 ventas/mes</b> para cubrir su costo. Es un break-even bajo y alcanzable — el problema no es el costo, es el funnel. Ver tab "Economía" para el análisis completo.</div>
+    </div>
+  </div>
+
+  <h2><span class="num">A</span>Performance por panel</h2>
+  <p class="lead">Cómo se ve el embudo desde dos fuentes distintas. La distancia entre ambas mediciones es donde está la oportunidad inmediata.</p>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Visitas, leads y conversiones</h3>
+    <div class="chart-box"><canvas id="chartOverview"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Distribución de leads ML en Pilot (últimos 60 días)</h3>
+    <table class="kpi-table">
+      <thead><tr><th>Vendedor</th><th>Sucursal</th><th>Leads</th><th>% del total</th></tr></thead>
+      <tbody>
+        <tr><td class="kpi-name">Josu Monasterio</td><td>Santa Rosa</td><td class="num">131</td><td class="num">53,7%</td></tr>
+        <tr><td class="kpi-name">Martín Bettomeo</td><td>Bahía Blanca</td><td class="num">47</td><td class="num">19,3%</td></tr>
+        <tr><td class="kpi-name">Juan Gerena</td><td>Santa Rosa</td><td class="num">44</td><td class="num">18,0%</td></tr>
+        <tr><td class="kpi-name">Juan Avila</td><td>Bahía Blanca</td><td class="num">19</td><td class="num">7,8%</td></tr>
+        <tr><td class="kpi-name">Daniel Chimento</td><td>Bahía Blanca</td><td class="num">2</td><td class="num">0,8%</td></tr>
+        <tr><td class="kpi-name">Otros</td><td>—</td><td class="num">1</td><td class="num">0,4%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:14px 0 0;font-size:13px;color:var(--muted)">El 72% de los leads ML va a Santa Rosa. Bettomeo gestiona ML en 59 min hábiles (50% &lt; 1h); Monasterio en 7,3 h (1% &lt; 1h). <b>Sin embargo, Monasterio recibe casi 3× más leads ML que Bettomeo</b>. El ruteo automático no premia velocidad.</p>
+  </div>
+</div>
+
+<!-- ============ FUNNEL ============ -->
+<div class="tab-content" id="funnel">
+  <h2><span class="num">B</span>Funnel completo</h2>
+  <p class="lead">Desde la visita a la publicación de ML hasta la venta concretada. Cada paso muestra el porcentaje sobre la etapa anterior y sobre el inicio del embudo.</p>
+
+  <div class="funnel">
+    <div class="funnel-step s1">
+      <div class="label">
+        <b>1 · Visitas a publicaciones</b>
+        <span class="pct">Tráfico orgánico en Mercado Libre</span>
+      </div>
+      <div><div class="num">28.000</div></div>
+    </div>
+    <div class="funnel-arrow">▼ conversión 1,16% (meta 2,5%)</div>
+
+    <div class="funnel-step s2">
+      <div class="label">
+        <b>2 · Contactos en ML</b>
+        <span class="pct">1,16% de las visitas</span>
+      </div>
+      <div><div class="num">325</div></div>
+    </div>
+    <div class="funnel-arrow">▼ se pierden 81 (25%) en el cruce a CRM</div>
+
+    <div class="funnel-step s3">
+      <div class="label">
+        <b>3 · Leads en Pilot</b>
+        <span class="pct">75% del total ML</span>
+      </div>
+      <div><div class="num">244</div></div>
+    </div>
+    <div class="funnel-arrow">▼ ~84% sin gestión visible (272 sobre 325)</div>
+
+    <div class="funnel-step s4">
+      <div class="label">
+        <b>4 · Leads gestionados</b>
+        <span class="pct">~53 con touchpoint registrado</span>
+      </div>
+      <div><div class="num">~53</div></div>
+    </div>
+    <div class="funnel-arrow">▼ conversión final extremadamente baja</div>
+
+    <div class="funnel-step s5">
+      <div class="label">
+        <b>5 · Ventas concretadas</b>
+        <span class="pct">0,3% del total de leads</span>
+      </div>
+      <div><div class="num">~1</div></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <b>Lectura del funnel:</b> hay tres cuellos de botella concurrentes. <b>(1)</b> el tráfico no convierte bien a contacto (1,16% vs 2-3% esperable), efecto de fotos y descripciones débiles. <b>(2)</b> la integración pierde 1 de cada 4 leads. <b>(3)</b> apenas un 16% de los leads tiene gestión registrada. <b>Cada uno multiplica al siguiente</b>: si arreglamos los tres, el output de ventas se multiplica varias veces sin sumar inversión.
+  </div>
+
+  <h2><span class="num">C</span>Calidad de las publicaciones</h2>
+
+  <div class="kpis">
+    <div class="kpi bad"><div class="kpi-label">Score promedio</div><div class="kpi-val">44,6/100</div><div class="kpi-sub">Mediano: 33 (calidad básica)</div></div>
+    <div class="kpi bad"><div class="kpi-label">Publicaciones básicas (33%)</div><div class="kpi-val">95</div><div class="kpi-sub">70% del catálogo</div></div>
+    <div class="kpi warn"><div class="kpi-label">Calidad media (66%)</div><div class="kpi-val">30</div><div class="kpi-sub">22% del catálogo</div></div>
+    <div class="kpi good"><div class="kpi-label">Calidad excelente (100%)</div><div class="kpi-val">9</div><div class="kpi-sub">solo 6,7%</div></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 12px;font-size:16px">¿Qué es el score de calidad de Mercado Libre?</h3>
+    <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted)">Es el puntaje que ML asigna a cada publicación según lo completa y atractiva que sea. Va de 0 a 100. <b style="color:var(--text)">Promedio actual de Guspamar: 44,6/100 (mediano: 33)</b>. El 70% del catálogo tiene "calidad básica" (33 puntos). ML penaliza estas publicaciones bajándolas en los resultados de búsqueda.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0">
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--bad);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">📷 Lo que penaliza hoy</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--muted)">
+          <li>Fotos de catálogo en lugar de fotos reales</li>
+          <li>Atributos incompletos (color, km, transmisión)</li>
+          <li>Descripciones genéricas sin info útil</li>
+          <li>Pocas fotos por publicación</li>
+        </ul>
+      </div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--warn);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🎯 Meta 30 días · 70/100</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--muted)">
+          <li>Fotos reales (mínimo 10 por auto)</li>
+          <li>Atributos 100% completos en todas</li>
+          <li>Descripción con FAQ + condiciones</li>
+          <li>Bajar publicaciones básicas de 95 a 30</li>
+        </ul>
+      </div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--good);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🏆 Meta 90 días · 90/100</div>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--muted)">
+          <li>Set fotográfico profesional para todo el stock</li>
+          <li>0 publicaciones con calidad básica</li>
+          <li>Mínimo 80% del catálogo en calidad 100%</li>
+          <li>Videos cortos en top 20 visitas</li>
+          <li>Upgrade masivo a Oro / Premium</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert-box" style="margin-top:14px">
+      <b>¿Por qué importa subir el score?</b> Una publicación con score alto aparece más arriba en los resultados de búsqueda de ML, recibe más visitas (la tasa visita→contacto del 1,16% podría escalar al 2-3%) y genera más confianza en el comprador. <b>Es la palanca con mayor efecto multiplicador del funnel:</b> si arreglamos las fotos y descripciones, el resto del embudo se acelera solo.
+    </div>
+  </div>
+</div>
+
+<!-- ============ PROBLEMAS ============ -->
+<div class="tab-content" id="problems">
+  <h2><span class="num">D</span>Problemas identificados · 7 hallazgos priorizados</h2>
+  <p class="lead">Cada tarjeta indica severidad, descripción y el impacto cuantificado. La criticidad se mide por el efecto directo en ventas perdidas.</p>
+
+  <div class="problems">
+    <div class="problem critical">
+      <span class="severity">P1 · Crítico</span>
+      <h4>272 leads sin gestionar (backlog enorme)</h4>
+      <p>De 325 contactos recibidos en 60 días, solo ~53 tienen acción registrada. El 84% del pipeline está sin gestión visible.</p>
+      <div class="impact">Impacto directo en la tasa de cierre.</div>
+    </div>
+
+    <div class="problem high">
+      <span class="severity">P2 · Alto</span>
+      <h4>Score 33/100 en la mayoría de publicaciones</h4>
+      <p>ML penaliza con menor exposición en búsquedas. Causa: fotos de catálogo en lugar de fotos reales del vehículo. 58 publicaciones marcadas como "calidad básica".</p>
+      <div class="impact">Acción de ML: "Mejorá las fotos" en casi todos los listados.</div>
+    </div>
+
+    <div class="problem high">
+      <span class="severity">P3 · Alto</span>
+      <h4>Tasa visita → contacto del 1,16%</h4>
+      <p>Con 28.000 visitas, solo 325 se convierten en leads. Con mejora de fotos y descripción podría llegar a 2-3%.</p>
+      <div class="impact">Potencial: 560-840 leads en el mismo período.</div>
+    </div>
+
+    <div class="problem med">
+      <span class="severity">P4 · Medio</span>
+      <h4>Publicaciones que vencen en &lt; 10 días</h4>
+      <p>Al menos 5 publicaciones de alto tráfico vencen en 3-9 días. Si no se renuevan, se pierde tráfico activo.</p>
+      <div class="impact">Riesgo de perder leads acumulados.</div>
+    </div>
+
+    <div class="problem med">
+      <span class="severity">P5 · Medio</span>
+      <h4>Publicaciones duplicadas de Ford Ranger</h4>
+      <p>4+ publicaciones de Rangers con características y precios similares. Fragmenta el tráfico y confunde al comprador.</p>
+      <div class="impact">Consolidar a 1-2 listings de calidad.</div>
+    </div>
+
+    <div class="problem med">
+      <span class="severity">P6 · Medio</span>
+      <h4>Renault Alaskan en Publicación Plata · 1.308 visitas</h4>
+      <p>El auto más visitado del inventario tiene la menor jerarquía de publicación. Upgrade a Oro o Oro Premium podría triplicar la conversión.</p>
+      <div class="impact">Quick win evidente.</div>
+    </div>
+
+    <div class="problem low">
+      <span class="severity">P7 · Bajo</span>
+      <h4>Sin color de reputación (estructural)</h4>
+      <p>No impacta directamente porque el modelo es WhatsApp → CRM. Pero puede generar desconfianza en compradores nuevos.</p>
+      <div class="impact">Limitación de plataforma (ML Autos no permite registrar ventas manuales).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INVENTARIO ============ -->
+<div class="tab-content" id="inventory">
+  <h2><span class="num">📦</span>Inventario · 135 publicaciones activas</h2>
+  <p class="lead">Análisis detallado del catálogo activo: distribución por marca, segmento, tipo de publicación y calidad. Las cifras provienen del export directo del panel de ML.</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Total visitas</div><div class="kpi-val">28.792</div><div class="kpi-sub">213 visitas/publicación promedio</div></div>
+    <div class="kpi accent"><div class="kpi-label">Top visita</div><div class="kpi-val">1.308</div><div class="kpi-sub">Renault Alaskan Emotion</div></div>
+    <div class="kpi warn"><div class="kpi-label">Calidad 100%</div><div class="kpi-val">9</div><div class="kpi-sub">solo el 6,7% del catálogo</div></div>
+    <div class="kpi bad"><div class="kpi-label">Vencen ≤10 días</div><div class="kpi-val">11</div><div class="kpi-sub">+ 1 vence HOY</div></div>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">M</span>Análisis por marca</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Visitas y promedio por marca</h3>
+    <div class="chart-box"><canvas id="chartMarcas"></canvas></div>
+  </div>
+
+  <div class="panel" style="padding:0 0 8px">
+    <table class="kpi-table">
+      <thead><tr>
+        <th style="padding-left:22px">Marca</th>
+        <th>Publicaciones</th>
+        <th>Visitas</th>
+        <th>Visitas / pub</th>
+        <th>Calidad avg</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Ford</b></td><td class="num">48</td><td class="num">11.102</td><td class="num">231</td><td class="num">46,1</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Fiat</b></td><td class="num">27</td><td class="num">4.091</td><td class="num">152</td><td class="num">49,0</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Renault</b></td><td class="num">10</td><td class="num">3.719</td><td class="num"><span style="color:var(--good)"><b>372</b></span></td><td class="num">39,6</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Jeep</b></td><td class="num">14</td><td class="num">2.827</td><td class="num">202</td><td class="num">42,5</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Volkswagen</b></td><td class="num">9</td><td class="num">2.459</td><td class="num"><span style="color:var(--good)"><b>273</b></span></td><td class="num">44,0</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Toyota</b></td><td class="num">10</td><td class="num">1.503</td><td class="num">150</td><td class="num">39,6</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Chevrolet</b></td><td class="num">5</td><td class="num">888</td><td class="num">178</td><td class="num">53,0</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px"><b>Peugeot</b></td><td class="num">4</td><td class="num">681</td><td class="num">170</td><td class="num">41,2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <b>Insight de mix:</b> Ford concentra el 36% de las publicaciones y el 39% de las visitas. Pero <b>Renault, con solo 10 publicaciones, tiene el mejor rendimiento por publicación (372 visitas/pub) y la única que genera contactos</b>. Las pickups Alaskan están traccionando fuerte. Vale la pena considerar sumar más publicaciones de Renault al catálogo.
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">T</span>Tipo de publicación · ¿vale la pena Oro Premium?</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Visitas promedio por nivel</h3>
+    <div class="chart-box"><canvas id="chartTipos"></canvas></div>
+  </div>
+
+  <div class="info-box">
+    <b>Análisis costo-beneficio:</b> Oro Premium recibe en promedio <b>324 visitas/publicación</b> vs 209 en Oro (+55%) y 165 en Plata (+96%). El upgrade tiene impacto medible. Sin embargo, hoy <b>el 21% del catálogo (28 publicaciones) está en Plata</b> incluyendo el Renault Alaskan Emotion con 1.308 visitas y la única publicación de Renault Alaskan Confort que genera contactos. <b>Recategorizar a Oro o Oro Premium los top-15 en visitas podría duplicar el tráfico de esas publicaciones.</b>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">🏆</span>Top 15 publicaciones más visitadas</h2>
+
+  <div class="panel" style="padding:0 0 8px;overflow-x:auto">
+    <table class="kpi-table">
+      <thead><tr>
+        <th style="padding-left:22px">Modelo</th>
+        <th>Marca</th>
+        <th>Precio</th>
+        <th>Tipo</th>
+        <th>Calidad</th>
+        <th>Visitas</th>
+        <th>Contactos</th>
+        <th>Vence</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="kpi-name" style="padding-left:22px">Renault Alaskan Emotion 4x4</td><td>Renault</td><td class="num">$30,5M</td><td><span class="pill warn">Plata</span></td><td class="num">66</td><td class="num"><b>1.308</b></td><td class="num">0</td><td class="num">46d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Ford Ranger Raptor 2.0 Biturbo</td><td>Ford</td><td class="num">$55,0M</td><td><span class="pill good">Oro Premium</span></td><td class="num">33</td><td class="num">924</td><td class="num">0</td><td class="num">74d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">VW Tiguan 2.0 Confortline</td><td>Volkswagen</td><td class="num">$38,7M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">903</td><td class="num">0</td><td class="num"><span style="color:var(--bad)"><b>HOY</b></span></td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Ford Ranger 3.2 XLS Manual 4x4</td><td>Ford</td><td class="num">$31,0M</td><td><span class="pill good">Oro</span></td><td class="num">66</td><td class="num">817</td><td class="num">0</td><td class="num">37d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Ford Ranger 3.2 Limited Tdci 4x4</td><td>Ford</td><td class="num">$24,0M</td><td><span class="pill good">Oro Premium</span></td><td class="num">33</td><td class="num">733</td><td class="num">0</td><td class="num">53d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Fiat Strada Trekking Multijet</td><td>Fiat</td><td class="num">$18,3M</td><td><span class="pill good">Oro Premium</span></td><td class="num">66</td><td class="num">710</td><td class="num">0</td><td class="num">106d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Ford Ranger 3.2 XLS Manual 4x2</td><td>Ford</td><td class="num">$29,9M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">640</td><td class="num">0</td><td class="num">74d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Jeep Compass Longitude Plus</td><td>Jeep</td><td class="num">$40,1M</td><td><span class="pill good">Oro Premium</span></td><td class="num">33</td><td class="num">614</td><td class="num">0</td><td class="num"><span style="color:var(--warn)">8d</span></td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Ford Territory Titanium</td><td>Ford</td><td class="num">$40,0M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">605</td><td class="num">0</td><td class="num">46d</td></tr>
+        <tr style="background:rgba(34,197,94,.05)"><td class="kpi-name" style="padding-left:22px"><b>Renault Alaskan Confort 4x4</b></td><td>Renault</td><td class="num">$26,5M</td><td><span class="pill good">Oro</span></td><td class="num"><span style="color:var(--bad)"><b>0</b></span></td><td class="num">577</td><td class="num"><span style="color:var(--good)"><b>4</b></span></td><td class="num">66d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Renault Fluence Privilege CVT</td><td>Renault</td><td class="num">$15,2M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">552</td><td class="num">0</td><td class="num">113d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Jeep Compass 2.4 Limited</td><td>Jeep</td><td class="num">$30,7M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">528</td><td class="num">0</td><td class="num">67d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Fiat Tipo 1.6 Etorq Easy</td><td>Fiat</td><td class="num">$15,0M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">520</td><td class="num">0</td><td class="num">85d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Fiat Uno 1.3 Cargo Fire</td><td>Fiat</td><td class="num">$9,0M</td><td><span class="pill warn">Plata</span></td><td class="num">33</td><td class="num">510</td><td class="num">0</td><td class="num">32d</td></tr>
+        <tr><td class="kpi-name" style="padding-left:22px">Nissan Frontier S 4x2 AT</td><td>Nissan</td><td class="num">$35,7M</td><td><span class="pill good">Oro</span></td><td class="num">33</td><td class="num">491</td><td class="num">0</td><td class="num">18d</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(34,197,94,.02));border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:13.5px">
+    <b style="color:var(--good)">🔍 La paradoja de la Renault Alaskan Confort:</b> es la única publicación del top 15 (y de las 135 activas) que genera contactos. Tiene <b>calidad 0%</b> según ML, está en Plata y aún así convierte. Hipótesis: probablemente la combinación precio/modelo está muy bien posicionada en búsquedas naturales y compensa la baja calidad. <b>Optimizarla (fotos + atributos + upgrade a Oro Premium) podría hacerla explotar.</b>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">🎯</span>Top 10 oportunidades · alta visita + baja calidad</h2>
+  <p class="lead">Publicaciones con +300 visitas, calidad ≤66% y que aún no vencen. Cada una representa una mejora rápida con efecto cuantificable: con score actual de 33-66 reciben 300-1.300 visitas; subiendo a 100% el tráfico puede crecer significativamente.</p>
+
+  <div class="panel" style="padding:0 0 8px">
+    <table class="kpi-table">
+      <thead><tr>
+        <th style="padding-left:22px">#</th>
+        <th>Modelo</th>
+        <th>Visitas</th>
+        <th>Calidad actual</th>
+        <th>Tipo</th>
+        <th>Acción sugerida</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="num" style="padding-left:22px">1</td><td class="kpi-name">Renault Alaskan Emotion</td><td class="num"><b>1.308</b></td><td class="num">66</td><td><span class="pill warn">Plata</span></td><td>Upgrade a Oro + fotos reales</td></tr>
+        <tr><td class="num" style="padding-left:22px">2</td><td class="kpi-name">Ford Ranger Raptor</td><td class="num">924</td><td class="num">33</td><td><span class="pill good">Oro Premium</span></td><td>Fotos reales (mejora score)</td></tr>
+        <tr><td class="num" style="padding-left:22px">3</td><td class="kpi-name">Ford Ranger XLS 4x4</td><td class="num">817</td><td class="num">66</td><td><span class="pill good">Oro</span></td><td>Sumar 4-6 fotos más</td></tr>
+        <tr><td class="num" style="padding-left:22px">4</td><td class="kpi-name">Ford Ranger Limited</td><td class="num">733</td><td class="num">33</td><td><span class="pill good">Oro Premium</span></td><td>Fotos reales + descripción</td></tr>
+        <tr><td class="num" style="padding-left:22px">5</td><td class="kpi-name">Fiat Strada Trekking</td><td class="num">710</td><td class="num">66</td><td><span class="pill good">Oro Premium</span></td><td>Sumar fotos al 100%</td></tr>
+        <tr><td class="num" style="padding-left:22px">6</td><td class="kpi-name">Ford Ranger XLS 4x2</td><td class="num">640</td><td class="num">33</td><td><span class="pill good">Oro</span></td><td>Fotos reales</td></tr>
+        <tr><td class="num" style="padding-left:22px">7</td><td class="kpi-name">Ford Territory Titanium</td><td class="num">605</td><td class="num">33</td><td><span class="pill good">Oro</span></td><td>Fotos reales</td></tr>
+        <tr><td class="num" style="padding-left:22px">8</td><td class="kpi-name">Renault Alaskan Confort</td><td class="num">577</td><td class="num"><b style="color:var(--bad)">0</b></td><td><span class="pill good">Oro</span></td><td><b>Revisar urgente</b> (genera 4 contactos pese al 0%)</td></tr>
+        <tr><td class="num" style="padding-left:22px">9</td><td class="kpi-name">Renault Fluence Privilege</td><td class="num">552</td><td class="num">33</td><td><span class="pill good">Oro</span></td><td>Fotos reales</td></tr>
+        <tr><td class="num" style="padding-left:22px">10</td><td class="kpi-name">Jeep Compass 2.4 Limited</td><td class="num">528</td><td class="num">33</td><td><span class="pill good">Oro</span></td><td>Fotos reales + descripción</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">⏰</span>Calendario de vencimientos</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Distribución de vencimientos</h3>
+    <div class="chart-box"><canvas id="chartVencimientos"></canvas></div>
+  </div>
+
+  <div class="alert-box">
+    <b>Acción urgente:</b> el VW Tiguan Confortline ($38,7M, 903 visitas) <b>vence hoy</b>. Jeep Compass Longitude Plus ($40,1M, 614 visitas) vence en 8 días. Ford Bronco Wild en 4 días. <b>11 publicaciones con vencimiento ≤10 días</b> que concentran 4.000+ visitas acumuladas. Renovar antes que se pause es imprescindible.
+  </div>
+</div>
+
+<!-- ============ ACCIONES ============ -->
+<div class="tab-content" id="actions">
+  <h2><span class="num">E</span>Plan de acción · próximos 30 días</h2>
+  <p class="lead">Clic en cada tarea para marcarla como hecha. El estado es local (solo en este navegador, para que puedas usar el dashboard como checklist visual).</p>
+
+  <h3 style="margin:24px 0 6px;font-size:15px;color:var(--bad);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">⏰ Urgente · esta semana</h3>
+  <div class="actions">
+    <div class="action-row" data-id="u1">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label">Corregir 2 publicaciones pendientes y 2 inactivas por políticas</span></div>
+    </div>
+    <div class="action-row" data-id="u2">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label">Renovar publicaciones que vencen en &lt; 10 días (Jeep Compass ×2, Ford Bronco Wild, Peugeot 308, Ford Ranger 4x4)</span></div>
+    </div>
+    <div class="action-row" data-id="u3">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label">Auditar los 272 leads sin gestionar: cruzar panel ML vs Pilot CRM para detectar leads sin touchpoint</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 6px;font-size:15px;color:var(--orange);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">📆 Corto plazo · próximas 2 semanas</h3>
+  <div class="actions">
+    <div class="action-row" data-id="c1">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag short">2 semanas</span><span class="label">Subir fotos reales a todas las publicaciones (mínimo 8 por vehículo: exterior 360°, interior, tablero, motor, ruedas)</span></div>
+    </div>
+    <div class="action-row" data-id="c2">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag short">2 semanas</span><span class="label">Completar todos los atributos de cada publicación (año, km, color, transmisión, combustible, puertas, service al día)</span></div>
+    </div>
+    <div class="action-row" data-id="c3">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag short">2 semanas</span><span class="label">Agregar descripción con FAQ: ¿acepta permuta? ¿es financiable? ¿tiene garantía? ¿cómo agendar visita?</span></div>
+    </div>
+    <div class="action-row" data-id="c4">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag short">2 semanas</span><span class="label">Subir el Renault Alaskan a Publicación Oro (1.308 visitas desperdiciadas en Plata)</span></div>
+    </div>
+    <div class="action-row" data-id="c5">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag short">2 semanas</span><span class="label">Recontactar leads de los últimos 7 días sin respuesta en Pilot</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 6px;font-size:15px;color:var(--accent-dark);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">🎯 Mediano plazo · próximo mes</h3>
+  <div class="actions">
+    <div class="action-row" data-id="m1">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag medium">1 mes</span><span class="label">Medir tiempo promedio de primera respuesta en Pilot y establecer SLA máximo de 2 horas</span></div>
+    </div>
+    <div class="action-row" data-id="m2">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag medium">1 mes</span><span class="label">Verificar que 100% de los leads ML lleguen a Pilot (cruzar conteos: 325 ML vs 244 Pilot — gap 25%)</span></div>
+    </div>
+    <div class="action-row" data-id="m3">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag medium">1 mes</span><span class="label">Consolidar publicaciones duplicadas de Ford Ranger en menos listings con más calidad</span></div>
+    </div>
+    <div class="action-row" data-id="m4">
+      <div class="action-check"></div>
+      <div class="action-body"><span class="action-tag medium">1 mes</span><span class="label">Evaluar bajar precio de 1-2 autos de bajo valor para generar primeras calificaciones en ML</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ECONOMIA ============ -->
+<div class="tab-content" id="economia">
+  <h2><span class="num">$</span>La economía real del canal Mercado Libre</h2>
+  <p class="lead">Costo total mensual del canal ML para toda la red Resasco: <b style="color:var(--accent);font-size:18px">$3.357.446,59</b>. A continuación se analiza el costo unitario, el retorno y los escenarios de break-even.</p>
+
+  <div class="kpis">
+    <div class="kpi accent">
+      <div class="kpi-label">Costo mensual ML</div>
+      <div class="kpi-val" style="font-size:22px">$3.357.447</div>
+      <div class="kpi-sub">Toda la red Resasco</div>
+    </div>
+    <div class="kpi bad">
+      <div class="kpi-label">Costo anualizado</div>
+      <div class="kpi-val" style="font-size:22px">$40.289.359</div>
+      <div class="kpi-sub">$3,36M × 12 meses</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Precio promedio catálogo</div>
+      <div class="kpi-val" style="font-size:22px">$27,8M</div>
+      <div class="kpi-sub">Margen 10% = $2,78M/unidad</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">Break-even mensual</div>
+      <div class="kpi-val" style="font-size:22px">1,2 ventas</div>
+      <div class="kpi-sub">Para cubrir el costo del canal</div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <b>El break-even del canal es bajo, pero hay que generarlo:</b> con margen bruto del 10% sobre el precio de venta y un precio promedio del catálogo de $27,8M, alcanza con generar <b>1,2 ventas mensuales</b> para cubrir el costo de Mercado Libre. El problema no es el costo del canal en sí, sino que <b>hoy el funnel está roto antes de poder convertir</b>: 84% de leads sin gestionar, 70% del catálogo con calidad básica, 25% de los leads no llega al CRM.
+  </div>
+
+  <h2 style="margin-top:34px"><span class="num">⚖️</span>Break-even · cuántas ventas necesitamos</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Ventas mensuales necesarias para cubrir el costo de ML</h3>
+    <div class="chart-box"><canvas id="chartBreakeven"></canvas></div>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--warn)">
+    <p style="margin:0;font-size:14px"><b style="color:var(--warn)">El cálculo:</b> el margen bruto promedio en usados es <b>~10% sobre el precio de venta</b>. Con un precio promedio del catálogo de <b>$27,8M</b>, el margen unitario es <b>$2,78M</b>. Para cubrir los $3,36M mensuales de ML, la red Resasco necesita generar <b>1,2 ventas/mes</b> desde el canal.</p>
+    <p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">Variando el precio promedio: con autos de $20M (margen $2M) son 1,7 ventas/mes; con autos de $30M (margen $3M) bastan 1,1. <b>Hoy todo el grupo Resasco está al borde del break-even teórico</b>, pero con el funnel actual (84% leads sin gestionar, score 33-44 promedio), apenas se está aprovechando una fracción del potencial.</p>
+  </div>
+
+  <h2 style="margin-top:34px"><span class="num">📊</span>¿Hacia dónde puede ir el canal?</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Proyección de ventas según escenario operativo</h3>
+    <div class="chart-box"><canvas id="chartProyeccion"></canvas></div>
+  </div>
+
+  <div class="problems" style="margin-top:18px">
+    <div class="problem critical">
+      <span class="severity">Hoy</span>
+      <h4>~0,5 ventas atribuidas/mes</h4>
+      <p>1 venta atribuida en 60 días en Guspamar Usados. Conv. lead→venta 0,3%, 84% de leads sin gestionar, score promedio 44/100.</p>
+      <div class="impact">Por debajo del break-even (1,2 ventas/mes)</div>
+    </div>
+    <div class="problem high">
+      <span class="severity">Meta 30 días</span>
+      <h4>8 ventas/mes</h4>
+      <p>SLA &lt; 1h, gestión 90%, score promedio 70/100, fotos reales en todo el catálogo. Mismo gasto en ML.</p>
+      <div class="impact">7× sobre break-even · ROI fuertemente positivo</div>
+    </div>
+    <div class="problem med" style="border-left-color:var(--blue)">
+      <span class="severity" style="background:rgba(52,131,250,.2);color:var(--accent-dark)">Meta 60 días</span>
+      <h4>15 ventas/mes</h4>
+      <p>Conv. visita→contacto 2,5%, integración CRM al 100%, todas las publicaciones en Oro o superior.</p>
+      <div class="impact">12× sobre break-even</div>
+    </div>
+    <div class="problem low" style="border-left-color:var(--good)">
+      <span class="severity" style="background:rgba(34,197,94,.2);color:var(--good)">Meta 90 días</span>
+      <h4>25 ventas/mes</h4>
+      <p>Funnel completamente optimizado: set fotográfico profesional, 80% del catálogo en calidad 100%, gestión 100%, conv. final 6%.</p>
+      <div class="impact">20× sobre break-even · canal premium del grupo</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ KPIs ============ -->
+<div class="tab-content" id="kpis">
+  <h2><span class="num">F</span>KPIs para el dashboard mensual</h2>
+  <p class="lead">Métricas que conviene trackear de forma sistemática para medir el impacto del plan. Las barras de progreso muestran la distancia al objetivo de 30 y 90 días.</p>
+
+  <div class="panel" style="padding:8px 0">
+    <table class="kpi-table">
+      <thead><tr>
+        <th style="padding-left:22px">KPI</th>
+        <th>Actual</th>
+        <th>Meta 30 d</th>
+        <th>Meta 90 d</th>
+        <th>Progreso a 90 d</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Visitas / mes</td>
+          <td class="num">14.001</td>
+          <td class="num">18.000</td>
+          <td class="num">25.000</td>
+          <td><div class="progress-bar"><div class="progress-fill warn" style="width:56%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Leads / mes</td>
+          <td class="num">162</td>
+          <td class="num">350</td>
+          <td class="num">600</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:27%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Tasa visita → contacto</td>
+          <td class="num">1,16%</td>
+          <td class="num">2,0%</td>
+          <td class="num">3,0%</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:39%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Leads gestionados / total</td>
+          <td class="num">~16%</td>
+          <td class="num">90%</td>
+          <td class="num">100%</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:16%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Tasa contacto → venta</td>
+          <td class="num">~0,6%</td>
+          <td class="num">3%</td>
+          <td class="num">6%</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:10%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Ventas origen ML / mes</td>
+          <td class="num">~0,3</td>
+          <td class="num">8</td>
+          <td class="num">25</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:1%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Score calidad publicaciones</td>
+          <td class="num">44/100</td>
+          <td class="num">70/100</td>
+          <td class="num">90/100</td>
+          <td><div class="progress-bar"><div class="progress-fill warn" style="width:49%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Publicaciones con score básico</td>
+          <td class="num">95</td>
+          <td class="num">30</td>
+          <td class="num">0</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:0%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Publicaciones calidad 100%</td>
+          <td class="num">9</td>
+          <td class="num">50</td>
+          <td class="num">108</td>
+          <td><div class="progress-bar"><div class="progress-fill bad" style="width:8%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Leads sin respuesta &lt; 2h</td>
+          <td class="num">desconocido</td>
+          <td class="num">&lt; 15%</td>
+          <td class="num">&lt; 3%</td>
+          <td><div class="progress-bar"><div class="progress-fill warn" style="width:0%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="kpi-name" style="padding-left:22px">Tiempo primera respuesta</td>
+          <td class="num">desconocido</td>
+          <td class="num">&lt; 1 h</td>
+          <td class="num">&lt; 30 min</td>
+          <td><div class="progress-bar"><div class="progress-fill warn" style="width:0%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <b>Cómo leer este tablero:</b> los KPIs más importantes están en la parte superior (volumen y conversión). Los del medio son palancas operativas (gestión de leads, tiempo de respuesta). Los de abajo son métricas de plataforma (score, calidad de publicaciones) que habilitan a los anteriores. <b>Empezar arreglando los de abajo</b> (fotos + score + integración CRM) <b>para que los de arriba puedan crecer.</b>
+  </div>
+
+  <h2><span class="num">G</span>Cómo se relacionan los KPIs</h2>
+  <div class="panel">
+    <div class="chart-box chart-tall"><canvas id="chartKPIs"></canvas></div>
+  </div>
+</div>
+
+<footer>
+  Dashboard generado para Juan Manuel Resasco · 11 de mayo de 2026 · Fuentes: Panel Mercado Libre Autos + Pilot CRM · Guspamar Usados
+</footer>
+
+</div>
+
+<script>
+const P={text:'#e6edf3',border:'#262d36',accent:'#fff159',blue:'#3483fa',good:'#22c55e',bad:'#ef4444',warn:'#facc15',orange:'#f97316'};
+Chart.defaults.color=P.text;Chart.defaults.borderColor=P.border;
+Chart.defaults.font.family='ui-sans-serif, system-ui';
+
+// === TABS ===
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    // Trigger chart resize
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+  });
+});
+
+// === ACTION ROWS CHECKBOX ===
+document.querySelectorAll('.action-row').forEach(row => {
+  const check = row.querySelector('.action-check');
+  row.addEventListener('click', () => {
+    check.classList.toggle('checked');
+  });
+});
+
+// === CHARTS ===
+// Overview chart
+new Chart(document.getElementById('chartOverview'),{
+  data:{
+    labels:['Visitas','Leads ML','Leads Pilot','Gestionados','Vendidos'],
+    datasets:[{
+      type:'bar',
+      label:'Cantidad',
+      data:[28000,325,244,53,1],
+      backgroundColor:[P.blue,P.accent,P.warn,P.orange,P.bad],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y.toLocaleString()+' leads/visitas'}}},
+    scales:{
+      y:{type:'logarithmic',beginAtZero:false,grid:{color:P.border},title:{display:true,text:'Escala logarítmica'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// KPIs radar
+// === INVENTARIO ===
+new Chart(document.getElementById('chartMarcas'),{
+  data:{
+    labels:['Ford','Fiat','Renault','Jeep','VW','Toyota','Chevrolet','Peugeot'],
+    datasets:[
+      {type:'bar',label:'Publicaciones',data:[48,27,10,14,9,10,5,4],backgroundColor:P.blue,borderRadius:6,yAxisID:'y'},
+      {type:'bar',label:'Visitas totales',data:[11102,4091,3719,2827,2459,1503,888,681],backgroundColor:P.accent,borderRadius:6,yAxisID:'y1'},
+      {type:'line',label:'Visitas/publicación',data:[231,152,372,202,273,150,178,170],borderColor:P.good,backgroundColor:P.good,borderWidth:3,pointRadius:6,pointHoverRadius:8,yAxisID:'y2',tension:.3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Publicaciones'}},
+      y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'Visitas'}},
+      y2:{display:false,beginAtZero:true},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartTipos'),{
+  data:{
+    labels:['Plata','Oro','Oro Premium'],
+    datasets:[
+      {type:'bar',label:'Publicaciones',data:[42,72,21],backgroundColor:['#9ca3af',P.accent,P.warn],borderRadius:6,yAxisID:'y'},
+      {type:'line',label:'Visitas promedio',data:[165,209,324],borderColor:P.good,backgroundColor:P.good,borderWidth:3,pointRadius:8,pointHoverRadius:10,yAxisID:'y1',tension:.3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Cantidad de publicaciones'}},
+      y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'Visitas promedio'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartVencimientos'),{
+  type:'bar',
+  data:{
+    labels:['Vence HOY','1-10 días','11-30 días','+30 días'],
+    datasets:[{
+      label:'Publicaciones',
+      data:[1,11,17,106],
+      backgroundColor:[P.bad,P.orange,P.warn,P.good],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' publicaciones'}}},
+    scales:{y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Cantidad'}},x:{grid:{display:false}}}
+  }
+});
+
+// Break-even: ventas necesarias según margen 10% sobre distintos precios
+new Chart(document.getElementById('chartBreakeven'),{
+  type:'bar',
+  data:{
+    labels:['Precio $20M','Precio $25M','Precio $27,8M (avg cat.)','Precio $30M'],
+    datasets:[
+      {label:'Ventas necesarias/mes para break-even',data:[1.68,1.34,1.21,1.12],backgroundColor:[P.warn,P.warn,P.bad,P.warn],borderRadius:6}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top'},
+      tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(2)+' ventas/mes para break-even'}}
+    },
+    scales:{
+      y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Ventas / mes'}},
+      x:{grid:{display:false},title:{display:true,text:'Margen bruto = 10% del precio de venta'}}
+    }
+  }
+});
+
+// Proyección de ventas vs costo por venta
+new Chart(document.getElementById('chartProyeccion'),{
+  data:{
+    labels:['Hoy','Meta 30 días','Meta 60 días','Meta 90 días'],
+    datasets:[
+      {type:'bar',label:'Ventas mensuales',data:[0.5,8,15,25],backgroundColor:[P.bad,P.warn,P.blue,P.good],borderRadius:6,yAxisID:'y'},
+      {type:'line',label:'Costo por venta ($k)',data:[6715,420,224,134],borderColor:P.accent,backgroundColor:P.accent,borderWidth:3,pointRadius:7,pointHoverRadius:9,yAxisID:'y1',tension:.3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>{
+      if(c.dataset.label.includes('Costo')) return 'Costo/venta: $'+(c.parsed.y*1000).toLocaleString('es-AR');
+      return 'Ventas: '+c.parsed.y;
+    }}}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Ventas / mes'}},
+      y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'Costo por venta ($miles)'},ticks:{callback:v=>'$'+v+'k'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartKPIs'),{
+  type:'radar',
+  data:{
+    labels:['Visitas/mes','Leads/mes','Conv. visita→lead','Leads gestionados','Conv. lead→venta','Ventas ML/mes','Score calidad','Pubs calidad 100%'],
+    datasets:[
+      {
+        label:'Hoy',
+        data:[56,27,39,16,10,1,49,8],
+        borderColor:P.bad,
+        backgroundColor:'rgba(239,68,68,.15)',
+        pointBackgroundColor:P.bad,
+        borderWidth:2
+      },
+      {
+        label:'Meta 30 días',
+        data:[72,58,67,90,50,32,78,46],
+        borderColor:P.warn,
+        backgroundColor:'rgba(250,204,21,.12)',
+        pointBackgroundColor:P.warn,
+        borderWidth:2
+      },
+      {
+        label:'Meta 90 días',
+        data:[100,100,100,100,100,100,100,100],
+        borderColor:P.good,
+        backgroundColor:'rgba(34,197,94,.10)',
+        pointBackgroundColor:P.good,
+        borderWidth:2
+      }
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.r+'% del objetivo'}}},
+    scales:{
+      r:{
+        beginAtZero:true,max:100,
+        angleLines:{color:P.border},
+        grid:{color:P.border},
+        pointLabels:{font:{size:11},color:P.text},
+        ticks:{display:false,backdropColor:'transparent'}
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
