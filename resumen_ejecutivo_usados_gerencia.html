@@ -179,8 +179,8 @@
     </div>
     <div class="tldr-card bad">
       <h4>El problema operativo a resolver</h4>
-      <span class="big">Santa Rosa tarda 6× más que Bahía Blanca</span>
-      <p>Mediana hábil de 5,2 horas vs 53 minutos. Solo 15% de los leads se gestiona en la primera hora hábil. No es un problema de canal, es operativa interna del salón.</p>
+      <span class="big">Santa Rosa tarda 5-6× más en gestionar</span>
+      <p>En Meta: 5,2 h vs 53 min de Bahía Blanca. En Mercado Libre: 7,8 h vs 1,5 h. Solo 15% de los leads Meta y 0,7% de los ML se gestionan en la primera hora hábil. No es problema de canal: es operativa interna del salón.</p>
     </div>
   </div>
 </section>
@@ -280,9 +280,53 @@
   </div>
 </section>
 
+<!-- ===================== MERCADO LIBRE ===================== -->
+<section>
+  <h2><span class="num">05</span>Mercado Libre · canal limpio pero lento</h2>
+  <p class="lead">279 leads y 2 ventas (conv. 0,72%). Calidad de fuente buena (16% bad rate, casi 3× mejor que Meta), pero la velocidad de gestión es el cuello de botella.</p>
+
+  <div class="kpis">
+    <div class="kpi warn"><div class="kpi-label">Mediana hábil ML</div><div class="kpi-val">5,4 h</div><div class="kpi-sub">vs 1,7 h en Meta</div></div>
+    <div class="kpi bad"><div class="kpi-label">% gestionado &lt; 1 h</div><div class="kpi-val">13,9%</div><div class="kpi-sub">vs 37,8% en Meta</div></div>
+    <div class="kpi"><div class="kpi-label">Volumen ML</div><div class="kpi-val">279</div><div class="kpi-sub">10% del total Usados</div></div>
+    <div class="kpi good"><div class="kpi-label">Bad rate</div><div class="kpi-val">16,1%</div><div class="kpi-sub">Lead estructuralmente más limpio</div></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Mercado Libre por sucursal</h3>
+    <table>
+      <thead><tr><th>Sucursal</th><th>Leads</th><th>Mediana hábil</th><th>% &lt; 1 h</th><th>% &lt; 4 h</th></tr></thead>
+      <tbody>
+        <tr><td><b>Bahía Blanca</b></td><td class="num">63</td><td class="num"><span class="pill good">1,5 h</span></td><td class="num"><b>42,9%</b></td><td class="num"><b>90,5%</b></td></tr>
+        <tr><td><b>Santa Rosa</b></td><td class="num">138</td><td class="num"><span class="pill bad">7,8 h</span></td><td class="num">0,7%</td><td class="num">21,0%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:14px 0 0;font-size:13.5px;color:var(--muted)">Santa Rosa absorbe el 69% del volumen ML pero gestiona <b style="color:var(--bad)">5× más lento</b> que Bahía Blanca. Solo 1 lead de 138 se atiende en la primera hora hábil. El resto, mañana o pasado.</p>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Mercado Libre por vendedor</h3>
+    <table>
+      <thead><tr><th>Vendedor</th><th>Sucursal</th><th>Leads ML</th><th>Mediana hábil</th><th>% &lt; 1 h</th><th>Bad rate</th></tr></thead>
+      <tbody>
+        <tr><td><b>Bettomeo</b></td><td>Bahía Blanca</td><td class="num">42</td><td class="num"><span class="pill good">59 min</span></td><td class="num"><b>50%</b></td><td class="num">17%</td></tr>
+        <tr><td>Avila</td><td>Bahía Blanca</td><td class="num">18</td><td class="num"><span class="pill warn">2,2 h</span></td><td class="num">28%</td><td class="num">11%</td></tr>
+        <tr><td>Chimento</td><td>Bahía Blanca</td><td class="num">3</td><td class="num"><span class="pill warn">3,7 h</span></td><td class="num">33%</td><td class="num">0%</td></tr>
+        <tr><td><b>Monasterio</b></td><td>Santa Rosa</td><td class="num">92</td><td class="num"><span class="pill bad">7,3 h</span></td><td class="num">1%</td><td class="num">0%</td></tr>
+        <tr><td><b>Gerena</b></td><td>Santa Rosa</td><td class="num">46</td><td class="num"><span class="pill bad">10,4 h</span></td><td class="num">0%</td><td class="num">65%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--warn)">
+    <p style="margin:0;font-size:14px"><b style="color:var(--warn)">Diagnóstico de Mercado Libre:</b> es el canal con mejor materia prima que tenemos en digital (cliente activo buscando autos, dato más confiable que un Lead Form de Meta) pero lo estamos atendiendo lento. Casi todo va a Santa Rosa, donde la mediana es 7,8 horas hábiles. <b>El cliente de ML no espera</b>: si no le contestamos rápido, va al siguiente vendedor que tiene una publicación similar.</p>
+    <p style="margin:8px 0 0;font-size:14px"><b>Caso testigo Bettomeo:</b> 50% de sus 42 leads ML gestionados en la primera hora hábil, 17% bad rate. Su patrón muestra que con velocidad ML rinde bien — pero recibe muy pocos. La pregunta es por qué la regla de ruteo manda el grueso de ML a Santa Rosa cuando Bahía Blanca lo atiende mucho mejor.</p>
+  </div>
+</section>
+
 <!-- ===================== SALON ===================== -->
 <section>
-  <h2><span class="num">05</span>Salón · el canal que sostiene el negocio</h2>
+  <h2><span class="num">06</span>Salón · el canal que sostiene el negocio</h2>
   <p class="lead">402 leads y 65 ventas (53% del total Usados). Evolución mensual por sucursal:</p>
 
   <div class="panel">
@@ -298,7 +342,7 @@
 
 <!-- ===================== ACCIONES ===================== -->
 <section>
-  <h2><span class="num">06</span>Plan de acción</h2>
+  <h2><span class="num">07</span>Plan de acción</h2>
 
   <div class="action">
     <div class="n">1</div>
@@ -338,6 +382,15 @@
 
   <div class="action">
     <div class="n">5</div>
+    <div>
+      <h4>Rebalancear el ruteo automático de Mercado Libre</h4>
+      <p>Hoy el 69% de los leads ML va a Santa Rosa (Monasterio y Gerena), donde se gestionan en 7-10 horas hábiles. En Bahía Blanca, Bettomeo cierra el 50% de sus leads ML en la primera hora. Modificar la regla de "Admin Resasco" para que ML se distribuya según capacidad de respuesta, no solo por suborigen.</p>
+      <p><b>Impacto esperado:</b> mismo volumen de leads convertidos a una tasa cercana a la de BB (5×) podría sumar varias ventas mensuales sin gastar más en publicaciones.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="n">6</div>
     <div>
       <h4>Programa formal de remarketing a Base de Clientes</h4>
       <p>Base de Clientes convierte al 75%, RRSS Facebook orgánico al 53%, Reventas al 92%. Son los canales con ROI más alto y reciben volumen mínimo. Activar una campaña sistemática a clientes históricos con propuestas de Usados.</p>
