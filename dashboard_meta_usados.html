@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Meta Ads · Guspamar Usados</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel-2:#1c232c;--border:#262d36;--text:#e6edf3;--muted:#8b949e;--meta-blue:#0866ff;--meta-purple:#7c3aed;--accent:#0866ff;--good:#22c55e;--bad:#ef4444;--warn:#facc15;--orange:#f97316;--cyan:#06b6d4}
+  *{box-sizing:border-box}
+  body{margin:0;padding:0;background:radial-gradient(1200px 600px at 10% -10%,#1a2230 0%,transparent 60%),radial-gradient(900px 500px at 110% 10%,#1a1530 0%,transparent 55%),var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:1240px;margin:0 auto;padding:32px 24px 60px}
+  header.hero{border:1px solid var(--border);background:linear-gradient(135deg,rgba(8,102,255,.10),rgba(124,58,237,.06));border-radius:16px;padding:26px 30px;margin-bottom:24px;position:relative;overflow:hidden}
+  header.hero::before{content:"";position:absolute;top:-40px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(8,102,255,.18),transparent 70%);pointer-events:none}
+  .meta-logo{display:inline-flex;align-items:center;gap:10px;background:var(--meta-blue);color:#fff;padding:6px 14px;border-radius:6px;font-weight:700;font-size:13px;letter-spacing:-.01em;margin-bottom:14px}
+  h1{font-family:"Playfair Display",serif;font-weight:600;font-size:36px;margin:0 0 8px;letter-spacing:-.01em;line-height:1.1}
+  .subtitle{color:var(--muted);font-size:15px;max-width:780px}
+  .meta-info{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+  .meta-info b{color:var(--text)}
+  .tabs{display:flex;gap:6px;margin:18px 0 22px;background:var(--panel);padding:6px;border-radius:12px;border:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1;min-width:130px;padding:10px 16px;background:transparent;color:var(--muted);border:none;border-radius:8px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:500;transition:all .2s;white-space:nowrap}
+  .tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab.active{background:var(--meta-blue);color:#fff;box-shadow:0 2px 12px rgba(8,102,255,.25)}
+  .tab-content{display:none;animation:fadeIn .3s}
+  .tab-content.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 22px}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+  .kpi:hover{transform:translateY(-2px);border-color:rgba(8,102,255,.4)}
+  .kpi-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-bottom:8px}
+  .kpi-val{font-size:28px;font-weight:600;font-family:"Playfair Display",serif;letter-spacing:-.02em;line-height:1.1}
+  .kpi-sub{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .kpi.good .kpi-val{color:var(--good)}.kpi.bad .kpi-val{color:var(--bad)}.kpi.warn .kpi-val{color:var(--warn)}.kpi.accent .kpi-val{color:var(--meta-blue)}.kpi.purple .kpi-val{color:var(--meta-purple)}
+  h2{font-family:"Playfair Display",serif;font-weight:600;font-size:24px;margin:32px 0 6px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:12px}
+  h2 .num{font-family:"JetBrains Mono",monospace;font-size:11px;color:#fff;background:var(--meta-blue);padding:3px 9px;border-radius:4px;font-weight:600}
+  .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px;max-width:880px}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;margin:14px 0}
+  .chart-box{position:relative;height:320px;margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:"JetBrains Mono",monospace;font-weight:500}
+  td.num{font-family:"JetBrains Mono",monospace;text-align:right}
+  .pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:"JetBrains Mono",monospace}
+  .pill.good{background:rgba(34,197,94,.18);color:var(--good)}
+  .pill.bad{background:rgba(239,68,68,.18);color:var(--bad)}
+  .pill.warn{background:rgba(250,204,21,.18);color:var(--warn)}
+  .pill.blue{background:rgba(8,102,255,.18);color:var(--meta-blue)}
+  .conjunto-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin:12px 0;border-left:5px solid var(--meta-blue);transition:transform .2s}
+  .conjunto-card:hover{transform:translateY(-2px)}
+  .conjunto-card.good{border-left-color:var(--good)}
+  .conjunto-card.warn{border-left-color:var(--warn)}
+  .conjunto-card.bad{border-left-color:var(--bad)}
+  .conjunto-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+  .conjunto-title{font-size:18px;font-weight:600;font-family:"Playfair Display",serif}
+  .conjunto-tag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:10.5px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-left:8px}
+  .conjunto-tag.leads{background:rgba(8,102,255,.2);color:var(--meta-blue)}
+  .conjunto-tag.alcance{background:rgba(124,58,237,.2);color:var(--meta-purple)}
+  .conjunto-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:14px;margin-top:10px}
+  .conjunto-stat{padding:10px 0;border-top:1px solid var(--border)}
+  .conjunto-stat .label{font-size:10px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+  .conjunto-stat .value{font-family:"Playfair Display",serif;font-size:20px;font-weight:600}
+  .conjunto-stat .sub{font-size:11px;color:var(--muted)}
+  .alert-box{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:14px 18px;margin:12px 0;font-size:13.5px}
+  .alert-box b{color:var(--bad)}
+  .info-box{background:rgba(8,102,255,.06);border:1px solid rgba(8,102,255,.25);border-radius:10px;padding:14px 18px;margin:12px 0;font-size:13.5px}
+  .info-box b{color:var(--meta-blue)}
+  .good-box{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:14px 18px;margin:12px 0;font-size:13.5px}
+  .good-box b{color:var(--good)}
+  .compare-vs{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;margin:14px 0;display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center}
+  .compare-vs .side{text-align:center}
+  .compare-vs .side .channel{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+  .compare-vs .side .num{font-family:"Playfair Display",serif;font-size:36px;font-weight:600;line-height:1}
+  .compare-vs .side .sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .compare-vs .meta-side .num{color:var(--meta-blue)}
+  .compare-vs .ml-side .num{color:var(--warn)}
+  .compare-vs .vs{font-family:"Playfair Display",serif;font-size:22px;color:var(--muted);text-align:center;font-style:italic}
+  .match-row{background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:8px 0;display:grid;grid-template-columns:1fr 80px 1fr 100px;gap:14px;align-items:center}
+  .match-row.good{border-left:3px solid var(--good)}
+  .match-row.warn{border-left:3px solid var(--warn)}
+  .match-row.bad{border-left:3px solid var(--bad)}
+  .match-source .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+  .match-source .name{font-weight:600;font-size:14px}
+  .match-source .num{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted)}
+  .match-arrow{text-align:center;color:var(--muted);font-size:20px}
+  .match-score{font-family:"Playfair Display",serif;font-size:22px;font-weight:600;text-align:center}
+  .match-score.good{color:var(--good)}
+  .match-score.warn{color:var(--warn)}
+  .match-score.bad{color:var(--bad)}
+  .problems{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:14px 0}
+  .problem{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;border-left:4px solid var(--warn)}
+  .problem.critical{border-left-color:var(--bad)}
+  .problem.high{border-left-color:var(--orange)}
+  .problem.med{border-left-color:var(--warn)}
+  .problem.low{border-left-color:var(--muted)}
+  .problem .severity{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:8px}
+  .problem.critical .severity{background:rgba(239,68,68,.2);color:var(--bad)}
+  .problem.high .severity{background:rgba(249,115,22,.2);color:var(--orange)}
+  .problem.med .severity{background:rgba(250,204,21,.2);color:var(--warn)}
+  .problem.low .severity{background:rgba(139,148,158,.2);color:var(--muted)}
+  .problem h4{margin:0 0 8px;font-size:15px}
+  .problem p{margin:0;font-size:13.5px;color:var(--muted)}
+  .problem .impact{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--text)}
+  .actions{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .action-row{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:14px;transition:all .2s;cursor:pointer}
+  .action-row:hover{border-color:var(--meta-blue);background:var(--panel-2)}
+  .action-check{width:22px;height:22px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .action-check.checked{background:var(--good);border-color:var(--good)}
+  .action-check.checked::after{content:"✓";color:#000;font-weight:700;font-size:14px}
+  .action-body{flex:1}
+  .action-body .label{font-size:14px;line-height:1.4}
+  .action-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-right:8px}
+  .action-tag.urgent{background:rgba(239,68,68,.2);color:var(--bad)}
+  .action-tag.short{background:rgba(249,115,22,.2);color:var(--orange)}
+  .action-tag.medium{background:rgba(8,102,255,.2);color:var(--meta-blue)}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;text-align:center;font-family:"JetBrains Mono",monospace}
+  @media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.problems{grid-template-columns:1fr}.compare-vs{grid-template-columns:1fr;gap:14px}.match-row{grid-template-columns:1fr;gap:8px;text-align:center}.match-arrow{display:none}h1{font-size:26px}.tabs{padding:4px}.tab{padding:8px 12px;font-size:10.5px;min-width:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="meta-logo">META ADS · GUSPAMAR USADOS</div>
+  <h1>Dashboard Meta Ads · Diagnóstico de inversión</h1>
+  <p class="subtitle">Análisis de los 4 conjuntos de anuncios activos en Meta (Facebook + Instagram) entre el 1-ene y el 11-may de 2026, con el cruce real de leads y ventas atribuidos en Pilot CRM.</p>
+  <div class="meta-info">
+    <span>Período: <b>01-ene a 11-may 2026</b> (131 días · 4,3 meses)</span>
+    <span>Conjuntos activos: <b>4</b></span>
+    <span>Inversión total: <b>$6.742.435</b></span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-tab="overview">📊 Overview</button>
+  <button class="tab" data-tab="conjuntos">📦 Conjuntos</button>
+  <button class="tab" data-tab="cruce">🔗 Cruce Pilot</button>
+  <button class="tab" data-tab="economia">💰 Economía</button>
+  <button class="tab" data-tab="problems">⚠️ Problemas</button>
+  <button class="tab" data-tab="actions">✅ Acciones</button>
+</div>
+
+<div class="tab-content active" id="overview">
+  <div class="kpis">
+    <div class="kpi accent"><div class="kpi-label">Inversión 131 días</div><div class="kpi-val">$6,74M</div><div class="kpi-sub">$1,57M / mes promedio</div></div>
+    <div class="kpi"><div class="kpi-label">Impresiones</div><div class="kpi-val">11,9M</div><div class="kpi-sub">alcance acumulado 2,14M</div></div>
+    <div class="kpi good"><div class="kpi-label">Leads Meta reporta</div><div class="kpi-val">1.347</div><div class="kpi-sub">3 conjuntos de leadgen</div></div>
+    <div class="kpi warn"><div class="kpi-label">Ventas Pilot atribuidas</div><div class="kpi-val">6</div><div class="kpi-sub">Costo/venta $1,12M</div></div>
+  </div>
+
+  <div class="compare-vs">
+    <div class="side meta-side">
+      <div class="channel">Meta Ads (4,3 meses)</div>
+      <div class="num">$6.742.435</div>
+      <div class="sub">1.347 leads · CPL promedio $4.005</div>
+    </div>
+    <div class="vs">vs</div>
+    <div class="side ml-side">
+      <div class="channel">Mercado Libre (4,3 meses)</div>
+      <div class="num">$14.436.020</div>
+      <div class="sub">~700 leads · CPL ~$20.625</div>
+    </div>
+  </div>
+
+  <div class="good-box">
+    <b>Meta es 5× más eficiente que ML en costo por lead:</b> $4.005 vs $20.625 promedio. El conjunto estrella "Usados BB" tiene CPL de <b>$2.469</b>. Si la calidad de los leads mejorara, Meta sería claramente el canal prioritario para usados.
+  </div>
+
+  <h2><span class="num">A</span>Visión general por conjunto</h2>
+  <p class="lead">4 conjuntos activos durante 131 días: 3 de generación de leads (Usados BB iniciado en dic 2025, las 2 ferias a partir del 20-mar) y 1 de alcance (Usados TOF).</p>
+
+  <div class="panel">
+    <table>
+      <thead><tr><th>Conjunto</th><th>Objetivo</th><th>Inicio</th><th>Inversión</th><th>Resultados</th><th>CPL/CPM</th><th>CTR</th></tr></thead>
+      <tbody>
+        <tr><td><b>Usados BB</b></td><td><span class="pill blue">Leads</span></td><td class="num">22-dic-25</td><td class="num">$2.861.791</td><td class="num">1.159 leads</td><td class="num"><span class="pill good">$2.469</span></td><td class="num"><span class="pill good">1,98%</span></td></tr>
+        <tr><td><b>Feria Pick Ups</b></td><td><span class="pill blue">Leads</span></td><td class="num">20-mar-26</td><td class="num">$1.302.633</td><td class="num">98 leads</td><td class="num"><span class="pill bad">$13.292</span></td><td class="num"><span class="pill warn">1,06%</span></td></tr>
+        <tr><td><b>Feria Autos</b></td><td><span class="pill blue">Leads</span></td><td class="num">20-mar-26</td><td class="num">$1.282.015</td><td class="num">90 leads</td><td class="num"><span class="pill bad">$14.245</span></td><td class="num"><span class="pill warn">1,28%</span></td></tr>
+        <tr><td><b>Usados TOF</b></td><td><span class="pill" style="background:rgba(124,58,237,.2);color:var(--meta-purple)">Alcance</span></td><td class="num">26-dic-25</td><td class="num">$1.295.995</td><td class="num">6,07M reprod.</td><td class="num"><span class="pill good">$0,21/repr.</span></td><td class="num">0,04%</td></tr>
+        <tr style="background:rgba(255,255,255,.03);font-weight:600"><td>TOTAL</td><td>—</td><td class="num">—</td><td class="num">$6.742.435</td><td class="num">1.347 leads</td><td class="num">$4.005 avg</td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert-box">
+    <b>Gap leads Meta vs Pilot:</b> Meta reporta 1.347 leads de los 3 conjuntos de leadgen. Pilot CRM registra <b>1.964 leads ADS Meta usados</b> en el mismo período. La diferencia de <b>617 leads</b> corresponde al suborigen "Usados La Pampa" (671 leads en Pilot, 75,7% bad rate, 1 venta), <b>que no aparece en este export de Meta</b>. Hay un conjunto adicional o cuenta publicitaria distinta no incluida en el reporte.
+  </div>
+</div>
+
+<div class="tab-content" id="conjuntos">
+  <h2><span class="num">📦</span>Análisis detallado por conjunto</h2>
+  <p class="lead">Métricas crudas de cada conjunto entre el 1-ene y el 11-may. Las ferias arrancaron el 20-mar (52 días corridos al cierre), el resto venía desde diciembre 2025.</p>
+
+  <div class="conjunto-card good">
+    <div class="conjunto-header">
+      <div><span class="conjunto-title">Usados BB</span><span class="conjunto-tag leads">Generación de Leads</span></div>
+      <div><span class="pill good">★ Conjunto estrella</span></div>
+    </div>
+    <div class="conjunto-stats">
+      <div class="conjunto-stat"><div class="label">Inversión</div><div class="value">$2.861.791</div><div class="sub">42,4% del total Meta</div></div>
+      <div class="conjunto-stat"><div class="label">Leads</div><div class="value">1.159</div><div class="sub">86% del leadgen</div></div>
+      <div class="conjunto-stat"><div class="label">CPL</div><div class="value" style="color:var(--good)">$2.469</div><div class="sub">Excelente</div></div>
+      <div class="conjunto-stat"><div class="label">CTR</div><div class="value" style="color:var(--good)">1,98%</div><div class="sub">17.209 clics</div></div>
+      <div class="conjunto-stat"><div class="label">Alcance</div><div class="value">167.957</div><div class="sub">Freq. 5,16</div></div>
+      <div class="conjunto-stat"><div class="label">CPM</div><div class="value">$3.300</div><div class="sub">867.244 impresiones</div></div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      <b>Diagnóstico:</b> el caballo de batalla. CPL bajísimo, CTR alto. En Pilot matchea con "Usados Bahia Blanca" (1.144 leads, 31,2% bad rate, <b>4 ventas atribuidas</b>). La frecuencia 5,16 es razonable aunque ya empieza a ser alta — conviene refrescar creativos para que la audiencia no se canse.
+    </div>
+  </div>
+
+  <div class="conjunto-card warn">
+    <div class="conjunto-header">
+      <div><span class="conjunto-title">Feria Pick Ups</span><span class="conjunto-tag leads">Generación de Leads</span></div>
+      <div><span class="pill warn">⚠ Frecuencia 8,18</span></div>
+    </div>
+    <div class="conjunto-stats">
+      <div class="conjunto-stat"><div class="label">Inversión</div><div class="value">$1.302.633</div><div class="sub">19,3% del total</div></div>
+      <div class="conjunto-stat"><div class="label">Leads</div><div class="value">98</div><div class="sub">7,3% del leadgen</div></div>
+      <div class="conjunto-stat"><div class="label">CPL</div><div class="value" style="color:var(--bad)">$13.292</div><div class="sub">5,4× más caro que BB</div></div>
+      <div class="conjunto-stat"><div class="label">CTR</div><div class="value" style="color:var(--warn)">1,06%</div><div class="sub">4.966 clics</div></div>
+      <div class="conjunto-stat"><div class="label">Alcance</div><div class="value">57.478</div><div class="sub" style="color:var(--bad)">Freq. 8,18 ⚠</div></div>
+      <div class="conjunto-stat"><div class="label">CPM</div><div class="value">$2.771</div><div class="sub">470.076 impresiones</div></div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      <b>Diagnóstico:</b> CPL 5× más caro que Usados BB. <b>La frecuencia de 8,18 es altísima</b>: cada persona vio el anuncio 8 veces en 52 días desde el inicio. La audiencia se saturó: el CPL se disparó, el CTR bajó. Hay que refrescar creativos urgente o ampliar audiencia.
+    </div>
+  </div>
+
+  <div class="conjunto-card warn">
+    <div class="conjunto-header">
+      <div><span class="conjunto-title">Feria Autos</span><span class="conjunto-tag leads">Generación de Leads</span></div>
+      <div><span class="pill warn">⚠ Frecuencia 6,53</span></div>
+    </div>
+    <div class="conjunto-stats">
+      <div class="conjunto-stat"><div class="label">Inversión</div><div class="value">$1.282.015</div><div class="sub">19,0% del total</div></div>
+      <div class="conjunto-stat"><div class="label">Leads</div><div class="value">90</div><div class="sub">6,7% del leadgen</div></div>
+      <div class="conjunto-stat"><div class="label">CPL</div><div class="value" style="color:var(--bad)">$14.245</div><div class="sub">5,8× más caro que BB</div></div>
+      <div class="conjunto-stat"><div class="label">CTR</div><div class="value" style="color:var(--warn)">1,28%</div><div class="sub">4.066 clics</div></div>
+      <div class="conjunto-stat"><div class="label">Alcance</div><div class="value">48.744</div><div class="sub" style="color:var(--bad)">Freq. 6,53 ⚠</div></div>
+      <div class="conjunto-stat"><div class="label">CPM</div><div class="value">$4.029</div><div class="sub">318.160 impresiones</div></div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      <b>Diagnóstico:</b> el conjunto más caro por lead ($14.245). CPM más alto que Usados BB y frecuencia 6,53. Es probable que esté compitiendo con BB en la misma audiencia (overlap). <b>Gasto similar a Feria Pick Ups pero genera 8% menos leads.</b>
+    </div>
+  </div>
+
+  <div class="conjunto-card" style="border-left-color:var(--meta-purple)">
+    <div class="conjunto-header">
+      <div><span class="conjunto-title">Usados TOF (Top of Funnel)</span><span class="conjunto-tag alcance">Alcance / Awareness</span></div>
+      <div><span class="pill" style="background:rgba(124,58,237,.2);color:var(--meta-purple)">Objetivo distinto</span></div>
+    </div>
+    <div class="conjunto-stats">
+      <div class="conjunto-stat"><div class="label">Inversión</div><div class="value">$1.295.995</div><div class="sub">19,2% del total</div></div>
+      <div class="conjunto-stat"><div class="label">Reproducciones</div><div class="value">6,07M</div><div class="sub">≥ 2 seg de video</div></div>
+      <div class="conjunto-stat"><div class="label">Costo / reprod.</div><div class="value" style="color:var(--good)">$0,21</div><div class="sub">Muy bajo</div></div>
+      <div class="conjunto-stat"><div class="label">Impresiones</div><div class="value">9,80M</div><div class="sub">82% del total Meta</div></div>
+      <div class="conjunto-stat"><div class="label">Alcance</div><div class="value">1,67M</div><div class="sub">Freq. 5,88</div></div>
+      <div class="conjunto-stat"><div class="label">CPM</div><div class="value">$132</div><div class="sub">Eficiente para alcance</div></div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      <b>Diagnóstico:</b> top-of-funnel para construcción de marca. No genera leads directos pero <b>alcanzó 1,67 millones de personas</b> con costo bajísimo. Su rol es alimentar la audiencia que después convierte en los conjuntos de leadgen. Difícil medir su impacto directo pero estructuralmente necesario.
+    </div>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">📊</span>Comparativa visual</h2>
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Inversión vs Leads por conjunto</h3>
+    <div class="chart-box"><canvas id="chartConjuntos"></canvas></div>
+  </div>
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">CPL por conjunto · brutal disparidad</h3>
+    <div class="chart-box"><canvas id="chartCPL"></canvas></div>
+  </div>
+</div>
+
+<div class="tab-content" id="cruce">
+  <h2><span class="num">🔗</span>Cruce Meta ↔ Pilot CRM</h2>
+  <p class="lead">Matcheo entre los conjuntos de Meta y los suborígenes registrados en Pilot. Permite ver qué porcentaje de los leads que Meta reporta llegan al CRM correctamente y dónde están las diferencias.</p>
+
+  <div class="kpis">
+    <div class="kpi accent"><div class="kpi-label">Leads Meta reporta</div><div class="kpi-val">1.347</div><div class="kpi-sub">3 conjuntos de leadgen</div></div>
+    <div class="kpi warn"><div class="kpi-label">Leads en Pilot</div><div class="kpi-val">1.964</div><div class="kpi-sub">ADS Meta Usados</div></div>
+    <div class="kpi bad"><div class="kpi-label">Gap inexplicado</div><div class="kpi-val">+617</div><div class="kpi-sub">Pilot tiene más</div></div>
+    <div class="kpi good"><div class="kpi-label">Match Usados BB</div><div class="kpi-val">98,7%</div><div class="kpi-sub">1.144 vs 1.159</div></div>
+  </div>
+
+  <h3 style="margin:24px 0 6px;font-size:16px">Matcheo conjunto a conjunto</h3>
+
+  <div class="match-row good">
+    <div class="match-source">
+      <div class="lbl">Meta · conjunto</div>
+      <div class="name">Usados BB</div>
+      <div class="num">1.159 leads · $2.861.791 · CPL $2.469</div>
+    </div>
+    <div class="match-arrow">⟷</div>
+    <div class="match-source">
+      <div class="lbl">Pilot · suborigen</div>
+      <div class="name">Usados Bahia Blanca</div>
+      <div class="num">1.144 leads · 31,2% bad · 4 ventas</div>
+    </div>
+    <div class="match-score good">98,7%</div>
+  </div>
+
+  <div class="match-row warn">
+    <div class="match-source">
+      <div class="lbl">Meta · conjuntos</div>
+      <div class="name">Feria Pick Ups + Feria Autos</div>
+      <div class="num">188 leads · $2.584.649 · CPL avg $13.748</div>
+    </div>
+    <div class="match-arrow">⟷</div>
+    <div class="match-source">
+      <div class="lbl">Pilot · suborigen probable</div>
+      <div class="name">Tradicional Santa Rosa</div>
+      <div class="num">93 leads · 51,6% bad · 1 venta</div>
+    </div>
+    <div class="match-score warn">49%</div>
+  </div>
+
+  <div class="match-row bad">
+    <div class="match-source">
+      <div class="lbl">Meta · conjunto</div>
+      <div class="name" style="color:var(--bad)">¿NO INCLUIDO EN EXPORT?</div>
+      <div class="num">Falta data de origen</div>
+    </div>
+    <div class="match-arrow">⟷</div>
+    <div class="match-source">
+      <div class="lbl">Pilot · suborigen</div>
+      <div class="name">Usados La Pampa</div>
+      <div class="num">671 leads · <b style="color:var(--bad)">75,7% bad</b> · 1 venta</div>
+    </div>
+    <div class="match-score bad">0%</div>
+  </div>
+
+  <div class="alert-box">
+    <b>El gran agujero negro: "Usados La Pampa".</b> 671 leads en Pilot, 75,7% basura (508 datos erróneos), <b>1 sola venta</b>. No aparece en este export de Meta. Probablemente está en una cuenta publicitaria distinta o como conjunto separado. <b>Sin saber cuánto se está gastando ahí, no podemos calcular el ROI real de Meta.</b>
+  </div>
+
+  <div class="info-box">
+    <b>Matcheo Ferias → Pilot al 49%:</b> Meta dice 188 leads pero Pilot solo registró 93 con suborigen "Tradicional Santa Rosa". Hay 95 leads que se cargaron en otros suborígenes o se perdieron en la integración. Hay un problema de configuración de Lead Forms / mapping de suborigen.
+  </div>
+
+  <h3 style="margin:24px 0 6px;font-size:16px">Resumen por suborigen en Pilot</h3>
+
+  <div class="panel" style="padding:0 0 8px">
+    <table>
+      <thead><tr><th>Suborigen Pilot</th><th>Leads</th><th>Bad rate</th><th>Vendidos</th><th>Conv.</th><th>Conjunto Meta asumido</th></tr></thead>
+      <tbody>
+        <tr><td><b>Usados Bahia Blanca</b></td><td class="num">1.144</td><td class="num"><span class="pill good">31,2%</span></td><td class="num">4</td><td class="num">0,35%</td><td>Usados BB</td></tr>
+        <tr><td><b>Usados La Pampa</b></td><td class="num">671</td><td class="num"><span class="pill bad">75,7%</span></td><td class="num">1</td><td class="num">0,15%</td><td><span style="color:var(--bad)">No identificado</span></td></tr>
+        <tr><td>Tradicional Santa Rosa</td><td class="num">93</td><td class="num"><span class="pill bad">51,6%</span></td><td class="num">1</td><td class="num">1,08%</td><td>Ferias (parcial)</td></tr>
+        <tr><td>Tradicional</td><td class="num">25</td><td class="num"><span class="pill good">16,0%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Ferias? · no claro</td></tr>
+        <tr><td>Plan de ahorro</td><td class="num">19</td><td class="num"><span class="pill good">21,1%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Otro conjunto?</td></tr>
+        <tr><td>Plan Óvalo Bahía</td><td class="num">4</td><td class="num"><span class="pill good">0,0%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Otro</td></tr>
+        <tr><td>Empresas</td><td class="num">3</td><td class="num"><span class="pill good">0,0%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Otro</td></tr>
+        <tr><td>Ranger XL Ene-Feb 26</td><td class="num">3</td><td class="num"><span class="pill warn">33,3%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Campaña previa</td></tr>
+        <tr><td>Transit Ene-Feb 26</td><td class="num">2</td><td class="num"><span class="pill warn">50,0%</span></td><td class="num">0</td><td class="num">0,00%</td><td>Campaña previa</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="tab-content" id="economia">
+  <h2><span class="num">💰</span>Economía del canal Meta</h2>
+  <p class="lead">Costo real por conjunto, costo por venta atribuida y break-even del canal. Comparativa con Mercado Libre.</p>
+
+  <div class="kpis">
+    <div class="kpi accent"><div class="kpi-label">Costo total 131 días</div><div class="kpi-val">$6,74M</div><div class="kpi-sub">$1,57M/mes promedio</div></div>
+    <div class="kpi"><div class="kpi-label">Costo anualizado</div><div class="kpi-val">$18,8M</div><div class="kpi-sub">vs ML $40,3M anual</div></div>
+    <div class="kpi good"><div class="kpi-label">CPL promedio leadgen</div><div class="kpi-val">$4.043</div><div class="kpi-sub">1.347 leads / $5,45M</div></div>
+    <div class="kpi warn"><div class="kpi-label">Costo por venta</div><div class="kpi-val">$1.123.739</div><div class="kpi-sub">6 ventas atribuidas</div></div>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">📊</span>Economía por conjunto</h2>
+
+  <div class="panel" style="padding:0 0 8px">
+    <table>
+      <thead><tr><th>Conjunto</th><th>Inversión</th><th>Leads Pilot</th><th>Bad rate</th><th>Ventas</th><th>Costo/venta</th></tr></thead>
+      <tbody>
+        <tr><td><b>Usados BB</b></td><td class="num">$2.861.791</td><td class="num">1.144</td><td class="num"><span class="pill good">31,2%</span></td><td class="num"><b>4</b></td><td class="num"><span class="pill warn">$715.448</span></td></tr>
+        <tr><td><b>Ferias (PickUps + Autos)</b></td><td class="num">$2.584.649</td><td class="num">93 (asumido)</td><td class="num"><span class="pill bad">51,6%</span></td><td class="num">1</td><td class="num"><span class="pill bad">$2.584.649</span></td></tr>
+        <tr><td><b>Usados TOF</b></td><td class="num">$1.295.995</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num"><span class="pill">N/A (alcance)</span></td></tr>
+        <tr style="background:rgba(239,68,68,.05)"><td><b>Usados La Pampa</b> ⚠️</td><td class="num"><b style="color:var(--bad)">DESCONOCIDO</b></td><td class="num">671</td><td class="num"><span class="pill bad">75,7%</span></td><td class="num">1</td><td class="num"><span class="pill bad">?</span></td></tr>
+        <tr style="background:rgba(255,255,255,.03);font-weight:600"><td>TOTAL Conocido</td><td class="num">$6.742.435</td><td class="num">1.293</td><td class="num">—</td><td class="num">5</td><td class="num">$1.348.487</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">⚔️</span>Comparativa Meta vs Mercado Libre</h2>
+
+  <div class="panel" style="padding:0 0 8px">
+    <table>
+      <thead><tr><th>Métrica</th><th>Meta Ads</th><th>Mercado Libre</th><th>Diferencia</th></tr></thead>
+      <tbody>
+        <tr><td>Período</td><td class="num">131 días</td><td class="num">131 días</td><td class="num">—</td></tr>
+        <tr><td>Inversión total</td><td class="num">$6.742.435</td><td class="num">~$14.436.020</td><td class="num"><span class="pill good">Meta -53%</span></td></tr>
+        <tr><td>Inversión mensualizada</td><td class="num">$1,57M/mes</td><td class="num">$3,36M/mes</td><td class="num">ML 2,1× más caro</td></tr>
+        <tr><td>Leads en Pilot</td><td class="num">1.964</td><td class="num">~525</td><td class="num"><span class="pill blue">Meta 3,7×</span></td></tr>
+        <tr><td>CPL real</td><td class="num"><span class="pill good">$3.433</span></td><td class="num"><span class="pill bad">$27.497</span></td><td class="num">ML 8× más caro</td></tr>
+        <tr><td>Ventas atribuidas</td><td class="num">6</td><td class="num">~2</td><td class="num"><span class="pill blue">Meta 3×</span></td></tr>
+        <tr><td>Costo por venta</td><td class="num">$1.123.739</td><td class="num">$7.218.010</td><td class="num"><span class="pill good">Meta 6,4× mejor</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Comparativa visual</h3>
+    <div class="chart-box"><canvas id="chartMetaVsML"></canvas></div>
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">⚖️</span>Break-even de Meta</h2>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Ventas mensuales necesarias para cubrir el costo</h3>
+    <div class="chart-box"><canvas id="chartBreakeven"></canvas></div>
+  </div>
+
+  <div class="good-box">
+    <b>Meta supera holgadamente el break-even:</b> con margen bruto del 10% y precio promedio $27,8M (margen unitario $2,78M), Meta necesita <b>0,56 ventas/mes</b> para cubrir el costo. Hoy genera <b>1,4 ventas/mes</b> (6 en 131 días). <b>Está al 250% del break-even</b> pero todavía muy por debajo de su potencial: con un funnel mejor, los mismos $1,57M/mes podrían generar 15-25 ventas.
+  </div>
+
+  <h2 style="margin-top:30px"><span class="num">🎯</span>Proyección de potencial</h2>
+
+  <div class="problems">
+    <div class="problem critical">
+      <span class="severity">Hoy</span>
+      <h4>1,4 ventas/mes</h4>
+      <p>1.964 leads en Pilot, 47% bad rate global. Solo 6 ventas en 4,3 meses. Mediana de gestión 5h hábiles en Santa Rosa.</p>
+      <div class="impact">Costo/venta: $1,12M (40% del margen)</div>
+    </div>
+    <div class="problem high">
+      <span class="severity">Meta 30 días</span>
+      <h4>8 ventas/mes</h4>
+      <p>Pausar Feria Autos, reasignar a Usados BB. Bot WhatsApp en primer contacto. SLA &lt; 2h hábiles en SR.</p>
+      <div class="impact">Costo/venta: $196K (7% del margen)</div>
+    </div>
+    <div class="problem med" style="border-left-color:var(--meta-blue)">
+      <span class="severity" style="background:rgba(8,102,255,.2);color:var(--meta-blue)">Meta 60 días</span>
+      <h4>15 ventas/mes</h4>
+      <p>Refresh de creativos en ferias. Bad rate baja al 30%. Conv. sobre good leads sube al 3%.</p>
+      <div class="impact">Costo/venta: $105K (4% del margen)</div>
+    </div>
+    <div class="problem low" style="border-left-color:var(--good)">
+      <span class="severity" style="background:rgba(34,197,94,.2);color:var(--good)">Meta 90 días</span>
+      <h4>25 ventas/mes</h4>
+      <p>Targeting geográfico optimizado (cortar pampeano interior). Gestión al 100%. Conversions API activo.</p>
+      <div class="impact">Costo/venta: $63K (2,3% del margen) · ROI fortísimo</div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content" id="problems">
+  <h2><span class="num">⚠️</span>Problemas identificados</h2>
+  <p class="lead">Priorizados por impacto en costo y conversión. Cada uno indica el efecto cuantificable en el funnel.</p>
+
+  <div class="problems">
+    <div class="problem critical">
+      <span class="severity">P1 · Crítico</span>
+      <h4>"Usados La Pampa" no aparece en este export</h4>
+      <p>671 leads en Pilot con 75,7% de bad rate y solo 1 venta. <b>No hay forma de saber cuánto cuesta este tráfico</b> sin acceso al panel completo de Meta. Si su inversión fuera similar a Usados BB, estaríamos quemando ~$1,7M en 4 meses con casi cero retorno.</p>
+      <div class="impact">Pedir acceso a la cuenta publicitaria completa</div>
+    </div>
+
+    <div class="problem critical">
+      <span class="severity">P2 · Crítico</span>
+      <h4>Bad rate 47% en leads Meta total</h4>
+      <p>De los 1.964 leads ADS Meta que entraron a Pilot, 923 son basura. "Usados La Pampa" concentra el 55% del bad rate del canal (508 leads basura sobre 671).</p>
+      <div class="impact">Pérdida ~$3,2M de los $6,7M invertidos</div>
+    </div>
+
+    <div class="problem high">
+      <span class="severity">P3 · Alto</span>
+      <h4>Ferias: 38% del gasto leadgen, 14% de los leads</h4>
+      <p>$2,58M invertidos en Ferias generaron 188 leads (CPL promedio $13.748). El mismo gasto al CPL de Usados BB habría generado <b>1.047 leads adicionales</b>.</p>
+      <div class="impact">Si redirigiéramos: ~1.000 leads más, ~7 ventas adicionales</div>
+    </div>
+
+    <div class="problem high">
+      <span class="severity">P4 · Alto</span>
+      <h4>Frecuencia 8,18 en Feria Pick Ups</h4>
+      <p>Cada persona vio el anuncio 8 veces en 52 días. Audiencia saturada — el CPL se dispara y el CTR baja. Signo claro de "ad fatigue".</p>
+      <div class="impact">Refrescar creativos o ampliar público para bajar a ≤ 4</div>
+    </div>
+
+    <div class="problem high">
+      <span class="severity">P5 · Alto</span>
+      <h4>Gestión 6× más lenta en Santa Rosa</h4>
+      <p>791 leads Meta van a Santa Rosa. Mediana de gestión 5,6 h hábiles vs 53 min en Bahía Blanca.</p>
+      <div class="impact">Cada hora extra de demora ↑ bad rate ~2%</div>
+    </div>
+
+    <div class="problem med">
+      <span class="severity">P6 · Medio</span>
+      <h4>Matcheo Ferias → Pilot al 49%</h4>
+      <p>Meta dice 188 leads de las Ferias, Pilot solo registró 93 con suborigen "Tradicional Santa Rosa". Hay 95 leads que se cargaron en otros suborígenes o se perdieron.</p>
+      <div class="impact">Revisar config de Lead Forms en Meta y mapping en Pilot</div>
+    </div>
+
+    <div class="problem med">
+      <span class="severity">P7 · Medio</span>
+      <h4>Sin Conversions API ni Pixel</h4>
+      <p>La atribución depende del "Origen" en Pilot. Meta no recibe la señal de ventas reales y por eso no puede optimizar por conversión final, solo por leads.</p>
+      <div class="impact">CAPI permitiría que Meta encuentre audiencias que compran</div>
+    </div>
+
+    <div class="problem low">
+      <span class="severity">P8 · Bajo</span>
+      <h4>TOF: difícil de medir el impacto</h4>
+      <p>$1,29M en alcance/video con 6,07M reproducciones. Es la base del funnel para construir marca pero no podemos medir cuántos terminan convirtiendo en los conjuntos de leadgen.</p>
+      <div class="impact">Evaluar overlap de audiencias entre TOF y leadgen</div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content" id="actions">
+  <h2><span class="num">✅</span>Plan de acción · próximos 30 días</h2>
+  <p class="lead">Tareas accionables ordenadas por impacto. Clic en cada tarea para marcarla como hecha.</p>
+
+  <h3 style="margin:24px 0 6px;font-size:15px;color:var(--bad);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">⏰ Urgente · esta semana</h3>
+  <div class="actions">
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label"><b>Pedir export completo de Meta Business Suite</b> incluyendo el conjunto que alimenta "Usados La Pampa" (671 leads sin atribución de costo).</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label"><b>Pausar Feria Autos</b> (CPL $14.245). Redirigir el gasto a Usados BB que tiene CPL $2.469.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label"><b>Refrescar creativos de Feria Pick Ups</b> (frecuencia 8,18). Nuevos formatos, videos y headlines para evitar saturación.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag urgent">Urgente</span><span class="label"><b>Auditar configuración de Lead Forms de las Ferias</b>: solo el 49% de los leads que Meta dice llegan al CRM con el suborigen correcto.</span></div></div>
+  </div>
+
+  <h3 style="margin:28px 0 6px;font-size:15px;color:var(--orange);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">📆 Corto plazo · próximas 2 semanas</h3>
+  <div class="actions">
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag short">2 semanas</span><span class="label"><b>Excluir geo del interior pampeano</b> en el conjunto "Usados La Pampa": Realicó, Toay, Macachín, Victorica, I. Alvear, 25 de Mayo (bad rate 60-90%).</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag short">2 semanas</span><span class="label"><b>Activar bot de WhatsApp</b> para primer contacto en leads Meta. Mensaje en menos de 2 minutos para reconfirmar dato y bajar el bad rate.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag short">2 semanas</span><span class="label"><b>Reducir frecuencia objetivo a ≤ 4</b> en todos los conjuntos. Ampliar audiencias por intereses, lookalike audiences nuevos o ampliar radio geográfico.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag short">2 semanas</span><span class="label"><b>Establecer SLA de gestión &lt; 1h hábil</b> para leads Meta en ambas sucursales. Hoy BB cumple parcialmente (53 min mediana); Santa Rosa está en 5,6h.</span></div></div>
+  </div>
+
+  <h3 style="margin:28px 0 6px;font-size:15px;color:var(--meta-blue);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em">🎯 Mediano plazo · próximo mes</h3>
+  <div class="actions">
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag medium">1 mes</span><span class="label"><b>Implementar Conversions API (CAPI)</b>: enviar las ventas registradas en Pilot de vuelta a Meta para que el algoritmo aprenda qué creativos y audiencias generan ventas reales.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag medium">1 mes</span><span class="label"><b>Pixel de Meta en página web</b>: medir tráfico web atribuible a Meta y abrir el canal a campañas de remarketing.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag medium">1 mes</span><span class="label"><b>Replicar "Usados BB" a Santa Rosa</b> con audiencia geográfica propia y creatividades adaptadas. El éxito de BB (CPL $2.469) podría replicarse con buen targeting.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag medium">1 mes</span><span class="label"><b>Test A/B de Lead Forms con calificación</b>: agregar preguntas en el formulario (¿en qué localidad estás? ¿plan de financiación?) para reducir bad rate de origen.</span></div></div>
+    <div class="action-row"><div class="action-check"></div><div class="action-body"><span class="action-tag medium">1 mes</span><span class="label"><b>Evaluar el ROI del conjunto TOF</b>: medir si los $1,29M en alcance están alimentando los conjuntos de leadgen.</span></div></div>
+  </div>
+</div>
+
+<footer>
+  Dashboard generado para Juan Manuel Resasco · 11 de mayo de 2026 · Fuentes: Meta Business Suite + Pilot CRM · Guspamar Usados FORD
+</footer>
+
+</div>
+
+<script>
+const P={text:'#e6edf3',border:'#262d36',meta_blue:'#0866ff',meta_purple:'#7c3aed',good:'#22c55e',bad:'#ef4444',warn:'#facc15',orange:'#f97316',cyan:'#06b6d4'};
+Chart.defaults.color=P.text;Chart.defaults.borderColor=P.border;
+Chart.defaults.font.family='ui-sans-serif, system-ui';
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+  });
+});
+
+document.querySelectorAll('.action-row').forEach(row => {
+  const check = row.querySelector('.action-check');
+  row.addEventListener('click', () => check.classList.toggle('checked'));
+});
+
+new Chart(document.getElementById('chartConjuntos'),{
+  data:{
+    labels:['Usados BB','Feria Pick Ups','Feria Autos','Usados TOF'],
+    datasets:[
+      {type:'bar',label:'Inversión ($M)',data:[2.86,1.30,1.28,1.30],backgroundColor:P.meta_blue,borderRadius:6,yAxisID:'y'},
+      {type:'bar',label:'Leads',data:[1159,98,90,0],backgroundColor:P.good,borderRadius:6,yAxisID:'y1'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Inversión ($M)'},ticks:{callback:v=>'$'+v+'M'}},
+      y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'Leads'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartCPL'),{
+  type:'bar',
+  data:{
+    labels:['Usados BB','Feria Pick Ups','Feria Autos'],
+    datasets:[{
+      label:'Costo por lead (CPL)',
+      data:[2469,13292,14245],
+      backgroundColor:[P.good,P.warn,P.bad],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString('es-AR')+' / lead'}}},
+    scales:{
+      y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'$ por lead'},ticks:{callback:v=>'$'+v.toLocaleString('es-AR')}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartMetaVsML'),{
+  data:{
+    labels:['Inversión ($M)','Leads Pilot (×100)','Ventas','Costo/venta ($M)'],
+    datasets:[
+      {type:'bar',label:'Meta Ads',data:[6.74,19.64,6,1.12],backgroundColor:P.meta_blue,borderRadius:6},
+      {type:'bar',label:'Mercado Libre',data:[14.44,5.25,2,7.22],backgroundColor:P.warn,borderRadius:6}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Valor (escalado)'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartBreakeven'),{
+  type:'bar',
+  data:{
+    labels:['Precio $20M','Precio $25M','Precio $27,8M (avg)','Precio $30M'],
+    datasets:[
+      {label:'Ventas Meta necesarias/mes para break-even',data:[0.78,0.63,0.56,0.52],backgroundColor:[P.warn,P.good,P.good,P.good],borderRadius:6},
+      {label:'Ventas Meta actuales/mes',data:[1.4,1.4,1.4,1.4],backgroundColor:P.meta_blue,borderRadius:6}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': '+c.parsed.y.toFixed(2)+' ventas'}}},
+    scales:{
+      y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Ventas / mes'}},
+      x:{grid:{display:false},title:{display:true,text:'Margen bruto = 10% del precio de venta'}}
+    }
+  }
+});
+</script>
+</body>
+</html>
