@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Usados Guspamar · Resumen ejecutivo</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1116;--panel:#161b22;--border:#262d36;
+    --text:#e6edf3;--muted:#8b949e;
+    --accent:#f59e0b;--good:#22c55e;--bad:#ef4444;--warn:#facc15;--blue:#3b82f6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0;
+    background:radial-gradient(1000px 500px at 10% -10%,#1a2230 0%,transparent 60%),var(--bg);
+    color:var(--text);
+    font-family:ui-sans-serif,system-ui,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 24px 60px}
+
+  header{
+    border:1px solid var(--border);
+    background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(59,130,246,.04));
+    border-radius:16px;padding:28px 32px;margin-bottom:32px;
+  }
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
+  h1{font-family:"Playfair Display",serif;font-weight:600;font-size:34px;margin:0 0 8px;letter-spacing:-.01em;line-height:1.15}
+  .subtitle{color:var(--muted);font-size:15px;max-width:780px}
+  .meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+  .meta b{color:var(--text)}
+
+  h2{
+    font-family:"Playfair Display",serif;font-weight:600;font-size:26px;
+    margin:48px 0 6px;letter-spacing:-.01em;
+    display:flex;align-items:baseline;gap:12px;
+  }
+  h2 .num{
+    font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--accent);
+    border:1px solid var(--accent);padding:2px 7px;border-radius:4px;font-weight:500;
+  }
+  .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px;max-width:840px}
+
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;margin:16px 0}
+  .chart-box{position:relative;height:320px;margin-top:6px}
+
+  /* KPIs grandes */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .kpi-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-bottom:6px}
+  .kpi-val{font-size:26px;font-weight:600;font-family:"Playfair Display",serif;letter-spacing:-.02em}
+  .kpi-sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .kpi.good .kpi-val{color:var(--good)}
+  .kpi.bad .kpi-val{color:var(--bad)}
+  .kpi.accent .kpi-val{color:var(--accent)}
+  .kpi.warn .kpi-val{color:var(--warn)}
+
+  /* TL;DR cards */
+  .tldr{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:14px 0}
+  .tldr-card{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:10px;padding:18px 20px;
+    border-left:4px solid var(--accent);
+  }
+  .tldr-card.bad{border-left-color:var(--bad)}
+  .tldr-card.good{border-left-color:var(--good)}
+  .tldr-card h4{
+    margin:0 0 8px;font-size:12px;
+    font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--accent);
+  }
+  .tldr-card.bad h4{color:var(--bad)}
+  .tldr-card.good h4{color:var(--good)}
+  .tldr-card p{margin:0;font-size:14px}
+  .tldr-card .big{font-family:"Playfair Display",serif;font-size:22px;font-weight:600;display:block;margin-bottom:4px}
+
+  /* tablas */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:"JetBrains Mono",monospace;font-weight:500}
+  td.num{font-family:"JetBrains Mono",monospace;text-align:right}
+  .pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:"JetBrains Mono",monospace}
+  .pill.good{background:rgba(34,197,94,.18);color:var(--good)}
+  .pill.bad{background:rgba(239,68,68,.18);color:var(--bad)}
+  .pill.warn{background:rgba(250,204,21,.18);color:var(--warn)}
+
+  /* mapa */
+  #map{
+    height:520px;border-radius:12px;border:1px solid var(--border);
+    background:var(--panel);
+  }
+  .map-legend{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;
+    font-size:12px;color:var(--muted);font-family:"JetBrains Mono",monospace;
+  }
+  .map-legend span{display:inline-flex;align-items:center;gap:8px}
+  .map-legend i{display:inline-block;border-radius:50%;border:2px solid #fff}
+  .map-legend .sz-sm{width:8px;height:8px}
+  .map-legend .sz-md{width:14px;height:14px}
+  .map-legend .sz-lg{width:22px;height:22px}
+  .map-legend .c-bad{background:rgba(239,68,68,.85)}
+  .map-legend .c-warn{background:rgba(250,204,21,.85)}
+  .map-legend .c-good{background:rgba(34,197,94,.85)}
+  .map-legend .c-conces{background:#fff;border-color:var(--blue)}
+
+  /* leaflet popup dark */
+  .leaflet-popup-content-wrapper{background:var(--panel);color:var(--text);border-radius:8px;border:1px solid var(--border)}
+  .leaflet-popup-tip{background:var(--panel);border:1px solid var(--border)}
+  .leaflet-popup-content{margin:12px 14px;font-family:ui-sans-serif,system-ui,sans-serif}
+  .leaflet-popup-content h5{margin:0 0 6px;font-size:14px;font-family:"Playfair Display",serif}
+  .leaflet-popup-content .row{display:flex;justify-content:space-between;font-size:12px;font-family:"JetBrains Mono",monospace;margin:3px 0}
+  .leaflet-popup-content .prov{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-family:"JetBrains Mono",monospace}
+
+  /* Acciones */
+  .action{
+    background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(59,130,246,.04));
+    border:1px solid var(--border);border-radius:12px;
+    padding:18px 22px;margin:12px 0;
+    display:grid;grid-template-columns:48px 1fr;gap:18px;align-items:start;
+  }
+  .action .n{
+    font-family:"Playfair Display",serif;font-size:36px;font-weight:600;
+    color:var(--accent);line-height:1;
+  }
+  .action h4{margin:0 0 6px;font-size:16px}
+  .action p{margin:0;font-size:14px;color:var(--text)}
+  .action p + p{margin-top:8px;color:var(--muted);font-size:13px}
+
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;text-align:center;font-family:"JetBrains Mono",monospace}
+
+  @media (max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .tldr{grid-template-columns:1fr}
+    h1{font-size:26px}
+    #map{height:400px}
+    .action{grid-template-columns:36px 1fr;gap:12px}
+    .action .n{font-size:28px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Resasco S.A. · Guspamar · Usados FORD</div>
+  <h1>Análisis de leads y performance de gestión · Usados 2026</h1>
+  <p class="subtitle">Resumen ejecutivo del funnel de Usados de Guspamar entre enero y mayo 2026: calidad por origen, distribución geográfica de Meta Ads, velocidad real de gestión (en horario hábil) y performance por vendedor y sucursal.</p>
+  <div class="meta">
+    <span>Período: <b>01-ene a 10-may 2026</b></span>
+    <span>Leads totales Usados: <b>2.935</b></span>
+    <span>Sucursales: <b>Bahía Blanca · Santa Rosa · Gral. Pico</b></span>
+  </div>
+</header>
+
+<!-- ===================== TL;DR ===================== -->
+<section>
+  <h2><span class="num">01</span>Lo más importante en 4 ideas</h2>
+
+  <div class="tldr">
+    <div class="tldr-card bad">
+      <h4>El problema más grande</h4>
+      <span class="big">67% del gasto en Meta es ineficiente</span>
+      <p>ADS Meta concentra el 67% del volumen de leads (1.977) pero apenas 6 ventas (4,9% del total). El 47% son leads basura (datos erróneos o ilocalizables). Casi todo se concentra en La Pampa y zonas sin presencia comercial.</p>
+    </div>
+    <div class="tldr-card good">
+      <h4>El motor real del negocio</h4>
+      <span class="big">Salón + Base de Clientes = 90,9% de las ventas</span>
+      <p>Salón vende 65 unidades (53% del total), Base de Clientes 36 (30%). Convierten al 16% y al 75% respectivamente. Generan el 15% del volumen pero casi todo el resultado comercial.</p>
+    </div>
+    <div class="tldr-card good">
+      <h4>El equipo de Bahía Blanca está bien</h4>
+      <span class="big">53 min de mediana hábil para gestionar Meta</span>
+      <p>En horario comercial, BB gestiona 55,5% de los leads de Meta en menos de 1 hora. Bettomeo es excepcional: 27 min de mediana, 75% gestionados en la primera hora hábil.</p>
+    </div>
+    <div class="tldr-card bad">
+      <h4>El problema operativo a resolver</h4>
+      <span class="big">Santa Rosa tarda 6× más que Bahía Blanca</span>
+      <p>Mediana hábil de 5,2 horas vs 53 minutos. Solo 15% de los leads se gestiona en la primera hora hábil. No es un problema de canal, es operativa interna del salón.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NUMEROS GLOBALES ===================== -->
+<section>
+  <h2><span class="num">02</span>El funnel en números</h2>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Leads Usados</div><div class="kpi-val">2.935</div><div class="kpi-sub">Ene – 10 May</div></div>
+    <div class="kpi accent"><div class="kpi-label">Vendidos</div><div class="kpi-val">122</div><div class="kpi-sub">Conv. total 4,16%</div></div>
+    <div class="kpi bad"><div class="kpi-label">Bad rate</div><div class="kpi-val">37,1%</div><div class="kpi-sub">1.089 leads basura</div></div>
+    <div class="kpi good"><div class="kpi-label">Conv. sobre Good</div><div class="kpi-val">6,61%</div><div class="kpi-sub">122 sobre 1.846</div></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Performance por canal</h3>
+    <table>
+      <thead><tr><th>Origen</th><th>Leads</th><th>% del total</th><th>Bad rate</th><th>Vendidos</th><th>Conv. %</th></tr></thead>
+      <tbody>
+        <tr><td><b>ADS Facebook</b></td><td class="num">1.977</td><td class="num">67%</td><td class="num"><span class="pill bad">47,0%</span></td><td class="num">6</td><td class="num"><span class="pill bad">0,30%</span></td></tr>
+        <tr><td><b>Salón</b></td><td class="num">402</td><td class="num">14%</td><td class="num"><span class="pill good">11,2%</span></td><td class="num"><b>65</b></td><td class="num"><span class="pill good">16,17%</span></td></tr>
+        <tr><td>Mercado Libre</td><td class="num">279</td><td class="num">10%</td><td class="num"><span class="pill good">16,1%</span></td><td class="num">2</td><td class="num">0,72%</td></tr>
+        <tr><td>Página Web</td><td class="num">144</td><td class="num">5%</td><td class="num"><span class="pill warn">33,3%</span></td><td class="num">4</td><td class="num">2,78%</td></tr>
+        <tr><td>RRSS Instagram</td><td class="num">66</td><td class="num">2%</td><td class="num"><span class="pill warn">28,8%</span></td><td class="num">1</td><td class="num">1,52%</td></tr>
+        <tr><td><b>Base de Clientes</b></td><td class="num">48</td><td class="num">2%</td><td class="num"><span class="pill good">4,2%</span></td><td class="num"><b>36</b></td><td class="num"><span class="pill good">75,00%</span></td></tr>
+        <tr><td>RRSS Facebook</td><td class="num">15</td><td class="num">1%</td><td class="num"><span class="pill good">0,0%</span></td><td class="num">8</td><td class="num"><span class="pill good">53,33%</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== MAPA ===================== -->
+<section>
+  <h2><span class="num">03</span>De dónde llegan los leads de Meta</h2>
+  <p class="lead">1.379 leads de Meta desde el 2 de marzo (cuando se activó el campo "ciudad" en los formularios, con 96,5% de cobertura). El tamaño del círculo indica volumen, el color indica calidad: rojo = bad rate alto (lead basura), verde = lead bueno.</p>
+
+  <div class="panel">
+    <div id="map"></div>
+    <div class="map-legend">
+      <span><i class="sz-sm c-bad"></i> Volumen bajo (8-15 leads)</span>
+      <span><i class="sz-md c-warn"></i> Volumen medio (15-50)</span>
+      <span><i class="sz-lg c-bad"></i> Volumen alto (50+)</span>
+      <span><i class="c-good sz-md"></i> Bad rate &lt; 30%</span>
+      <span><i class="c-warn sz-md"></i> Bad rate 30-50%</span>
+      <span><i class="c-bad sz-md"></i> Bad rate &gt; 50%</span>
+      <span><i class="c-conces sz-md"></i> Concesionario Guspamar</span>
+    </div>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--bad)">
+    <p style="margin:0;font-size:14px"><b style="color:var(--bad)">Patrón claro en el mapa:</b> los puntos rojos grandes están todos en La Pampa (Santa Rosa 199 leads / 65% bad, General Pico 93 / 75% bad, Realicó 91% bad, Toay 69% bad, Victorica 64%, 25 de Mayo 70%). La Pampa concentra el 32% del volumen ADS Meta y el 69% son leads basura. <b>El targeting de Meta sangra plata en pueblos del interior pampeano.</b></p>
+    <p style="margin:8px 0 0;font-size:14px"><b style="color:var(--good)">Patrón positivo:</b> donde hay presencia comercial (Bahía Blanca, Punta Alta, Tres Arroyos, Patagones) y en grandes ciudades alejadas (Buenos Aires, CABA, Córdoba), el bad rate baja al 22-35%. Mejor calidad, pero todavía 0 ventas: el problema acá es ya gestión, no fuente.</p>
+  </div>
+</section>
+
+<!-- ===================== VELOCIDAD GESTION ===================== -->
+<section>
+  <h2><span class="num">04</span>Velocidad real de gestión · horario hábil</h2>
+  <p class="lead">Medido solo en minutos dentro del horario comercial de cada sucursal: Bahía Blanca lun-vie 08:30-17:30, Santa Rosa y Gral. Pico lun-vie 08:00-12:30 y 15:30-19:00. Universo: 1.593 leads ADS Meta gestionados.</p>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Comparación por vendedor</h3>
+    <table>
+      <thead><tr><th>Vendedor</th><th>Sucursal</th><th>Leads ADS</th><th>Med. hábil</th><th>% &lt; 30 min</th><th>% &lt; 1 h</th><th>Bad rate</th></tr></thead>
+      <tbody>
+        <tr><td><b>Bettomeo</b></td><td>Bahía Blanca</td><td class="num">419</td><td class="num"><span class="pill good">27 min</span></td><td class="num"><b>52,3%</b></td><td class="num"><b>75,2%</b></td><td class="num">25,5%</td></tr>
+        <tr><td><b>Chimento</b></td><td>Bahía Blanca</td><td class="num">30</td><td class="num"><span class="pill good">57 min</span></td><td class="num">20,0%</td><td class="num">53,3%</td><td class="num">0,0%</td></tr>
+        <tr><td><b>Avila</b></td><td>Bahía Blanca</td><td class="num">409</td><td class="num"><span class="pill warn">1,7 h</span></td><td class="num">17,4%</td><td class="num">34,7%</td><td class="num">30,1%</td></tr>
+        <tr><td><b>Gerena</b></td><td>Santa Rosa</td><td class="num">533</td><td class="num"><span class="pill bad">5,6 h</span></td><td class="num">6,0%</td><td class="num">10,5%</td><td class="num">89,1%</td></tr>
+        <tr><td><b>Monasterio</b></td><td>Santa Rosa</td><td class="num">86</td><td class="num"><span class="pill bad">14,7 h</span></td><td class="num">1,2%</td><td class="num">3,5%</td><td class="num">0,0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Mediana hábil hasta gestión (más bajo = mejor)</h3>
+    <div class="chart-box"><canvas id="chartVendedores"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 14px;font-size:16px">Comparación por sucursal</h3>
+    <table>
+      <thead><tr><th>Sucursal</th><th>Leads gestionados</th><th>Mediana hábil</th><th>% &lt; 30 min</th><th>% &lt; 1 h</th></tr></thead>
+      <tbody>
+        <tr><td><b>Bahía Blanca</b></td><td class="num">884</td><td class="num"><span class="pill good">53 min</span></td><td class="num"><b>34,8%</b></td><td class="num"><b>55,5%</b></td></tr>
+        <tr><td><b>Santa Rosa</b></td><td class="num">708</td><td class="num"><span class="pill bad">5,2 h</span></td><td class="num">9,6%</td><td class="num">15,3%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:14px 0 0;font-size:13.5px;color:var(--muted)">Santa Rosa gestiona <b style="color:var(--bad)">6× más lento</b> que Bahía Blanca en horario comercial. Hipótesis principal: el horario partido (12:30-15:30 cerrado) acumula leads que se atienden recién a la tarde.</p>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">La velocidad limpia datos</h3>
+    <div class="chart-box"><canvas id="chartVelocidad"></canvas></div>
+    <p style="margin:10px 0 0;font-size:13.5px;color:var(--muted)">Cuanto más tarde se llama al cliente, más probable que el dato resulte basura (no atiende, el número estaba mal, cargó otro auto). De 34% de bad rate en gestiones &lt; 30 min se pasa a 61% en gestiones de &gt; 16 h hábiles.</p>
+  </div>
+</section>
+
+<!-- ===================== SALON ===================== -->
+<section>
+  <h2><span class="num">05</span>Salón · el canal que sostiene el negocio</h2>
+  <p class="lead">402 leads y 65 ventas (53% del total Usados). Evolución mensual por sucursal:</p>
+
+  <div class="panel">
+    <h3 style="margin:0 0 6px;font-size:16px">Leads y ventas de Salón por sucursal y mes</h3>
+    <div class="chart-box"><canvas id="chartSalon"></canvas></div>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--bad)">
+    <p style="margin:0;font-size:14px"><b style="color:var(--bad)">Alerta Santa Rosa:</b> de 8 ventas Salón en enero a 1 en marzo, 5 en abril y <b>0 en mayo</b>. La conversión cayó de 25% (febrero) a 0% (mayo). El canal está apagándose.</p>
+    <p style="margin:8px 0 0;font-size:14px"><b style="color:var(--good)">Bahía Blanca sólido:</b> entre 6 y 10 ventas mensuales, con un bache puntual en marzo (probable distracción del equipo por pico de leads digitales). Mayo arrancó al 35,3% de conversión — el mejor mes del año.</p>
+  </div>
+</section>
+
+<!-- ===================== ACCIONES ===================== -->
+<section>
+  <h2><span class="num">06</span>Plan de acción</h2>
+
+  <div class="action">
+    <div class="n">1</div>
+    <div>
+      <h4>Recortar el targeting de Meta en La Pampa interior</h4>
+      <p>Excluir las localidades con bad rate &gt; 60% del interior pampeano: Realicó, Toay, Victorica, 25 de Mayo, Macachín, I. Alvear, General Acha, Carhué. Mantener Santa Rosa y General Pico capitales pero con segmentación más estricta.</p>
+      <p><b>Impacto esperado:</b> reducir gasto en 25-30% sin pérdida de ventas, ya que estas localidades generan menos del 1% de la conversión.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="n">2</div>
+    <div>
+      <h4>SLA de gestión por sucursal y bot de primer contacto</h4>
+      <p>Establecer objetivo formal: <b>70% de leads ADS Meta gestionados &lt; 1 h hábil</b>. Bahía Blanca ya está en 55%, Santa Rosa en 15%. Sumar un bot de WhatsApp que responda &lt; 2 min, califique mínimamente y reconfirme el teléfono del cliente.</p>
+      <p><b>Impacto esperado:</b> mejora doble — más conversión y menos bad rate, porque el cliente reconfirma el dato mientras está atento.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="n">3</div>
+    <div>
+      <h4>Diagnóstico operativo del salón Santa Rosa</h4>
+      <p>Reunión con el equipo para entender por qué la mediana de gestión es 6× peor que Bahía Blanca: ¿qué pasa entre 12:30 y 15:30? ¿Hay guardia? ¿Cómo se priorizan los leads digitales vs walk-ins? ¿Stock y exhibición de unidades?</p>
+      <p><b>Impacto esperado:</b> recuperar Salón Santa Rosa que viene en caída libre desde marzo (de 8 ventas/mes a 0 en mayo).</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="n">4</div>
+    <div>
+      <h4>Redistribuir leads de Juan Gerena mientras se arregla la fuente</h4>
+      <p>Hoy recibe el 86,8% de los leads basura de "Usados La Pampa". Su conversión sobre leads buenos es comparable al resto del equipo; el problema es la fuente, no él. Mientras se rediseñan las campañas de Meta, asignarle más leads de calidad de otros canales.</p>
+      <p><b>Impacto esperado:</b> mejor uso del recurso humano y posibilidad de que aporte al canal Salón Santa Rosa.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="n">5</div>
+    <div>
+      <h4>Programa formal de remarketing a Base de Clientes</h4>
+      <p>Base de Clientes convierte al 75%, RRSS Facebook orgánico al 53%, Reventas al 92%. Son los canales con ROI más alto y reciben volumen mínimo. Activar una campaña sistemática a clientes históricos con propuestas de Usados.</p>
+      <p><b>Impacto esperado:</b> con sumar 50 leads/mes de Base de Clientes a tasa actual, son 35-40 ventas adicionales por mes.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Preparado por El Gallo Claudio para Juan Manuel Resasco · Bahía Blanca, 10 de mayo de 2026 · Fuente: Pilot CRM · Resasco S.A. · Guspamar Usados FORD
+</footer>
+
+</div>
+
+<script>
+const P={text:'#e6edf3',border:'#262d36',accent:'#f59e0b',good:'#22c55e',bad:'#ef4444',warn:'#facc15',blue:'#3b82f6',purple:'#a78bfa'};
+Chart.defaults.color=P.text;Chart.defaults.borderColor=P.border;
+
+// === MAPA ===
+const map = L.map('map', {scrollWheelZoom:false}).setView([-37.5, -64], 6);
+L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+  attribution:'© OpenStreetMap, © CARTO', maxZoom:18
+}).addTo(map);
+
+// color según bad rate
+function badColor(b){
+  if(b<30) return 'rgba(34,197,94,.85)';   // good
+  if(b<50) return 'rgba(250,204,21,.85)';  // warn
+  return 'rgba(239,68,68,.85)';            // bad
+}
+// radio según leads
+function leadRadius(l){
+  return Math.max(7, Math.min(34, Math.sqrt(l)*1.8));
+}
+
+const LOCS = [
+  {n:"Santa Rosa",lat:-36.62,lng:-64.29,L:199,b:65.3,v:0,p:"La Pampa"},
+  {n:"Bahía Blanca",lat:-38.717,lng:-62.27,L:112,b:25.9,v:0,p:"Buenos Aires"},
+  {n:"General Pico",lat:-35.66,lng:-63.76,L:93,b:75.3,v:2,p:"La Pampa"},
+  {n:"Neuquén",lat:-38.951,lng:-68.06,L:43,b:41.9,v:0,p:"Neuquén"},
+  {n:"Buenos Aires / GBA",lat:-34.61,lng:-58.38,L:39,b:28.2,v:0,p:"Buenos Aires"},
+  {n:"Toay",lat:-36.679,lng:-64.378,L:29,b:69.0,v:0,p:"La Pampa"},
+  {n:"Trenque Lauquen",lat:-35.974,lng:-62.733,L:23,b:43.5,v:0,p:"Buenos Aires"},
+  {n:"Viedma",lat:-40.813,lng:-62.997,L:22,b:31.8,v:0,p:"Río Negro"},
+  {n:"Punta Alta",lat:-38.88,lng:-62.08,L:17,b:35.3,v:0,p:"Buenos Aires"},
+  {n:"Cipolletti",lat:-38.935,lng:-67.991,L:15,b:53.3,v:0,p:"Río Negro"},
+  {n:"Río Colorado",lat:-38.997,lng:-64.083,L:14,b:64.3,v:0,p:"Río Negro"},
+  {n:"Tres Arroyos",lat:-38.376,lng:-60.275,L:13,b:23.1,v:0,p:"Buenos Aires"},
+  {n:"Carhué",lat:-37.18,lng:-62.76,L:12,b:75.0,v:0,p:"Buenos Aires"},
+  {n:"Rufino",lat:-34.27,lng:-62.71,L:12,b:58.3,v:0,p:"Santa Fe"},
+  {n:"Intendente Alvear",lat:-35.226,lng:-63.594,L:12,b:66.7,v:0,p:"La Pampa"},
+  {n:"Córdoba",lat:-31.42,lng:-64.19,L:11,b:27.3,v:0,p:"Córdoba"},
+  {n:"Victorica",lat:-36.222,lng:-65.444,L:11,b:63.6,v:0,p:"La Pampa"},
+  {n:"Realicó",lat:-35.034,lng:-64.245,L:11,b:90.9,v:0,p:"La Pampa"},
+  {n:"General Acha",lat:-37.388,lng:-64.605,L:10,b:50.0,v:0,p:"La Pampa"},
+  {n:"Rosario",lat:-32.946,lng:-60.639,L:10,b:40.0,v:0,p:"Santa Fe"},
+  {n:"Tandil",lat:-37.327,lng:-59.13,L:10,b:40.0,v:0,p:"Buenos Aires"},
+  {n:"Olavarría",lat:-36.893,lng:-60.323,L:10,b:10.0,v:0,p:"Buenos Aires"},
+  {n:"Macachín",lat:-37.139,lng:-63.668,L:10,b:50.0,v:1,p:"La Pampa"},
+  {n:"25 de Mayo",lat:-37.788,lng:-67.706,L:10,b:70.0,v:0,p:"La Pampa"},
+  {n:"CABA",lat:-34.603,lng:-58.381,L:9,b:22.2,v:0,p:"CABA"},
+  {n:"Pehuajó",lat:-35.811,lng:-61.892,L:9,b:44.4,v:0,p:"Buenos Aires"},
+  {n:"General Roca",lat:-39.034,lng:-67.578,L:9,b:55.6,v:0,p:"Río Negro"},
+  {n:"Carlos Casares",lat:-35.625,lng:-61.359,L:9,b:55.6,v:0,p:"Buenos Aires"},
+  {n:"Carmen de Patagones",lat:-40.802,lng:-62.985,L:8,b:25.0,v:0,p:"Buenos Aires"},
+  {n:"Bariloche",lat:-41.135,lng:-71.31,L:8,b:25.0,v:0,p:"Río Negro"}
+];
+
+LOCS.forEach(loc => {
+  const c = L.circleMarker([loc.lat, loc.lng], {
+    radius: leadRadius(loc.L),
+    fillColor: badColor(loc.b),
+    color: '#fff',
+    weight: 1.5,
+    opacity: 0.95,
+    fillOpacity: 0.7
+  }).addTo(map);
+  c.bindPopup(`
+    <h5>${loc.n}</h5>
+    <div class="prov">${loc.p}</div>
+    <div class="row"><span>Leads:</span><span><b>${loc.L}</b></span></div>
+    <div class="row"><span>Bad rate:</span><span style="color:${badColor(loc.b)}"><b>${loc.b}%</b></span></div>
+    <div class="row"><span>Ventas:</span><span><b>${loc.v}</b></span></div>
+  `);
+});
+
+// Concesionarios
+const CONCES = [
+  {n:"Guspamar Bahía Blanca", lat:-38.717, lng:-62.265},
+  {n:"Guspamar Santa Rosa",   lat:-36.620, lng:-64.290},
+  {n:"Guspamar General Pico", lat:-35.660, lng:-63.760}
+];
+CONCES.forEach(c => {
+  L.marker([c.lat, c.lng], {
+    icon: L.divIcon({
+      html: '<div style="background:#3b82f6;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 8px rgba(59,130,246,.8)"></div>',
+      className:'', iconSize:[14,14], iconAnchor:[7,7]
+    })
+  }).addTo(map).bindPopup(`<h5>${c.n}</h5><div class="prov">Concesionario</div>`);
+});
+
+// === Charts ===
+new Chart(document.getElementById('chartVendedores'),{
+  type:'bar',
+  data:{
+    labels:['Bettomeo (BB)','Chimento (BB)','Avila (BB)','Gerena (SR)','Monasterio (SR)'],
+    datasets:[{
+      label:'Mediana hábil (horas)',
+      data:[0.45,0.95,1.65,5.59,14.67],
+      backgroundColor:[P.good,P.good,P.warn,P.bad,P.bad],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' h'}}},
+    scales:{y:{beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Horas hábiles'},ticks:{callback:v=>v+'h'}},x:{grid:{display:false}}}
+  }
+});
+
+new Chart(document.getElementById('chartVelocidad'),{
+  data:{
+    labels:['< 30 min','30-60 min','1-2 h','2-4 h','4-8 h','8-16 h','> 16 h'],
+    datasets:[
+      {type:'bar',label:'Leads',data:[376,223,258,215,213,145,163],backgroundColor:P.blue,borderRadius:6,yAxisID:'y'},
+      {type:'line',label:'Bad rate %',data:[34.0,32.7,48.4,49.3,62.9,54.5,61.3],borderColor:P.bad,backgroundColor:P.bad,borderWidth:3,pointRadius:5,pointHoverRadius:7,yAxisID:'y1',tension:.2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:P.border},title:{display:true,text:'Leads'}},
+      y1:{position:'right',beginAtZero:true,max:100,grid:{display:false},title:{display:true,text:'Bad %'},ticks:{callback:v=>v+'%'}},
+      x:{grid:{display:false},title:{display:true,text:'Tiempo hábil hasta gestión'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartSalon'),{
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo','Abril','Mayo (10d)'],
+    datasets:[
+      // Leads (barras más claras y agrupadas)
+      {label:'Leads · Bahía Blanca',data:[45,47,75,64,17],backgroundColor:'rgba(59,130,246,.3)',borderColor:P.blue,borderWidth:1,borderRadius:4,stack:'leads'},
+      {label:'Leads · Santa Rosa',data:[47,28,30,36,5],backgroundColor:'rgba(245,158,11,.3)',borderColor:P.accent,borderWidth:1,borderRadius:4,stack:'leads'},
+      {label:'Leads · Gral. Pico',data:[2,1,2,0,0],backgroundColor:'rgba(167,139,250,.3)',borderColor:P.purple,borderWidth:1,borderRadius:4,stack:'leads'},
+      // Ventas (barras sólidas)
+      {label:'Ventas · Bahía Blanca',data:[10,9,6,8,6],backgroundColor:P.blue,borderRadius:4,stack:'ventas'},
+      {label:'Ventas · Santa Rosa',data:[8,7,1,5,0],backgroundColor:P.accent,borderRadius:4,stack:'ventas'},
+      {label:'Ventas · Gral. Pico',data:[2,1,1,0,0],backgroundColor:P.purple,borderRadius:4,stack:'ventas'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top',labels:{boxWidth:14,font:{size:11}}},
+      tooltip:{mode:'index',intersect:false}
+    },
+    scales:{
+      y:{beginAtZero:true,stacked:true,grid:{color:P.border},title:{display:true,text:'Leads (claro) / Ventas (sólido)'}},
+      x:{stacked:true,grid:{display:false}}
+    }
+  }
+});
+</script>
+</body>
+</html>
