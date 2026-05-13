@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Consolidado — Ranger (V6 · Monoturbo · Biturbo)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6f9; color: #1f2937; padding: 24px; }
+  header { background: linear-gradient(135deg, #002F6C 0%, #003E84 100%); color: #fff; padding: 24px 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+  header h1 { font-size: 26px; font-weight: 700; }
+  header .subtitle { font-size: 14px; opacity: .85; margin-top: 4px; }
+  header .meta { margin-top: 12px; display: flex; gap: 24px; font-size: 13px; opacity: .9; flex-wrap: wrap; }
+
+  .section-title { font-size: 18px; font-weight: 700; color: #002F6C; margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #002F6C; display: flex; align-items: center; gap: 12px; }
+  .section-title .pill { background: #002F6C; color: #fff; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; }
+  .section-title .pill.amber { background: #F59E0B; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi-card { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.06); border-left: 4px solid; }
+  .kpi-card.kpi1 { border-color: #0066B2; }
+  .kpi-card.kpi2 { border-color: #F59E0B; }
+  .kpi-card.kpi3 { border-color: #10B981; }
+  .kpi-card.kpi4 { border-color: #8B5CF6; }
+  .kpi-card.kpi3b { border-color: #047857; }
+  .kpi-card.kpi5 { border-color: #EF4444; }
+  .kpi-card.kpi6 { border-color: #0EA5E9; }
+  .kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; font-weight: 600; margin-bottom: 8px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #111827; line-height: 1; margin-bottom: 6px; }
+  .kpi-value small { font-size: 16px; color: #6b7280; font-weight: 500; }
+  .kpi-sub { font-size: 11px; color: #6b7280; line-height: 1.5; }
+  .kpi-sub b { color: #1f2937; font-weight: 600; }
+
+  .matrix { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 16px; }
+  .matrix table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .matrix th { text-align: left; padding: 10px 8px; background: #002F6C; color: #fff; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+  .matrix th.num, .matrix td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .matrix td { padding: 9px 8px; border-bottom: 1px solid #e5e7eb; }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix tr.total-row td { background: #f3f4f6; font-weight: 700; }
+  .matrix tr.section-row td { background: #f9fafb; font-weight: 700; color: #002F6C; padding: 8px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-top: 2px solid #002F6C; }
+  .matrix .delta-bad { color: #b91c1c; font-weight: 700; }
+  .matrix .delta-good { color: #047857; font-weight: 700; }
+  .matrix .delta-neutral { color: #6b7280; }
+
+  .row { display: grid; gap: 16px; margin-bottom: 16px; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .panel { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .panel h2 { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; }
+  .chart-wrap { position: relative; height: 280px; }
+
+  .alert { background: #fef2f2; border-left: 4px solid #EF4444; padding: 14px 16px; border-radius: 8px; margin: 16px 0; font-size: 13px; color: #7f1d1d; line-height: 1.6; }
+  .alert strong { color: #450a0a; }
+  .alert.good { background: #ecfdf5; border-color: #10B981; color: #064e3b; }
+  .alert.good strong { color: #022c22; }
+
+  footer { text-align: center; color: #9ca3af; font-size: 12px; margin-top: 32px; padding: 16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Dashboard Consolidado — Ranger</h1>
+  <div class="subtitle">V6 · 2.0 Monoturbo · 2.0 Biturbo — Comparativa Período Completo vs Último Año</div>
+  <div class="meta">
+    <span><strong>Período completo:</strong> Ago 2023 – May 2026</span>
+    <span><strong>Último año:</strong> May 2025 – May 2026</span>
+    <span><strong>Total órdenes:</strong> 8.534</span>
+    <span><strong>Total VINs únicos:</strong> 2.609</span>
+    <span><strong>Ajuste cambiario:</strong> Dólar BYMA</span>
+  </div>
+</header>
+
+<!-- ============ SECCIÓN 1: TOTALIZADO PERÍODO COMPLETO ============ -->
+<div class="section-title">Totalizado · Período Completo <span class="pill">Ago 2023 – May 2026</span></div>
+<div class="kpi-grid">
+  <div class="kpi-card kpi1"><div class="kpi-label">KPI 1 · VINs con Garantía</div><div class="kpi-value">54,93<small>%</small></div><div class="kpi-sub"><b>1.433</b> de <b>2.609</b> VINs</div></div>
+  <div class="kpi-card kpi2"><div class="kpi-label">KPI 2 · Días en Taller (G)</div><div class="kpi-value">3,65<small> días</small></div><div class="kpi-sub">Promedio entrada → salida</div></div>
+  <div class="kpi-card kpi3"><div class="kpi-label">KPI 3 · % Garantía</div><div class="kpi-value">23,25<small>%</small></div><div class="kpi-sub">Cliente: 39,36% · Interno: 37,39%</div></div>
+  <div class="kpi-card kpi3b"><div class="kpi-label">KPI 3b · % G (sin Internos)</div><div class="kpi-value">37,13<small>%</small></div><div class="kpi-sub">Sobre C+G · Cliente: 62,87%</div></div>
+  <div class="kpi-card kpi4"><div class="kpi-label">KPI 4 · Margen Promedio (C)</div><div class="kpi-value">$137.007</div><div class="kpi-sub">U$D 95,81 · pesos may-26</div></div>
+  <div class="kpi-card kpi5"><div class="kpi-label">KPI 5 · Ingresos G / VIN</div><div class="kpi-value">2,13<small> veces</small></div><div class="kpi-sub">Promedio sobre VINs con G</div></div>
+  <div class="kpi-card kpi6"><div class="kpi-label">KPI 6 · % Horas G Facturadas</div><div class="kpi-value">63,19<small>%</small></div><div class="kpi-sub"><b>30.881</b> de <b>48.873</b> hs reales</div></div>
+</div>
+
+<!-- ============ SECCIÓN 2: TOTALIZADO ÚLTIMO AÑO ============ -->
+<div class="section-title">Totalizado · Último Año <span class="pill amber">May 2025 – May 2026</span></div>
+<div class="kpi-grid">
+  <div class="kpi-card kpi1"><div class="kpi-label">KPI 1 · VINs con Garantía</div><div class="kpi-value">46,89<small>%</small></div><div class="kpi-sub"><b>1.033</b> de <b>2.203</b> VINs</div></div>
+  <div class="kpi-card kpi2"><div class="kpi-label">KPI 2 · Días en Taller (G)</div><div class="kpi-value">3,92<small> días</small></div><div class="kpi-sub">Promedio entrada → salida</div></div>
+  <div class="kpi-card kpi3"><div class="kpi-label">KPI 3 · % Garantía</div><div class="kpi-value">22,44<small>%</small></div><div class="kpi-sub">Cliente: 44,81% · Interno: 32,75%</div></div>
+  <div class="kpi-card kpi3b"><div class="kpi-label">KPI 3b · % G (sin Internos)</div><div class="kpi-value">33,37<small>%</small></div><div class="kpi-sub">Sobre C+G · Cliente: 66,63%</div></div>
+  <div class="kpi-card kpi4"><div class="kpi-label">KPI 4 · Margen Promedio (C)</div><div class="kpi-value">$131.445</div><div class="kpi-sub">U$D 91,92 · pesos may-26</div></div>
+  <div class="kpi-card kpi5"><div class="kpi-label">KPI 5 · Ingresos G / VIN</div><div class="kpi-value">1,43<small> veces</small></div><div class="kpi-sub">Sobre VINs con G en el período</div></div>
+  <div class="kpi-card kpi6"><div class="kpi-label">KPI 6 · % Horas G Facturadas</div><div class="kpi-value">76,56<small>%</small></div><div class="kpi-sub"><b>19.224</b> de <b>25.108</b> hs reales</div></div>
+</div>
+
+<!-- ============ MATRIZ COMPARATIVA ============ -->
+<div class="section-title">Matriz Comparativa — Período Completo vs Último Año</div>
+<div class="matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>KPI</th>
+        <th>Motorización</th>
+        <th class="num">Período Completo</th>
+        <th class="num">Último Año</th>
+        <th class="num">Δ</th>
+        <th>Tendencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="6">KPI 1 — % VINs con Reparaciones en Garantía (menor es mejor)</td></tr>
+      <tr><td>—</td><td><b>TOTAL</b></td><td class="num">54,93%</td><td class="num">46,89%</td><td class="num delta-good">-8,04 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">58,56%</td><td class="num">52,90%</td><td class="num delta-good">-5,66 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">44,53%</td><td class="num">36,71%</td><td class="num delta-good">-7,82 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">65,84%</td><td class="num">53,50%</td><td class="num delta-good">-12,34 pp</td><td class="delta-good">Mejoró</td></tr>
+
+      <tr class="section-row"><td colspan="6">KPI 2 — Días Promedio en Taller en Garantía (menor es mejor)</td></tr>
+      <tr><td>—</td><td><b>TOTAL</b></td><td class="num">3,65</td><td class="num">3,92</td><td class="num delta-bad">+0,27</td><td class="delta-bad">Empeoró</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">2,70</td><td class="num">2,88</td><td class="num delta-bad">+0,18</td><td class="delta-bad">Empeoró</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">3,91</td><td class="num">5,12</td><td class="num delta-bad">+1,21</td><td class="delta-bad">Empeoró</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">4,78</td><td class="num">4,33</td><td class="num delta-good">-0,45</td><td class="delta-good">Mejoró</td></tr>
+
+      <tr class="section-row"><td colspan="6">KPI 3 — % Reparaciones en Garantía (menor es mejor)</td></tr>
+      <tr><td>—</td><td><b>TOTAL</b></td><td class="num">23,25%</td><td class="num">22,44%</td><td class="num delta-good">-0,81 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">25,68%</td><td class="num">24,28%</td><td class="num delta-good">-1,40 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">19,10%</td><td class="num">18,88%</td><td class="num delta-good">-0,22 pp</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">24,70%</td><td class="num">24,38%</td><td class="num delta-good">-0,32 pp</td><td class="delta-good">Estable</td></tr>
+
+      <tr class="section-row"><td colspan="6">KPI 4 — Margen Promedio Repuestos C en USD (mayor es mejor)</td></tr>
+      <tr><td>—</td><td><b>TOTAL</b></td><td class="num">U$D 95,81</td><td class="num">U$D 91,92</td><td class="num delta-bad">-U$D 3,89</td><td class="delta-bad">Empeoró</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">U$D 100,91</td><td class="num">U$D 100,05</td><td class="num delta-neutral">-U$D 0,86</td><td class="delta-neutral">Estable</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">U$D 96,27</td><td class="num">U$D 86,61</td><td class="num delta-bad">-U$D 9,66</td><td class="delta-bad">Empeoró</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">U$D 88,70</td><td class="num">U$D 88,03</td><td class="num delta-neutral">-U$D 0,67</td><td class="delta-neutral">Estable</td></tr>
+
+      <tr class="section-row"><td colspan="6">KPI 5 — Ingresos Promedio en Garantía por VIN (menor es mejor)</td></tr>
+      <tr><td>—</td><td><b>TOTAL</b></td><td class="num">2,13</td><td class="num">1,43</td><td class="num delta-good">-0,70</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">2,53</td><td class="num">1,55</td><td class="num delta-good">-0,98</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">1,78</td><td class="num">1,39</td><td class="num delta-good">-0,39</td><td class="delta-good">Mejoró</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">2,02</td><td class="num">1,31</td><td class="num delta-good">-0,71</td><td class="delta-good">Mejoró</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="alert good">
+  <strong>Buenas noticias:</strong> En el último año <b>4 de los 5 KPIs mejoraron</b> a nivel total — bajaron VINs en garantía, % de garantía en el mix, e ingresos repetidos. El KPI 5 (reincidencia) muestra una caída notable de 2,13 a 1,43 ingresos por VIN.
+</div>
+<div class="alert">
+  <strong>Atención:</strong> El KPI 2 (tiempo en taller) <b>empeoró +0,27 días</b> a nivel total. El caso más preocupante es el Monoturbo, donde subió <b>+1,21 días</b> (de 3,91 a 5,12). El margen en USD también cayó levemente (-U$D 3,89), tirado fundamentalmente por el Monoturbo.
+</div>
+
+<!-- ============ CHARTS COMPARATIVOS ============ -->
+<div class="section-title">Gráficos Comparativos por KPI</div>
+<div class="row row-2">
+  <div class="panel"><h2>KPI 1 — % VINs con Garantía</h2><div class="chart-wrap"><canvas id="k1"></canvas></div></div>
+  <div class="panel"><h2>KPI 2 — Días en Taller (Garantía)</h2><div class="chart-wrap"><canvas id="k2"></canvas></div></div>
+</div>
+<div class="row row-2">
+  <div class="panel"><h2>KPI 3 — % Reparaciones en Garantía</h2><div class="chart-wrap"><canvas id="k3"></canvas></div></div>
+  <div class="panel"><h2>KPI 4 — Margen Promedio (USD)</h2><div class="chart-wrap"><canvas id="k4"></canvas></div></div>
+</div>
+<div class="row row-2">
+  <div class="panel"><h2>KPI 5 — Ingresos en Garantía por VIN</h2><div class="chart-wrap"><canvas id="k5"></canvas></div></div>
+  <div class="panel"><h2>KPI 3 — Composición Cargo (% sobre reparaciones)</h2><div class="chart-wrap"><canvas id="kcomp"></canvas></div></div>
+</div>
+
+<!-- ============ DISTRIBUCIONES DETALLADAS ============ -->
+<div class="section-title">Distribución de Permanencia en Taller (Garantía)</div>
+<div class="row row-2">
+  <div class="panel"><h2>Período completo (n=3.037 órdenes)</h2><div class="chart-wrap"><canvas id="permPC"></canvas></div></div>
+  <div class="panel"><h2>Último año (n=1.464 órdenes)</h2><div class="chart-wrap"><canvas id="permUY"></canvas></div></div>
+</div>
+
+<div class="section-title">Distribución de Ingresos en Garantía por VIN</div>
+<div class="row row-2">
+  <div class="panel"><h2>Período completo (n=1.433 VINs)</h2>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:center;">
+      <div class="chart-wrap" style="height:260px;"><canvas id="ingPC"></canvas></div>
+      <div>
+        <table>
+          <thead><tr><th>Ing.</th><th class="num">VINs</th><th class="num">%</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="num">670</td><td class="num">46,8%</td></tr>
+            <tr><td>2</td><td class="num">361</td><td class="num">25,2%</td></tr>
+            <tr><td>3</td><td class="num">192</td><td class="num">13,4%</td></tr>
+            <tr><td>4</td><td class="num">82</td><td class="num">5,7%</td></tr>
+            <tr><td>5</td><td class="num">73</td><td class="num">5,1%</td></tr>
+            <tr><td>6</td><td class="num">30</td><td class="num">2,1%</td></tr>
+            <tr><td>7</td><td class="num">13</td><td class="num">0,9%</td></tr>
+            <tr><td>8+</td><td class="num">12</td><td class="num">0,8%</td></tr>
+            <tr class="total-row"><td><b>Total</b></td><td class="num"><b>1.433</b></td><td class="num"><b>100%</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel"><h2>Último año (n=1.033 VINs)</h2>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:center;">
+      <div class="chart-wrap" style="height:260px;"><canvas id="ingUY"></canvas></div>
+      <div>
+        <table>
+          <thead><tr><th>Ing.</th><th class="num">VINs</th><th class="num">%</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="num">720</td><td class="num">69,7%</td></tr>
+            <tr><td>2</td><td class="num">225</td><td class="num">21,8%</td></tr>
+            <tr><td>3</td><td class="num">58</td><td class="num">5,6%</td></tr>
+            <tr><td>4</td><td class="num">20</td><td class="num">1,9%</td></tr>
+            <tr><td>5</td><td class="num">6</td><td class="num">0,6%</td></tr>
+            <tr><td>6</td><td class="num">4</td><td class="num">0,4%</td></tr>
+            <tr><td>7</td><td class="num">0</td><td class="num">0,0%</td></tr>
+            <tr><td>8+</td><td class="num">0</td><td class="num">0,0%</td></tr>
+            <tr class="total-row"><td><b>Total</b></td><td class="num"><b>1.033</b></td><td class="num"><b>100%</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ESCENARIO WHAT-IF ============ -->
+<div class="section-title">Escenario "What-if" — Pérdida por Exceso de Garantía sobre 15%</div>
+
+<div class="alert">
+  <strong>Supuesto:</strong> Calculamos cuánto margen adicional se habría generado si solamente el <b>15%</b> de las unidades-orden se hubieran cargado a Garantía, y la diferencia se hubiera facturado a Cliente. Usamos como referencia el <b>margen promedio de órdenes "sin cargo G"</b> de cada motorización (limpio del efecto mixto).
+</div>
+
+<div class="matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th>Motorización</th>
+        <th class="num">Total uds.</th>
+        <th class="num">% G actual</th>
+        <th class="num">Uds. mover G→C</th>
+        <th class="num">Margen prom. sin G</th>
+        <th class="num">Pérdida $ hoy</th>
+        <th class="num">Pérdida USD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="8">PERÍODO COMPLETO (Ago 2023 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">13.123</td><td class="num">23,25%</td><td class="num">~1.083</td><td class="num">—</td><td class="num"><b>$175.234.505</b></td><td class="num"><b>U$D 122.542</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">5.116</td><td class="num">25,68%</td><td class="num">~547</td><td class="num">$174.285</td><td class="num">$95.264.404</td><td class="num">U$D 66.618</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">4.294</td><td class="num">19,10%</td><td class="num">~176</td><td class="num">$144.702</td><td class="num">$25.453.089</td><td class="num">U$D 17.799</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">3.713</td><td class="num">24,70%</td><td class="num">~360</td><td class="num">$151.415</td><td class="num">$54.517.012</td><td class="num">U$D 38.124</td></tr>
+
+      <tr class="section-row"><td colspan="8">ÚLTIMO AÑO (May 2025 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">6.586</td><td class="num">22,44%</td><td class="num">~490</td><td class="num">—</td><td class="num"><b>$73.668.129</b></td><td class="num"><b>U$D 51.516</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">2.673</td><td class="num">24,28%</td><td class="num">~248</td><td class="num">$160.926</td><td class="num">$39.964.600</td><td class="num">U$D 27.947</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">2.272</td><td class="num">18,88%</td><td class="num">~88</td><td class="num">$122.183</td><td class="num">$10.770.698</td><td class="num">U$D 7.532</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">1.641</td><td class="num">24,38%</td><td class="num">~154</td><td class="num">$148.948</td><td class="num">$22.932.831</td><td class="num">U$D 16.037</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row row-2">
+  <div class="panel"><h2>Pérdida estimada por Motorización (pesos hoy)</h2><div class="chart-wrap"><canvas id="whatifChart"></canvas></div></div>
+  <div class="panel"><h2>Pérdida estimada por Motorización (USD)</h2><div class="chart-wrap"><canvas id="whatifUsdChart"></canvas></div></div>
+</div>
+
+<div class="alert">
+  <strong>Lectura:</strong> A nivel total, el exceso de garantía sobre el umbral del 15% costó aproximadamente <b>$175 millones</b> de margen perdido en el período completo (U$D 122.542) y <b>$74 millones</b> en el último año (U$D 51.516). El <b>V6 explica el 50%</b> de esa pérdida — es la motorización donde más impacto económico tiene la sobrecarga a garantía, tanto por su mayor % de G como por su mayor margen por orden.
+</div>
+
+<!-- ============ VISTA ALTERNATIVA SIN INTERNOS ============ -->
+<div class="section-title">Vista Alternativa — Excluyendo Cargos Internos <span class="pill amber">Solo C + G</span></div>
+
+<div class="alert">
+  <strong>Por qué esta vista:</strong> Los cargos Internos (I) son trabajos absorbidos por la concesionaria (rework, cortesías, PDI). Si los excluimos del cálculo, la base pasa a ser únicamente las reparaciones "facturables a alguien" (Cliente o Garantía). Esto da una lectura más limpia de qué porcentaje del trabajo "facturable" termina pagándolo Ford vs el cliente.
+</div>
+
+<div class="matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th>Motorización</th>
+        <th class="num">Cliente (C)</th>
+        <th class="num">Garantía (G)</th>
+        <th class="num">Total C+G</th>
+        <th class="num">% G</th>
+        <th class="num">% C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="7">PERÍODO COMPLETO (Ago 2023 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">5.165</td><td class="num">3.051</td><td class="num">8.216</td><td class="num"><b>37,13%</b></td><td class="num">62,87%</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">1.842</td><td class="num">1.314</td><td class="num">3.156</td><td class="num">41,63%</td><td class="num">58,37%</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">1.875</td><td class="num">820</td><td class="num">2.695</td><td class="num">30,43%</td><td class="num">69,57%</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">1.448</td><td class="num">917</td><td class="num">2.365</td><td class="num">38,77%</td><td class="num">61,23%</td></tr>
+      <tr class="section-row"><td colspan="7">ÚLTIMO AÑO (May 2025 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">2.951</td><td class="num">1.478</td><td class="num">4.429</td><td class="num"><b>33,37%</b></td><td class="num">66,63%</td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">1.104</td><td class="num">649</td><td class="num">1.753</td><td class="num">37,02%</td><td class="num">62,98%</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">1.123</td><td class="num">429</td><td class="num">1.552</td><td class="num">27,64%</td><td class="num">72,36%</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">724</td><td class="num">400</td><td class="num">1.124</td><td class="num">35,59%</td><td class="num">64,41%</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="alert">
+  <strong>Lectura:</strong> Excluyendo internos, la garantía pasa de ser ~23% (con I) a representar el <b>37,13%</b> del trabajo facturable a nivel total. Es decir, <b>de cada 100 reparaciones facturables, ~37 las paga Ford y ~63 las paga el cliente</b>. En el último año el ratio mejoró a 33,37%/66,63%. El V6 sigue siendo el motor con mayor sobre-garantía: 41,63% de su trabajo facturable lo cubre Ford.
+</div>
+
+<div class="section-title">Escenario "What-if" Recalculado — Sin Internos</div>
+
+<div class="alert">
+  <strong>Nuevo supuesto:</strong> Llevamos la garantía al <b>15% del trabajo facturable</b> (sólo C+G, sin I). Como el denominador es menor, las unidades a "mover" son mayores y, por lo tanto, la pérdida estimada también.
+</div>
+
+<div class="matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th>Motorización</th>
+        <th class="num">Total C+G</th>
+        <th class="num">% G actual</th>
+        <th class="num">Mover G→C</th>
+        <th class="num">Margen sin G</th>
+        <th class="num">Pérdida $ hoy</th>
+        <th class="num">Pérdida USD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="8">PERÍODO COMPLETO</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">8.216</td><td class="num">37,13%</td><td class="num">~1.819</td><td class="num">—</td><td class="num"><b>$291.797.335</b></td><td class="num"><b>U$D 204.054</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">3.156</td><td class="num">41,63%</td><td class="num">~841</td><td class="num">$174.285</td><td class="num">$146.504.313</td><td class="num">U$D 102.451</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">2.695</td><td class="num">30,43%</td><td class="num">~416</td><td class="num">$144.702</td><td class="num">$60.159.874</td><td class="num">U$D 42.070</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">2.365</td><td class="num">38,77%</td><td class="num">~562</td><td class="num">$151.415</td><td class="num">$85.133.148</td><td class="num">U$D 59.534</td></tr>
+      <tr class="section-row"><td colspan="8">ÚLTIMO AÑO</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">4.429</td><td class="num">33,37%</td><td class="num">~814</td><td class="num">—</td><td class="num"><b>$120.650.200</b></td><td class="num"><b>U$D 84.371</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">1.753</td><td class="num">37,02%</td><td class="num">~386</td><td class="num">$161.115</td><td class="num">$62.198.484</td><td class="num">U$D 43.495</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">1.552</td><td class="num">27,64%</td><td class="num">~196</td><td class="num">$122.117</td><td class="num">$23.959.308</td><td class="num">U$D 16.755</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">1.124</td><td class="num">35,59%</td><td class="num">~231</td><td class="num">$149.060</td><td class="num">$34.492.409</td><td class="num">U$D 24.121</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row row-2">
+  <div class="panel"><h2>Comparativa Vistas — Pérdida $ hoy (TOTAL)</h2><div class="chart-wrap"><canvas id="vistasChart"></canvas></div></div>
+  <div class="panel"><h2>% Garantía — Con I vs Sin I</h2><div class="chart-wrap"><canvas id="pctGChart"></canvas></div></div>
+</div>
+
+<div class="alert">
+  <strong>Comparativa de las dos vistas (Período Completo · TOTAL):</strong><br>
+  Vista <b>con Internos</b>: %G = 23,25% · Pérdida = $175M (U$D 123k)<br>
+  Vista <b>sin Internos</b>: %G = 37,13% · Pérdida = <b>$292M (U$D 204k)</b><br>
+  La pérdida sube ~67% al excluir Internos. Esto sugiere que <b>la sobrecarga a garantía está concentrada en el segmento "facturable"</b>: cuando hay un trabajo que SÍ va a alguien, ese alguien termina siendo Ford con demasiada frecuencia.
+</div>
+
+
+<!-- ============ WHAT-IF HORAS GARANTÍA ============ -->
+<div class="section-title">What-if Horas — Pérdida por Horas Trabajadas No Facturadas en Garantía <span class="pill amber">$81.660 / h</span></div>
+
+<div class="alert">
+  <strong>Supuesto:</strong> Sobre las órdenes con tareas de Garantía (cargo G en Mano de Obra), comparamos las <b>horas reales trabajadas</b> (tpo_real) contra las <b>horas efectivamente facturadas</b> a Ford (tpo_fact). La diferencia positiva representa trabajo no remunerado; la negativa, horas pagadas por sobre lo trabajado. Aplicamos el valor actual de <b>$81.660 por hora de garantía</b> para valorizar la brecha (vista neta — los valores negativos se restan).
+</div>
+
+<div class="matrix">
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th>Motorización</th>
+        <th class="num">Órdenes con G</th>
+        <th class="num">H reales (tot)</th>
+        <th class="num">H facturadas (tot)</th>
+        <th class="num">Δ horas</th>
+        <th class="num">Δ por orden</th>
+        <th class="num">% facturado</th>
+        <th class="num">Pérdida (neta) $</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="9">PERÍODO COMPLETO (Ago 2023 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">2.980</td><td class="num">48.872,81</td><td class="num">30.880,68</td><td class="num">17.992,13</td><td class="num">6,04</td><td class="num">63,19%</td><td class="num"><b>$1.469.237.336</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">1.288</td><td class="num">19.563,46</td><td class="num">11.805,81</td><td class="num">7.757,65</td><td class="num">6,02</td><td class="num">60,35%</td><td class="num">$633.489.699</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">792</td><td class="num">8.462,25</td><td class="num">8.260,64</td><td class="num">201,61</td><td class="num">0,25</td><td class="num">97,62%</td><td class="num">$16.463.473</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">900</td><td class="num">20.847,10</td><td class="num">10.814,23</td><td class="num">10.032,87</td><td class="num">11,15</td><td class="num">51,87%</td><td class="num">$819.284.164</td></tr>
+      <tr class="section-row"><td colspan="9">ÚLTIMO AÑO (May 2025 – May 2026)</td></tr>
+      <tr class="total-row"><td>—</td><td><b>TOTAL</b></td><td class="num">1.441</td><td class="num">25.107,75</td><td class="num">19.223,58</td><td class="num">5.884,17</td><td class="num">4,08</td><td class="num">76,56%</td><td class="num"><b>$480.501.322</b></td></tr>
+      <tr><td>—</td><td>V6</td><td class="num">637</td><td class="num">11.189,11</td><td class="num">6.988,54</td><td class="num">4.200,57</td><td class="num">6,59</td><td class="num">62,46%</td><td class="num">$343.018.546</td></tr>
+      <tr><td>—</td><td>Monoturbo</td><td class="num">411</td><td class="num">7.299,05</td><td class="num">7.526,52</td><td class="num">-227,47</td><td class="num">-0,55</td><td class="num">103,12%</td><td class="num" style="color:#047857;font-weight:600;">-$18.575.200</td></tr>
+      <tr><td>—</td><td>Biturbo</td><td class="num">393</td><td class="num">6.619,59</td><td class="num">4.708,52</td><td class="num">1.911,07</td><td class="num">4,86</td><td class="num">71,13%</td><td class="num">$156.057.976</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row row-2">
+  <div class="panel"><h2>Δ Horas (real - facturado) por Motorización</h2><div class="chart-wrap"><canvas id="horasChart"></canvas></div></div>
+  <div class="panel"><h2>Pérdida (neta) por Horas no Facturadas</h2><div class="chart-wrap"><canvas id="horasPerdidaChart"></canvas></div></div>
+</div>
+
+<div class="alert">
+  <strong>Lectura:</strong> Históricamente perdimos <b>$1.469 millones</b> (≈ U$D 1,03M al BYMA actual) por horas trabajadas y no facturadas en garantía — equivalente a <b>17.992 horas</b>. El <b>Biturbo concentra el 56% de la pérdida</b> ($819M) con una brecha de +11,15 horas por orden no remuneradas. El <b>Monoturbo es el más eficiente</b>: facturamos casi todo lo trabajado (97,6% histórico, 103,1% en el último año — donde de hecho generamos un crédito neto de $18,6M). En el último año la pérdida total fue <b>$480 millones</b> (≈ U$D 336k al cambio actual).
+</div>
+
+<footer>Dashboard consolidado generado el 12/05/2026 · Comparativa Período Completo vs Último Año · Datos de V6, 2.0 Monoturbo y 2.0 Biturbo</footer>
+
+<script>
+const C_PERIODO='#0066B2', C_ULTIMO='#F59E0B';
+const labels = ['TOTAL', 'V6', 'Monoturbo', 'Biturbo'];
+
+function barChart(id, total, last, fmt) {
+  return new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Período completo', data: total, backgroundColor: C_PERIODO, borderRadius: 4 },
+      { label: 'Último año', data: last, backgroundColor: C_ULTIMO, borderRadius: 4 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${fmt(ctx.parsed.y)}` } } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => fmt(v) } } }
+    }
+  });
+}
+barChart('k1',[54.93,58.56,44.53,65.84],[46.89,52.90,36.71,53.50], v=>v.toFixed(2)+'%');
+barChart('k2',[3.65,2.70,3.91,4.78],[3.92,2.88,5.12,4.33], v=>v.toFixed(2)+' días');
+barChart('k3',[23.25,25.68,19.10,24.70],[22.44,24.28,18.88,24.38], v=>v.toFixed(2)+'%');
+barChart('k4',[95.81,100.91,96.27,88.70],[91.92,100.05,86.61,88.03], v=>'U$D '+v.toFixed(0));
+barChart('k5',[2.13,2.53,1.78,2.02],[1.43,1.55,1.39,1.31], v=>v.toFixed(2));
+
+new Chart(document.getElementById('vistasChart'), {
+  type: 'bar',
+  data: { labels: ['Período completo','Último año'], datasets: [
+    { label: 'Con Internos', data: [175234505, 73668129], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Sin Internos', data: [291797335, 120650200], backgroundColor: '#EF4444', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-AR')}` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000000).toFixed(0) + 'M' } } }
+  }
+});
+new Chart(document.getElementById('pctGChart'), {
+  type: 'bar',
+  data: { labels: ['TOTAL','V6','Monoturbo','Biturbo'], datasets: [
+    { label: 'Con Internos', data: [23.25, 25.68, 19.10, 24.70], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Sin Internos', data: [37.13, 41.63, 30.43, 38.77], backgroundColor: '#EF4444', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+new Chart(document.getElementById('whatifChart'), {
+  type: 'bar',
+  data: { labels: ['V6','Monoturbo','Biturbo'], datasets: [
+    { label: 'Período completo', data: [95264404, 25453089, 54517012], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Último año', data: [39964600, 10770698, 22932831], backgroundColor: '#F59E0B', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-AR')}` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000000).toFixed(0) + 'M' } } }
+  }
+});
+new Chart(document.getElementById('whatifUsdChart'), {
+  type: 'bar',
+  data: { labels: ['V6','Monoturbo','Biturbo'], datasets: [
+    { label: 'Período completo', data: [66618, 17799, 38124], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Último año', data: [27947, 7532, 16037], backgroundColor: '#F59E0B', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: U$D ${ctx.parsed.y.toLocaleString('es-AR')}` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => 'U$D ' + (v/1000).toFixed(0) + 'k' } } }
+  }
+});
+
+const labelsPerm = ['0 días','1 día','2-3 días','4-7 días','8-15 días','16-30 días','>30 días'];
+new Chart(document.getElementById('permPC'), {
+  type:'bar',
+  data:{ labels: labelsPerm, datasets:[{ label:'Órdenes', data:[1819,533,235,180,109,71,90], backgroundColor:'#F59E0B', borderRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(ctx)=>`${ctx.parsed.y} órdenes (${(ctx.parsed.y/3037*100).toFixed(1)}%)` } } }, scales:{ y:{ beginAtZero:true, ticks:{precision:0} } } }
+});
+new Chart(document.getElementById('permUY'), {
+  type:'bar',
+  data:{ labels: labelsPerm, datasets:[{ label:'Órdenes', data:[858,273,116,85,52,28,52], backgroundColor:'#F59E0B', borderRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(ctx)=>`${ctx.parsed.y} órdenes (${(ctx.parsed.y/1464*100).toFixed(1)}%)` } } }, scales:{ y:{ beginAtZero:true, ticks:{precision:0} } } }
+});
+
+const labelsIng = ['1','2','3','4','5','6','7','8+'];
+new Chart(document.getElementById('ingPC'), {
+  type:'bar',
+  data:{ labels: labelsIng, datasets:[{ label:'VINs', data:[670,361,192,82,73,30,13,12], backgroundColor:'#EF4444', borderRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(ctx)=>`${ctx.parsed.y} VINs (${(ctx.parsed.y/1433*100).toFixed(1)}%)` } } }, scales:{ y:{ beginAtZero:true, ticks:{precision:0} } } }
+});
+new Chart(document.getElementById('ingUY'), {
+  type:'bar',
+  data:{ labels: labelsIng, datasets:[{ label:'VINs', data:[720,225,58,20,6,4,0,0], backgroundColor:'#EF4444', borderRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(ctx)=>`${ctx.parsed.y} VINs (${(ctx.parsed.y/1033*100).toFixed(1)}%)` } } }, scales:{ y:{ beginAtZero:true, ticks:{precision:0} } } }
+});
+
+new Chart(document.getElementById('horasChart'), {
+  type: 'bar',
+  data: { labels: ['V6','Monoturbo','Biturbo'], datasets: [
+    { label: 'Período completo', data: [7757.65, 201.61, 10032.87], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Último año', data: [4200.57, -227.47, 1911.07], backgroundColor: '#F59E0B', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})} hs` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString('es-AR') + ' hs' } } }
+  }
+});
+new Chart(document.getElementById('horasPerdidaChart'), {
+  type: 'bar',
+  data: { labels: ['V6','Monoturbo','Biturbo'], datasets: [
+    { label: 'Período completo', data: [633489699, 16463473, 819284164], backgroundColor: '#0066B2', borderRadius: 4 },
+    { label: 'Último año', data: [343018546, -18575200, 156057976], backgroundColor: '#F59E0B', borderRadius: 4 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-AR')}` } } },
+    scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000000).toFixed(0) + 'M' } } }
+  }
+});
+
+new Chart(document.getElementById('kcomp'), {
+  type: 'bar',
+  data: { labels, datasets: [
+    { label: 'Cliente (C)', data: [39.36,36.00,43.67,39.00], backgroundColor: '#0066B2' },
+    { label: 'Garantía (G)', data: [23.25,25.68,19.10,24.70], backgroundColor: '#10B981' },
+    { label: 'Interno (I)', data: [37.39,38.31,37.24,36.30], backgroundColor: '#F59E0B' },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%` } } },
+    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, max: 100, ticks: { callback: v => v+'%' } } }
+  }
+});
+</script>
+</body>
+</html>
