@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cruce Meta × Pilot — Plan Óvalo + Convencional — Mayo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f3eb;
+    --paper-2: #efe9dc;
+    --ink: #14181f;
+    --ink-soft: #3a4250;
+    --ink-mute: #6c7382;
+    --line: #d8cfbb;
+    --line-soft: #e5dfd0;
+    --accent: #b53a26;
+    --good: #0f6b3d;
+    --good-bg: #d8ead9;
+    --bad: #9d1f1f;
+    --bad-bg: #f1d8d4;
+    --warn: #b07a17;
+    --warn-bg: #f4e6c4;
+    --pa: #2c4b6e;
+    --pa-bg: #d8e1ec;
+    --conv: #6e3d2c;
+    --conv-bg: #ecdfd5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'IBM Plex Sans', sans-serif; font-size: 14.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 40px 48px 80px; }
+
+  /* HEADER */
+  header.masthead { border-bottom: 3px solid var(--ink); padding-bottom: 24px; margin-bottom: 36px; }
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+  .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+  h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 54px; line-height: 1; letter-spacing: -0.025em; margin-bottom: 14px; }
+  h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+  .subtitle { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 400; color: var(--ink-soft); max-width: 760px; line-height: 1.4; margin-bottom: 24px; }
+  .meta-bar { display: flex; flex-wrap: wrap; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); }
+  .meta-bar strong { color: var(--ink); font-weight: 700; }
+
+  /* HEADLINE STATS */
+  .top-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-bottom: 48px; }
+  .top-stat { background: var(--paper); padding: 20px 22px; }
+  .top-stat .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 8px; }
+  .top-stat .value { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+  .top-stat .value .unit { font-size: 14px; color: var(--ink-mute); font-weight: 400; }
+  .top-stat .sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-mute); margin-top: 4px; }
+
+  /* SECTION */
+  section { margin-bottom: 56px; scroll-margin-top: 20px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .section-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); font-weight: 700; }
+  h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 28px; letter-spacing: -0.015em; }
+  h2 em { font-style: italic; font-weight: 400; }
+  .section-lead { font-family: 'Fraunces', serif; font-size: 16px; color: var(--ink-soft); max-width: 800px; margin-bottom: 18px; font-style: italic; }
+
+  /* NAV STICKY */
+  .toc { background: var(--paper-2); border: 1px solid var(--line); padding: 14px 20px; margin-bottom: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .toc-title { color: var(--ink-mute); margin-bottom: 8px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .toc-links { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .toc-links a { color: var(--ink); text-decoration: none; padding: 2px 0; border-bottom: 1px dotted transparent; transition: border-color 0.2s; }
+  .toc-links a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+
+  /* MATRIX 2x3 */
+  .matrix { display: grid; grid-template-columns: 140px repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .matrix > div { background: var(--paper); padding: 14px 16px; }
+  .matrix-corner { background: var(--ink) !important; }
+  .matrix-h { background: var(--ink) !important; color: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+  .matrix-rh { background: var(--paper-2) !important; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); font-weight: 600; }
+  .matrix-cell { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .matrix-cell .big { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; line-height: 1.1; display: block; }
+  .matrix-cell .delta { font-size: 10px; color: var(--ink-mute); }
+  .matrix-cell.win { background: rgba(15, 107, 61, 0.08) !important; }
+  .matrix-cell.lose { background: rgba(157, 31, 31, 0.08) !important; }
+
+  /* DATA TABLE */
+  .dt { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  .dt thead th { text-align: left; padding: 10px 12px; background: var(--ink); color: var(--paper); font-weight: 500; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; border-right: 1px solid rgba(247,243,235,0.15); position: sticky; top: 0; }
+  .dt thead th:last-child { border-right: none; }
+  .dt thead th.num { text-align: right; }
+  .dt tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); vertical-align: middle; }
+  .dt tbody td:last-child { border-right: none; }
+  .dt tbody tr:hover { background: var(--paper-2); }
+  .dt tbody td.num { text-align: right; }
+  .dt tbody td.name { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+  .dt-zone-bb { background: rgba(44,75,110,0.04); }
+  .dt-zone-lp { background: rgba(176,122,23,0.04); }
+  .dt-zone-nr { background: rgba(15,107,61,0.04); }
+  .pct-cell { position: relative; }
+  .pct-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent); }
+  .pct-bar.good { background: var(--good); }
+  .pct-bar.bad { background: var(--bad); }
+  .pct-bar.mid { background: var(--warn); }
+  .num-good { color: var(--good); font-weight: 700; }
+  .num-bad { color: var(--bad); font-weight: 700; }
+  .num-mid { color: var(--warn); font-weight: 700; }
+  .num-zero { color: var(--ink-mute); }
+  .tag { display: inline-block; padding: 1px 7px; font-size: 9px; letter-spacing: 0.08em; font-weight: 700; }
+  .tag.bb { background: var(--pa-bg); color: var(--pa); }
+  .tag.lp { background: var(--warn-bg); color: var(--warn); }
+  .tag.nr { background: var(--good-bg); color: var(--good); }
+  .tag.pa { background: var(--pa-bg); color: var(--pa); }
+  .tag.conv { background: var(--conv-bg); color: var(--conv); }
+
+  /* HEATMAP */
+  .heatmap { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; }
+  .hm-cell { background: var(--paper); padding: 14px 16px; font-size: 12px; }
+  .hm-header { background: var(--ink) !important; color: var(--paper); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+  .hm-row-h { background: var(--paper-2) !important; font-weight: 600; font-size: 11px; color: var(--ink-mute); letter-spacing: 0.08em; text-transform: uppercase; }
+  .hm-value { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; line-height: 1; }
+  .hm-sub { font-size: 10px; color: var(--ink-mute); margin-top: 3px; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .col-card { border: 1px solid var(--line); background: var(--paper); padding: 22px 24px; }
+  .col-card.good-tint { background: rgba(15,107,61,0.03); border-color: rgba(15,107,61,0.18); }
+  .col-card.bad-tint { background: rgba(157,31,31,0.03); border-color: rgba(157,31,31,0.18); }
+  .col-card h3 { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: baseline; gap: 8px; }
+  .col-card .item { padding: 8px 0; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .col-card .item:last-child { border-bottom: none; }
+  .col-card .item .name { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 14px; }
+  .col-card .item .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); margin-top: 2px; display: block; }
+  .col-card .item .val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .col-card .item .val.good { color: var(--good); }
+  .col-card .item .val.bad { color: var(--bad); }
+
+  /* INSIGHTS */
+  .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .insight { border-left: 3px solid var(--ink-soft); padding: 6px 0 6px 18px; }
+  .insight-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); font-weight: 700; margin-bottom: 6px; }
+  .insight h4 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.25; }
+  .insight p { color: var(--ink-soft); font-size: 13.5px; line-height: 1.5; }
+  .insight p strong { color: var(--ink); font-weight: 600; }
+  .insight.alert { border-left-color: var(--bad); }
+  .insight.alert .insight-tag { color: var(--bad); }
+  .insight.win { border-left-color: var(--good); }
+  .insight.win .insight-tag { color: var(--good); }
+  .insight.warn { border-left-color: var(--warn); }
+  .insight.warn .insight-tag { color: var(--warn); }
+
+  /* FUGA FLOW */
+  .fuga-flow { background: var(--paper-2); border: 1px solid var(--line); padding: 24px; }
+  .fuga-row { display: grid; grid-template-columns: 80px 1fr; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+  .fuga-row:last-child { border-bottom: none; }
+  .fuga-source { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
+  .fuga-source .sub { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-mute); font-weight: 400; }
+  .fuga-bars { display: flex; gap: 2px; height: 36px; }
+  .fuga-bar { display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 32px; padding: 4px 8px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; position: relative; }
+  .fuga-bar.in-zone { background: var(--good); }
+  .fuga-bar.cross-bb { background: var(--pa); }
+  .fuga-bar.cross-lp { background: var(--warn); }
+  .fuga-bar.cross-nr { background: var(--good); opacity: 0.6; }
+  .fuga-bar.bsas { background: #555; }
+  .fuga-bar.other { background: #888; }
+  .fuga-bar.nopilot { background: var(--bad); opacity: 0.7; }
+  .fuga-bar .lbl { display: block; font-size: 9px; opacity: 0.8; margin-top: 2px; }
+
+  /* HHT VIZ */
+  .hht-buckets { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .hht-bucket { background: var(--paper); padding: 16px; text-align: center; }
+  .hht-bucket .b-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); letter-spacing: 0.08em; }
+  .hht-bucket .b-value { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; line-height: 1; margin: 6px 0; }
+  .hht-bucket .b-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .hht-bucket.fast { background: rgba(15,107,61,0.06); }
+  .hht-bucket.slow { background: rgba(157,31,31,0.06); }
+
+  /* FOOTER */
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-mute); display: flex; justify-content: space-between; }
+  footer .conf { background: var(--bad-bg); color: var(--bad); padding: 2px 8px; font-weight: 700; }
+
+  /* GLOSSARY */
+  .gloss { background: var(--paper-2); padding: 22px 26px; border: 1px solid var(--line); font-size: 13px; }
+  .gloss dt { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); margin-top: 12px; }
+  .gloss dt:first-child { margin-top: 0; }
+  .gloss dd { color: var(--ink-soft); margin: 4px 0 0 0; }
+  .gloss dd code { background: var(--paper); padding: 1px 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+
+  @media print { body { background: white; } .wrap { padding: 18px; max-width: 100%; } section { page-break-inside: avoid; } .toc { display: none; } }
+  @media (max-width: 920px) { .top-stats, .insights-grid, .two-col, .matrix { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header class="masthead">
+    <div class="eyebrow">Reporte interno · Guspamar · Marketing · Confidencial</div>
+    <h1>Cruce <em>Meta × Pilot</em><br>2 canales · 3 zonas · 18 días</h1>
+    <p class="subtitle">Mapeo de eficiencia, calidad y asociaciones entre inversión publicitaria, gestión comercial y conversión.</p>
+    <div class="meta-bar">
+      <div>Período: <strong>01 — 18 mayo 2026</strong></div>
+      <div>Canales: <strong>Plan Ahorro + Convencional + Ford Pro</strong></div>
+      <div>Zonas: <strong>BB · LP · Neu+Rn</strong></div>
+      <div>Cruce: <strong>808 leads Meta × 879 Pilot</strong></div>
+    </div>
+  </header>
+
+  <!-- ============ TOC ============ -->
+  <nav class="toc">
+    <div class="toc-title">Navegación</div>
+    <div class="toc-links">
+      <a href="#foto">01 Foto general</a>
+      <a href="#embudo">02 Embudo completo (TOFU+BOFU)</a>
+      <a href="#matriz">03 Matriz canal × zona</a>
+      <a href="#asociaciones">04 Asociaciones clave</a>
+      <a href="#hht">05 Tiempo hasta gestión</a>
+      <a href="#vendedores">06 Vendedores</a>
+      <a href="#sucursal">07 Sucursales</a>
+      <a href="#fuga">08 Fuga geográfica</a>
+      <a href="#dispersion">09 Dispersión geográfica</a>
+      <a href="#anuncios">10 Performance por creativo</a>
+      <a href="#cruces">11 Mismo creativo, distinta zona</a>
+      <a href="#metodo">12 Glosario</a>
+    </div>
+  </nav>
+
+  <!-- ============ 01 FOTO ============ -->
+  <section id="foto">
+    <div class="section-head"><div class="section-num">01</div><h2>Foto <em>general</em></h2></div>
+    <div class="top-stats">
+      <div class="top-stat">
+        <div class="label">Inversión total</div>
+        <div class="value">$8.4<span class="unit">M ARS</span></div>
+        <div class="sub">Lead gen: $7.55M · Branding: $864K</div>
+      </div>
+      <div class="top-stat">
+        <div class="label">Leads totales</div>
+        <div class="value">808</div>
+        <div class="sub">PA: 269 · Conv: 461 · Ford Pro: 78</div>
+      </div>
+      <div class="top-stat">
+        <div class="label">Alcance branding</div>
+        <div class="value">1.3<span class="unit">M personas</span></div>
+        <div class="sub">3 campañas TOFU · 10% del total</div>
+      </div>
+      <div class="top-stat">
+        <div class="label">Útiles (no bad)</div>
+        <div class="value">~60<span class="unit">%</span></div>
+        <div class="sub">PA: 73% · Conv: 58% · FP: 50%</div>
+      </div>
+      <div class="top-stat">
+        <div class="label">Vendidos</div>
+        <div class="value">3</div>
+        <div class="sub">en el período · 0.4% conversión</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 EMBUDO COMPLETO ============ -->
+  <section id="embudo">
+    <div class="section-head"><div class="section-num">02</div><h2>Embudo <em>completo</em> · TOFU + BOFU</h2></div>
+    <p class="section-lead">Distribución total de la inversión Meta entre construcción de marca (alcance/branding) y captación de leads (lead gen), dividida por unidad de negocio.</p>
+
+    <table class="dt" style="margin-bottom: 20px;">
+      <thead>
+        <tr>
+          <th>Bloque</th>
+          <th>Campaña / Conjunto</th>
+          <th class="num">Inversión</th>
+          <th class="num">% Total</th>
+          <th class="num">Alcance</th>
+          <th class="num">Frecuencia</th>
+          <th class="num">CPM</th>
+          <th class="num">Leads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background: var(--paper-2)"><td colspan="8" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: var(--ink-mute); text-transform: uppercase;">TOFU · BRANDING / ALCANCE</td></tr>
+        <tr><td class="name">Branding cross-canal</td><td>Broad Adv (PA + Trad)</td><td class="num">$130.537</td><td class="num">1.5%</td><td class="num">451K</td><td class="num num-good">1.41</td><td class="num">$205</td><td class="num num-zero">—</td></tr>
+        <tr><td class="name">Branding cross-canal</td><td>TOF (LOOKALIKE)</td><td class="num">$661.399</td><td class="num">7.9%</td><td class="num">781K</td><td class="num num-bad">3.42</td><td class="num">$248</td><td class="num num-zero">—</td></tr>
+        <tr><td class="name">Branding B2B</td><td>Ford Pro Alcance (Broad/lpybb)</td><td class="num">$71.567</td><td class="num">0.9%</td><td class="num">96K</td><td class="num num-good">1.81</td><td class="num">$410</td><td class="num num-zero">—</td></tr>
+        <tr style="background: var(--paper-2)"><td colspan="2" class="name"><strong>Subtotal TOFU</strong></td><td class="num"><strong>$863.503</strong></td><td class="num"><strong>10.3%</strong></td><td class="num">1.33M</td><td class="num">2.21 prom</td><td class="num">$256 prom</td><td class="num">0</td></tr>
+
+        <tr style="background: var(--paper-2)"><td colspan="8" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: var(--ink-mute); text-transform: uppercase;">BOFU · LEAD GEN</td></tr>
+        <tr><td class="name">Plan Ahorro</td><td><span class="tag pa">PA</span> BB + LP + NR (16 anuncios)</td><td class="num">$3.31M</td><td class="num num-bad">39.4%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num num-good">269</td></tr>
+        <tr><td class="name">Convencional</td><td><span class="tag conv">CONV</span> BB + LP + NR (20 anuncios)</td><td class="num">$3.62M</td><td class="num num-bad">43.1%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num num-good">461</td></tr>
+        <tr><td class="name">Ford Pro</td><td>FORDPRO - bb (7 anuncios)</td><td class="num">$518.541</td><td class="num">6.2%</td><td class="num">73K</td><td class="num num-bad">2.60</td><td class="num">$2.715</td><td class="num num-good">70</td></tr>
+        <tr><td class="name">Ford Pro</td><td>FORDPRO - lp (7 anuncios)</td><td class="num">$102.178</td><td class="num">1.2%</td><td class="num">20K</td><td class="num">2.13</td><td class="num">$2.337</td><td class="num num-good">8</td></tr>
+        <tr style="background: var(--paper-2)"><td colspan="2" class="name"><strong>Subtotal BOFU</strong></td><td class="num"><strong>$7.55M</strong></td><td class="num"><strong>89.7%</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num"><strong>808</strong></td></tr>
+
+        <tr style="background: var(--ink); color: var(--paper);"><td colspan="2" class="name" style="color: var(--paper);"><strong>TOTAL</strong></td><td class="num"><strong>$8.42M</strong></td><td class="num"><strong>100%</strong></td><td class="num">1.33M+</td><td class="num">—</td><td class="num">—</td><td class="num"><strong>808</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="insights-grid">
+      <div class="insight warn">
+        <div class="insight-tag">Alerta · Saturación TOFU</div>
+        <h4>El conjunto TOF (LOOKALIKE) tiene frecuencia 3.42</h4>
+        <p>781K personas vieron el ad un promedio de <strong>3.4 veces cada una</strong>. Lo saludable en TOFU es 1.5-2.5. Estamos quemando audiencia: el branding ya no agrega marca, está fatigando. Es el bloque más caro de TOFU ($661K) y el más saturado. Para comparar: Broad Adv tiene frecuencia 1.41 y CPM más bajo ($205 vs $248).</p>
+      </div>
+      <div class="insight">
+        <div class="insight-tag">Composición de inversión</div>
+        <h4>10% en branding, 90% en captación</h4>
+        <p>Distribución TOFU/BOFU clásica de performance-heavy. <strong>Plan Ahorro y Conv concentran 82% del presupuesto</strong> (lead gen puro). Ford Pro suma 7% más en lead gen. El 10.3% restante son las 3 campañas de alcance que nutren al embudo de manera transversal.</p>
+      </div>
+      <div class="insight">
+        <div class="insight-tag">CPM por unidad de negocio</div>
+        <h4>Ford Pro es B2B y se nota en el CPM</h4>
+        <p>CPM en Ford Pro lead gen: <strong>$2.715 (BB) y $2.337 (LP)</strong>. Audiencias más chicas y específicas (empresas) suben el costo por mil impresiones. En contraste, branding masivo: $205-$248. Ford Pro Alcance también está en el medio: $410.</p>
+      </div>
+      <div class="insight">
+        <div class="insight-tag">Ratio leads/inversión</div>
+        <h4>Ford Pro tiene el mejor CPL nominal de los 3 canales</h4>
+        <p>CPL nominal: Conv $7.86 · <strong>Ford Pro $7.95</strong> · PA $12.30. Pero ojo, esto se invierte al filtrar bad: Ford Pro tiene <strong>50% bad</strong> vs Conv 42% vs PA 27%. Multiplicador real: Ford Pro 2.0x · Conv 1.74x · PA 1.34x. Conclusión: <strong>Ford Pro es el más barato de capturar pero el peor en calidad</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 MATRIZ ============ -->
+  <section id="matriz">
+    <div class="section-head"><div class="section-num">03</div><h2>Matriz <em>canal × zona</em></h2></div>
+    <p class="section-lead">Una sola celda gana en eficiencia real: <strong>Convencional Neu+Rn</strong>. Una sola pierde clarito: <strong>Plan Ahorro LP</strong>.</p>
+
+    <div class="matrix" style="grid-template-columns: 140px repeat(3,1fr);">
+      <div class="matrix-corner matrix-h">Métrica</div>
+      <div class="matrix-h" style="text-align:center">BB</div>
+      <div class="matrix-h" style="text-align:center">LP</div>
+      <div class="matrix-h" style="text-align:center">Neu+Rn</div>
+
+      <!-- PLAN AHORRO -->
+      <div class="matrix-rh" style="grid-column: 1 / 5; background: var(--pa-bg) !important; color: var(--pa)">PLAN AHORRO</div>
+
+      <div class="matrix-rh">Inversión</div>
+      <div class="matrix-cell">$1.336K</div>
+      <div class="matrix-cell">$1.572K</div>
+      <div class="matrix-cell">$401K</div>
+
+      <div class="matrix-rh">Leads / Útiles</div>
+      <div class="matrix-cell">134 / 100 <span class="delta">75%</span></div>
+      <div class="matrix-cell">116 / 80 <span class="delta">69%</span></div>
+      <div class="matrix-cell">31 / 26 <span class="delta">84%</span></div>
+
+      <div class="matrix-rh">CPL nominal</div>
+      <div class="matrix-cell">$9.968</div>
+      <div class="matrix-cell">$13.552</div>
+      <div class="matrix-cell">$12.924</div>
+
+      <div class="matrix-rh">CPL útil</div>
+      <div class="matrix-cell">$13.357<br><span class="delta">×1.34</span></div>
+      <div class="matrix-cell lose">$19.650<br><span class="delta">×1.45</span></div>
+      <div class="matrix-cell">$15.409<br><span class="delta">×1.19</span></div>
+
+      <div class="matrix-rh">% bad</div>
+      <div class="matrix-cell">25%</div>
+      <div class="matrix-cell">31%</div>
+      <div class="matrix-cell">16%</div>
+
+      <div class="matrix-rh">% en zona</div>
+      <div class="matrix-cell">35%</div>
+      <div class="matrix-cell">43%</div>
+      <div class="matrix-cell">55%</div>
+
+      <!-- CONVENCIONAL -->
+      <div class="matrix-rh" style="grid-column: 1 / 5; background: var(--conv-bg) !important; color: var(--conv)">CONVENCIONAL</div>
+
+      <div class="matrix-rh">Inversión</div>
+      <div class="matrix-cell">$1.670K</div>
+      <div class="matrix-cell">$1.552K</div>
+      <div class="matrix-cell">$402K</div>
+
+      <div class="matrix-rh">Leads / Útiles</div>
+      <div class="matrix-cell">207 / 119 <span class="delta">57%</span></div>
+      <div class="matrix-cell">142 / 92 <span class="delta">65%</span></div>
+      <div class="matrix-cell">78 / 38 <span class="delta">49%</span></div>
+
+      <div class="matrix-rh">CPL nominal</div>
+      <div class="matrix-cell">$8.066</div>
+      <div class="matrix-cell">$10.927</div>
+      <div class="matrix-cell">$5.151</div>
+
+      <div class="matrix-rh">CPL útil</div>
+      <div class="matrix-cell">$14.031<br><span class="delta">×1.74</span></div>
+      <div class="matrix-cell">$16.865<br><span class="delta">×1.54</span></div>
+      <div class="matrix-cell win">$10.572<br><span class="delta">×2.05</span></div>
+
+      <div class="matrix-rh">% bad</div>
+      <div class="matrix-cell">43%</div>
+      <div class="matrix-cell">35%</div>
+      <div class="matrix-cell lose">51%</div>
+
+      <div class="matrix-rh">% en zona</div>
+      <div class="matrix-cell">23%</div>
+      <div class="matrix-cell lose">20%</div>
+      <div class="matrix-cell win">71%</div>
+
+      <!-- FORD PRO -->
+      <div class="matrix-rh" style="grid-column: 1 / 5; background: #ecdfd5 !important; color: #6e3d2c">FORD PRO (B2B · transversal a Conv y PA)</div>
+
+      <div class="matrix-rh">Inversión</div>
+      <div class="matrix-cell">$518K</div>
+      <div class="matrix-cell">$102K</div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">sin pauta</div>
+
+      <div class="matrix-rh">Leads / Útiles</div>
+      <div class="matrix-cell">70 (Meta) <span class="delta">94 en Pilot</span></div>
+      <div class="matrix-cell">8 (Meta) <span class="delta">23 en Pilot</span></div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">—</div>
+
+      <div class="matrix-rh">CPL nominal</div>
+      <div class="matrix-cell">$7.408</div>
+      <div class="matrix-cell">$12.772</div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">—</div>
+
+      <div class="matrix-rh">CPL útil</div>
+      <div class="matrix-cell lose">$13.972<br><span class="delta">×1.88 (53% bad)</span></div>
+      <div class="matrix-cell lose">$26.610<br><span class="delta">×2.08 (52% bad)</span></div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">—</div>
+
+      <div class="matrix-rh">% bad</div>
+      <div class="matrix-cell">53%</div>
+      <div class="matrix-cell">52%</div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">—</div>
+
+      <div class="matrix-rh">Frecuencia</div>
+      <div class="matrix-cell lose">2.60 <span class="delta">satura</span></div>
+      <div class="matrix-cell">2.13</div>
+      <div class="matrix-cell" style="color: var(--ink-mute); font-style: italic;">—</div>
+    </div>
+    <p style="margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); font-style: italic;">
+      Nota: Ford Pro Pilot reporta más leads que Meta xlsx porque incluye leads de Ranger XL/Transit que el equipo reclasificó como "Empresas" desde pautas regulares de Conv/PA. Total <strong>127 leads marcados como Ford Pro en Pilot</strong> · 98% Trad, 2% PA.
+    </p>
+  </section>
+
+  <!-- ============ 03 ASOCIACIONES ============ -->
+  <section id="asociaciones">
+    <div class="section-head"><div class="section-num">04</div><h2>Asociaciones <em>clave</em></h2></div>
+
+    <div class="insights-grid">
+      <div class="insight">
+        <div class="insight-tag">Asociación 1 · Multiplicador real/nominal</div>
+        <h4>El CPL nominal "barato" siempre es el que más miente</h4>
+        <p>Conv NR tiene CPL nominal <strong>$5.151</strong> (el más barato del análisis) pero multiplicador <strong>×2.05</strong> al filtrar bad. PA BB tiene CPL nominal <strong>$9.968</strong> y multiplicador <strong>×1.34</strong>. La relación es inversa: <strong>cuanto menor el CPL nominal, mayor el factor de corrección real</strong>. Convencional miente en promedio ×1.74; Plan Ahorro ×1.33.</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 2 · Canal vs % bad</div>
+        <h4>Convencional tiene casi el doble de bad que Plan Ahorro</h4>
+        <p>PA: <strong>25-31% bad</strong> · Conv: <strong>35-51% bad</strong>. Hipótesis: el form de Plan Ahorro requiere más compromiso (sabe que es un plan a años), mientras que Convencional atrae oportunistas con la promesa de tasa 0/financiación inmediata. Conv NR es el caso extremo: 51% bad, el más alto de toda la matriz.</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 3 · Zona vs fuga geográfica</div>
+        <h4>NR es la zona "fiel"; BB y LP son las que más fugan</h4>
+        <p>Convencional Neu+Rn: <strong>71% de leads efectivamente en NR</strong>. Convencional LP: <strong>20%</strong>. Convencional BB: <strong>23%</strong>. El mismo adset "Engagers + Viewers + Site Visitors" se comporta radicalmente distinto según la zona. Patrón se repite en PA: NR 55%, LP 43%, BB 35%.</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 4 · HHT vs calidad</div>
+        <h4>Atender en menos de 4 horas baja el % bad y sube el % oportunidad</h4>
+        <p>Leads atendidos en <strong>&lt;1h: 27% bad · 20% oportunidad</strong>. Leads atendidos en <strong>4-24h: 37% bad · 14% oport</strong>. En <strong>&gt;72h: 80% bad · 0% oport</strong>. Cuanto antes se gestiona, mejor calidad y conversión. (Detalle en sección 04.)</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 5 · Canal vs HHT</div>
+        <h4>Plan Ahorro se gestiona más rápido que Convencional</h4>
+        <p>PA: <strong>26% atendidos en &lt;1h</strong> · 47% en &lt;4h. Conv: solo <strong>10% en &lt;1h</strong> · 22% en &lt;4h. <strong>12% de Convencional queda sin gestionar</strong> vs solo 2% en PA. El equipo prioriza PA, posiblemente por mayor markup esperado o porque los leads de Conv parecen menos calificados de entrada.</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 6 · Creativo universal</div>
+        <h4>Ranger Limited+ baja el CPL útil a medida que escala</h4>
+        <p>Mismo creativo, 3 zonas. Conv BB (volumen alto): $14.848. Conv NR (volumen medio): $9.354. Conv LP (volumen alto): $10.939. <strong>Es el único anuncio del análisis que mejora eficiencia con escala</strong>. Trae el ~70% del volumen total de Convencional.</p>
+      </div>
+
+      <div class="insight alert">
+        <div class="insight-tag">Asociación 7 · Saturación TOFU</div>
+        <h4>El "TOF Lookalike" está saturando audiencia, no construyendo marca</h4>
+        <p>Frecuencia <strong>3.42</strong> con 781K personas alcanzadas — cada una vio el ad 3.4 veces en 18 días. En TOFU lo saludable es 1.5-2.5. Es el bloque más caro de branding ($661K) y el menos eficiente. <strong>Broad Adv hace lo opuesto</strong>: freq 1.41 y CPM más bajo ($205 vs $248). Convivencia de dos estrategias de TOFU con resultados muy distintos.</p>
+      </div>
+
+      <div class="insight alert">
+        <div class="insight-tag">Asociación 8 · Ford Pro CPL engañoso</div>
+        <h4>Ford Pro tiene el CPL nominal más barato y la calidad más baja</h4>
+        <p>CPL nominal: <strong>Ford Pro $7.95 · Conv $7.86 · PA $12.30</strong>. Pero al filtrar bad: <strong>Ford Pro 50% bad · Conv 42% · PA 27%</strong>. Multiplicador real: Ford Pro <strong>2.0x</strong> · Conv 1.74x · PA 1.34x. <strong>Las pautas más baratas son sistemáticamente las menos confiables</strong>. Confirma asociación 1 (inversa CPL nominal vs multiplicador).</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 9 · Ford Pro mono-canal</div>
+        <h4>Ford Pro es 98% Tradicional, 2% Plan Ahorro</h4>
+        <p>De los 127 leads marcados como "Empresas" en Pilot: <strong>125 en Tradicional · 2 en Plan Ahorro</strong>. La unidad B2B casi no está usando Plan Ahorro como instrumento de venta a empresas, aunque el plan podría servirles por sus condiciones de financiación. Posible gap comercial.</p>
+      </div>
+
+      <div class="insight win">
+        <div class="insight-tag">Asociación 10 · Gral Pico FP</div>
+        <h4>Gral Pico es la mejor sucursal otra vez, ahora en Ford Pro</h4>
+        <p>De 10 leads Ford Pro asignados a Gral Pico: <strong>10% bad · 4 oportunidades · HHT prom 9.6h</strong>. Frente a BB (53% bad, 22h HHT) y Santa Rosa (52% bad, 17h HHT). Mismo patrón que en PA/Conv: <strong>volumen bajo + atención dedicada = mejor calidad</strong>.</p>
+      </div>
+
+      <div class="insight">
+        <div class="insight-tag">Asociación 11 · Producto N/A</div>
+        <h4>El 66% de leads Ford Pro no identifica producto</h4>
+        <p>84 de 127 leads Ford Pro tienen "N/A" en Producto de Interés en Pilot. En PA es 0% y en Conv es ~2%. Las formas de Lead Ads Ford Pro no capturan modelo, igual que pasaba antes con leads Meta cuando la pauta no incluía pregunta por modelo. <strong>Es información perdida para el vendedor antes del primer contacto</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 HHT ============ -->
+  <section id="hht">
+    <div class="section-head"><div class="section-num">05</div><h2>Tiempo hasta <em>gestión</em> (HHT)</h2></div>
+    <p class="section-lead">Mediana global 11.6h, promedio 14.6h. Pero la asociación con calidad es lineal: mientras más rápido, mejor.</p>
+
+    <div class="hht-buckets">
+      <div class="hht-bucket fast">
+        <div class="b-label">&lt;1h</div>
+        <div class="b-value">109</div>
+        <div class="b-pct">16% · <span class="num-bad">27% bad</span> · <span class="num-good">20% oport</span></div>
+      </div>
+      <div class="hht-bucket fast">
+        <div class="b-label">1–4h</div>
+        <div class="b-value">95</div>
+        <div class="b-pct">14% · <span class="num-bad">29% bad</span> · <span class="num-good">20% oport</span></div>
+      </div>
+      <div class="hht-bucket">
+        <div class="b-label">4–24h</div>
+        <div class="b-value">319</div>
+        <div class="b-pct">46% · <span class="num-bad">37% bad</span> · 14% oport</div>
+      </div>
+      <div class="hht-bucket">
+        <div class="b-label">24–72h</div>
+        <div class="b-value">106</div>
+        <div class="b-pct">15% · <span class="num-bad">35% bad</span> · 11% oport</div>
+      </div>
+      <div class="hht-bucket slow">
+        <div class="b-label">&gt;72h</div>
+        <div class="b-value">5</div>
+        <div class="b-pct">1% · <span class="num-bad">80% bad</span> · 0% oport</div>
+      </div>
+      <div class="hht-bucket slow">
+        <div class="b-label">sin gestión</div>
+        <div class="b-value">57</div>
+        <div class="b-pct">8% — leads que nunca tomó nadie</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top: 22px;">
+      <div class="col-card">
+        <h3>HHT por canal</h3>
+        <table class="dt" style="font-size: 12px;">
+          <thead><tr><th>Canal</th><th class="num">&lt;1h</th><th class="num">1-4h</th><th class="num">4-24h</th><th class="num">&gt;24h</th><th class="num">s/g</th></tr></thead>
+          <tbody>
+            <tr><td class="name"><span class="tag pa">PA</span></td><td class="num num-good">26%</td><td class="num">17%</td><td class="num">45%</td><td class="num">10%</td><td class="num num-mid">2%</td></tr>
+            <tr><td class="name"><span class="tag conv">CONV</span></td><td class="num num-bad">10%</td><td class="num">12%</td><td class="num">47%</td><td class="num">19%</td><td class="num num-bad">12%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 12.5px; color: var(--ink-soft); margin-top: 12px; font-style: italic;">PA recibe atención inmediata 2.6× más que Conv. Conv tiene 6× más leads abandonados.</p>
+      </div>
+
+      <div class="col-card">
+        <h3>HHT por zona pautada</h3>
+        <table class="dt" style="font-size: 12px;">
+          <thead><tr><th>Zona</th><th class="num">&lt;1h</th><th class="num">1-4h</th><th class="num">4-24h</th><th class="num">&gt;24h</th><th class="num">s/g</th></tr></thead>
+          <tbody>
+            <tr><td class="name"><span class="tag bb">BB</span></td><td class="num">16%</td><td class="num">12%</td><td class="num">44%</td><td class="num">15%</td><td class="num">10%</td></tr>
+            <tr><td class="name"><span class="tag lp">LP</span></td><td class="num">16%</td><td class="num">15%</td><td class="num">47%</td><td class="num">15%</td><td class="num">6%</td></tr>
+            <tr><td class="name"><span class="tag nr">NR</span></td><td class="num">14%</td><td class="num">13%</td><td class="num">47%</td><td class="num">20%</td><td class="num">7%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 12.5px; color: var(--ink-soft); margin-top: 12px; font-style: italic;">Distribución similar entre zonas: el HHT depende más del canal y del vendedor que de la zona.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 VENDEDORES ============ -->
+  <section id="vendedores">
+    <div class="section-head"><div class="section-num">06</div><h2>Eficiencia <em>por vendedor</em></h2></div>
+    <p class="section-lead">22 vendedores con leads asignados. La dispersión es enorme: hay quienes tienen 0% bad y quienes tienen 100%.</p>
+
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Vendedor</th>
+          <th>Sucursal</th>
+          <th class="num">Total</th>
+          <th class="num">Bad</th>
+          <th class="num">% Bad</th>
+          <th class="num">Oport.</th>
+          <th class="num">Vend.</th>
+          <th class="num">HHT prom</th>
+          <th class="num">HHT med</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">Sebastian Murias</td><td><span class="tag bb">BB</span></td><td class="num">60</td><td class="num">29</td><td class="num pct-cell num-bad">48%<div class="pct-bar bad" style="width:48%"></div></td><td class="num">6</td><td class="num num-zero">0</td><td class="num">13.8h</td><td class="num">12.0h</td></tr>
+        <tr><td class="name">Mariano Rodríguez</td><td><span class="tag bb">BB</span></td><td class="num">53</td><td class="num">41</td><td class="num pct-cell num-bad">77%<div class="pct-bar bad" style="width:77%"></div></td><td class="num num-zero">0</td><td class="num num-zero">0</td><td class="num">12.5h</td><td class="num">12.4h</td></tr>
+        <tr><td class="name">Marcial Fernandez</td><td><span class="tag bb">BB</span></td><td class="num">50</td><td class="num">20</td><td class="num pct-cell num-mid">40%<div class="pct-bar mid" style="width:40%"></div></td><td class="num">6</td><td class="num num-zero">0</td><td class="num">25.5h</td><td class="num">17.0h</td></tr>
+        <tr><td class="name">Kevin Aguilar</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">49</td><td class="num">13</td><td class="num pct-cell num-good">27%<div class="pct-bar good" style="width:27%"></div></td><td class="num">3</td><td class="num num-zero">0</td><td class="num">12.5h</td><td class="num">9.3h</td></tr>
+        <tr><td class="name">Gastón Maceratesi</td><td><span class="tag bb">BB</span></td><td class="num">49</td><td class="num">19</td><td class="num pct-cell num-mid">39%<div class="pct-bar mid" style="width:39%"></div></td><td class="num">5</td><td class="num num-zero">0</td><td class="num">15.4h</td><td class="num">14.0h</td></tr>
+        <tr><td class="name">Ezequiel Castillo</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">45</td><td class="num">19</td><td class="num pct-cell num-mid">42%<div class="pct-bar mid" style="width:42%"></div></td><td class="num num-zero">0</td><td class="num num-zero">0</td><td class="num">11.9h</td><td class="num">9.9h</td></tr>
+        <tr><td class="name">Joaquin Gutierrez</td><td><span class="tag bb">BB</span></td><td class="num">43</td><td class="num">6</td><td class="num pct-cell num-good">14%<div class="pct-bar good" style="width:14%"></div></td><td class="num">6</td><td class="num num-zero">0</td><td class="num num-good">5.1h</td><td class="num num-good">0.6h</td></tr>
+        <tr><td class="name">Hernan Rivarola</td><td><span class="tag bb">BB</span></td><td class="num">38</td><td class="num">18</td><td class="num pct-cell num-mid">47%<div class="pct-bar mid" style="width:47%"></div></td><td class="num num-zero">0</td><td class="num num-zero">0</td><td class="num">19.2h</td><td class="num">14.3h</td></tr>
+        <tr><td class="name">Emiliano Solla</td><td><span class="tag bb">BB</span></td><td class="num">33</td><td class="num">6</td><td class="num pct-cell num-good">18%<div class="pct-bar good" style="width:18%"></div></td><td class="num num-good">16</td><td class="num num-good">1</td><td class="num">14.7h</td><td class="num">13.9h</td></tr>
+        <tr><td class="name">Alexis Favata</td><td><span class="tag bb">BB</span></td><td class="num">33</td><td class="num">7</td><td class="num pct-cell num-good">21%<div class="pct-bar good" style="width:21%"></div></td><td class="num">8</td><td class="num num-zero">0</td><td class="num num-good">8.7h</td><td class="num num-good">1.8h</td></tr>
+        <tr><td class="name">Facundo González</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">32</td><td class="num">13</td><td class="num pct-cell num-mid">41%<div class="pct-bar mid" style="width:41%"></div></td><td class="num">4</td><td class="num num-zero">0</td><td class="num">15.7h</td><td class="num">13.8h</td></tr>
+        <tr><td class="name">Pablo Castellano</td><td><span class="tag bb">BB</span></td><td class="num">30</td><td class="num">12</td><td class="num pct-cell num-mid">40%<div class="pct-bar mid" style="width:40%"></div></td><td class="num num-zero">0</td><td class="num num-zero">0</td><td class="num">23.4h</td><td class="num">14.5h</td></tr>
+        <tr><td class="name">Agustín Pignatta</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">29</td><td class="num">2</td><td class="num pct-cell num-good">7%<div class="pct-bar good" style="width:7%"></div></td><td class="num num-good">7</td><td class="num num-zero">0</td><td class="num">21.0h</td><td class="num">11.9h</td></tr>
+        <tr><td class="name">Laureano San José</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">26</td><td class="num">8</td><td class="num pct-cell num-good">31%<div class="pct-bar good" style="width:31%"></div></td><td class="num">6</td><td class="num num-zero">0</td><td class="num">15.0h</td><td class="num">10.9h</td></tr>
+        <tr><td class="name">Martín Espil</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">25</td><td class="num">12</td><td class="num pct-cell num-bad">48%<div class="pct-bar bad" style="width:48%"></div></td><td class="num num-good">9</td><td class="num num-zero">0</td><td class="num">15.8h</td><td class="num">9.9h</td></tr>
+        <tr><td class="name">Maximiliano Heredia</td><td><span class="tag bb">BB</span></td><td class="num">21</td><td class="num">8</td><td class="num pct-cell num-mid">38%<div class="pct-bar mid" style="width:38%"></div></td><td class="num">5</td><td class="num num-good">1</td><td class="num">10.9h</td><td class="num">12.2h</td></tr>
+        <tr><td class="name">Nicolas Braun</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">18</td><td class="num">10</td><td class="num pct-cell num-bad">56%<div class="pct-bar bad" style="width:56%"></div></td><td class="num">2</td><td class="num num-zero">0</td><td class="num">12.9h</td><td class="num">10.3h</td></tr>
+        <tr><td class="name">Inaky Spikerman</td><td><span class="tag bb">BB</span></td><td class="num">17</td><td class="num">7</td><td class="num pct-cell num-mid">41%<div class="pct-bar mid" style="width:41%"></div></td><td class="num">2</td><td class="num num-zero">0</td><td class="num">11.3h</td><td class="num">10.5h</td></tr>
+        <tr><td class="name">Gastón López Conca</td><td><span class="tag nr">Gral Pico</span></td><td class="num">17</td><td class="num num-good">0</td><td class="num pct-cell num-good">0%<div class="pct-bar good" style="width:5%"></div></td><td class="num num-good">8</td><td class="num num-zero">0</td><td class="num">15.0h</td><td class="num">13.1h</td></tr>
+        <tr><td class="name">Julio Sánchez</td><td><span class="tag nr">Gral Pico</span></td><td class="num">13</td><td class="num">5</td><td class="num pct-cell num-mid">38%<div class="pct-bar mid" style="width:38%"></div></td><td class="num">5</td><td class="num num-zero">0</td><td class="num">18.2h</td><td class="num">14.6h</td></tr>
+        <tr><td class="name">Ariel Asprea</td><td><span class="tag bb">BB</span></td><td class="num">4</td><td class="num">1</td><td class="num pct-cell num-mid">25%<div class="pct-bar mid" style="width:25%"></div></td><td class="num">1</td><td class="num num-zero">0</td><td class="num">16.8h</td><td class="num">15.7h</td></tr>
+        <tr><td class="name">Fabián Mocca</td><td><span class="tag lp">Santa Rosa</span></td><td class="num">4</td><td class="num">4</td><td class="num pct-cell num-bad">100%<div class="pct-bar bad" style="width:100%"></div></td><td class="num num-zero">0</td><td class="num num-zero">0</td><td class="num num-bad">25.2h</td><td class="num num-bad">39.3h</td></tr>
+      </tbody>
+    </table>
+
+    <div class="two-col" style="margin-top: 22px;">
+      <div class="col-card good-tint">
+        <h3>🟢 Mejor eficiencia (mín. 10 leads)</h3>
+        <div class="item">
+          <div><div class="name">Gastón López Conca</div><span class="meta">Gral Pico · 17 leads</span></div>
+          <div class="val good">0% bad · 8 oport</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Agustín Pignatta</div><span class="meta">Santa Rosa · 29 leads</span></div>
+          <div class="val good">7% bad · 7 oport</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Joaquin Gutierrez</div><span class="meta">BB · 43 leads · HHT 0.6h</span></div>
+          <div class="val good">14% bad · 6 oport</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Emiliano Solla</div><span class="meta">BB · 33 leads</span></div>
+          <div class="val good">18% bad · 16 oport · 1 vendido</div>
+        </div>
+      </div>
+
+      <div class="col-card bad-tint">
+        <h3>🔴 Mayor ineficiencia (mín. 10 leads)</h3>
+        <div class="item">
+          <div><div class="name">Mariano Rodríguez</div><span class="meta">BB · 53 leads</span></div>
+          <div class="val bad">77% bad · 0 oport · 0 vendidos</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Nicolas Braun</div><span class="meta">Santa Rosa · 18 leads</span></div>
+          <div class="val bad">56% bad · 2 oport</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Sebastian Murias</div><span class="meta">BB · 60 leads</span></div>
+          <div class="val bad">48% bad · 6 oport</div>
+        </div>
+        <div class="item">
+          <div><div class="name">Martín Espil</div><span class="meta">Santa Rosa · 25 leads</span></div>
+          <div class="val bad">48% bad · pero 9 oport</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 16px; font-size: 13px; color: var(--ink-soft); font-style: italic;">⚠ El cruce entre <strong>volumen × % bad × oportunidades</strong> da combinaciones contraintuitivas: Martín Espil tiene 48% bad pero generó 9 oportunidades; Mariano Rodríguez tiene 77% bad y 0 oportunidades.</p>
+  </section>
+
+  <!-- ============ 06 SUCURSAL ============ -->
+  <section id="sucursal">
+    <div class="section-head"><div class="section-num">07</div><h2>Eficiencia <em>por sucursal</em></h2></div>
+
+    <div class="heatmap" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="hm-cell hm-header">Bahia Blanca</div>
+      <div class="hm-cell hm-header">Santa Rosa</div>
+      <div class="hm-cell hm-header">General Pico</div>
+
+      <div class="hm-cell">
+        <div class="hm-value">431</div>
+        <div class="hm-sub">leads recibidos</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">230</div>
+        <div class="hm-sub">leads recibidos</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">30</div>
+        <div class="hm-sub">leads recibidos</div>
+      </div>
+
+      <div class="hm-cell">
+        <div class="hm-value">60%</div>
+        <div class="hm-sub">útiles · 40% bad</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">64%</div>
+        <div class="hm-sub">útiles · 36% bad</div>
+      </div>
+      <div class="hm-cell" style="background: rgba(15,107,61,0.1)">
+        <div class="hm-value num-good">83%</div>
+        <div class="hm-sub">útiles · 17% bad</div>
+      </div>
+
+      <div class="hm-cell">
+        <div class="hm-value">55</div>
+        <div class="hm-sub">oportunidades · 13% conv</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">31</div>
+        <div class="hm-sub">oportunidades · 13% conv</div>
+      </div>
+      <div class="hm-cell" style="background: rgba(15,107,61,0.1)">
+        <div class="hm-value num-good">13</div>
+        <div class="hm-sub">oportunidades · 43% conv</div>
+      </div>
+
+      <div class="hm-cell">
+        <div class="hm-value">14.9h</div>
+        <div class="hm-sub">HHT prom · 12.3h med</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">14.6h</div>
+        <div class="hm-sub">HHT prom · 11.1h med</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">16.4h</div>
+        <div class="hm-sub">HHT prom · 13.5h med</div>
+      </div>
+
+      <div class="hm-cell">
+        <div class="hm-value">2</div>
+        <div class="hm-sub">vendidos en el período</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">0</div>
+        <div class="hm-sub">vendidos en el período</div>
+      </div>
+      <div class="hm-cell">
+        <div class="hm-value">0</div>
+        <div class="hm-sub">vendidos en el período</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 18px; font-size: 13.5px; color: var(--ink-soft); font-style: italic;">
+      <strong>Asociación inesperada:</strong> Gral Pico recibe muchos menos leads (30 vs 431 de BB), pero los gestiona con la menor tasa de bad (17%) y la mayor tasa de conversión a oportunidad (43%). HHT ligeramente más lento. <strong>Volumen vs. concentración: cuando hay pocos leads, cada uno se gestiona con más cuidado.</strong>
+    </p>
+  </section>
+
+  <!-- ============ 07 FUGA ============ -->
+  <section id="fuga">
+    <div class="section-head"><div class="section-num">08</div><h2>Fuga <em>geográfica</em> cruzada</h2></div>
+    <p class="section-lead">Cuántos leads pagados en una zona terminan viviendo en otra. Cuando la zona de destino también está pautada, el lead se está pagando 2 veces.</p>
+
+    <div class="fuga-flow">
+      <div class="fuga-row">
+        <div class="fuga-source">PA <span class="tag bb">BB</span><span class="sub">134 leads · $1.336K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 47">47<span class="lbl">BB</span></div>
+          <div class="fuga-bar cross-nr" style="flex: 28">28<span class="lbl">→NR</span></div>
+          <div class="fuga-bar bsas" style="flex: 31">31<span class="lbl">BsAs</span></div>
+          <div class="fuga-bar other" style="flex: 28">28<span class="lbl">otra</span></div>
+        </div>
+      </div>
+      <div class="fuga-row">
+        <div class="fuga-source">PA <span class="tag lp">LP</span><span class="sub">116 leads · $1.572K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 45">45<span class="lbl">LP</span></div>
+          <div class="fuga-bar cross-bb" style="flex: 25">25<span class="lbl">→BB</span></div>
+          <div class="fuga-bar bsas" style="flex: 15">15<span class="lbl">BsAs</span></div>
+          <div class="fuga-bar other" style="flex: 31">31<span class="lbl">otra</span></div>
+        </div>
+      </div>
+      <div class="fuga-row">
+        <div class="fuga-source">PA <span class="tag nr">NR</span><span class="sub">31 leads · $401K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 16">16<span class="lbl">NR</span></div>
+          <div class="fuga-bar cross-bb" style="flex: 5">5<span class="lbl">→BB</span></div>
+          <div class="fuga-bar other" style="flex: 10">10<span class="lbl">otra</span></div>
+        </div>
+      </div>
+      <div class="fuga-row">
+        <div class="fuga-source">CONV <span class="tag bb">BB</span><span class="sub">207 leads · $1.670K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 47">47<span class="lbl">BB</span></div>
+          <div class="fuga-bar cross-nr" style="flex: 31">31<span class="lbl">→NR</span></div>
+          <div class="fuga-bar cross-lp" style="flex: 9">9<span class="lbl">→LP</span></div>
+          <div class="fuga-bar bsas" style="flex: 71">71<span class="lbl">BsAs</span></div>
+          <div class="fuga-bar other" style="flex: 28">28<span class="lbl">otra</span></div>
+          <div class="fuga-bar nopilot" style="flex: 21">21<span class="lbl">no CRM</span></div>
+        </div>
+      </div>
+      <div class="fuga-row">
+        <div class="fuga-source">CONV <span class="tag lp">LP</span><span class="sub">142 leads · $1.552K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 28">28<span class="lbl">LP</span></div>
+          <div class="fuga-bar cross-bb" style="flex: 20">20<span class="lbl">→BB</span></div>
+          <div class="fuga-bar cross-nr" style="flex: 11">11<span class="lbl">→NR</span></div>
+          <div class="fuga-bar bsas" style="flex: 31">31<span class="lbl">BsAs</span></div>
+          <div class="fuga-bar other" style="flex: 31">31<span class="lbl">otra</span></div>
+          <div class="fuga-bar nopilot" style="flex: 21">21<span class="lbl">no CRM</span></div>
+        </div>
+      </div>
+      <div class="fuga-row">
+        <div class="fuga-source">CONV <span class="tag nr">NR</span><span class="sub">78 leads · $402K</span></div>
+        <div class="fuga-bars">
+          <div class="fuga-bar in-zone" style="flex: 55">55<span class="lbl">NR</span></div>
+          <div class="fuga-bar cross-bb" style="flex: 6">6<span class="lbl">→BB</span></div>
+          <div class="fuga-bar bsas" style="flex: 6">6<span class="lbl">BsAs</span></div>
+          <div class="fuga-bar other" style="flex: 5">5<span class="lbl">otra</span></div>
+          <div class="fuga-bar nopilot" style="flex: 6">6<span class="lbl">no CRM</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top: 22px; padding-top: 16px; border-top: 1px dashed var(--line); font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-mute);">
+        <strong style="color: var(--bad);">Solapamiento total estimado:</strong> 125 leads "fugados" caen en otra zona que también pautamos (28+25+5+31+20+11+5+6). Representa <strong>18% del total de leads</strong> potencialmente pagados dos veces.
+      </div>
+    </div>
+  </section>
+
+    <!-- ============ 08 MAPAS DE DISPERSIÓN ============ -->
+  <style>
+    .pro-map { background: #f7f3eb; border: 1px solid var(--line); padding: 0; position: relative; overflow: hidden; margin-bottom: 28px; }
+    .pro-map-caption { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); padding: 14px 20px; border-bottom: 1px solid var(--line-soft); background: var(--paper-2); display: flex; justify-content: space-between; align-items: center; }
+    .pro-map-caption .stats { display: flex; gap: 20px; }
+    .pro-map-caption strong { color: var(--ink); font-weight: 700; }
+    .pro-map-legend-inline { display: flex; gap: 18px; padding: 12px 20px; background: var(--paper-2); border-top: 1px solid var(--line-soft); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); align-items: center; flex-wrap: wrap; }
+    .pro-map-legend-inline .leg-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1.4px solid #14181f; margin-right: 6px; vertical-align: middle; }
+    .pro-map-legend-inline .size-scale { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+    .pro-map-legend-inline .size-scale .scale-dot { display: inline-block; border-radius: 50%; background: var(--ink-soft); opacity: 0.4; }
+  </style>
+
+  <section id="dispersion">
+    <div class="section-head"><div class="section-num">09</div><h2>Dispersión <em>geográfica</em></h2></div>
+    <p class="section-lead">Cada localidad como un punto sobre el mapa de Argentina. Tamaño proporcional al volumen de leads, color según si cae dentro o fuera de la zona operada (BB + LP + RN + Neuquén).</p>
+
+    <div class="pro-map">
+      <div class="pro-map-caption">
+        <div>Mapa 01 · Plan Ahorro · 269 leads totales</div>
+        <div class="stats">
+          <div>En zona operada: <strong>71%</strong></div>
+          <div>Fugas: <strong>28%</strong></div>
+        </div>
+      </div>
+      <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.5.0.min.js" integrity="sha256-fHbNLP+GlIXN+efbQec78UkemUz3NJp7UmfGxC1tNxs=" crossorigin="anonymous"></script>                <div id="map_pa" class="plotly-graph-div" style="height:820px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("map_pa")) {                    Plotly.newPlot(                        "map_pa",                        [{"customdata":[["Bahia blanca","Buenos Aires",39,45,39,26],["Santa Rosa","La Pampa",22,8,22,14],["Neuquén","Neuquén",14,31,14,21],["General Pico","La Pampa",11,9,11,5],["Tres arroyos","Buenos Aires",7,6,7,6],["Cipolletti","Río Negro",6,7,6,3],["Punta Alta","Buenos Aires",5,5,5,6],["Coronel Pringles","Buenos Aires",5,1,5,2],["Viedma","Río Negro",4,5,4,6],["Tornquist","Buenos Aires",4,3,4,2],["Plottier","Neuquén",4,3,4,1],["Cutral-Có","Neuquén",4,3,4,2],["Coronel Dorrego","Buenos Aires",4,2,4,1],["Centenario","Neuquén",4,2,4,2],["General Roca","Río Negro",3,6,3,3],["Villa Regina","Río Negro",3,4,3,3],["Monte Hermoso","Provincia de Buenos Aires",3,2,3,4],["Pedro Luro","Buenos Aires",3,1,3,1],["Victorica","La Pampa",3,0,3,1],["cinco saltos","Río Negro",2,4,2,3],["Eduardo Castex","La Pampa",2,1,2,0],["carhue","Buenos Aires",2,1,2,1],["intendente Alvear","La Pampa",2,1,2,1],["General Daniel Cerri","Buenos Aires",2,1,2,0],["Chos Malal","Neuquén",2,0,2,0],["San Carlos de Bariloche","Río Negro",1,4,1,1],["Pigüé","Buenos Aires",1,3,1,1],["Coronel Suárez","Buenos Aires",1,3,1,1],["San Antonio Oeste","Río Negro",1,3,1,2],["Santa Rosa de Toay","La Pampa",1,2,1,1],["Macachín","La Pampa",1,2,1,1],["General La Madrid","Buenos Aires",1,1,1,0],["las grutas","Río Negro",1,1,1,0],["Huanguelén","Buenos Aires",1,1,1,1],["Villa Iris","Provincia de Buenos Aires",1,1,1,1],["Guatraché","La Pampa",1,1,1,0],["Sierra de la Ventana","Buenos Aires",1,1,1,1],["General Acha","La Pampa",1,1,1,0],["Alpachiri","La Pampa",1,1,1,0],["Junín de los andes","Neuquén",1,0,1,0],["Embajador Martini","La Pampa",1,0,1,1],["Doblas","La Pampa",1,0,1,1]],"hovertemplate":"\u003cb style=\"font-size:14px\"\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style=\"color:#888\"\u003e%{customdata[1]}\u003c\u002fspan\u003e\u003cbr\u003e━━━━━━━━━━\u003cbr\u003ePA: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e   Conv: \u003cb\u003e%{customdata[3]}\u003c\u002fb\u003e\u003cbr\u003eTotal Plan Ahorro: \u003cb\u003e%{customdata[4]}\u003c\u002fb\u003e\u003cbr\u003eBad: %{customdata[5]}\u003cextra\u003e\u003c\u002fextra\u003e","lat":[-38.7196,-36.6167,-38.9517,-35.6562,-38.3742,-38.9333,-38.881,-37.9836,-40.8135,-38.0986,-38.9678,-38.9389,-38.7184,-38.8333,-39.0333,-39.0996,-38.9869,-39.4992,-36.2122,-38.8167,-35.9078,-37.1797,-35.2392,-38.7544,-37.3833,-41.1336,-37.6042,-37.4544,-40.733,-36.6722,-37.1483,-37.24,-40.8167,-37.05,-38.1833,-37.6628,-38.1333,-37.3833,-37.37,-39.9447,-35.2247,-37.1392],"lon":[-62.2724,-64.2833,-68.0591,-63.7558,-60.2731,-67.9833,-62.0844,-61.3614,-62.9967,-62.2236,-68.2306,-69.2333,-61.2911,-68.1167,-67.5833,-67.0728,-61.296,-62.6856,-65.44,-68.0667,-64.2989,-62.7625,-63.5917,-62.425,-70.2667,-71.3103,-62.4106,-61.9217,-64.9476,-64.3789,-63.6633,-61.24,-65.0833,-61.9667,-63.1833,-63.5392,-61.7833,-64.6,-63.7536,-71.0689,-64.2569,-63.6925],"marker":{"color":"#2c4b6e","line":{"color":"#14181f","width":1.4},"opacity":0.78,"size":[43.71498598878879,32.83291031876401,26.19160170741759,23.2163735324878,18.520259177452136,17.146428199482244,15.652475842498529,15.652475842498529,14.0,14.0,14.0,14.0,14.0,14.0,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"sizemode":"diameter"},"mode":"markers","name":"Plan Ahorro en zona","showlegend":false,"type":"scattergeo"},{"customdata":[["Córdoba","Córdoba",4,11,4,6],["Trenque lauquen","Buenos Aires",4,8,4,3],["Olavarria","Buenos Aires",4,6,4,1],["Buenos Aires","Buenos Aires",3,7,3,4],["Puerto Madryn","Chubut",3,2,3,2],["Mar del Plata","Buenos Aires",2,8,2,6],["Comodoro Rivadavia","Chubut",2,2,2,3],["Tucumán","Tucumán",2,2,2,3],["Salliqueló","Buenos Aires",2,2,2,2],["Carlos Casares","Buenos Aires",2,1,2,0],["Río Gallegos","Santa Cruz",2,1,2,1],["america","",2,0,2,1],["Pehuajó","Buenos Aires",2,0,2,1],["Mendoza","Mendoza",1,7,1,6],["La plata","Buenos Aires",1,4,1,2],["Rio cuarto","Córdoba",1,4,1,2],["Laguna Alsina","Buenos Aires",1,3,1,0],["Venado Tuerto","Santa Fe",1,2,1,1],["General Villegas","Buenos Aires",1,2,1,1],["Casbas","Provincia de Buenos Aires",1,2,1,2],["Corrientes","Corrientes",1,1,1,1],["Lamarque","Texas",1,1,1,2],["Ministro Rivadavia","Buenos Aires",1,1,1,2],["junin","Buenos Aires",1,1,1,1],["Daireaux","Buenos Aires",1,1,1,0],["Balcarce","Buenos Aires",1,1,1,2],["tres lomas","Buenos Aires",1,1,1,1],["Huinca Renancó","Córdoba",1,1,1,0],["San Rafael","Mendoza",1,0,1,0],["Río Negro","Los Lagos",1,0,1,0]],"hovertemplate":"\u003cb style=\"font-size:14px\"\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style=\"color:#888\"\u003e%{customdata[1]}\u003c\u002fspan\u003e\u003cbr\u003e━━━━━━━━━━\u003cbr\u003ePA: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e   Conv: \u003cb\u003e%{customdata[3]}\u003c\u002fb\u003e\u003cbr\u003eTotal Plan Ahorro: \u003cb\u003e%{customdata[4]}\u003c\u002fb\u003e\u003cbr\u003eBad: %{customdata[5]}\u003cextra\u003e\u003c\u002fextra\u003e","lat":[-31.4201,-35.9711,-36.8927,-34.6118,-42.7689,-38.0023,-45.865,-26.8083,-36.7825,-35.6203,-51.623,-35.4833,-35.8167,-32.8895,-34.9215,-33.1232,-36.855,-33.7461,-35.0314,-36.85,-27.4806,-39.4,-34.85,-34.5947,-36.6056,-37.8456,-36.4519,-34.84,-34.6177,-40.0],"lon":[-64.1888,-62.7331,-60.3225,-58.396,-65.0388,-57.5575,-67.4861,-65.2176,-62.9558,-61.3603,-69.2168,-62.9833,-61.9,-68.8458,-57.9545,-64.3493,-62.205,-61.9695,-63.0167,-62.5,-58.8341,-65.6833,-58.5,-60.9486,-61.7494,-58.2569,-62.8636,-64.3681,-68.3301,-67.0],"marker":{"color":"#c14a3a","line":{"color":"#14181f","width":1.4},"opacity":0.7,"size":[14.0,14.0,14.0,12.12435565298214,12.12435565298214,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"sizemode":"diameter"},"mode":"markers","name":"Plan Ahorro fuera","showlegend":false,"type":"scattergeo"},{"hoverinfo":"skip","lat":[-37.9196,-38.151700000000005,-35.816700000000004,-34.8562,-30.6201,-33.811800000000005],"lon":[-62.2724,-68.0591,-64.2833,-63.7558,-64.1888,-58.396],"mode":"text","showlegend":false,"text":["Bahia blanca","Neuquén","Santa Rosa","General Pico","Córdoba","Buenos Aires"],"textfont":{"color":"#14181f","family":"IBM Plex Sans, sans-serif","size":11},"type":"scattergeo"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"geo":{"lonaxis":{"range":[-75.5,-52],"showgrid":true,"gridcolor":"rgba(168,158,136,0.15)","gridwidth":0.5,"dtick":5},"lataxis":{"range":[-56,-21],"showgrid":true,"gridcolor":"rgba(168,158,136,0.15)","gridwidth":0.5,"dtick":5},"resolution":50,"showcountries":true,"countrycolor":"#3a4250","countrywidth":1.6,"showsubunits":true,"subunitcolor":"#a89e88","subunitwidth":0.6,"showland":true,"landcolor":"#f0ebdf","showocean":true,"oceancolor":"#dde4ea","showcoastlines":true,"coastlinecolor":"#3a4250","coastlinewidth":1.6,"showlakes":false,"showframe":false,"showrivers":false,"framecolor":"#d8cfbb","framewidth":1,"bgcolor":"#f7f3eb"},"margin":{"l":10,"r":10,"t":10,"b":10},"font":{"family":"IBM Plex Sans, sans-serif","size":12,"color":"#14181f"},"hoverlabel":{"font":{"family":"IBM Plex Sans, sans-serif","size":12,"color":"#f7f3eb"},"bgcolor":"#14181f","bordercolor":"#14181f"},"height":820,"paper_bgcolor":"#f7f3eb","plot_bgcolor":"#f7f3eb","showlegend":false,"dragmode":"pan"},                        {"displayModeBar": false, "responsive": true, "scrollZoom": true}                    )                };            </script>        </div>
+      <div class="pro-map-legend-inline">
+        <div><span class="leg-dot" style="background: rgba(44,75,110,0.78)"></span> Zona operada (BB + LP + RN + Neuquén)</div>
+        <div><span class="leg-dot" style="background: rgba(193,74,58,0.7)"></span> Fuga geográfica</div>
+        <div class="size-scale">
+          <span>Volumen:</span>
+          <span class="scale-dot" style="width:7px;height:7px"></span>
+          <span style="font-size:10px">1</span>
+          <span class="scale-dot" style="width:14px;height:14px"></span>
+          <span style="font-size:10px">10</span>
+          <span class="scale-dot" style="width:24px;height:24px"></span>
+          <span style="font-size:10px">40+</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pro-map">
+      <div class="pro-map-caption">
+        <div>Mapa 02 · Convencional · 427 leads totales</div>
+        <div class="stats">
+          <div>En zona operada: <strong>47%</strong></div>
+          <div>Fugas: <strong>45%</strong></div>
+        </div>
+      </div>
+      <div>                            <div id="map_conv" class="plotly-graph-div" style="height:820px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("map_conv")) {                    Plotly.newPlot(                        "map_conv",                        [{"customdata":[["Bahia blanca","Buenos Aires",39,45,45,26],["Neuquén","Neuquén",14,31,31,21],["General Pico","La Pampa",11,9,9,5],["Santa Rosa","La Pampa",22,8,8,14],["Cipolletti","Río Negro",6,7,7,3],["Tres arroyos","Buenos Aires",7,6,6,6],["General Roca","Río Negro",3,6,6,3],["Punta Alta","Buenos Aires",5,5,5,6],["Viedma","Río Negro",4,5,5,6],["Villa Regina","Río Negro",3,4,4,3],["cinco saltos","Río Negro",2,4,4,3],["San Carlos de Bariloche","Río Negro",1,4,4,1],["Tornquist","Buenos Aires",4,3,3,2],["Plottier","Neuquén",4,3,3,1],["Cutral-Có","Neuquén",4,3,3,2],["Pigüé","Buenos Aires",1,3,3,1],["Coronel Suárez","Buenos Aires",1,3,3,1],["San Antonio Oeste","Río Negro",1,3,3,2],["Plaza Huincul","Neuquén",0,3,3,2],["Choele Choel","Río Negro",0,3,3,0],["Catriel","Río Negro",0,3,3,0],["Coronel Dorrego","Buenos Aires",4,2,2,1],["Centenario","Neuquén",4,2,2,2],["Monte Hermoso","Provincia de Buenos Aires",3,2,2,4],["Santa Rosa de Toay","La Pampa",1,2,2,1],["Macachín","La Pampa",1,2,2,1],["rincón de los sauces","Neuquén",0,2,2,0],["San Martín de los Andes","Neuquén",0,2,2,1],["Carmen de Patagones","Buenos Aires",0,2,2,0],["Coronel Pringles","Buenos Aires",5,1,1,2],["Pedro Luro","Buenos Aires",3,1,1,1],["Eduardo Castex","La Pampa",2,1,1,0],["carhue","Buenos Aires",2,1,1,1],["intendente Alvear","La Pampa",2,1,1,1],["General Daniel Cerri","Buenos Aires",2,1,1,0],["General La Madrid","Buenos Aires",1,1,1,0],["las grutas","Río Negro",1,1,1,0],["Huanguelén","Buenos Aires",1,1,1,1],["Villa Iris","Provincia de Buenos Aires",1,1,1,1],["Guatraché","La Pampa",1,1,1,0],["Sierra de la Ventana","Buenos Aires",1,1,1,1],["General Acha","La Pampa",1,1,1,0],["Alpachiri","La Pampa",1,1,1,0],["Zapala","Neuquén",0,1,1,1],["Añelo","Neuquén",0,1,1,1],["Senillosa","Neuquén",0,1,1,0],["Villa La Angostura","Neuquén",0,1,1,0],["Ingeniero White","Provincia de Buenos Aires",0,1,1,1],["Catrilo","La Pampa",0,1,1,0],["Telén","La Pampa",0,1,1,1],["General Conesa","Río Negro",0,1,1,0]],"hovertemplate":"\u003cb style=\"font-size:14px\"\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style=\"color:#888\"\u003e%{customdata[1]}\u003c\u002fspan\u003e\u003cbr\u003e━━━━━━━━━━\u003cbr\u003ePA: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e   Conv: \u003cb\u003e%{customdata[3]}\u003c\u002fb\u003e\u003cbr\u003eTotal Convencional: \u003cb\u003e%{customdata[4]}\u003c\u002fb\u003e\u003cbr\u003eBad: %{customdata[5]}\u003cextra\u003e\u003c\u002fextra\u003e","lat":[-38.7196,-38.9517,-35.6562,-36.6167,-38.9333,-38.3742,-39.0333,-38.881,-40.8135,-39.0996,-38.8167,-41.1336,-38.0986,-38.9678,-38.9389,-37.6042,-37.4544,-40.733,-38.9292,-39.275,-37.8783,-38.7184,-38.8333,-38.9869,-36.6722,-37.1483,-37.3833,-40.1581,-40.8,-37.9836,-39.4992,-35.9078,-37.1797,-35.2392,-38.7544,-37.24,-40.8167,-37.05,-38.1833,-37.6628,-38.1333,-37.3833,-37.37,-38.9,-38.35,-39.0167,-40.7556,-38.7833,-36.4083,-36.2733,-40.1019],"lon":[-62.2724,-68.0591,-63.7558,-64.2833,-67.9833,-60.2731,-67.5833,-62.0844,-62.9967,-67.0728,-68.0667,-71.3103,-62.2236,-68.2306,-69.2333,-62.4106,-61.9217,-64.9476,-69.2083,-65.6917,-67.7975,-61.2911,-68.1167,-61.296,-64.3789,-63.6633,-68.9333,-71.3508,-62.9833,-61.3614,-62.6856,-64.2989,-62.7625,-63.5917,-62.425,-61.24,-65.0833,-61.9667,-63.1833,-63.5392,-61.7833,-64.6,-63.7536,-70.0667,-68.7833,-68.45,-71.6486,-62.2667,-63.4133,-65.5078,-64.4467],"marker":{"color":"#8c5430","line":{"color":"#14181f","width":1.4},"opacity":0.78,"size":[46.95742752749558,38.97435053981015,21.0,19.79898987322333,18.520259177452136,17.146428199482244,17.146428199482244,15.652475842498529,15.652475842498529,14.0,14.0,14.0,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"sizemode":"diameter"},"mode":"markers","name":"Convencional en zona","showlegend":false,"type":"scattergeo"},{"customdata":[["Córdoba","Córdoba",4,11,11,6],["Trenque lauquen","Buenos Aires",4,8,8,3],["Mar del Plata","Buenos Aires",2,8,8,6],["Buenos Aires","Buenos Aires",3,7,7,4],["Mendoza","Mendoza",1,7,7,6],["Olavarria","Buenos Aires",4,6,6,1],["Azul","Buenos Aires",0,5,5,3],["Necochea","Buenos Aires",0,5,5,2],["La plata","Buenos Aires",1,4,4,2],["Rio cuarto","Córdoba",1,4,4,2],["Tandil","Buenos Aires",0,4,4,1],["Laguna Alsina","Buenos Aires",1,3,3,0],["Allen","Texas",0,3,3,2],["San Juan","San Juan",0,3,3,2],["Trelew","Chubut",0,3,3,1],["Puerto Madryn","Chubut",3,2,2,2],["Comodoro Rivadavia","Chubut",2,2,2,3],["Tucumán","Tucumán",2,2,2,3],["Salliqueló","Buenos Aires",2,2,2,2],["Venado Tuerto","Santa Fe",1,2,2,1],["General Villegas","Buenos Aires",1,2,2,1],["Casbas","Provincia de Buenos Aires",1,2,2,2],["Río Colorado","",0,2,2,0],["Chascomús","Buenos Aires",0,2,2,0],["Carlos Casares","Buenos Aires",2,1,1,0],["Río Gallegos","Santa Cruz",2,1,1,1],["Corrientes","Corrientes",1,1,1,1],["Lamarque","Texas",1,1,1,2],["Ministro Rivadavia","Buenos Aires",1,1,1,2],["junin","Buenos Aires",1,1,1,1],["Daireaux","Buenos Aires",1,1,1,0],["Balcarce","Buenos Aires",1,1,1,2],["tres lomas","Buenos Aires",1,1,1,1],["Huinca Renancó","Córdoba",1,1,1,0],["Sierra Grande","New Mexico",0,1,1,0],["Médanos","Canary Islands",0,1,1,0],["Catamarca","Catamarca",0,1,1,0],["Villa María","Córdoba",0,1,1,1],["25 de Mayo","Buenos Aires",0,1,1,0],["Formosa","Formosa",0,1,1,1],["Río Grande","Tierra del Fuego",0,1,1,1],["santa fe","New Mexico",0,1,1,1],["San Martin","San Salvador Department",0,1,1,1],["Rosario","Santa Fe",0,1,1,0],["9 de Julio","Buenos Aires",0,1,1,0],["San Luis","San Luis",0,1,1,1],["Godoy Cruz","Mendoza",0,1,1,0],["Lobos","",0,1,1,1],["Rawson","Chubut",0,1,1,0]],"hovertemplate":"\u003cb style=\"font-size:14px\"\u003e%{customdata[0]}\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style=\"color:#888\"\u003e%{customdata[1]}\u003c\u002fspan\u003e\u003cbr\u003e━━━━━━━━━━\u003cbr\u003ePA: \u003cb\u003e%{customdata[2]}\u003c\u002fb\u003e   Conv: \u003cb\u003e%{customdata[3]}\u003c\u002fb\u003e\u003cbr\u003eTotal Convencional: \u003cb\u003e%{customdata[4]}\u003c\u002fb\u003e\u003cbr\u003eBad: %{customdata[5]}\u003cextra\u003e\u003c\u002fextra\u003e","lat":[-31.4201,-35.9711,-38.0023,-34.6118,-32.8895,-36.8927,-36.7775,-38.5547,-34.9215,-33.1232,-37.3217,-36.855,-38.9756,-31.5375,-43.2489,-42.7689,-45.865,-26.8083,-36.7825,-33.7461,-35.0314,-36.85,-39.0033,-35.575,-35.6203,-51.623,-27.4806,-39.4,-34.85,-34.5947,-36.6056,-37.8456,-36.4519,-34.84,-41.6075,-38.8244,-28.4696,-32.4101,-35.4333,-26.1775,-53.7833,-31.6333,-34.5667,-32.9468,-35.4453,-33.295,-32.9258,-35.1844,-43.3],"lon":[-64.1888,-62.7331,-57.5575,-58.396,-68.8458,-60.3225,-59.8589,-58.7383,-57.9545,-64.3493,-59.1332,-62.205,-67.8267,-68.5364,-65.305,-65.0388,-67.4861,-65.2176,-62.9558,-61.9695,-63.0167,-62.5,-64.0858,-58.0083,-61.3603,-69.2168,-58.8341,-65.6833,-58.5,-60.9486,-61.7494,-58.2569,-62.8636,-64.3681,-65.3578,-62.6919,-65.7795,-63.24,-60.1667,-58.1781,-67.7,-60.7,-58.5333,-60.6393,-60.8857,-66.3356,-68.8417,-59.0964,-65.1],"marker":{"color":"#c14a3a","line":{"color":"#14181f","width":1.4},"opacity":0.7,"size":[23.2163735324878,19.79898987322333,19.79898987322333,18.520259177452136,18.520259177452136,17.146428199482244,15.652475842498529,15.652475842498529,14.0,14.0,14.0,12.12435565298214,12.12435565298214,12.12435565298214,12.12435565298214,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,9.899494936611665,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"sizemode":"diameter"},"mode":"markers","name":"Convencional fuera","showlegend":false,"type":"scattergeo"},{"hoverinfo":"skip","lat":[-37.9196,-38.151700000000005,-35.816700000000004,-34.8562,-30.6201,-37.2023,-33.811800000000005,-32.0895,-40.333600000000004],"lon":[-62.2724,-68.0591,-64.2833,-63.7558,-64.1888,-57.5575,-58.396,-68.8458,-71.3103],"mode":"text","showlegend":false,"text":["Bahia blanca","Neuquén","Santa Rosa","General Pico","Córdoba","Mar del Plata","Buenos Aires","Mendoza","San Carlos de Bariloche"],"textfont":{"color":"#14181f","family":"IBM Plex Sans, sans-serif","size":11},"type":"scattergeo"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"geo":{"lonaxis":{"range":[-75.5,-52],"showgrid":true,"gridcolor":"rgba(168,158,136,0.15)","gridwidth":0.5,"dtick":5},"lataxis":{"range":[-56,-21],"showgrid":true,"gridcolor":"rgba(168,158,136,0.15)","gridwidth":0.5,"dtick":5},"resolution":50,"showcountries":true,"countrycolor":"#3a4250","countrywidth":1.6,"showsubunits":true,"subunitcolor":"#a89e88","subunitwidth":0.6,"showland":true,"landcolor":"#f0ebdf","showocean":true,"oceancolor":"#dde4ea","showcoastlines":true,"coastlinecolor":"#3a4250","coastlinewidth":1.6,"showlakes":false,"showframe":false,"showrivers":false,"framecolor":"#d8cfbb","framewidth":1,"bgcolor":"#f7f3eb"},"margin":{"l":10,"r":10,"t":10,"b":10},"font":{"family":"IBM Plex Sans, sans-serif","size":12,"color":"#14181f"},"hoverlabel":{"font":{"family":"IBM Plex Sans, sans-serif","size":12,"color":"#f7f3eb"},"bgcolor":"#14181f","bordercolor":"#14181f"},"height":820,"paper_bgcolor":"#f7f3eb","plot_bgcolor":"#f7f3eb","showlegend":false,"dragmode":"pan"},                        {"displayModeBar": false, "responsive": true, "scrollZoom": true}                    )                };            </script>        </div>
+      <div class="pro-map-legend-inline">
+        <div><span class="leg-dot" style="background: rgba(140,84,48,0.78)"></span> Zona operada (BB + LP + RN + Neuquén)</div>
+        <div><span class="leg-dot" style="background: rgba(193,74,58,0.7)"></span> Fuga geográfica</div>
+        <div class="size-scale">
+          <span>Volumen:</span>
+          <span class="scale-dot" style="width:7px;height:7px"></span>
+          <span style="font-size:10px">1</span>
+          <span class="scale-dot" style="width:14px;height:14px"></span>
+          <span style="font-size:10px">10</span>
+          <span class="scale-dot" style="width:24px;height:24px"></span>
+          <span style="font-size:10px">40+</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 18px; font-size: 13.5px; color: var(--ink-soft); font-style: italic;">
+      Notar la diferencia de patrón entre canales: <strong>Plan Ahorro concentra masa en el sur</strong> (sobre la zona operada), mientras que <strong>Convencional dispersa puntos rojos por todo el país</strong>: Córdoba, Mendoza, Mar del Plata, La Plata, Tucumán, hasta Ushuaia.
+    </p>
+  </section>
+
+<!-- ============ 09 ANUNCIOS ============ -->
+  <section id="anuncios">
+    <div class="section-head"><div class="section-num">10</div><h2>Performance <em>por creativo</em></h2></div>
+
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Canal</th><th>Zona</th><th>Creativo</th>
+          <th class="num">Inv</th>
+          <th class="num">Leads</th>
+          <th class="num">Bad</th>
+          <th class="num">% Bad</th>
+          <th class="num">Útiles</th>
+          <th class="num">CPL nom</th>
+          <th class="num">CPL útil</th>
+          <th class="num">Mult</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- PA BB -->
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">RANGER XL</td><td class="num">$1.008K</td><td class="num">108</td><td class="num">19</td><td class="num num-good">18%</td><td class="num">89</td><td class="num">$9.330</td><td class="num">$11.322</td><td class="num num-good">1.2x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Terri hibrida</td><td class="num">$100K</td><td class="num">5</td><td class="num">2</td><td class="num num-mid">40%</td><td class="num">3</td><td class="num">$19.917</td><td class="num">$33.195</td><td class="num">1.7x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Transit, sabias que</td><td class="num">$90K</td><td class="num">10</td><td class="num">4</td><td class="num num-mid">40%</td><td class="num">6</td><td class="num">$8.959</td><td class="num">$14.931</td><td class="num">1.7x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Video terri dos</td><td class="num">$65K</td><td class="num">5</td><td class="num num-bad">5</td><td class="num num-bad">100%</td><td class="num num-zero">0</td><td class="num">$13.020</td><td class="num num-bad">∞</td><td class="num">∞</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Maverick, para acceder</td><td class="num">$50K</td><td class="num">4</td><td class="num num-bad">4</td><td class="num num-bad">100%</td><td class="num num-zero">0</td><td class="num">$12.584</td><td class="num num-bad">∞</td><td class="num">∞</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Maverick, si pensas</td><td class="num">$13K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$12.873</td><td class="num">$12.873</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag pa">PA</span></td><td><span class="tag bb">BB</span></td><td class="name">Ranger, la mejor 2026</td><td class="num">$11K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$10.592</td><td class="num">$10.592</td><td class="num num-good">1.0x</td></tr>
+        <!-- PA LP -->
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">RANGER XL</td><td class="num">$662K</td><td class="num">56</td><td class="num">13</td><td class="num num-mid">23%</td><td class="num">43</td><td class="num">$11.814</td><td class="num">$15.386</td><td class="num">1.3x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">VIDEO TERRI 2</td><td class="num">$403K</td><td class="num">24</td><td class="num">13</td><td class="num num-bad">54%</td><td class="num">11</td><td class="num">$16.806</td><td class="num num-bad">$36.668</td><td class="num num-bad">2.2x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">Transit, cansado de depender</td><td class="num">$234K</td><td class="num">17</td><td class="num">6</td><td class="num num-mid">35%</td><td class="num">11</td><td class="num">$13.789</td><td class="num">$21.310</td><td class="num">1.5x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">terri hibrida</td><td class="num">$99K</td><td class="num">6</td><td class="num">3</td><td class="num num-bad">50%</td><td class="num">3</td><td class="num">$16.463</td><td class="num">$32.925</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">Maverick, para acceder</td><td class="num">$91K</td><td class="num">8</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num num-good">8</td><td class="num">$11.363</td><td class="num">$11.363</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">Video transit lp emi</td><td class="num">$39K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$38.742</td><td class="num">$38.742</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag pa">PA</span></td><td><span class="tag lp">LP</span></td><td class="name">Ranger, la mejor 2026</td><td class="num">$24K</td><td class="num">4</td><td class="num">1</td><td class="num num-mid">25%</td><td class="num">3</td><td class="num">$6.061</td><td class="num num-good">$8.082</td><td class="num">1.3x</td></tr>
+        <!-- PA NR -->
+        <tr class="dt-zone-nr"><td><span class="tag pa">PA</span></td><td><span class="tag nr">NR</span></td><td class="name">RANGER XL</td><td class="num">$337K</td><td class="num">29</td><td class="num">4</td><td class="num num-good">14%</td><td class="num">25</td><td class="num">$11.609</td><td class="num">$13.466</td><td class="num num-good">1.2x</td></tr>
+        <tr class="dt-zone-nr"><td><span class="tag pa">PA</span></td><td><span class="tag nr">NR</span></td><td class="name">Terri hibrida</td><td class="num">$19K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$19.077</td><td class="num">$19.077</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-nr"><td><span class="tag pa">PA</span></td><td><span class="tag nr">NR</span></td><td class="name">Maverick, un importado</td><td class="num">$7K</td><td class="num">1</td><td class="num num-bad">1</td><td class="num num-bad">100%</td><td class="num num-zero">0</td><td class="num">$7.424</td><td class="num num-bad">∞</td><td class="num">∞</td></tr>
+        <!-- CONV BB -->
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">RANGER, explicación tasa 0</td><td class="num">$602K</td><td class="num">59</td><td class="num">20</td><td class="num num-mid">34%</td><td class="num">39</td><td class="num">$10.202</td><td class="num">$15.434</td><td class="num">1.5x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">Ranger Limited+</td><td class="num">$594K</td><td class="num">80</td><td class="num">40</td><td class="num num-bad">50%</td><td class="num">40</td><td class="num">$7.424</td><td class="num">$14.848</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">RANGER XL/BB</td><td class="num">$202K</td><td class="num">20</td><td class="num">11</td><td class="num num-bad">55%</td><td class="num">9</td><td class="num">$10.124</td><td class="num num-bad">$22.497</td><td class="num num-bad">2.2x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">Tu usado tu prox paso</td><td class="num">$193K</td><td class="num">27</td><td class="num">13</td><td class="num num-bad">48%</td><td class="num">14</td><td class="num">$7.163</td><td class="num">$13.814</td><td class="num">1.9x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">Maverick, fin</td><td class="num">$42K</td><td class="num">15</td><td class="num">3</td><td class="num num-good">20%</td><td class="num">12</td><td class="num">$2.807</td><td class="num num-good">$3.509</td><td class="num num-good">1.3x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">Ranger XLT v6 vs Amarok</td><td class="num">$14K</td><td class="num">2</td><td class="num">1</td><td class="num num-bad">50%</td><td class="num">1</td><td class="num">$6.926</td><td class="num">$13.852</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">XLT V6, ni basica ni cara</td><td class="num">$8K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$8.181</td><td class="num">$8.181</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-bb"><td><span class="tag conv">CONV</span></td><td><span class="tag bb">BB</span></td><td class="name">Transit, 3 razones</td><td class="num">$8K</td><td class="num">3</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">3</td><td class="num">$2.511</td><td class="num num-good">$2.511</td><td class="num num-good">1.0x</td></tr>
+        <!-- CONV LP -->
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Ranger Limited+</td><td class="num">$634K</td><td class="num">91</td><td class="num">33</td><td class="num num-mid">36%</td><td class="num">58</td><td class="num">$6.972</td><td class="num num-good">$10.939</td><td class="num">1.6x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">RANGER XL/LP</td><td class="num">$503K</td><td class="num">31</td><td class="num">11</td><td class="num num-mid">35%</td><td class="num">20</td><td class="num">$16.216</td><td class="num">$25.134</td><td class="num">1.5x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Te presentamos nueva financiación</td><td class="num">$193K</td><td class="num">9</td><td class="num">2</td><td class="num num-mid">22%</td><td class="num">7</td><td class="num">$21.491</td><td class="num">$27.632</td><td class="num">1.3x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Video asrm terri</td><td class="num">$91K</td><td class="num">6</td><td class="num">3</td><td class="num num-bad">50%</td><td class="num">3</td><td class="num">$15.183</td><td class="num">$30.366</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Video tano everest</td><td class="num">$61K</td><td class="num">2</td><td class="num">1</td><td class="num num-bad">50%</td><td class="num">1</td><td class="num">$30.451</td><td class="num num-bad">$60.902</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Maverick, fin</td><td class="num">$34K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$33.602</td><td class="num">$33.602</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Transit, 3 razones</td><td class="num">$26K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$25.647</td><td class="num">$25.647</td><td class="num num-good">1.0x</td></tr>
+        <tr class="dt-zone-lp"><td><span class="tag conv">CONV</span></td><td><span class="tag lp">LP</span></td><td class="name">Ranger XLT v6 vs Amarok</td><td class="num">$10K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$9.762</td><td class="num">$9.762</td><td class="num num-good">1.0x</td></tr>
+        <!-- CONV NR -->
+        <tr class="dt-zone-nr"><td><span class="tag conv">CONV</span></td><td><span class="tag nr">NR</span></td><td class="name">Ranger Limited+</td><td class="num">$318K</td><td class="num">71</td><td class="num">37</td><td class="num num-bad">52%</td><td class="num">34</td><td class="num">$4.479</td><td class="num num-good">$9.354</td><td class="num num-bad">2.1x</td></tr>
+        <tr class="dt-zone-nr"><td><span class="tag conv">CONV</span></td><td><span class="tag nr">NR</span></td><td class="name">RANGER XL/BB</td><td class="num">$44K</td><td class="num">4</td><td class="num">2</td><td class="num num-bad">50%</td><td class="num">2</td><td class="num">$11.072</td><td class="num">$22.143</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-nr"><td><span class="tag conv">CONV</span></td><td><span class="tag nr">NR</span></td><td class="name">RANGER, explicación tasa 0</td><td class="num">$13K</td><td class="num">2</td><td class="num">1</td><td class="num num-bad">50%</td><td class="num">1</td><td class="num">$6.472</td><td class="num">$12.944</td><td class="num">2.0x</td></tr>
+        <tr class="dt-zone-nr"><td><span class="tag conv">CONV</span></td><td><span class="tag nr">NR</span></td><td class="name">Tu usado tu prox paso</td><td class="num">$10K</td><td class="num">1</td><td class="num num-zero">0</td><td class="num num-good">0%</td><td class="num">1</td><td class="num">$9.931</td><td class="num">$9.931</td><td class="num num-good">1.0x</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 10 MISMO CREATIVO ============ -->
+  <section id="cruces">
+    <div class="section-head"><div class="section-num">11</div><h2>Mismo creativo, <em>distinta zona</em></h2></div>
+    <p class="section-lead">Creativos que corrieron en 2 o 3 zonas. Permite aislar el efecto zona del efecto creativo.</p>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h3>Ranger Limited+ <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· Conv · 3 zonas</span></h3>
+        <div class="item"><div><div class="name">Conv NR</div><span class="meta">71 leads · 52% bad · 70% en zona</span></div><div class="val good">$9.354 ⭐</div></div>
+        <div class="item"><div><div class="name">Conv LP</div><span class="meta">91 leads · 36% bad · 14% en zona</span></div><div class="val">$10.939</div></div>
+        <div class="item"><div><div class="name">Conv BB</div><span class="meta">80 leads · 50% bad · 20% en zona</span></div><div class="val">$14.848</div></div>
+      </div>
+
+      <div class="col-card">
+        <h3>RANGER XL (Plan Ahorro) <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· PA · 3 zonas</span></h3>
+        <div class="item"><div><div class="name">PA BB</div><span class="meta">108 leads · 18% bad · 34% en zona</span></div><div class="val good">$11.322 ⭐</div></div>
+        <div class="item"><div><div class="name">PA NR</div><span class="meta">29 leads · 14% bad · 55% en zona</span></div><div class="val good">$13.466</div></div>
+        <div class="item"><div><div class="name">PA LP</div><span class="meta">56 leads · 23% bad · 42% en zona</span></div><div class="val">$15.386</div></div>
+      </div>
+
+      <div class="col-card">
+        <h3>RANGER explicación tasa 0 <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· Conv · 2 zonas</span></h3>
+        <div class="item"><div><div class="name">Conv BB</div><span class="meta">59 leads · 34% bad</span></div><div class="val good">$15.434 ⭐</div></div>
+        <div class="item"><div><div class="name">Conv NR</div><span class="meta">2 leads · 50% bad</span></div><div class="val">$12.944</div></div>
+        <p style="font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic;">En NR casi no traccionó. ¿Saturación de audiencia en esa zona?</p>
+      </div>
+
+      <div class="col-card">
+        <h3>Maverick "fin" <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· Conv · 3 zonas</span></h3>
+        <div class="item"><div><div class="name">Conv BB</div><span class="meta">15 leads · 20% bad · 12 útiles</span></div><div class="val good">$3.509 ⭐</div></div>
+        <div class="item"><div><div class="name">Conv LP</div><span class="meta">1 lead · 0% bad</span></div><div class="val">$33.602</div></div>
+        <div class="item"><div><div class="name">Conv NR</div><span class="meta">0 leads · $8.784 gastados</span></div><div class="val bad">∞</div></div>
+        <p style="font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic;">Funciona muy fuerte en BB, casi nada fuera. Creativo zona-específico.</p>
+      </div>
+
+      <div class="col-card">
+        <h3>Ranger XLT V6 vs Amarok <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· Conv · 3 zonas</span></h3>
+        <div class="item"><div><div class="name">Conv LP</div><span class="meta">1 lead · 0% bad</span></div><div class="val">$9.762</div></div>
+        <div class="item"><div><div class="name">Conv BB</div><span class="meta">2 leads · 50% bad</span></div><div class="val">$13.852</div></div>
+        <div class="item"><div><div class="name">Conv NR</div><span class="meta">0 leads · $2.458 gastados</span></div><div class="val bad">∞</div></div>
+        <p style="font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic;">Volumen mínimo en 3 zonas. No escala. El ángulo comparativo no engancha.</p>
+      </div>
+
+      <div class="col-card">
+        <h3>Terri hibrida <span style="font-size: 12px; font-weight: 400; color: var(--ink-mute);">· PA · 3 zonas</span></h3>
+        <div class="item"><div><div class="name">PA LP</div><span class="meta">6 leads · 50% bad · 17% en zona</span></div><div class="val">$32.925</div></div>
+        <div class="item"><div><div class="name">PA BB</div><span class="meta">5 leads · 40% bad · 20% en zona</span></div><div class="val">$33.195</div></div>
+        <div class="item"><div><div class="name">PA NR</div><span class="meta">1 lead · 0% bad</span></div><div class="val good">$19.077 ⭐</div></div>
+        <p style="font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic;">CPL útil ~$33K en BB y LP. El producto no engancha en Plan Ahorro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 11 GLOSARIO ============ -->
+  <section id="metodo">
+    <div class="section-head"><div class="section-num">12</div><h2>Glosario y <em>metodología</em></h2></div>
+
+    <div class="gloss">
+      <dl>
+        <dt>Lead útil</dt>
+        <dd>Lead que NO tiene marcado uno de los 3 motivos bad en Pilot: <code>BL: Imposible de contactar</code>, <code>BL: Dato Erróneo</code>, <code>BL: Dato Duplicado</code>. Los leads sin clasificar (motivo en blanco) se cuentan como útiles hasta que el vendedor los gestione.</dd>
+
+        <dt>CPL nominal</dt>
+        <dd>Inversión ÷ Leads reportados por Meta. Es lo que muestra Meta Ads Manager.</dd>
+
+        <dt>CPL útil</dt>
+        <dd>Inversión ÷ Leads útiles. Refleja el costo real del lead trabajable por el equipo.</dd>
+
+        <dt>Multiplicador real/nominal</dt>
+        <dd>CPL útil ÷ CPL nominal. Cuánto miente el CPL que muestra Meta. 1.0x = sin mentira; 2.0x = el doble del costo real.</dd>
+
+        <dt>HHT (Horas Hasta la Toma)</dt>
+        <dd>Tiempo entre la creación del lead en Pilot y su gestión efectiva por parte del vendedor. Métrica del CRM Resasco.</dd>
+
+        <dt>En zona</dt>
+        <dd>Lead cuya localidad/provincia declarada en Pilot coincide con la zona pautada en Meta. Se evalúa por matching de localidad o provincia.</dd>
+
+        <dt>Fuga geográfica</dt>
+        <dd>Leads pagados en una zona pautada que terminan viviendo en otra. Si la zona de destino también es pautada en una campaña separada, el lead se está pagando dos veces.</dd>
+
+        <dt>Fuentes</dt>
+        <dd>Meta Ads Manager (exports CSV por anuncio + xlsx por conjunto de anuncios), Pilot Solution / Resasco (exports CSV por lista: 1575 Plan Ahorro, 1576 Convencional).</dd>
+
+        <dt>Match Meta ↔ Pilot</dt>
+        <dd>Cruce por email o teléfono normalizado (últimos 10 dígitos). Tasa global de match: 93% (PA) y 93% (Conv).</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    <div>Guspamar S.A · Marketing · Generado mayo 2026</div>
+    <div><span class="conf">INTERNO</span> Contiene datos sensibles. No compartir con terceros sin sanitizar.</div>
+  </footer>
+
+</div>
+</body>
+</html>
