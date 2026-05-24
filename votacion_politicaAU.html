@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUUU, POLÍTICA SALVAJE, AUUU 🐺</title>
+    <style>
+        @keyframes howl {
+            0%, 100% { transform: scaleY(1) rotate(0deg); opacity: 1; }
+            50% { transform: scaleY(1.2) rotate(-2deg); opacity: 0.7; }
+        }
+
+        @keyframes float-wolf {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(20px) translateY(-10px); }
+            50% { transform: translateX(0) translateY(-5px); }
+            75% { transform: translateX(-20px) translateY(-10px); }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .wolf {
+            display: inline-block;
+            font-size: 32px;
+            animation: float-wolf 3s ease-in-out infinite;
+        }
+
+        .wolf:nth-child(1) { animation-delay: 0s; }
+        .wolf:nth-child(2) { animation-delay: 0.5s; }
+        .wolf:nth-child(3) { animation-delay: 1s; }
+
+        .container {
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            max-width: 900px;
+            width: 100%;
+            padding: 30px 20px;
+            border: 2px solid #ff6b35;
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                padding: 40px;
+            }
+        }
+
+        .header-wolves {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 28px;
+            letter-spacing: 2px;
+            animation: howl 2s ease-in-out infinite;
+        }
+
+        h1 {
+            color: #ff6b35;
+            margin-bottom: 8px;
+            font-size: 24px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+
+        @media (min-width: 600px) {
+            h1 {
+                font-size: 32px;
+                letter-spacing: 3px;
+            }
+        }
+
+        .subtitle {
+            color: #ccc;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: #ccc;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-btn:hover {
+            color: #ff6b35;
+        }
+
+        .tab-btn.active {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        #selection-screen { display: none; }
+        #selection-screen.active { display: block; }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .friend-btn {
+            padding: 12px;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 107, 53, 0.05);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-align: center;
+            color: #ccc;
+        }
+
+        .friend-btn:hover:not(.voted) {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .friend-btn.selected {
+            background: #ff6b35;
+            color: #1a1a2e;
+            border-color: #ff6b35;
+        }
+
+        .friend-btn.voted {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #voting-screen { display: none; }
+        #voting-screen.active { display: block; }
+
+        .voting-info {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #ccc;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .voting-info strong {
+            color: #ff6b35;
+            font-size: 14px;
+        }
+
+        .voting-progress {
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+        }
+
+        .friend-card {
+            background: rgba(255, 107, 53, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .friend-name {
+            color: #ff6b35;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .slider-label-main {
+            color: #ccc;
+            font-weight: 600;
+        }
+
+        .slider-label-value {
+            color: #ff6b35;
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 107, 53, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ff6b35;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ff6b35;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .mini-compass {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            position: relative;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-point {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff6b35;
+            position: absolute;
+            box-shadow: 0 0 8px rgba(255, 107, 53, 0.7);
+        }
+
+        .mini-cross {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .mini-cross::before,
+        .mini-cross::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 107, 53, 0.3);
+        }
+
+        .mini-cross::before {
+            width: 1px;
+            height: 60px;
+        }
+
+        .mini-cross::after {
+            width: 60px;
+            height: 1px;
+        }
+
+        .voting-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: #1a1a2e;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #ff8555;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 107, 53, 0.1);
+            color: #ff6b35;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        .btn-monitor {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-monitor:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-nav {
+            padding: 10px 16px;
+            font-size: 12px;
+            flex: 1;
+        }
+
+        #monitor-screen { display: none; }
+        #monitor-screen.active { display: block; }
+
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .monitor-card {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .monitor-card.voted {
+            background: rgba(72, 187, 120, 0.1);
+            border-color: rgba(72, 187, 120, 0.3);
+        }
+
+        .monitor-card .name {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #ff6b35;
+        }
+
+        .monitor-card.voted .name {
+            color: #48bb78;
+        }
+
+        .monitor-card .status {
+            font-size: 18px;
+        }
+
+        .monitor-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ff6b35;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 107, 53, 0.2);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ff6b35;
+            transition: width 0.3s;
+        }
+
+        #results-screen { display: none; }
+        #results-screen.active { display: block; }
+
+        .result-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-left: 3px solid #ff6b35;
+        }
+
+        .result-card .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #ff6b35;
+            margin-bottom: 6px;
+        }
+
+        .result-card .coords {
+            font-size: 11px;
+            color: #999;
+            font-family: monospace;
+            margin-bottom: 4px;
+        }
+
+        .result-card .voters-voted {
+            font-size: 11px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-wolves">
+            <span class="wolf">🐺</span>
+            <span class="wolf">🐺</span>
+            <span class="wolf">🐺</span>
+        </div>
+        <h1>AUUU, POLÍTICA SALVAJE, AUUU</h1>
+
+        <!-- Selection Screen -->
+        <div id="selection-screen" class="active">
+            <p class="subtitle">Seleccioná tu nombre para comenzar a votar</p>
+            <div class="friends-grid" id="selection-grid"></div>
+            <div class="voting-buttons">
+                <button class="btn-primary" id="start-voting-btn" disabled>Comenzar a votar</button>
+                <button class="btn-monitor" id="show-monitor-btn">📊 Ver votaciones</button>
+            </div>
+            <div id="progress-container"></div>
+        </div>
+
+        <!-- Voting Screen -->
+        <div id="voting-screen">
+            <div class="voting-info">
+                <strong id="voter-name"></strong> está votando
+            </div>
+            <div class="voting-progress">
+                <span id="voting-counter">1</span> / 19
+            </div>
+
+            <div class="friend-card">
+                <div class="friend-name" id="current-friend-name">Amigo</div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span class="slider-label-main">📍 Izquierda ← → Derecha</span>
+                        <span class="slider-label-value" id="x-value">50D</span>
+                    </div>
+                    <input type="range" id="slider-x" min="0" max="100" value="50" step="1">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span class="slider-label-main">📍 Conservador ← → Progresista</span>
+                        <span class="slider-label-value" id="y-value">50Co</span>
+                    </div>
+                    <input type="range" id="slider-y" min="0" max="100" value="50" step="1">
+                </div>
+
+                <div class="mini-compass">
+                    <div class="mini-cross"></div>
+                    <div class="mini-point" id="mini-point"></div>
+                </div>
+            </div>
+
+            <div class="voting-buttons">
+                <button class="btn-secondary btn-nav" id="prev-btn">← Anterior</button>
+                <button class="btn-secondary btn-nav" id="next-btn">Siguiente →</button>
+            </div>
+
+            <div class="voting-buttons" style="margin-top: 10px;">
+                <button class="btn-secondary" id="back-voting-btn" style="flex: 1;">Volver</button>
+                <button class="btn-primary" id="submit-vote-btn" style="flex: 1;">✅ Guardar votos</button>
+            </div>
+        </div>
+
+        <!-- Monitor Screen -->
+        <div id="monitor-screen">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="status">Estado actual</button>
+                <button class="tab-btn" data-tab="results">Resultados</button>
+            </div>
+            
+            <div id="status" class="tab-content active">
+                <p class="subtitle">¿Quién ha votado?</p>
+                <div class="monitor-grid" id="monitor-grid"></div>
+                <div class="monitor-stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="voted-count">0</div>
+                        <div class="stat-label">Han votado</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="pending-count">19</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="tab-content">
+                <p class="subtitle">Resultados parciales</p>
+                <div class="result-list" id="monitor-result-list"></div>
+            </div>
+
+            <div class="voting-buttons" style="margin-top: 20px;">
+                <button class="btn-secondary" id="back-monitor-btn" style="flex: 1;">Volver</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen">
+            <p class="subtitle">Resultados finales</p>
+            <div class="results-info" style="background: rgba(255, 107, 53, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #ccc; border: 1px solid rgba(255, 107, 53, 0.3);">
+                <strong id="voters-count" style="color: #ff6b35;"></strong> personas votaron
+            </div>
+            <div class="result-list" id="result-list"></div>
+
+            <div class="voting-buttons" style="margin-top: 20px;">
+                <button class="btn-secondary" id="restart-btn" style="flex: 1;">🔄 Comenzar de nuevo</button>
+                <button class="btn-primary" id="export-btn" style="flex: 1;">💾 Exportar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const FRIENDS = [
+            "Mariano Rudolf", "Maximo Faggiano", "Juan Manuel Resasco", "Cesar Lombardi",
+            "Martin Borda", "Agustin Udi", "Agustin Elias", "Martin Bras",
+            "Guillermo Bohan", "Jose Esteban de Robbio", "Eugenio Andres", "Mauro Saks",
+            "Federico Nilos", "Santiago Torre", "Ignacio Ficcadenti", "Nicolas Marino",
+            "Federico Claiir", "Mariano Cabarrus", "Ramon Biondo"
+        ];
+
+        let state = {
+            votes: {},
+            selectedVoter: null,
+            currentVotes: {},
+            currentIndex: 0
+        };
+
+        function initSelectionScreen() {
+            const grid = document.getElementById('selection-grid');
+            grid.innerHTML = '';
+            FRIENDS.forEach(friend => {
+                const hasVoted = state.votes[friend] !== undefined;
+                const btn = document.createElement('button');
+                btn.className = `friend-btn ${hasVoted ? 'voted' : ''}`;
+                btn.textContent = friend;
+                btn.disabled = hasVoted;
+                if (!hasVoted) {
+                    btn.onclick = () => {
+                        document.querySelectorAll('.friend-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        state.selectedVoter = friend;
+                        document.getElementById('start-voting-btn').disabled = false;
+                    };
+                }
+                grid.appendChild(btn);
+            });
+        }
+
+        function getCoordinatesLabel(x, y) {
+            const xLabel = x < 50 ? `${Math.round(100 - x * 2)}L` : `${Math.round((x - 50) * 2)}D`;
+            const yLabel = y < 50 ? `${Math.round(100 - y * 2)}Co` : `${Math.round((y - 50) * 2)}Pr`;
+            return { xLabel, yLabel };
+        }
+
+        function showVotingScreen() {
+            if (state.votes[state.selectedVoter]) {
+                alert(`❌ ${state.selectedVoter} ya votó.`);
+                return;
+            }
+
+            state.currentIndex = 0;
+            state.currentVotes = {};
+            
+            document.getElementById('selection-screen').classList.remove('active');
+            document.getElementById('monitor-screen').classList.remove('active');
+            document.getElementById('voting-screen').classList.add('active');
+            document.getElementById('voter-name').textContent = state.selectedVoter;
+            
+            updateVotingCard();
+        }
+
+        function updateVotingCard() {
+            const friend = FRIENDS[state.currentIndex];
+            const vote = state.currentVotes[friend] || { x: 50, y: 50 };
+            
+            document.getElementById('current-friend-name').textContent = friend;
+            document.getElementById('slider-x').value = vote.x;
+            document.getElementById('slider-y').value = vote.y;
+            document.getElementById('voting-counter').textContent = state.currentIndex + 1;
+            
+            updateSliderLabels();
+            updateMiniCompass();
+            
+            document.getElementById('prev-btn').disabled = state.currentIndex === 0;
+            document.getElementById('next-btn').disabled = state.currentIndex === FRIENDS.length - 1;
+        }
+
+        function updateSliderLabels() {
+            const x = parseFloat(document.getElementById('slider-x').value);
+            const y = parseFloat(document.getElementById('slider-y').value);
+            const coords = getCoordinatesLabel(x, y);
+            
+            document.getElementById('x-value').textContent = coords.xLabel;
+            document.getElementById('y-value').textContent = coords.yLabel;
+        }
+
+        function updateMiniCompass() {
+            const x = parseFloat(document.getElementById('slider-x').value);
+            const y = parseFloat(document.getElementById('slider-y').value);
+            
+            const point = document.getElementById('mini-point');
+            point.style.left = x + '%';
+            point.style.top = y + '%';
+            point.style.transform = 'translate(-50%, -50%)';
+        }
+
+        function saveCurrentFriend() {
+            const friend = FRIENDS[state.currentIndex];
+            state.currentVotes[friend] = {
+                x: parseFloat(document.getElementById('slider-x').value),
+                y: parseFloat(document.getElementById('slider-y').value)
+            };
+        }
+
+        function goNext() {
+            saveCurrentFriend();
+            if (state.currentIndex < FRIENDS.length - 1) {
+                state.currentIndex++;
+                updateVotingCard();
+            }
+        }
+
+        function goPrev() {
+            saveCurrentFriend();
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                updateVotingCard();
+            }
+        }
+
+        function saveVotes() {
+            saveCurrentFriend();
+            state.votes[state.selectedVoter] = state.currentVotes;
+            localStorage.setItem('politicalVotes', JSON.stringify(state.votes));
+            alert(`✅ Votos de ${state.selectedVoter} guardados!`);
+            showSelectionScreen();
+        }
+
+        function showSelectionScreen() {
+            document.getElementById('voting-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.remove('active');
+            document.getElementById('monitor-screen').classList.remove('active');
+            document.getElementById('selection-screen').classList.add('active');
+            state.selectedVoter = null;
+            document.querySelectorAll('.friend-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('start-voting-btn').disabled = true;
+            
+            initSelectionScreen();
+            updateVotingProgress();
+        }
+
+        function showMonitorScreen() {
+            document.getElementById('selection-screen').classList.remove('active');
+            document.getElementById('voting-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.remove('active');
+            document.getElementById('monitor-screen').classList.add('active');
+            
+            updateMonitorDisplay();
+        }
+
+        function updateMonitorDisplay() {
+            const grid = document.getElementById('monitor-grid');
+            grid.innerHTML = '';
+            
+            const votedCount = Object.keys(state.votes).length;
+            const pendingCount = FRIENDS.length - votedCount;
+            
+            document.getElementById('voted-count').textContent = votedCount;
+            document.getElementById('pending-count').textContent = pendingCount;
+            
+            FRIENDS.forEach(friend => {
+                const hasVoted = state.votes[friend] !== undefined;
+                const card = document.createElement('div');
+                card.className = `monitor-card ${hasVoted ? 'voted' : ''}`;
+                card.innerHTML = `
+                    <div class="name">${friend}</div>
+                    <div class="status">${hasVoted ? '✅' : '⏳'}</div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            if (votedCount > 0) {
+                const averages = calculateAverages();
+                displayMonitorResults(averages);
+            }
+        }
+
+        function calculateAverages() {
+            const averages = {};
+            
+            FRIENDS.forEach(friend => {
+                let totalX = 0, totalY = 0, count = 0;
+                
+                Object.keys(state.votes).forEach(voter => {
+                    if (state.votes[voter][friend]) {
+                        totalX += state.votes[voter][friend].x;
+                        totalY += state.votes[voter][friend].y;
+                        count++;
+                    }
+                });
+                
+                if (count > 0) {
+                    averages[friend] = {
+                        x: totalX / count,
+                        y: totalY / count,
+                        votes: count
+                    };
+                }
+            });
+            
+            return averages;
+        }
+
+        function displayMonitorResults(averages) {
+            const list = document.getElementById('monitor-result-list');
+            list.innerHTML = '';
+            
+            const sorted = Object.entries(averages).sort((a, b) => b[1].votes - a[1].votes);
+            sorted.forEach(([friend, avg]) => {
+                const coords = getCoordinatesLabel(avg.x, avg.y);
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="name">${friend}</div>
+                    <div class="coords">${coords.xLabel}, ${coords.yLabel}</div>
+                    <div class="voters-voted">${avg.votes} voto${avg.votes !== 1 ? 's' : ''}</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function updateVotingProgress() {
+            const container = document.getElementById('progress-container');
+            const voted = Object.keys(state.votes).length;
+            const total = FRIENDS.length;
+            const progress = (voted / total) * 100;
+            
+            container.innerHTML = `
+                <div style="margin: 20px 0;">
+                    <div style="color: #ccc; font-size: 12px; margin-bottom: 10px; text-align: center;">
+                        ${voted} de ${total} han votado
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    ${voted === total ? '<div style="color: #48bb78; font-weight: 600; margin-top: 10px; text-align: center;">🎉 ¡TODOS VOTARON!</div>' : ''}
+                </div>
+            `;
+        }
+
+        function showResultsScreen() {
+            document.getElementById('selection-screen').classList.remove('active');
+            document.getElementById('voting-screen').classList.remove('active');
+            document.getElementById('monitor-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.add('active');
+            
+            const averages = calculateAverages();
+            displayResultsList(averages);
+            
+            document.getElementById('voters-count').textContent = `${Object.keys(state.votes).length}`;
+        }
+
+        function displayResultsList(averages) {
+            const list = document.getElementById('result-list');
+            list.innerHTML = '';
+            
+            const sorted = Object.entries(averages).sort((a, b) => b[1].votes - a[1].votes);
+            
+            sorted.forEach(([friend, avg]) => {
+                const coords = getCoordinatesLabel(avg.x, avg.y);
+                
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="name">${friend}</div>
+                    <div class="coords">${coords.xLabel}, ${coords.yLabel}</div>
+                    <div class="voters-voted">${avg.votes} voto${avg.votes !== 1 ? 's' : ''}</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function exportResults() {
+            const averages = calculateAverages();
+            const exportData = {
+                fecha: new Date().toLocaleString('es-AR'),
+                votantes: Object.keys(state.votes),
+                resultados: averages,
+                detalles: state.votes
+            };
+            
+            const json = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `politica_salvaje_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        // Event Listeners
+        document.getElementById('start-voting-btn').addEventListener('click', showVotingScreen);
+        document.getElementById('show-monitor-btn').addEventListener('click', showMonitorScreen);
+        document.getElementById('back-voting-btn').addEventListener('click', showSelectionScreen);
+        document.getElementById('back-monitor-btn').addEventListener('click', showSelectionScreen);
+        document.getElementById('submit-vote-btn').addEventListener('click', saveVotes);
+        document.getElementById('next-btn').addEventListener('click', goNext);
+        document.getElementById('prev-btn').addEventListener('click', goPrev);
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            if (confirm('¿AUUU? ¿Estás seguro?')) {
+                state.votes = {};
+                localStorage.removeItem('politicalVotes');
+                showSelectionScreen();
+            }
+        });
+        document.getElementById('export-btn').addEventListener('click', exportResults);
+
+        document.getElementById('slider-x').addEventListener('input', updateSliderLabels);
+        document.getElementById('slider-y').addEventListener('input', updateSliderLabels);
+        
+        document.getElementById('slider-x').addEventListener('input', updateMiniCompass);
+        document.getElementById('slider-y').addEventListener('input', updateMiniCompass);
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Initialize
+        function init() {
+            const saved = localStorage.getItem('politicalVotes');
+            if (saved) {
+                state.votes = JSON.parse(saved);
+            }
+            
+            initSelectionScreen();
+            updateVotingProgress();
+            
+            if (Object.keys(state.votes).length === FRIENDS.length) {
+                const showResults = confirm('🎉 ¡TODOS VOTARON! ¿Querés ver los resultados?');
+                if (showResults) {
+                    showResultsScreen();
+                }
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
