@@ -1,0 +1,3396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRUPO RESASCO - Sistema de Peritajes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8f9fb 0%, #f3f5f8 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+        
+        .login-container { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+        .login-container::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            bottom: -80px;
+            left: -80px;
+        }
+        .login-box { 
+            background: white;
+            border-radius: 20px;
+            padding: 60px 50px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .login-box h1 { 
+            color: #667eea;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .login-box h2 { 
+            color: #999;
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 40px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .login-box input { 
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .login-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .login-box button { 
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .admin-panel { 
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fb 0%, #f3f5f8 100%);
+            min-height: 100vh;
+        }
+        .admin-header { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .admin-header h1 { 
+            color: #1a1a1a;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .logout-btn { 
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .tabs { 
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+        .tab-btn { 
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e8e8e8;
+            cursor: pointer;
+            font-weight: 600;
+            color: #999;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .tab-btn:hover { 
+            color: #667eea;
+            border-color: #667eea;
+        }
+        .tab-btn.active { 
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .card { 
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .card h2 { 
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .card h3 { 
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .filters {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        .filter-group { 
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 160px;
+        }
+        .filter-group label { 
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-group input, .filter-group select { 
+            padding: 11px 14px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        .filter-group input:focus, .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .kpi-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .kpi { 
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .kpi::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .kpi:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
+        }
+        .kpi-label { 
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .kpi-number { 
+            font-size: 42px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        .kpi-subtitle { 
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .charts-grid { 
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .chart-container { 
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .modal { 
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        .modal.active { 
+            display: flex;
+        }
+        .modal-content { 
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .hidden { display: none; }
+        button { 
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .item { 
+            padding: 14px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .item-content {
+            flex: 1;
+            cursor: pointer;
+        }
+        .item:hover {
+            background: #f0f2ff;
+            border-left-color: #764ba2;
+        }
+        .item .title { 
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+        .item p { 
+            margin: 0;
+            font-size: 13px;
+            color: #999;
+        }
+        .item-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .icon-btn {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: all 0.2s;
+        }
+        .icon-btn.edit {
+            background: #fff5e6;
+            color: #f59e0b;
+        }
+        .icon-btn.edit:hover {
+            background: #f59e0b;
+            color: white;
+        }
+        .icon-btn.delete {
+            background: #ffe5e5;
+            color: #ff6b6b;
+        }
+        .icon-btn.delete:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .fecha-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .fecha-btn {
+            padding: 12px 8px;
+            border: 2px solid #e8e8e8;
+            background: white;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .fecha-btn:hover:not(.disabled) {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        .fecha-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .horarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .horario-btn {
+            padding: 12px 8px;
+            border: 2px solid #ddd;
+            background: white;
+            color: #1a1a1a;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .horario-btn:hover:not(.ocupado) {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .horario-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .horario-btn.ocupado {
+            background: #f5f5f5;
+            color: #ccc;
+            cursor: not-allowed;
+            border-color: #e8e8e8;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .required-field::after {
+            content: '*';
+            color: #ff6b6b;
+            margin-left: 4px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        /* PLANILLA PERITAJE */
+        .seccion-peritaje {
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .seccion-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            background: #f8f9ff;
+            border: none;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .seccion-header:hover {
+            background: #f0f2ff;
+            transform: none;
+        }
+        .seccion-arrow {
+            font-size: 12px;
+            color: #999;
+            transition: transform 0.2s;
+        }
+        .seccion-arrow.collapsed {
+            transform: rotate(-90deg);
+        }
+        .seccion-body {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .planilla-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .planilla-item:last-child {
+            border-bottom: none;
+        }
+        .planilla-item-nombre {
+            font-size: 13px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        .planilla-item-numero {
+            color: #999;
+            font-size: 11px;
+            font-weight: 400;
+            margin-right: 4px;
+        }
+        .brm-group {
+            display: flex;
+            gap: 4px;
+        }
+        .brm-btn {
+            width: 36px;
+            height: 36px;
+            border: 2px solid #e8e8e8;
+            background: white;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brm-btn:hover {
+            border-color: #667eea;
+        }
+        .brm-btn.selected.b {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        .brm-btn.selected.r {
+            background: #f59e0b;
+            color: white;
+            border-color: #f59e0b;
+        }
+        .brm-btn.selected.m {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        .puntos-seccion {
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: auto;
+            margin-left: 12px;
+        }
+        .preview-foto {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            border: 2px solid #e8e8e8;
+        }
+        .preview-foto img, .preview-foto video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-foto .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-view" class="login-container">
+    <div class="login-box">
+        <h1>GRUPO RESASCO</h1>
+        <h2>Sistema de Peritajes de Usados</h2>
+        <form onsubmit="login(event)">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Ingresar</button>
+        </form>
+        <div style="margin-top: 30px; padding: 16px; background: #f8f9ff; border-radius: 10px; font-size: 12px; color: #666;">
+            <p style="margin: 0 0 8px 0; font-weight: 700; color: #1a1a1a; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Cuentas de prueba</p>
+            <p style="margin: 0 0 4px 0; font-weight: 600;">👑 <span style="color: #667eea;">admin@grupo.com</span> / admin123</p>
+            <p style="margin: 0 0 4px 0; font-weight: 600;">💼 <span style="color: #667eea;">vendedor@grupo.com</span> / vendedor123</p>
+            <p style="margin: 0; font-weight: 600;">🔧 <span style="color: #667eea;">mecanico@grupo.com</span> / mecanico123</p>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-view" class="admin-panel hidden">
+    <div class="admin-header">
+        <div>
+            <h1 id="header-titulo">📊 Peritajes</h1>
+            <p id="header-subtitulo" style="color: #999; font-size: 14px; margin-top: 4px;"></p>
+        </div>
+        <button class="logout-btn" onclick="logout()">Salir</button>
+    </div>
+
+    <div class="tabs" id="tabs-container">
+        <button class="tab-btn active" data-tab="dashboard" onclick="switchTab(event, 'dashboard')">📊 Dashboard</button>
+        <button class="tab-btn" data-tab="peritajes" onclick="switchTab(event, 'peritajes')">📋 Peritajes</button>
+        <button class="tab-btn" data-tab="turnos" onclick="switchTab(event, 'turnos')">📅 Turnos</button>
+        <button class="tab-btn" data-tab="usuarios" onclick="switchTab(event, 'usuarios')">⚙️ Usuarios</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="tab-content active">
+        <div class="card">
+            <h2>Filtros</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Período</label>
+                    <input type="month" id="filter-mes" onchange="actualizarDashboard()">
+                </div>
+                <div class="filter-group">
+                    <label>Sucursal</label>
+                    <select id="filter-sucursal" onchange="actualizarDashboard()">
+                        <option value="">Todas</option>
+                        <option value="bahia">Bahía Blanca</option>
+                        <option value="santa_rosa">Santa Rosa</option>
+                        <option value="general_pico">General Pico</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Mecánico</label>
+                    <select id="filter-mecanico" onchange="actualizarDashboard()">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Unidad</label>
+                    <select id="filter-unidad" onchange="actualizarDashboard()">
+                        <option value="">Todas</option>
+                        <option value="0km">0 KM</option>
+                        <option value="plan_ahorro">Plan Ahorro</option>
+                        <option value="usado">Usado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi">
+                <div class="kpi-label">Peritajes</div>
+                <div class="kpi-number" id="kpi-total">0</div>
+                <div class="kpi-subtitle">Completados</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Puntaje Promedio</div>
+                <div class="kpi-number" id="kpi-promedio">0%</div>
+                <div class="kpi-subtitle">Calidad</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Turnos</div>
+                <div class="kpi-number" id="kpi-turnos">0</div>
+                <div class="kpi-subtitle">Pendientes</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Peritajes Promedio</div>
+                <div class="kpi-number" id="kpi-promedios">0</div>
+                <div class="kpi-subtitle">Por día hábil</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3 id="chart-titulo">Evolución de Peritajes por Sucursal</h3>
+                <div id="chart-canvas-wrapper">
+                    <canvas id="chart-sucursal"></canvas>
+                </div>
+                <div id="agenda-mecanico" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERITAJES -->
+    <div id="peritajes" class="tab-content">
+        <div class="card">
+            <h2>Peritajes</h2>
+            
+            <div class="filters" style="margin-bottom: 20px;">
+                <div class="filter-group">
+                    <label>Fecha Desde</label>
+                    <input type="date" id="filter-peritaje-desde" onchange="filtrarPeritajes()">
+                </div>
+                <div class="filter-group">
+                    <label>Fecha Hasta</label>
+                    <input type="date" id="filter-peritaje-hasta" onchange="filtrarPeritajes()">
+                </div>
+                <div class="filter-group">
+                    <label>Sucursal</label>
+                    <select id="filter-peritaje-sucursal" onchange="filtrarPeritajes()">
+                        <option value="">Todas</option>
+                        <option value="bahia">Bahía Blanca</option>
+                        <option value="santa_rosa">Santa Rosa</option>
+                        <option value="general_pico">General Pico</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Unidad</label>
+                    <select id="filter-peritaje-unidad" onchange="filtrarPeritajes()">
+                        <option value="">Todas</option>
+                        <option value="0km">0 KM</option>
+                        <option value="plan_ahorro">Plan Ahorro</option>
+                        <option value="usado">Usado</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="flex: 0; min-width: auto; align-self: flex-end;">
+                    <button onclick="limpiarFiltrosPeritajes()" style="padding: 11px 16px; background: #e8e8e8; color: #1a1a1a;">🔄 Limpiar</button>
+                </div>
+            </div>
+            
+            <input type="text" placeholder="🔍 Buscar por patente, modelo o cliente..." id="search-peritajes" onkeyup="filtrarPeritajes()" class="form-input" style="margin-bottom: 20px;">
+            
+            <div id="peritajes-count" style="margin-bottom: 15px; color: #667eea; font-weight: 600; font-size: 14px;"></div>
+            <div id="peritajes-list"></div>
+        </div>
+    </div>
+
+    <!-- TURNOS -->
+    <div id="turnos" class="tab-content">
+        <!-- Vista de Agenda Mensual (Mecánico) -->
+        <div id="vista-agenda-mensual" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
+                    <h2 style="margin: 0;" id="agenda-titulo-mes">Agenda</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="cambiarMesAgenda(-1)" style="background: #e8e8e8; color: #1a1a1a; padding: 8px 14px; font-size: 14px;">‹ Anterior</button>
+                        <button onclick="cambiarMesAgenda(0)" style="background: #667eea; color: white; padding: 8px 14px; font-size: 14px;">Hoy</button>
+                        <button onclick="cambiarMesAgenda(1)" style="background: #e8e8e8; color: #1a1a1a; padding: 8px 14px; font-size: 14px;">Siguiente ›</button>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; font-size: 12px; color: #666;">
+                    <span><span style="display: inline-block; width: 12px; height: 12px; background: #f59e0b; border-radius: 3px; margin-right: 4px; vertical-align: middle;"></span>Turnos pendientes</span>
+                    <span><span style="display: inline-block; width: 12px; height: 12px; background: #27ae60; border-radius: 3px; margin-right: 4px; vertical-align: middle;"></span>Peritajes realizados</span>
+                </div>
+                
+                <div id="calendario-mensual"></div>
+                
+                <div style="margin-top: 20px;">
+                    <button onclick="document.getElementById('vista-agenda-mensual').style.display='none'; document.getElementById('vista-form-turno').style.display='grid';" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; font-weight: 600;">➕ Sacar Nuevo Turno</button>
+                </div>
+            </div>
+            
+            <!-- Detalle del día seleccionado -->
+            <div id="detalle-dia-seleccionado" style="display: none;"></div>
+        </div>
+        
+        <!-- Vista de Formulario de Turno (Vendedor/Admin/Mecánico cuando saca turno) -->
+        <div id="vista-form-turno" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card">
+                <h2>Sacar Turno</h2>
+                
+                <label class="form-label required-field">Sucursal</label>
+                <select id="turno-sucursal" onchange="actualizarTurnero()" class="form-input" style="margin-bottom: 16px;">
+                    <option value="">Seleccionar sucursal</option>
+                    <option value="bahia">Bahía Blanca (8:30-17:30)</option>
+                    <option value="santa_rosa">Santa Rosa (8:00-12:30 / 15:30-19:00)</option>
+                    <option value="general_pico">General Pico (8:00-12:30 / 15:30-19:00)</option>
+                </select>
+
+                <label class="form-label required-field">Canal/Origen</label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
+                    <button type="button" class="form-input" style="padding: 12px; margin-bottom: 0; background: white; border: 2px solid #e8e8e8; color: #666; cursor: pointer;" id="canal-0km" onclick="seleccionarCanal('0km')">0 KM</button>
+                    <button type="button" class="form-input" style="padding: 12px; margin-bottom: 0; background: white; border: 2px solid #e8e8e8; color: #666; cursor: pointer;" id="canal-plan" onclick="seleccionarCanal('plan_ahorro')">Plan Ahorro</button>
+                    <button type="button" class="form-input" style="padding: 12px; margin-bottom: 0; background: white; border: 2px solid #e8e8e8; color: #666; cursor: pointer;" id="canal-usado" onclick="seleccionarCanal('usado')">Usado</button>
+                </div>
+
+                <label class="form-label required-field">Marca</label>
+                <input type="text" id="turno-marca" class="form-input" placeholder="Ej: Ford">
+
+                <label class="form-label required-field">Modelo</label>
+                <input type="text" id="turno-modelo" class="form-input" placeholder="Ej: Focus">
+
+                <label class="form-label required-field">Versión</label>
+                <input type="text" id="turno-version" class="form-input" placeholder="Ej: Titanium 2.0">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label required-field">Año</label>
+                        <input type="number" id="turno-anio" class="form-input" placeholder="Ej: 2020" min="1980" max="2030">
+                    </div>
+                    <div>
+                        <label class="form-label required-field">Color</label>
+                        <input type="text" id="turno-color" class="form-input" placeholder="Ej: Gris plata">
+                    </div>
+                </div>
+
+                <label class="form-label required-field">Dominio</label>
+                <input type="text" id="turno-dominio" class="form-input" placeholder="Ej: ABC123" style="text-transform: uppercase;">
+
+                <label class="form-label required-field">Nombre</label>
+                <input type="text" id="turno-nombre" class="form-input" placeholder="Nombre del cliente">
+
+                <label class="form-label required-field">Apellido</label>
+                <input type="text" id="turno-apellido" class="form-input" placeholder="Apellido del cliente">
+
+                <label class="form-label required-field">Teléfono</label>
+                <input type="text" id="turno-telefono" class="form-input" placeholder="Ej: 2914234567">
+
+                <label class="form-label required-field">Fecha</label>
+                <div id="calendario" class="fecha-selector"></div>
+
+                <label class="form-label required-field">Hora</label>
+                <div id="horarios-disponibles" class="horarios-grid"></div>
+
+                <button onclick="sacarTurno()" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px; font-weight: 600; margin-top: 10px;">✅ Confirmar Turno</button>
+            </div>
+
+            <div class="card">
+                <h2 id="turnos-card-titulo">Turnos Pendientes</h2>
+                <div id="turnos-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USUARIOS -->
+    <div id="usuarios" class="tab-content">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card">
+                <h2>Crear Usuario</h2>
+                <input type="text" id="nuevo-nombre" class="form-input" placeholder="Nombre">
+                <input type="email" id="nuevo-email" class="form-input" placeholder="Email">
+                <input type="password" id="nuevo-password" class="form-input" placeholder="Contraseña">
+                <select id="nuevo-rol" class="form-input" style="margin-bottom: 16px;">
+                    <option value="vendedor">Vendedor</option>
+                    <option value="mecanico">Mecánico</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button onclick="crearUsuario()" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px; font-weight: 600;">➕ Crear Usuario</button>
+            </div>
+            <div class="card">
+                <h2>Usuarios</h2>
+                <div id="usuarios-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CARGAR PERITAJE (MECÁNICO) - COMPLETO CON PLANILLA -->
+<div id="modal-cargar-peritaje" class="modal">
+    <div class="modal-content" style="max-width: 720px; padding: 24px;">
+        <!-- HEADER STICKY -->
+        <div style="position: sticky; top: 0; background: white; padding: 16px 0; border-bottom: 2px solid #f0f0f0; margin: -24px -24px 20px; padding: 20px 24px; z-index: 10;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                <div style="flex: 1;">
+                    <h2 style="color: #1a1a1a; margin: 0; font-size: 20px;">📋 Cargar Peritaje</h2>
+                    <p id="cargar-peritaje-turno-info" style="color: #999; font-size: 12px; margin-top: 4px;"></p>
+                </div>
+                <div style="text-align: right; padding: 10px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                    <p style="font-size: 10px; text-transform: uppercase; margin: 0; opacity: 0.9; letter-spacing: 0.5px;">Puntaje</p>
+                    <p id="puntaje-en-vivo" style="font-size: 24px; font-weight: 700; margin: 0; line-height: 1;">--</p>
+                </div>
+            </div>
+        </div>
+        
+        <input type="hidden" id="cargar-peritaje-turno-id">
+        
+        <!-- SECCIÓN: Datos del Vehículo -->
+        <div class="seccion-peritaje">
+            <button type="button" class="seccion-header" onclick="toggleSeccion('datos')">
+                <span>🚗 Datos del Vehículo</span>
+                <span class="seccion-arrow" id="arrow-datos">▼</span>
+            </button>
+            <div class="seccion-body" id="seccion-datos" style="display: block;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label required-field" style="font-size: 12px;">Marca</label>
+                        <input type="text" id="cp-marca" class="form-input" placeholder="Ej: Ford">
+                    </div>
+                    <div>
+                        <label class="form-label required-field" style="font-size: 12px;">Modelo</label>
+                        <input type="text" id="cp-modelo" class="form-input" placeholder="Ej: Focus">
+                    </div>
+                    <div>
+                        <label class="form-label required-field" style="font-size: 12px;">Dominio</label>
+                        <input type="text" id="cp-dominio" class="form-input" placeholder="ABC123" style="text-transform: uppercase;">
+                    </div>
+                    <div>
+                        <label class="form-label required-field" style="font-size: 12px;">KM</label>
+                        <input type="number" id="cp-km" class="form-input" placeholder="Kilometraje">
+                    </div>
+                </div>
+                <label class="form-label required-field" style="font-size: 12px;">Cliente</label>
+                <input type="text" id="cp-cliente" class="form-input" placeholder="Nombre completo">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Vencimiento VTV</label>
+                        <input type="date" id="cp-vtv" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label required-field" style="font-size: 12px;">Sucursal</label>
+                        <select id="cp-sucursal" class="form-input">
+                            <option value="bahia">Bahía Blanca</option>
+                            <option value="santa_rosa">Santa Rosa</option>
+                            <option value="general_pico">General Pico</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="form-label required-field" style="font-size: 12px;">Canal/Origen</label>
+                <select id="cp-unidad" class="form-input">
+                    <option value="usado">Usado</option>
+                    <option value="0km">0 KM</option>
+                    <option value="plan_ahorro">Plan Ahorro</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- SECCIONES DE LA PLANILLA (se generan dinámicamente) -->
+        <div id="secciones-planilla"></div>
+        
+        <!-- SECCIÓN: Fotos y Videos -->
+        <div class="seccion-peritaje">
+            <button type="button" class="seccion-header" onclick="toggleSeccion('multimedia')">
+                <span>📸 Fotos y Videos</span>
+                <span id="contador-multimedia" style="background: #f0f0f0; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #666;">0 fotos · 0 videos</span>
+                <span class="seccion-arrow" id="arrow-multimedia">▼</span>
+            </button>
+            <div class="seccion-body" id="seccion-multimedia" style="display: none;">
+                <div style="background: #fff5e6; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: #92400e;">
+                    ℹ️ <strong>Mínimo recomendado:</strong> 8 fotos y 1 video del vehículo
+                </div>
+                
+                <label class="form-label" style="font-size: 13px;">📷 Fotos</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <label for="cp-fotos-camara" style="padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        📸 Sacar Foto
+                    </label>
+                    <input type="file" id="cp-fotos-camara" accept="image/*" capture="environment" multiple style="display: none;" onchange="agregarFotos(this)">
+                    
+                    <label for="cp-fotos-galeria" style="padding: 14px; background: white; border: 2px solid #667eea; color: #667eea; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        🖼️ Subir desde Galería
+                    </label>
+                    <input type="file" id="cp-fotos-galeria" accept="image/*" multiple style="display: none;" onchange="agregarFotos(this)">
+                </div>
+                <div id="preview-fotos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-bottom: 16px;"></div>
+                
+                <label class="form-label" style="font-size: 13px;">🎥 Videos</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <label for="cp-video-camara" style="padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        🎥 Grabar Video
+                    </label>
+                    <input type="file" id="cp-video-camara" accept="video/*" capture="environment" multiple style="display: none;" onchange="agregarVideos(this)">
+                    
+                    <label for="cp-video-galeria" style="padding: 14px; background: white; border: 2px solid #667eea; color: #667eea; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        📁 Subir Video
+                    </label>
+                    <input type="file" id="cp-video-galeria" accept="video/*" multiple style="display: none;" onchange="agregarVideos(this)">
+                </div>
+                <div id="preview-videos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px;"></div>
+            </div>
+        </div>
+        
+        <!-- AVISO -->
+        <div style="padding: 12px; background: #fff5e6; border-radius: 8px; margin: 20px 0; font-size: 12px; color: #92400e;">
+            ⚠️ <strong>Atención:</strong> Una vez cargado el peritaje no podrás editarlo. Si necesitás hacer cambios, pedile ayuda a un administrador.
+        </div>
+        
+        <!-- BOTONES -->
+        <div style="display: flex; gap: 10px; position: sticky; bottom: 0; background: white; padding-top: 16px; border-top: 2px solid #f0f0f0; margin: 0 -24px -24px; padding: 16px 24px;">
+            <button type="button" onclick="guardarNuevoPeritaje()" style="flex: 2; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 14px; font-weight: 600; font-size: 15px;">✅ Guardar Peritaje</button>
+            <button type="button" onclick="closeModalCargarPeritaje()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 14px;">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALLES PERITAJE -->
+<div id="modal-peritaje" class="modal">
+    <div class="modal-content">
+        <h2 id="modal-titulo" style="color: #1a1a1a; margin-bottom: 20px;">Detalles</h2>
+        <div id="modal-body" style="margin-bottom: 20px;"></div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR PERITAJE -->
+<div id="modal-editar-peritaje" class="modal">
+    <div class="modal-content" style="max-width: 720px; padding: 24px;">
+        <!-- HEADER STICKY -->
+        <div style="position: sticky; top: 0; background: white; padding: 16px 0; border-bottom: 2px solid #f0f0f0; margin: -24px -24px 20px; padding: 20px 24px; z-index: 10;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                <div style="flex: 1;">
+                    <h2 style="color: #f59e0b; margin: 0; font-size: 20px;">✏️ Editar Peritaje</h2>
+                    <p style="color: #999; font-size: 12px; margin-top: 4px;">Admin · Edición completa</p>
+                </div>
+                <div style="text-align: right; padding: 10px 16px; background: linear-gradient(135deg, #f59e0b 0%, #f59e0b 100%); border-radius: 12px; color: white;">
+                    <p style="font-size: 10px; text-transform: uppercase; margin: 0; opacity: 0.9; letter-spacing: 0.5px;">Puntaje</p>
+                    <p id="edit-puntaje-en-vivo" style="font-size: 24px; font-weight: 700; margin: 0; line-height: 1;">--</p>
+                </div>
+            </div>
+        </div>
+        
+        <input type="hidden" id="edit-peritaje-id">
+        
+        <!-- SECCIÓN: Datos del Vehículo -->
+        <div class="seccion-peritaje">
+            <button type="button" class="seccion-header" onclick="toggleSeccionEdit('datos')">
+                <span>🚗 Datos del Vehículo</span>
+                <span class="seccion-arrow" id="edit-arrow-datos">▼</span>
+            </button>
+            <div class="seccion-body" id="edit-seccion-datos" style="display: block;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Marca</label>
+                        <input type="text" id="edit-peritaje-marca" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Modelo</label>
+                        <input type="text" id="edit-peritaje-modelo" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Dominio</label>
+                        <input type="text" id="edit-peritaje-dominio" class="form-input" style="text-transform: uppercase;">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">KM</label>
+                        <input type="number" id="edit-peritaje-km" class="form-input">
+                    </div>
+                </div>
+                <label class="form-label" style="font-size: 12px;">Cliente</label>
+                <input type="text" id="edit-peritaje-cliente" class="form-input">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">VTV</label>
+                        <input type="date" id="edit-peritaje-vtv" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Fecha del Peritaje</label>
+                        <input type="date" id="edit-peritaje-fecha" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Sucursal</label>
+                        <select id="edit-peritaje-sucursal" class="form-input">
+                            <option value="bahia">Bahía Blanca</option>
+                            <option value="santa_rosa">Santa Rosa</option>
+                            <option value="general_pico">General Pico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 12px;">Canal / Unidad</label>
+                        <select id="edit-peritaje-unidad" class="form-input">
+                            <option value="0km">0 KM</option>
+                            <option value="plan_ahorro">Plan Ahorro</option>
+                            <option value="usado">Usado</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="form-label" style="font-size: 12px;">Mecánico</label>
+                <input type="text" id="edit-peritaje-mecanico" class="form-input">
+            </div>
+        </div>
+        
+        <!-- SECCIONES DE LA PLANILLA (se generan dinámicamente) -->
+        <div id="edit-secciones-planilla"></div>
+        
+        <!-- SECCIÓN: Fotos y Videos -->
+        <div class="seccion-peritaje">
+            <button type="button" class="seccion-header" onclick="toggleSeccionEdit('multimedia')">
+                <span>📸 Fotos y Videos</span>
+                <span id="edit-contador-multimedia" style="background: #f0f0f0; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #666;">0 fotos · 0 videos</span>
+                <span class="seccion-arrow collapsed" id="edit-arrow-multimedia">▼</span>
+            </button>
+            <div class="seccion-body" id="edit-seccion-multimedia" style="display: none;">
+                <label class="form-label" style="font-size: 13px;">📷 Agregar Fotos</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <label for="edit-fotos-camara" style="padding: 14px; background: linear-gradient(135deg, #f59e0b 0%, #f59e0b 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        📸 Sacar Foto
+                    </label>
+                    <input type="file" id="edit-fotos-camara" accept="image/*" capture="environment" multiple style="display: none;" onchange="agregarFotosEdit(this)">
+                    
+                    <label for="edit-fotos-galeria" style="padding: 14px; background: white; border: 2px solid #f59e0b; color: #f59e0b; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        🖼️ Subir desde Galería
+                    </label>
+                    <input type="file" id="edit-fotos-galeria" accept="image/*" multiple style="display: none;" onchange="agregarFotosEdit(this)">
+                </div>
+                <div id="edit-preview-fotos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-bottom: 16px;"></div>
+                
+                <label class="form-label" style="font-size: 13px;">🎥 Agregar Videos</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <label for="edit-video-camara" style="padding: 14px; background: linear-gradient(135deg, #f59e0b 0%, #f59e0b 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        🎥 Grabar Video
+                    </label>
+                    <input type="file" id="edit-video-camara" accept="video/*" capture="environment" multiple style="display: none;" onchange="agregarVideosEdit(this)">
+                    
+                    <label for="edit-video-galeria" style="padding: 14px; background: white; border: 2px solid #f59e0b; color: #f59e0b; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px;">
+                        📁 Subir Video
+                    </label>
+                    <input type="file" id="edit-video-galeria" accept="video/*" multiple style="display: none;" onchange="agregarVideosEdit(this)">
+                </div>
+                <div id="edit-preview-videos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px;"></div>
+            </div>
+        </div>
+        
+        <!-- BOTONES -->
+        <div style="display: flex; gap: 10px; position: sticky; bottom: 0; background: white; padding-top: 16px; border-top: 2px solid #f0f0f0; margin: 16px -24px -24px; padding: 16px 24px;">
+            <button type="button" onclick="guardarEdicionPeritaje()" style="flex: 2; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 14px; font-weight: 600; font-size: 15px;">💾 Guardar Cambios</button>
+            <button type="button" onclick="closeModalEditarPeritaje()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 14px;">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR USUARIO -->
+<div id="modal-editar-usuario" class="modal">
+    <div class="modal-content">
+        <h2 style="color: #1a1a1a; margin-bottom: 20px;">✏️ Editar Usuario</h2>
+        <input type="hidden" id="edit-usuario-id">
+        
+        <label class="form-label">Nombre</label>
+        <input type="text" id="edit-usuario-nombre" class="form-input">
+        
+        <label class="form-label">Email</label>
+        <input type="email" id="edit-usuario-email" class="form-input">
+        
+        <label class="form-label">Contraseña</label>
+        <input type="password" id="edit-usuario-password" class="form-input" placeholder="Dejar vacío para no cambiar">
+        <p style="font-size: 11px; color: #999; margin-top: -8px; margin-bottom: 12px;">Solo completar si querés cambiar la contraseña</p>
+        
+        <label class="form-label">Rol</label>
+        <select id="edit-usuario-rol" class="form-input">
+            <option value="admin">Administrador</option>
+            <option value="vendedor">Vendedor</option>
+            <option value="mecanico">Mecánico</option>
+        </select>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="guardarEdicionUsuario()" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px;">💾 Guardar Cambios</button>
+            <button onclick="closeModalEditarUsuario()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 12px;">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR TURNO -->
+<div id="modal-editar-turno" class="modal">
+    <div class="modal-content">
+        <h2 style="color: #1a1a1a; margin-bottom: 20px;">✏️ Editar Turno</h2>
+        <input type="hidden" id="edit-turno-id">
+        
+        <label class="form-label">Marca</label>
+        <input type="text" id="edit-turno-marca" class="form-input">
+        
+        <label class="form-label">Modelo</label>
+        <input type="text" id="edit-turno-modelo" class="form-input">
+        
+        <label class="form-label">Versión</label>
+        <input type="text" id="edit-turno-version" class="form-input">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+                <label class="form-label">Año</label>
+                <input type="number" id="edit-turno-anio" class="form-input" min="1980" max="2030">
+            </div>
+            <div>
+                <label class="form-label">Color</label>
+                <input type="text" id="edit-turno-color" class="form-input">
+            </div>
+        </div>
+        
+        <label class="form-label">Dominio</label>
+        <input type="text" id="edit-turno-dominio" class="form-input" style="text-transform: uppercase;">
+        
+        <label class="form-label">Cliente</label>
+        <input type="text" id="edit-turno-cliente" class="form-input">
+        
+        <label class="form-label">Fecha</label>
+        <input type="date" id="edit-turno-fecha" class="form-input">
+        
+        <label class="form-label">Hora</label>
+        <select id="edit-turno-hora" class="form-input">
+            <option value="">Seleccionar hora</option>
+        </select>
+        
+        <label class="form-label">Sucursal</label>
+        <select id="edit-turno-sucursal" class="form-input" onchange="actualizarHorasEditTurno()">
+            <option value="bahia">Bahía Blanca</option>
+            <option value="santa_rosa">Santa Rosa</option>
+            <option value="general_pico">General Pico</option>
+        </select>
+        
+        <label class="form-label">Canal/Origen</label>
+        <select id="edit-turno-canal" class="form-input">
+            <option value="0km">0 KM</option>
+            <option value="plan_ahorro">Plan Ahorro</option>
+            <option value="usado">Usado</option>
+        </select>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="guardarEdicionTurno()" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px;">💾 Guardar Cambios</button>
+            <button onclick="closeModalEditarTurno()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 12px;">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let usuarios = [];
+let peritajes = [];
+let turnos = [];
+let usuarioActual = null;
+let esVendedor = false;
+let esMecanico = false;
+let chartSucursal = null;
+let allCharts = [];
+
+function destroyAllCharts() {
+    if (chartSucursal) { chartSucursal.destroy(); chartSucursal = null; }
+    allCharts.forEach(c => { try { c.destroy(); } catch(e) {} });
+    allCharts = [];
+}
+let turnoSeleccionado = { sucursal: null, canal: null, fecha: null, hora: null };
+
+const horariosBahia = ['08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
+const horariosProvincias = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'];
+
+function init() {
+    const datos = localStorage.getItem('sistemaPeritajes');
+    if (!datos) {
+        usuarios = [
+            { id: 1, email: 'admin@grupo.com', password: 'admin123', nombre: 'Admin', rol: 'admin' },
+            { id: 2, email: 'vendedor@grupo.com', password: 'vendedor123', nombre: 'Vendedor Demo', rol: 'vendedor' },
+            { id: 3, email: 'mecanico@grupo.com', password: 'mecanico123', nombre: 'Mecánico Demo', rol: 'mecanico' }
+        ];
+        peritajes = [
+            { id: 1, marca: 'Ford', modelo: 'Focus', dominio: 'ABC123', cliente: 'Juan García', puntaje: 85, fotos: 3, videos: 1, mecanico: 'Carlos', fecha: '2026-05-15', sucursal: 'bahia', unidad: '0km' },
+            { id: 2, marca: 'VW', modelo: 'Gol', dominio: 'XYZ789', cliente: 'María López', puntaje: 72, fotos: 2, videos: 1, mecanico: 'Carlos', fecha: '2026-05-16', sucursal: 'santa_rosa', unidad: 'plan_ahorro' },
+            { id: 3, marca: 'Fiat', modelo: 'Argo', dominio: 'GHI012', cliente: 'Carlos Fernández', puntaje: 90, fotos: 4, videos: 2, mecanico: 'Roberto', fecha: '2026-05-18', sucursal: 'general_pico', unidad: 'usado' },
+            { id: 4, marca: 'Chevrolet', modelo: 'Onix', dominio: 'JKL456', cliente: 'Pedro Martínez', puntaje: 78, fotos: 3, videos: 1, mecanico: 'Carlos', fecha: '2026-05-20', sucursal: 'bahia', unidad: '0km' },
+            { id: 5, marca: 'Renault', modelo: 'Sandero', dominio: 'MNO789', cliente: 'Laura García', puntaje: 88, fotos: 4, videos: 1, mecanico: 'Roberto', fecha: '2026-05-22', sucursal: 'santa_rosa', unidad: 'plan_ahorro' },
+        ];
+        turnos = [
+            { id: 1, marca: 'Toyota', modelo: 'Corolla', dominio: 'AA111BB', cliente: 'Mario Suárez', telefono: '2914111222', fecha: '2026-05-29', hora: '10:00', sucursal: 'bahia', canal: 'usado', vendedorEmail: 'vendedor@grupo.com', vendedorNombre: 'Vendedor Demo', estado: 'pendiente' },
+            { id: 2, marca: 'Peugeot', modelo: '208', dominio: 'BB222CC', cliente: 'Ana Rodríguez', telefono: '2914333444', fecha: '2026-06-02', hora: '14:30', sucursal: 'santa_rosa', canal: '0km', vendedorEmail: 'vendedor@grupo.com', vendedorNombre: 'Vendedor Demo', estado: 'pendiente' },
+            { id: 3, marca: 'Citroen', modelo: 'C3', dominio: 'CC333DD', cliente: 'Luis Pérez', telefono: '2914555666', fecha: '2026-05-20', hora: '09:30', sucursal: 'bahia', canal: 'plan_ahorro', vendedorEmail: 'vendedor@grupo.com', vendedorNombre: 'Vendedor Demo', estado: 'completado' },
+        ];
+        guardar();
+    } else {
+        const parsed = JSON.parse(datos);
+        usuarios = parsed.usuarios || [];
+        peritajes = parsed.peritajes || [];
+        turnos = parsed.turnos || [];
+        
+        // Asegurar que existan los usuarios demo (admin, vendedor, mecánico)
+        let nuevosUsuarios = false;
+        if (!usuarios.find(u => u.email === 'admin@grupo.com')) {
+            usuarios.push({ id: Math.max(...usuarios.map(u => u.id), 0) + 1, email: 'admin@grupo.com', password: 'admin123', nombre: 'Admin', rol: 'admin' });
+            nuevosUsuarios = true;
+        }
+        if (!usuarios.find(u => u.email === 'vendedor@grupo.com')) {
+            usuarios.push({ id: Math.max(...usuarios.map(u => u.id), 0) + 1, email: 'vendedor@grupo.com', password: 'vendedor123', nombre: 'Vendedor Demo', rol: 'vendedor' });
+            nuevosUsuarios = true;
+        }
+        if (!usuarios.find(u => u.email === 'mecanico@grupo.com')) {
+            usuarios.push({ id: Math.max(...usuarios.map(u => u.id), 0) + 1, email: 'mecanico@grupo.com', password: 'mecanico123', nombre: 'Mecánico Demo', rol: 'mecanico' });
+            nuevosUsuarios = true;
+        }
+        if (nuevosUsuarios) guardar();
+    }
+    
+    const hoy = new Date();
+    const mesHoy = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+    document.getElementById('filter-mes').value = mesHoy;
+    
+    actualizarSelectMecanicos();
+}
+
+function guardar() { 
+    try {
+        localStorage.setItem('sistemaPeritajes', JSON.stringify({ usuarios, peritajes, turnos })); 
+    } catch (e) {
+        alert('⚠️ El almacenamiento local está casi lleno. En producción los archivos se subirían al servidor.\n\nEl peritaje se guardó pero algunas fotos pueden no haberse persistido.');
+    }
+}
+
+function actualizarSelectMecanicos() {
+    const mecanicos = [...new Set(peritajes.map(p => p.mecanico))];
+    const select = document.getElementById('filter-mecanico');
+    select.innerHTML = '<option value="">Todos</option>' + mecanicos.map(m => `<option value="${m}">${m}</option>`).join('');
+}
+
+function esDialHabil(fecha) {
+    const date = new Date(fecha);
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+}
+
+function getPeritajesFiltrados() {
+    const mes = document.getElementById('filter-mes').value;
+    const sucursal = document.getElementById('filter-sucursal').value;
+    const mecanico = document.getElementById('filter-mecanico').value;
+    const unidad = document.getElementById('filter-unidad').value;
+
+    return peritajes.filter(p => {
+        const fechaParts = p.fecha.split('-');
+        const fechaMes = `${fechaParts[0]}-${fechaParts[1]}`;
+        
+        if (mes && fechaMes !== mes) return false;
+        if (sucursal && p.sucursal !== sucursal) return false;
+        if (mecanico && p.mecanico !== mecanico) return false;
+        if (unidad && p.unidad !== unidad) return false;
+        return true;
+    });
+}
+
+// ===== ESTRUCTURA DE LA PLANILLA DE PERITAJE =====
+const PLANILLA = {
+    exterior: {
+        titulo: '🚙 Carrocería Exterior',
+        items: [
+            { id: 1, nombre: 'Capot' },
+            { id: 2, nombre: 'Paragolpes delantero' },
+            { id: 3, nombre: 'Paragolpes trasero' },
+            { id: 4, nombre: 'Puerta delantera izquierda' },
+            { id: 5, nombre: 'Puerta delantera derecha' },
+            { id: 6, nombre: 'Puerta trasera izquierda' },
+            { id: 7, nombre: 'Puerta trasera derecha' },
+            { id: 8, nombre: 'Guardabarro delantero izq.' },
+            { id: 9, nombre: 'Guardabarro delantero der.' },
+            { id: 10, nombre: 'Guardabarro trasero izq.' },
+            { id: 11, nombre: 'Guardabarro trasero der.' },
+            { id: 12, nombre: 'Techo' },
+            { id: 13, nombre: 'Baúl / Portón trasero' },
+            { id: 14, nombre: 'Espejo izquierdo' },
+            { id: 15, nombre: 'Espejo derecho' },
+            { id: 16, nombre: 'Llantas delanteras' },
+            { id: 17, nombre: 'Llantas traseras' },
+            { id: 18, nombre: 'Parabrisas' },
+            { id: 19, nombre: 'Luneta' },
+            { id: 20, nombre: 'Vidrios laterales' },
+            { id: 21, nombre: 'Antena' },
+            { id: 22, nombre: 'Insignias y molduras' },
+            { id: 23, nombre: 'Pintura general' }
+        ]
+    },
+    interior_estetica: {
+        titulo: '✨ Carrocería Interior - Estética',
+        items: [
+            { id: 24, nombre: 'Tablero' },
+            { id: 25, nombre: 'Volante' },
+            { id: 26, nombre: 'Comandos y mandos' },
+            { id: 27, nombre: 'Butaca conductor' },
+            { id: 28, nombre: 'Butaca acompañante' },
+            { id: 29, nombre: 'Asiento trasero' },
+            { id: 30, nombre: 'Cinturones de seguridad' },
+            { id: 31, nombre: 'Apoyacabezas' },
+            { id: 32, nombre: 'Alfombra delantera' },
+            { id: 33, nombre: 'Alfombra trasera' },
+            { id: 34, nombre: 'Tapizado de puertas' },
+            { id: 35, nombre: 'Techo interior' },
+            { id: 36, nombre: 'Guantera' },
+            { id: 37, nombre: 'Consola central' }
+        ]
+    },
+    luces: {
+        titulo: '💡 Luces',
+        items: [
+            { id: 38, nombre: 'Luces delanteras' },
+            { id: 39, nombre: 'Luces traseras' }
+        ]
+    },
+    motor: {
+        titulo: '⚙️ Motor / Marcha',
+        items: [
+            { id: 40, nombre: 'Marcha en frío' },
+            { id: 41, nombre: 'Marcha en caliente' },
+            { id: 42, nombre: 'Aceleración' },
+            { id: 43, nombre: 'Frenos' },
+            { id: 44, nombre: 'Suspensión' },
+            { id: 45, nombre: 'Dirección' }
+        ]
+    },
+    interior_funcion: {
+        titulo: '🔧 Carrocería Interior - Función',
+        items: [
+            { id: 46, nombre: 'Limpiaparabrisas' },
+            { id: 47, nombre: 'Bocina' },
+            { id: 48, nombre: 'Aire acondicionado' },
+            { id: 49, nombre: 'Calefacción' },
+            { id: 50, nombre: 'Cierre centralizado' },
+            { id: 51, nombre: 'Levantavidrios' },
+            { id: 52, nombre: 'Espejos eléctricos' },
+            { id: 53, nombre: 'Radio / Multimedia' },
+            { id: 54, nombre: 'Computadora abordo' },
+            { id: 55, nombre: 'Encendido' },
+            { id: 56, nombre: 'Sensores' }
+        ]
+    },
+    tasas: {
+        titulo: '🛠️ Tasas y Componentes',
+        items: [
+            { id: 57, nombre: 'Batería' },
+            { id: 58, nombre: 'Alternador' },
+            { id: 59, nombre: 'Líquido refrigerante' },
+            { id: 60, nombre: 'Aceite de motor' },
+            { id: 61, nombre: 'Líquido de frenos' },
+            { id: 62, nombre: 'Líquido hidráulico' },
+            { id: 63, nombre: 'Correa de distribución' },
+            { id: 64, nombre: 'Filtro de aire' },
+            { id: 65, nombre: 'Filtro de aceite' },
+            { id: 66, nombre: 'Filtro de combustible' },
+            { id: 67, nombre: 'Bujías' },
+            { id: 68, nombre: 'Cables y conexiones' }
+        ]
+    },
+    varios: {
+        titulo: '📋 Varios',
+        items: [
+            { id: 69, nombre: 'Documentación' },
+            { id: 70, nombre: 'Llaves' },
+            { id: 71, nombre: 'Manual de uso' },
+            { id: 72, nombre: 'Estado general' }
+        ]
+    }
+};
+
+// Valores de puntaje
+const PUNTOS_BRM = { B: 10, R: 5, M: 1 };
+
+// Estado actual de la planilla
+let planillaEstado = {};
+let fotosCargadas = [];
+let videosCargados = [];
+
+function generarSeccionesPlanilla() {
+    let html = '';
+    Object.entries(PLANILLA).forEach(([key, seccion]) => {
+        const maxPuntos = seccion.items.length * 10;
+        html += `
+            <div class="seccion-peritaje">
+                <button type="button" class="seccion-header" onclick="toggleSeccion('${key}')">
+                    <span>${seccion.titulo}</span>
+                    <span class="puntos-seccion" id="puntos-${key}">0/${maxPuntos}</span>
+                    <span class="seccion-arrow collapsed" id="arrow-${key}">▼</span>
+                </button>
+                <div class="seccion-body" id="seccion-${key}" style="display: none;">
+                    ${seccion.items.map(item => `
+                        <div class="planilla-item">
+                            <div class="planilla-item-nombre">
+                                <span class="planilla-item-numero">${item.id}.</span> ${item.nombre}
+                            </div>
+                            <div class="brm-group">
+                                <button type="button" class="brm-btn b" data-item="${item.id}" data-valor="B" onclick="seleccionarBRM(${item.id}, 'B', '${key}')" title="Bueno">B</button>
+                                <button type="button" class="brm-btn r" data-item="${item.id}" data-valor="R" onclick="seleccionarBRM(${item.id}, 'R', '${key}')" title="Regular">R</button>
+                                <button type="button" class="brm-btn m" data-item="${item.id}" data-valor="M" onclick="seleccionarBRM(${item.id}, 'M', '${key}')" title="Malo">M</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    document.getElementById('secciones-planilla').innerHTML = html;
+}
+
+function toggleSeccion(key) {
+    const body = document.getElementById('seccion-' + key);
+    const arrow = document.getElementById('arrow-' + key);
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        arrow.classList.remove('collapsed');
+    } else {
+        body.style.display = 'none';
+        arrow.classList.add('collapsed');
+    }
+}
+
+function seleccionarBRM(itemId, valor, seccionKey) {
+    planillaEstado[itemId] = valor;
+    
+    // Actualizar UI de botones del item
+    document.querySelectorAll(`.brm-btn[data-item="${itemId}"]`).forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    document.querySelector(`.brm-btn[data-item="${itemId}"][data-valor="${valor}"]`).classList.add('selected');
+    
+    // Actualizar puntaje de la sección
+    actualizarPuntajeSeccion(seccionKey);
+    actualizarPuntajeTotal();
+}
+
+function actualizarPuntajeSeccion(seccionKey) {
+    const seccion = PLANILLA[seccionKey];
+    let puntos = 0;
+    seccion.items.forEach(item => {
+        if (planillaEstado[item.id]) {
+            puntos += PUNTOS_BRM[planillaEstado[item.id]];
+        }
+    });
+    const max = seccion.items.length * 10;
+    document.getElementById('puntos-' + seccionKey).textContent = `${puntos}/${max}`;
+}
+
+function actualizarPuntajeTotal() {
+    let puntos = 0;
+    let max = 0;
+    Object.entries(PLANILLA).forEach(([key, seccion]) => {
+        max += seccion.items.length * 10;
+        seccion.items.forEach(item => {
+            if (planillaEstado[item.id]) {
+                puntos += PUNTOS_BRM[planillaEstado[item.id]];
+            }
+        });
+    });
+    
+    const porcentaje = max > 0 ? Math.round((puntos / max) * 100) : 0;
+    document.getElementById('puntaje-en-vivo').textContent = porcentaje + '%';
+}
+
+function comprimirImagen(file) {
+    return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxSize = 800;
+                let { width, height } = img;
+                
+                if (width > height && width > maxSize) {
+                    height *= maxSize / width;
+                    width = maxSize;
+                } else if (height > maxSize) {
+                    width *= maxSize / height;
+                    height = maxSize;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function agregarFotos(input) {
+    Array.from(input.files).forEach(async (file) => {
+        const dataUrl = await comprimirImagen(file);
+        fotosCargadas.push({ nombre: file.name, dataUrl });
+        actualizarPreviewFotos();
+    });
+    input.value = '';
+}
+
+function agregarVideos(input) {
+    Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            videosCargados.push({ nombre: file.name, dataUrl: e.target.result });
+            actualizarPreviewVideos();
+        };
+        reader.readAsDataURL(file);
+    });
+    input.value = '';
+}
+
+function actualizarPreviewFotos() {
+    const container = document.getElementById('preview-fotos');
+    container.innerHTML = fotosCargadas.map((f, i) => `
+        <div class="preview-foto">
+            <img src="${f.dataUrl}" alt="Foto ${i+1}">
+            <button type="button" class="remove-btn" onclick="quitarFoto(${i})">×</button>
+        </div>
+    `).join('');
+    actualizarContadorMultimedia();
+}
+
+function actualizarPreviewVideos() {
+    const container = document.getElementById('preview-videos');
+    container.innerHTML = videosCargados.map((v, i) => `
+        <div class="preview-foto" style="aspect-ratio: 16/9;">
+            <video src="${v.dataUrl}" muted></video>
+            <button type="button" class="remove-btn" onclick="quitarVideo(${i})">×</button>
+        </div>
+    `).join('');
+    actualizarContadorMultimedia();
+}
+
+function quitarFoto(idx) {
+    fotosCargadas.splice(idx, 1);
+    actualizarPreviewFotos();
+}
+
+function quitarVideo(idx) {
+    videosCargados.splice(idx, 1);
+    actualizarPreviewVideos();
+}
+
+function actualizarContadorMultimedia() {
+    document.getElementById('contador-multimedia').textContent = 
+        `${fotosCargadas.length} fotos · ${videosCargados.length} videos`;
+}
+
+function abrirModalCargarPeritaje(turnoId) {
+    // Reset
+    planillaEstado = {};
+    fotosCargadas = [];
+    videosCargados = [];
+    
+    // Limpiar campos
+    document.getElementById('cp-marca').value = '';
+    document.getElementById('cp-modelo').value = '';
+    document.getElementById('cp-dominio').value = '';
+    document.getElementById('cp-cliente').value = '';
+    document.getElementById('cp-km').value = '';
+    document.getElementById('cp-vtv').value = '';
+    document.getElementById('cp-sucursal').value = 'bahia';
+    document.getElementById('cp-unidad').value = 'usado';
+    document.getElementById('cargar-peritaje-turno-id').value = '';
+    
+    // Generar planilla
+    generarSeccionesPlanilla();
+    document.getElementById('puntaje-en-vivo').textContent = '--';
+    document.getElementById('preview-fotos').innerHTML = '';
+    document.getElementById('preview-videos').innerHTML = '';
+    actualizarContadorMultimedia();
+    
+    if (turnoId) {
+        const t = turnos.find(x => x.id === turnoId);
+        if (t) {
+            document.getElementById('cargar-peritaje-turno-id').value = t.id;
+            document.getElementById('cp-marca').value = t.marca;
+            document.getElementById('cp-modelo').value = t.modelo;
+            document.getElementById('cp-dominio').value = t.dominio;
+            document.getElementById('cp-cliente').value = t.cliente;
+            document.getElementById('cp-sucursal').value = t.sucursal;
+            document.getElementById('cp-unidad').value = t.canal;
+            // Guardamos versión, año y color del turno para reusarlos al guardar
+            window._turnoVersionTemp = t.version || '';
+            window._turnoAnioTemp = t.anio || null;
+            window._turnoColorTemp = t.color || '';
+            document.getElementById('cargar-peritaje-turno-info').textContent = `Desde turno: ${t.fecha} ${t.hora} hs${t.version ? ' · ' + t.version : ''}${t.anio ? ' · ' + t.anio : ''}${t.color ? ' · ' + t.color : ''}`;
+        }
+    } else {
+        window._turnoVersionTemp = '';
+        window._turnoAnioTemp = null;
+        window._turnoColorTemp = '';
+        document.getElementById('cargar-peritaje-turno-info').textContent = 'Peritaje sin turno - se registrará un turno completado automáticamente';
+    }
+    
+    document.getElementById('modal-cargar-peritaje').classList.add('active');
+}
+
+function closeModalCargarPeritaje() {
+    document.getElementById('modal-cargar-peritaje').classList.remove('active');
+}
+
+function guardarNuevoPeritaje() {
+    const marca = document.getElementById('cp-marca').value.trim();
+    const modelo = document.getElementById('cp-modelo').value.trim();
+    const dominio = document.getElementById('cp-dominio').value.trim().toUpperCase();
+    const cliente = document.getElementById('cp-cliente').value.trim();
+    const km = document.getElementById('cp-km').value;
+    const vtv = document.getElementById('cp-vtv').value;
+    const sucursal = document.getElementById('cp-sucursal').value;
+    const unidad = document.getElementById('cp-unidad').value;
+    const turnoId = document.getElementById('cargar-peritaje-turno-id').value;
+    
+    // Validar campos básicos
+    const faltantes = [];
+    if (!marca) faltantes.push('Marca');
+    if (!modelo) faltantes.push('Modelo');
+    if (!dominio) faltantes.push('Dominio');
+    if (!cliente) faltantes.push('Cliente');
+    if (!km) faltantes.push('KM');
+    
+    if (faltantes.length > 0) {
+        alert('⚠️ Campos obligatorios faltantes:\n\n' + faltantes.join('\n'));
+        return;
+    }
+    
+    // Calcular puntaje
+    let puntos = 0;
+    let max = 0;
+    let itemsCompletados = 0;
+    let itemsTotales = 0;
+    
+    Object.values(PLANILLA).forEach(seccion => {
+        seccion.items.forEach(item => {
+            itemsTotales++;
+            max += 10;
+            if (planillaEstado[item.id]) {
+                puntos += PUNTOS_BRM[planillaEstado[item.id]];
+                itemsCompletados++;
+            }
+        });
+    });
+    
+    const puntaje = max > 0 ? Math.round((puntos / max) * 100) : 0;
+    
+    // Validaciones de la planilla
+    if (itemsCompletados < itemsTotales) {
+        const continuar = window.confirm(`⚠️ Te faltan ${itemsTotales - itemsCompletados} ítems por completar de ${itemsTotales}.\n\n¿Querés guardar el peritaje igual?`);
+        if (!continuar) return;
+    }
+    
+    // Validar multimedia
+    if (fotosCargadas.length < 8) {
+        const continuar = window.confirm(`⚠️ Cargaste ${fotosCargadas.length} fotos (mínimo recomendado: 8).\n\n¿Querés guardar el peritaje igual?`);
+        if (!continuar) return;
+    }
+    
+    if (videosCargados.length < 1) {
+        const continuar = window.confirm(`⚠️ No cargaste ningún video (mínimo recomendado: 1).\n\n¿Querés guardar el peritaje igual?`);
+        if (!continuar) return;
+    }
+    
+    const hoy = new Date();
+    const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+    const horaStr = `${String(hoy.getHours()).padStart(2, '0')}:${String(hoy.getMinutes()).padStart(2, '0')}`;
+    
+    // Crear peritaje
+    const nuevoPeritaje = {
+        id: Math.max(...peritajes.map(p => p.id), 0) + 1,
+        marca, modelo, dominio, cliente,
+        version: window._turnoVersionTemp || '',
+        anio: window._turnoAnioTemp || null,
+        color: window._turnoColorTemp || '',
+        km: parseInt(km),
+        vtv: vtv || null,
+        puntaje,
+        fotos: fotosCargadas.length,
+        videos: videosCargados.length,
+        fotosData: [...fotosCargadas],
+        videosData: [...videosCargados],
+        planilla: { ...planillaEstado },
+        mecanico: usuarioActual.nombre,
+        mecanicoEmail: usuarioActual.email,
+        fecha: hoyStr,
+        sucursal,
+        unidad
+    };
+    
+    peritajes.push(nuevoPeritaje);
+    
+    // Manejar turno
+    if (turnoId) {
+        const idx = turnos.findIndex(t => t.id === parseInt(turnoId));
+        if (idx !== -1) {
+            turnos[idx].estado = 'completado';
+            turnos[idx].peritajeId = nuevoPeritaje.id;
+        }
+    } else {
+        // Si no había turno, crear uno completado automáticamente
+        turnos.push({
+            id: Math.max(...turnos.map(t => t.id), 0) + 1,
+            marca, modelo, dominio, cliente,
+            version: '',
+            anio: null,
+            color: '',
+            telefono: '',
+            fecha: hoyStr,
+            hora: horaStr,
+            sucursal,
+            canal: unidad,
+            vendedorEmail: null,
+            vendedorNombre: 'Sin turno previo',
+            mecanico: usuarioActual.nombre,
+            estado: 'completado',
+            peritajeId: nuevoPeritaje.id
+        });
+    }
+    
+    guardar();
+    actualizarSelectMecanicos();
+    closeModalCargarPeritaje();
+    actualizarDashboard();
+    alert(`✅ Peritaje cargado correctamente\n\nPuntaje: ${puntaje}%\nFotos: ${fotosCargadas.length}\nVideos: ${videosCargados.length}`);
+}
+
+function login(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const user = usuarios.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        usuarioActual = user;
+        esVendedor = user.rol === 'vendedor';
+        esMecanico = user.rol === 'mecanico';
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('admin-view').classList.remove('hidden');
+        adaptarUIporRol();
+        actualizarDashboard();
+    } else {
+        alert('Credenciales incorrectas');
+    }
+}
+
+function adaptarUIporRol() {
+    const titulo = document.getElementById('header-titulo');
+    const subtitulo = document.getElementById('header-subtitulo');
+    const tabUsuarios = document.querySelector('[data-tab="usuarios"]');
+    
+    // Filtros del dashboard que solo aplican al admin
+    const filterSucursal = document.getElementById('filter-sucursal').closest('.filter-group');
+    const filterMecanico = document.getElementById('filter-mecanico').closest('.filter-group');
+    const filterUnidad = document.getElementById('filter-unidad').closest('.filter-group');
+    
+    if (esVendedor) {
+        titulo.innerHTML = `👋 Hola, ${usuarioActual.nombre}`;
+        subtitulo.textContent = 'Panel de Vendedor';
+        tabUsuarios.style.display = 'none';
+        filterSucursal.style.display = 'none';
+        filterMecanico.style.display = 'none';
+        filterUnidad.style.display = 'none';
+        document.querySelector('[data-tab="dashboard"]').innerHTML = '📊 Dashboard';
+        document.querySelector('[data-tab="turnos"]').innerHTML = '📅 Turnos';
+    } else if (esMecanico) {
+        titulo.innerHTML = `🔧 Hola, ${usuarioActual.nombre}`;
+        subtitulo.textContent = 'Panel de Mecánico';
+        tabUsuarios.style.display = 'none';
+        filterSucursal.style.display = 'none';
+        filterMecanico.style.display = 'none';
+        filterUnidad.style.display = 'none';
+        document.querySelector('[data-tab="dashboard"]').innerHTML = '📆 Agenda';
+        document.querySelector('[data-tab="turnos"]').innerHTML = '➕ Sacar Turno';
+    } else {
+        titulo.innerHTML = `📊 Panel de Administración`;
+        subtitulo.textContent = `${usuarioActual.nombre} · Administrador`;
+        tabUsuarios.style.display = 'block';
+        filterSucursal.style.display = 'flex';
+        filterMecanico.style.display = 'flex';
+        filterUnidad.style.display = 'flex';
+        document.querySelector('[data-tab="dashboard"]').innerHTML = '📊 Dashboard';
+        document.querySelector('[data-tab="turnos"]').innerHTML = '📅 Turnos';
+    }
+}
+
+function logout() {
+    usuarioActual = null;
+    esVendedor = false;
+    esMecanico = false;
+    document.getElementById('login-view').classList.remove('hidden');
+    document.getElementById('admin-view').classList.add('hidden');
+}
+
+function switchTab(event, tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+
+    if (tab === 'dashboard') actualizarDashboard();
+    if (tab === 'peritajes') mostrarPeritajes();
+    if (tab === 'turnos') { 
+        document.getElementById('turnos-card-titulo').textContent = esMecanico ? 'Sacar Turno' : 'Turnos Pendientes';
+        // El calendario mensual ahora está en el dashboard, no en este tab
+        document.getElementById('vista-agenda-mensual').style.display = 'none';
+        document.getElementById('vista-form-turno').style.display = 'grid';
+        mostrarTurnos(); 
+        generarTurnero(); 
+    }
+    if (tab === 'usuarios') mostrarUsuarios();
+}
+
+// Variable global para el mes del calendario
+let mesAgenda = new Date();
+
+function cambiarMesAgenda(delta) {
+    if (delta === 0) {
+        mesAgenda = new Date();
+    } else {
+        mesAgenda.setMonth(mesAgenda.getMonth() + delta);
+    }
+    generarCalendarioMensual();
+}
+
+function generarCalendarioMensual() {
+    const año = mesAgenda.getFullYear();
+    const mes = mesAgenda.getMonth();
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    document.getElementById('agenda-titulo-mes').textContent = `📆 ${meses[mes]} ${año}`;
+    
+    const primerDia = new Date(año, mes, 1);
+    const ultimoDia = new Date(año, mes + 1, 0);
+    const diasEnMes = ultimoDia.getDate();
+    let diaSemanaInicio = primerDia.getDay() - 1; // 0=Lun
+    if (diaSemanaInicio < 0) diaSemanaInicio = 6;
+    
+    const hoy = new Date();
+    const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+    
+    let html = '<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 8px;">';
+    ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].forEach(d => {
+        html += `<div style="text-align: center; font-weight: 700; font-size: 12px; color: #667eea; padding: 8px 0;">${d}</div>`;
+    });
+    html += '</div>';
+    
+    html += '<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;">';
+    
+    // Días vacíos al inicio
+    for (let i = 0; i < diaSemanaInicio; i++) {
+        html += '<div></div>';
+    }
+    
+    // Días del mes
+    for (let dia = 1; dia <= diasEnMes; dia++) {
+        const fechaStr = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const esHoy = fechaStr === hoyStr;
+        const fechaDia = new Date(año, mes, dia);
+        const esFinDeSemana = fechaDia.getDay() === 0 || fechaDia.getDay() === 6;
+        
+        // Contar turnos y peritajes del día
+        const turnosDia = turnos.filter(t => t.fecha === fechaStr && t.estado === 'pendiente').length;
+        const peritajesDia = peritajes.filter(p => p.fecha === fechaStr).length;
+        
+        const bgColor = esHoy ? '#667eea' : esFinDeSemana ? '#f5f5f5' : 'white';
+        const textColor = esHoy ? 'white' : esFinDeSemana ? '#999' : '#1a1a1a';
+        
+        html += `<div style="background: ${bgColor}; color: ${textColor}; border: 2px solid ${esHoy ? '#667eea' : '#e8e8e8'}; border-radius: 8px; padding: 8px 4px; min-height: 70px; cursor: pointer; transition: all 0.2s; position: relative;" 
+                onclick="seleccionarDiaAgenda('${fechaStr}')"
+                onmouseenter="this.style.borderColor='#667eea';"
+                onmouseleave="this.style.borderColor='${esHoy ? '#667eea' : '#e8e8e8'}';">
+            <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">${dia}</div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">`;
+        
+        if (turnosDia > 0) {
+            html += `<div style="background: #f59e0b; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; text-align: center;">⏳ ${turnosDia}</div>`;
+        }
+        if (peritajesDia > 0) {
+            html += `<div style="background: #27ae60; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; text-align: center;">✅ ${peritajesDia}</div>`;
+        }
+        
+        html += '</div></div>';
+    }
+    html += '</div>';
+    
+    document.getElementById('calendario-mensual').innerHTML = html;
+    document.getElementById('detalle-dia-seleccionado').style.display = 'none';
+}
+
+function seleccionarDiaAgenda(fecha) {
+    const turnosDia = turnos.filter(t => t.fecha === fecha).sort((a, b) => a.hora.localeCompare(b.hora));
+    const peritajesDia = peritajes.filter(p => p.fecha === fecha);
+    
+    const [año, mes, dia] = fecha.split('-');
+    const fechaObj = new Date(parseInt(año), parseInt(mes) - 1, parseInt(dia));
+    const fechaFormato = fechaObj.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    
+    let html = `<div style="background: #f8f9ff; padding: 20px; border-radius: 12px; margin-top: 20px;">
+        <h3 style="margin-bottom: 16px; text-transform: capitalize; color: #1a1a1a;">📅 ${fechaFormato}</h3>`;
+    
+    if (turnosDia.length === 0 && peritajesDia.length === 0) {
+        html += `<p style="color: #999; text-align: center; padding: 24px;">Sin actividad este día</p>`;
+    } else {
+        const pendientes = turnosDia.filter(t => t.estado === 'pendiente');
+        if (pendientes.length > 0) {
+            html += '<h4 style="font-size: 13px; color: #f59e0b; margin-bottom: 10px;">⏳ Turnos Pendientes</h4>';
+            pendientes.forEach(t => {
+                const sucursalNombre = t.sucursal === 'bahia' ? 'Bahía Blanca' : t.sucursal === 'santa_rosa' ? 'Santa Rosa' : 'General Pico';
+                const canalNombre = t.canal === '0km' ? '0 KM' : t.canal === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado';
+                html += `<div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 10px; margin-bottom: 8px; border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 18px; font-weight: 700; color: #f59e0b; min-width: 60px;">${t.hora}</div>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-weight: 600; font-size: 13px;">${t.marca} ${t.modelo} · ${t.dominio}</p>
+                        <p style="margin: 2px 0 0 0; font-size: 12px; color: #666;">👤 ${t.cliente} · ${sucursalNombre} · ${canalNombre}</p>
+                    </div>
+                    <button onclick="abrirModalCargarPeritaje(${t.id})" style="background: #27ae60; color: white; padding: 8px 14px; font-size: 12px;">📋 Cargar</button>
+                </div>`;
+            });
+        }
+        
+        if (peritajesDia.length > 0) {
+            html += '<h4 style="font-size: 13px; color: #27ae60; margin: 16px 0 10px 0;">✅ Peritajes Realizados</h4>';
+            peritajesDia.forEach(p => {
+                html += `<div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 10px; margin-bottom: 8px; border-left: 4px solid #27ae60; cursor: pointer;" onclick="verPeritaje(${p.id})">
+                    <div style="background: #27ae60; color: white; min-width: 50px; padding: 8px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 18px; font-weight: 700;">${p.puntaje}%</div>
+                    </div>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-weight: 600; font-size: 13px;">${p.marca} ${p.modelo} · ${p.dominio}</p>
+                        <p style="margin: 2px 0 0 0; font-size: 12px; color: #666;">👤 ${p.cliente} · 📸 ${p.fotos} · 🎥 ${p.videos}</p>
+                    </div>
+                    <span style="color: #999; font-size: 18px;">→</span>
+                </div>`;
+            });
+        }
+    }
+    
+    html += '</div>';
+    
+    // Buscar el contenedor correcto (puede estar en home o en tab agenda)
+    const contHome = document.getElementById('detalle-dia-home');
+    const contTab = document.getElementById('detalle-dia-seleccionado');
+    
+    if (contHome) {
+        contHome.innerHTML = html;
+        setTimeout(() => contHome.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+    if (contTab) {
+        contTab.innerHTML = html;
+        contTab.style.display = 'block';
+    }
+}
+
+function actualizarDashboard() {
+    if (esVendedor) {
+        actualizarDashboardVendedor();
+    } else if (esMecanico) {
+        actualizarDashboardMecanico();
+    } else {
+        actualizarDashboardAdmin();
+    }
+}
+
+function actualizarDashboardAdmin() {
+    // Mostrar canvas y ocultar agenda
+    document.getElementById('chart-canvas-wrapper').style.display = 'block';
+    document.getElementById('agenda-mecanico').style.display = 'none';
+    document.getElementById('chart-titulo').textContent = '📊 Métricas de Peritajes';
+    
+    const filtrados = getPeritajesFiltrados();
+    const puntajePromedio = filtrados.length > 0 ? Math.round(filtrados.reduce((sum, p) => sum + p.puntaje, 0) / filtrados.length) : 0;
+    
+    const diasHabiles = new Set();
+    filtrados.forEach(p => {
+        if (esDialHabil(p.fecha)) {
+            diasHabiles.add(p.fecha);
+        }
+    });
+    const peritajesPromedioPorDiaHabil = diasHabiles.size > 0 ? Math.round(filtrados.length / diasHabiles.size) : 0;
+
+    document.getElementById('kpi-total').textContent = filtrados.length;
+    document.getElementById('kpi-promedio').textContent = puntajePromedio + '%';
+    document.getElementById('kpi-turnos').textContent = turnos.filter(t => t.estado === 'pendiente').length;
+    document.getElementById('kpi-promedios').textContent = peritajesPromedioPorDiaHabil;
+    
+    // Labels admin
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-label').textContent = 'Peritajes';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-subtitle').textContent = 'Completados';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-label').textContent = 'Puntaje Promedio';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-subtitle').textContent = 'Calidad';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-label').textContent = 'Turnos';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-subtitle').textContent = 'Pendientes';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-label').textContent = 'Peritajes Promedio';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-subtitle').textContent = 'Por día hábil';
+
+    actualizarChart(filtrados);
+}
+
+function actualizarDashboardMecanico() {
+    const hoy = new Date();
+    const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+    
+    // Turnos del día de hoy (para KPIs)
+    const turnosHoy = turnos.filter(t => t.fecha === hoyStr);
+    const turnosPendientesHoy = turnosHoy.filter(t => t.estado === 'pendiente');
+    const turnosCompletadosHoy = turnosHoy.filter(t => t.estado === 'completado');
+    const peritajesHoy = peritajes.filter(p => p.fecha === hoyStr);
+    
+    document.getElementById('kpi-total').textContent = turnosHoy.length;
+    document.getElementById('kpi-promedio').textContent = turnosPendientesHoy.length;
+    document.getElementById('kpi-turnos').textContent = turnosCompletadosHoy.length;
+    document.getElementById('kpi-promedios').textContent = peritajesHoy.length;
+    
+    // Labels mecánico
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-label').textContent = 'Turnos Hoy';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-subtitle').textContent = 'Agendados para hoy';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-label').textContent = 'Pendientes';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-subtitle').textContent = 'Por hacer hoy';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-label').textContent = 'Completados';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-subtitle').textContent = 'Hechos hoy';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-label').textContent = 'Peritajes Hoy';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-subtitle').textContent = 'Cargados hoy';
+    
+    // Mostrar agenda mensual en lugar de chart
+    document.getElementById('chart-canvas-wrapper').style.display = 'none';
+    document.getElementById('agenda-mecanico').style.display = 'block';
+    
+    // Renderizar el calendario mensual en el div agenda-mecanico
+    renderizarCalendarioMensualHome();
+    
+    // Destruir charts si existen
+    destroyAllCharts();
+}
+
+function renderizarCalendarioMensualHome() {
+    const año = mesAgenda.getFullYear();
+    const mes = mesAgenda.getMonth();
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    document.getElementById('chart-titulo').innerHTML = `📆 Agenda · ${meses[mes]} ${año}`;
+    
+    const primerDia = new Date(año, mes, 1);
+    const ultimoDia = new Date(año, mes + 1, 0);
+    const diasEnMes = ultimoDia.getDate();
+    let diaSemanaInicio = primerDia.getDay() - 1;
+    if (diaSemanaInicio < 0) diaSemanaInicio = 6;
+    
+    const hoy = new Date();
+    const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+    
+    let html = `
+        <!-- Navegación de mes -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 10px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="cambiarMesAgendaHome(-1)" style="background: #e8e8e8; color: #1a1a1a; padding: 8px 14px; font-size: 13px;">‹ Anterior</button>
+                <button onclick="cambiarMesAgendaHome(0)" style="background: #667eea; color: white; padding: 8px 14px; font-size: 13px;">Hoy</button>
+                <button onclick="cambiarMesAgendaHome(1)" style="background: #e8e8e8; color: #1a1a1a; padding: 8px 14px; font-size: 13px;">Siguiente ›</button>
+            </div>
+            <button onclick="abrirModalCargarPeritaje()" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 10px 18px; font-weight: 600; font-size: 13px;">📋 Cargar Peritaje Sin Turno</button>
+        </div>
+        
+        <!-- Leyenda -->
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; font-size: 12px; color: #666;">
+            <span><span style="display: inline-block; width: 12px; height: 12px; background: #f59e0b; border-radius: 3px; margin-right: 4px; vertical-align: middle;"></span>Turnos pendientes</span>
+            <span><span style="display: inline-block; width: 12px; height: 12px; background: #27ae60; border-radius: 3px; margin-right: 4px; vertical-align: middle;"></span>Peritajes realizados</span>
+        </div>
+        
+        <!-- Encabezado días -->
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 8px;">`;
+    
+    ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].forEach(d => {
+        html += `<div style="text-align: center; font-weight: 700; font-size: 12px; color: #667eea; padding: 8px 0;">${d}</div>`;
+    });
+    html += '</div>';
+    
+    html += '<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;">';
+    
+    // Días vacíos al inicio
+    for (let i = 0; i < diaSemanaInicio; i++) {
+        html += '<div></div>';
+    }
+    
+    // Días del mes
+    for (let dia = 1; dia <= diasEnMes; dia++) {
+        const fechaStr = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const esHoy = fechaStr === hoyStr;
+        const fechaDia = new Date(año, mes, dia);
+        const esFinDeSemana = fechaDia.getDay() === 0 || fechaDia.getDay() === 6;
+        
+        const turnosDia = turnos.filter(t => t.fecha === fechaStr && t.estado === 'pendiente').length;
+        const peritajesDia = peritajes.filter(p => p.fecha === fechaStr).length;
+        
+        const bgColor = esHoy ? '#667eea' : esFinDeSemana ? '#f5f5f5' : 'white';
+        const textColor = esHoy ? 'white' : esFinDeSemana ? '#999' : '#1a1a1a';
+        
+        html += `<div style="background: ${bgColor}; color: ${textColor}; border: 2px solid ${esHoy ? '#667eea' : '#e8e8e8'}; border-radius: 8px; padding: 8px 4px; min-height: 70px; cursor: pointer; transition: all 0.2s; position: relative;" 
+                onclick="seleccionarDiaAgenda('${fechaStr}')">
+            <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">${dia}</div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">`;
+        
+        if (turnosDia > 0) {
+            html += `<div style="background: #f59e0b; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; text-align: center;">⏳ ${turnosDia}</div>`;
+        }
+        if (peritajesDia > 0) {
+            html += `<div style="background: #27ae60; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; text-align: center;">✅ ${peritajesDia}</div>`;
+        }
+        
+        html += '</div></div>';
+    }
+    html += '</div>';
+    
+    // Contenedor para el detalle del día seleccionado
+    html += '<div id="detalle-dia-home" style="margin-top: 20px;"></div>';
+    
+    document.getElementById('agenda-mecanico').innerHTML = html;
+}
+
+function cambiarMesAgendaHome(delta) {
+    if (delta === 0) {
+        mesAgenda = new Date();
+    } else {
+        mesAgenda.setMonth(mesAgenda.getMonth() + delta);
+    }
+    renderizarCalendarioMensualHome();
+}
+
+function actualizarDashboardVendedor() {
+    // Mostrar canvas y ocultar agenda
+    document.getElementById('chart-canvas-wrapper').style.display = 'block';
+    document.getElementById('agenda-mecanico').style.display = 'none';
+    document.getElementById('chart-titulo').textContent = '📊 Mis Métricas';
+    
+    const mes = document.getElementById('filter-mes').value;
+    
+    // Mis turnos (los que cargué yo)
+    let misTurnos = turnos.filter(t => t.vendedorEmail === usuarioActual.email);
+    if (mes) {
+        misTurnos = misTurnos.filter(t => {
+            const fechaMes = t.fecha.substring(0, 7);
+            return fechaMes === mes;
+        });
+    }
+    
+    const turnosPendientes = misTurnos.filter(t => t.estado === 'pendiente');
+    const turnosCompletados = misTurnos.filter(t => t.estado === 'completado');
+    
+    // Total de peritajes en sistema (puede ver todos)
+    let peritajesFiltrados = peritajes;
+    if (mes) {
+        peritajesFiltrados = peritajes.filter(p => p.fecha.substring(0, 7) === mes);
+    }
+    
+    document.getElementById('kpi-total').textContent = misTurnos.length;
+    document.getElementById('kpi-promedio').textContent = turnosPendientes.length;
+    document.getElementById('kpi-turnos').textContent = turnosCompletados.length;
+    document.getElementById('kpi-promedios').textContent = peritajesFiltrados.length;
+    
+    // Labels para vendedor
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-label').textContent = 'Mis Turnos';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(1) .kpi-subtitle').textContent = 'Total cargados';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-label').textContent = 'Pendientes';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(2) .kpi-subtitle').textContent = 'Mis turnos por realizar';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-label').textContent = 'Completados';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(3) .kpi-subtitle').textContent = 'Mis turnos finalizados';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-label').textContent = 'Peritajes en Sistema';
+    document.querySelector('#dashboard .kpi-grid .kpi:nth-child(4) .kpi-subtitle').textContent = 'Total disponibles';
+    
+    actualizarChartVendedor(misTurnos);
+}
+
+function actualizarChartVendedor(misTurnos) {
+    destroyAllCharts();
+    
+    document.getElementById('chart-canvas-wrapper').innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">📊 Estado de Mis Turnos</h4>
+                <canvas id="chart-1"></canvas>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">🏷️ Mis Turnos por Canal</h4>
+                <canvas id="chart-2"></canvas>
+            </div>
+        </div>
+    `;
+    
+    if (misTurnos.length === 0) {
+        document.getElementById('chart-canvas-wrapper').innerHTML = `
+            <div style="text-align: center; padding: 60px 20px; color: #999;">
+                <p style="font-size: 16px; margin-bottom: 8px;">📭 Todavía no cargaste turnos</p>
+                <p style="font-size: 13px;">Andá a la pestaña Turnos para cargar el primero</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // 1. ESTADO DE TURNOS (donut: pendientes vs completados)
+    const pendientes = misTurnos.filter(t => t.estado === 'pendiente').length;
+    const completados = misTurnos.filter(t => t.estado === 'completado').length;
+    
+    allCharts.push(new Chart(document.getElementById('chart-1'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Pendientes', 'Completados'],
+            datasets: [{
+                data: [pendientes, completados],
+                backgroundColor: ['#f59e0b', '#27ae60'],
+                borderWidth: 0
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 12 } } } }
+        }
+    }));
+    
+    // 2. MIS TURNOS POR CANAL
+    const porCanal = { '0 KM': 0, 'Plan Ahorro': 0, 'Usado': 0 };
+    misTurnos.forEach(t => {
+        const nombre = t.canal === '0km' ? '0 KM' : t.canal === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado';
+        porCanal[nombre]++;
+    });
+    allCharts.push(new Chart(document.getElementById('chart-2'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(porCanal),
+            datasets: [{
+                data: Object.values(porCanal),
+                backgroundColor: ['#27ae60', '#3b82f6', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 12 } } } }
+        }
+    }));
+}
+
+function actualizarChart(filtrados) {
+    destroyAllCharts();
+    
+    // Generar estructura de 4 gráficos en grilla
+    document.getElementById('chart-canvas-wrapper').innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">📍 Peritajes por Sucursal</h4>
+                <canvas id="chart-1"></canvas>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">🏷️ Peritajes por Canal</h4>
+                <canvas id="chart-2"></canvas>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">📊 Distribución de Puntajes</h4>
+                <canvas id="chart-3"></canvas>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 12px; font-size: 14px; color: #1a1a1a; font-weight: 700;">🔧 Top Mecánicos</h4>
+                <canvas id="chart-4"></canvas>
+            </div>
+        </div>
+    `;
+    
+    // 1. POR SUCURSAL (donut)
+    const porSucursal = { 'Bahía Blanca': 0, 'Santa Rosa': 0, 'General Pico': 0 };
+    filtrados.forEach(p => {
+        const nombre = p.sucursal === 'bahia' ? 'Bahía Blanca' : p.sucursal === 'santa_rosa' ? 'Santa Rosa' : 'General Pico';
+        porSucursal[nombre]++;
+    });
+    allCharts.push(new Chart(document.getElementById('chart-1'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(porSucursal),
+            datasets: [{
+                data: Object.values(porSucursal),
+                backgroundColor: ['#667eea', '#764ba2', '#f59e0b'],
+                borderWidth: 0
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 12 } } } }
+        }
+    }));
+    
+    // 2. POR CANAL (donut)
+    const porCanal = { '0 KM': 0, 'Plan Ahorro': 0, 'Usado': 0 };
+    filtrados.forEach(p => {
+        const nombre = p.unidad === '0km' ? '0 KM' : p.unidad === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado';
+        porCanal[nombre]++;
+    });
+    allCharts.push(new Chart(document.getElementById('chart-2'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(porCanal),
+            datasets: [{
+                data: Object.values(porCanal),
+                backgroundColor: ['#27ae60', '#3b82f6', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 12 } } } }
+        }
+    }));
+    
+    // 3. RANGOS DE PUNTAJE (bar horizontal)
+    const rangos = { 'Malo (<60%)': 0, 'Regular (60-75%)': 0, 'Bueno (75-90%)': 0, 'Excelente (≥90%)': 0 };
+    filtrados.forEach(p => {
+        if (p.puntaje < 60) rangos['Malo (<60%)']++;
+        else if (p.puntaje < 75) rangos['Regular (60-75%)']++;
+        else if (p.puntaje < 90) rangos['Bueno (75-90%)']++;
+        else rangos['Excelente (≥90%)']++;
+    });
+    allCharts.push(new Chart(document.getElementById('chart-3'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(rangos),
+            datasets: [{
+                label: 'Cantidad',
+                data: Object.values(rangos),
+                backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#27ae60'],
+                borderWidth: 0,
+                borderRadius: 6
+            }]
+        },
+        options: { 
+            indexAxis: 'y',
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    }));
+    
+    // 4. TOP MECÁNICOS (bar)
+    const porMecanico = {};
+    filtrados.forEach(p => {
+        if (p.mecanico) porMecanico[p.mecanico] = (porMecanico[p.mecanico] || 0) + 1;
+    });
+    const topMecanicos = Object.entries(porMecanico).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    allCharts.push(new Chart(document.getElementById('chart-4'), {
+        type: 'bar',
+        data: {
+            labels: topMecanicos.map(([n]) => n),
+            datasets: [{
+                label: 'Peritajes',
+                data: topMecanicos.map(([, c]) => c),
+                backgroundColor: '#667eea',
+                borderWidth: 0,
+                borderRadius: 6
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    }));
+}
+
+function generarTurnero() {
+    const sucursal = document.getElementById('turno-sucursal').value;
+    if (!sucursal) {
+        document.getElementById('calendario').innerHTML = '<p style="color: #999; text-align: center; grid-column: 1 / -1;">Selecciona una sucursal primero</p>';
+        document.getElementById('horarios-disponibles').innerHTML = '';
+        return;
+    }
+
+    const hoy = new Date();
+    let html = '';
+    
+    for (let i = 0; i < 30; i++) {
+        const fecha = new Date(hoy);
+        fecha.setDate(fecha.getDate() + i);
+        
+        const esSabado = fecha.getDay() === 6;
+        const esDomingo = fecha.getDay() === 0;
+        
+        if (esSabado || esDomingo) continue;
+        
+        const fechaStr = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+        const diasEmana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        const diaStr = diasEmana[fecha.getDay()];
+        const fechaFormato = `${diaStr} ${fecha.getDate()}`;
+        const isSelected = turnoSeleccionado.fecha === fechaStr;
+        
+        html += `<button type="button" class="fecha-btn ${isSelected ? 'selected' : ''}" onclick="seleccionarFecha('${fechaStr}')">
+            ${fechaFormato}
+        </button>`;
+    }
+    
+    document.getElementById('calendario').innerHTML = html;
+    actualizarHorariosTurnero();
+}
+
+function seleccionarFecha(fecha) {
+    turnoSeleccionado.fecha = fecha;
+    generarTurnero();
+}
+
+function actualizarTurnero() {
+    turnoSeleccionado = { sucursal: null, canal: null, fecha: null, hora: null };
+    document.querySelectorAll('[id^="canal-"]').forEach(btn => {
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.borderColor = '#e8e8e8';
+    });
+    generarTurnero();
+}
+
+function actualizarHorariosTurnero() {
+    const sucursal = document.getElementById('turno-sucursal').value;
+    if (!sucursal || !turnoSeleccionado.fecha) {
+        document.getElementById('horarios-disponibles').innerHTML = '';
+        return;
+    }
+
+    turnoSeleccionado.sucursal = sucursal;
+    const horarios = sucursal === 'bahia' ? horariosBahia : horariosProvincias;
+    const turnosDiaSeleccionado = turnos.filter(t => t.fecha === turnoSeleccionado.fecha && t.sucursal === sucursal);
+    const horariosOcupados = turnosDiaSeleccionado.map(t => t.hora);
+
+    let html = '';
+    horarios.forEach(hora => {
+        const ocupado = horariosOcupados.includes(hora);
+        const isSelected = turnoSeleccionado.hora === hora;
+        html += `<button type="button" class="horario-btn ${ocupado ? 'ocupado' : isSelected ? 'selected' : ''}" 
+                onclick="${ocupado ? '' : `turnoSeleccionado.hora='${hora}'; actualizarHorariosTurnero();`}">
+            ${hora}
+        </button>`;
+    });
+    
+    document.getElementById('horarios-disponibles').innerHTML = html;
+}
+
+function seleccionarCanal(canal) {
+    turnoSeleccionado.canal = canal;
+    document.querySelectorAll('[id^="canal-"]').forEach(btn => {
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.borderColor = '#e8e8e8';
+    });
+    const btnId = canal === '0km' ? 'canal-0km' : canal === 'plan_ahorro' ? 'canal-plan' : 'canal-usado';
+    document.getElementById(btnId).style.background = '#667eea';
+    document.getElementById(btnId).style.color = 'white';
+    document.getElementById(btnId).style.borderColor = '#667eea';
+}
+
+function validarCampos() {
+    const campos = {
+        sucursal: document.getElementById('turno-sucursal').value,
+        canal: turnoSeleccionado.canal,
+        marca: document.getElementById('turno-marca').value,
+        modelo: document.getElementById('turno-modelo').value,
+        version: document.getElementById('turno-version').value,
+        anio: document.getElementById('turno-anio').value,
+        color: document.getElementById('turno-color').value,
+        dominio: document.getElementById('turno-dominio').value,
+        nombre: document.getElementById('turno-nombre').value,
+        apellido: document.getElementById('turno-apellido').value,
+        telefono: document.getElementById('turno-telefono').value,
+        fecha: turnoSeleccionado.fecha,
+        hora: turnoSeleccionado.hora
+    };
+
+    const faltantes = [];
+    if (!campos.sucursal) faltantes.push('Sucursal');
+    if (!campos.canal) faltantes.push('Canal/Origen');
+    if (!campos.marca) faltantes.push('Marca');
+    if (!campos.modelo) faltantes.push('Modelo');
+    if (!campos.version) faltantes.push('Versión');
+    if (!campos.anio) faltantes.push('Año');
+    if (!campos.color) faltantes.push('Color');
+    if (!campos.dominio) faltantes.push('Dominio');
+    if (!campos.nombre) faltantes.push('Nombre');
+    if (!campos.apellido) faltantes.push('Apellido');
+    if (!campos.telefono) faltantes.push('Teléfono');
+    if (!campos.fecha) faltantes.push('Fecha');
+    if (!campos.hora) faltantes.push('Hora');
+
+    return { valido: faltantes.length === 0, faltantes };
+}
+
+function sacarTurno() {
+    const validacion = validarCampos();
+    
+    if (!validacion.valido) {
+        alert('⚠️ Campos obligatorios faltantes:\n\n' + validacion.faltantes.join('\n'));
+        return;
+    }
+
+    turnos.push({
+        id: Math.max(...turnos.map(t => t.id), 0) + 1,
+        marca: document.getElementById('turno-marca').value,
+        modelo: document.getElementById('turno-modelo').value,
+        version: document.getElementById('turno-version').value,
+        anio: parseInt(document.getElementById('turno-anio').value),
+        color: document.getElementById('turno-color').value,
+        dominio: document.getElementById('turno-dominio').value.toUpperCase(),
+        cliente: `${document.getElementById('turno-nombre').value} ${document.getElementById('turno-apellido').value}`,
+        telefono: document.getElementById('turno-telefono').value,
+        fecha: turnoSeleccionado.fecha,
+        hora: turnoSeleccionado.hora,
+        sucursal: turnoSeleccionado.sucursal,
+        canal: turnoSeleccionado.canal,
+        vendedorEmail: usuarioActual.email,
+        vendedorNombre: usuarioActual.nombre,
+        estado: 'pendiente'
+    });
+
+    guardar();
+    limpiarFormularioTurno();
+    mostrarTurnos();
+    generarTurnero();
+    alert('✅ Turno confirmado exitosamente');
+}
+
+function limpiarFormularioTurno() {
+    document.getElementById('turno-marca').value = '';
+    document.getElementById('turno-modelo').value = '';
+    document.getElementById('turno-version').value = '';
+    document.getElementById('turno-anio').value = '';
+    document.getElementById('turno-color').value = '';
+    document.getElementById('turno-dominio').value = '';
+    document.getElementById('turno-nombre').value = '';
+    document.getElementById('turno-apellido').value = '';
+    document.getElementById('turno-telefono').value = '';
+    document.getElementById('turno-sucursal').value = '';
+    document.querySelectorAll('[id^="canal-"]').forEach(btn => {
+        btn.style.background = 'white';
+        btn.style.color = '#666';
+        btn.style.borderColor = '#e8e8e8';
+    });
+    turnoSeleccionado = { sucursal: null, canal: null, fecha: null, hora: null };
+}
+
+function mostrarPeritajes() {
+    filtrarPeritajes();
+}
+
+function limpiarFiltrosPeritajes() {
+    document.getElementById('filter-peritaje-desde').value = '';
+    document.getElementById('filter-peritaje-hasta').value = '';
+    document.getElementById('filter-peritaje-sucursal').value = '';
+    document.getElementById('filter-peritaje-unidad').value = '';
+    document.getElementById('search-peritajes').value = '';
+    filtrarPeritajes();
+}
+
+function filtrarPeritajes() {
+    const desde = document.getElementById('filter-peritaje-desde').value;
+    const hasta = document.getElementById('filter-peritaje-hasta').value;
+    const sucursal = document.getElementById('filter-peritaje-sucursal').value;
+    const unidad = document.getElementById('filter-peritaje-unidad').value;
+    const busqueda = document.getElementById('search-peritajes').value.toLowerCase();
+    
+    let filtrados = peritajes.filter(p => {
+        if (desde && p.fecha < desde) return false;
+        if (hasta && p.fecha > hasta) return false;
+        if (sucursal && p.sucursal !== sucursal) return false;
+        if (unidad && p.unidad !== unidad) return false;
+        if (busqueda) {
+            const matchBusqueda = p.dominio.toLowerCase().includes(busqueda) || 
+                                   p.modelo.toLowerCase().includes(busqueda) || 
+                                   p.cliente.toLowerCase().includes(busqueda) ||
+                                   p.marca.toLowerCase().includes(busqueda);
+            if (!matchBusqueda) return false;
+        }
+        return true;
+    });
+    
+    // Ordenar por fecha descendente (más recientes primero)
+    filtrados.sort((a, b) => b.fecha.localeCompare(a.fecha));
+    
+    const count = document.getElementById('peritajes-count');
+    count.textContent = `${filtrados.length} peritaje${filtrados.length !== 1 ? 's' : ''} encontrado${filtrados.length !== 1 ? 's' : ''}`;
+    
+    const lista = document.getElementById('peritajes-list');
+    if (filtrados.length === 0) {
+        lista.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">No se encontraron peritajes con los filtros aplicados</div>';
+        return;
+    }
+    
+    lista.innerHTML = filtrados.map(p => `
+        <div class="item">
+            <div class="item-content" onclick="verPeritaje(${p.id})">
+                <p class="title">👤 ${p.cliente}</p>
+                <p style="font-weight: 600; color: #667eea; font-size: 13px; margin-bottom: 4px;">${p.marca} ${p.modelo}</p>
+                <p><strong>Patente:</strong> ${p.dominio} | <strong>Puntaje:</strong> ${p.puntaje}% | <strong>${p.fecha}</strong></p>
+            </div>
+            ${(!esVendedor && !esMecanico) ? `<div class="item-actions">
+                <button class="icon-btn edit" onclick="editarPeritaje(${p.id})">✏️ Editar</button>
+                <button class="icon-btn delete" onclick="eliminarPeritaje(${p.id})">🗑️ Borrar</button>
+            </div>` : '<div style="font-size: 11px; color: #999; padding: 6px 12px; background: #f0f0f0; border-radius: 6px;">👁️ Solo lectura</div>'}
+        </div>
+    `).join('');
+}
+
+function buscarPeritajes() {
+    filtrarPeritajes();
+}
+
+function verPeritaje(id) {
+    const p = peritajes.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modal-titulo').textContent = `${p.marca} ${p.modelo}`;
+    
+    // PLANILLA
+    let planillaHTML = '';
+    if (p.planilla && Object.keys(p.planilla).length > 0 && typeof PLANILLA !== 'undefined') {
+        planillaHTML = '<div style="margin-top: 24px;"><h3 style="font-size: 15px; color: #1a1a1a; margin-bottom: 12px;">📋 Planilla de Inspección</h3>';
+        Object.entries(PLANILLA).forEach(([key, seccion]) => {
+            let itemsHTML = '';
+            seccion.items.forEach(item => {
+                const valor = p.planilla[item.id];
+                if (!valor) return;
+                const color = valor === 'B' ? '#27ae60' : valor === 'R' ? '#f59e0b' : '#ef4444';
+                const bg = valor === 'B' ? '#d1fae5' : valor === 'R' ? '#fff3cd' : '#fee2e2';
+                itemsHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 12px; border-bottom: 1px solid #f5f5f5;">
+                    <span style="color: #1a1a1a;">${item.id}. ${item.nombre}</span>
+                    <span style="color: ${color}; background: ${bg}; font-weight: 700; padding: 2px 10px; border-radius: 12px; font-size: 11px;">${valor}</span>
+                </div>`;
+            });
+            if (itemsHTML) {
+                planillaHTML += `<details style="margin-bottom: 10px; background: #f8f9ff; border-radius: 8px; padding: 12px;">
+                    <summary style="cursor: pointer; font-weight: 600; font-size: 13px; color: #667eea;">${seccion.titulo}</summary>
+                    <div style="margin-top: 8px;">${itemsHTML}</div>
+                </details>`;
+            }
+        });
+        planillaHTML += '</div>';
+    }
+    
+    // FOTOS
+    let fotosHTML = '';
+    if (p.fotosData && p.fotosData.length > 0) {
+        fotosHTML = `<div style="margin-top: 24px;">
+            <h3 style="font-size: 15px; color: #1a1a1a; margin-bottom: 12px;">📸 Fotos (${p.fotosData.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px;">
+                ${p.fotosData.map((f, i) => `
+                    <div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; border: 2px solid #e8e8e8;" onclick="abrirFotoCompleta('${p.id}', ${i})">
+                        <img src="${f.dataUrl}" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto ${i+1}">
+                    </div>
+                `).join('')}
+            </div>
+        </div>`;
+    } else if (p.fotos > 0) {
+        fotosHTML = `<div style="margin-top: 24px; padding: 16px; background: #f8f9ff; border-radius: 8px; text-align: center; color: #999; font-size: 13px;">
+            📸 ${p.fotos} fotos cargadas (no almacenadas en este registro)
+        </div>`;
+    }
+    
+    // VIDEOS
+    let videosHTML = '';
+    if (p.videosData && p.videosData.length > 0) {
+        videosHTML = `<div style="margin-top: 24px;">
+            <h3 style="font-size: 15px; color: #1a1a1a; margin-bottom: 12px;">🎥 Videos (${p.videosData.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;">
+                ${p.videosData.map((v, i) => `
+                    <video src="${v.dataUrl}" controls style="width: 100%; border-radius: 8px; background: black;"></video>
+                `).join('')}
+            </div>
+        </div>`;
+    } else if (p.videos > 0) {
+        videosHTML = `<div style="margin-top: 16px; padding: 16px; background: #f8f9ff; border-radius: 8px; text-align: center; color: #999; font-size: 13px;">
+            🎥 ${p.videos} videos cargados (no almacenados en este registro)
+        </div>`;
+    }
+    
+    const botones = (esVendedor || esMecanico) ? 
+        `<div style="display: flex; gap: 10px; margin-top: 24px; position: sticky; bottom: 0; background: white; padding-top: 12px; border-top: 1px solid #f0f0f0;">
+            <button onclick="closeModal()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 12px;">Cerrar</button>
+        </div>` :
+        `<div style="display: flex; gap: 10px; margin-top: 24px; position: sticky; bottom: 0; background: white; padding-top: 12px; border-top: 1px solid #f0f0f0;">
+            <button onclick="editarPeritaje(${p.id}); closeModal();" style="flex: 1; background: #f59e0b; color: white; padding: 12px;">✏️ Editar</button>
+            <button onclick="eliminarPeritaje(${p.id})" style="flex: 1; background: #ff6b6b; color: white; padding: 12px;">🗑️ Borrar</button>
+            <button onclick="closeModal()" style="flex: 1; background: #e8e8e8; color: #1a1a1a; padding: 12px;">Cerrar</button>
+        </div>`;
+    
+    const sucursalNombre = p.sucursal === 'bahia' ? 'Bahía Blanca' : p.sucursal === 'santa_rosa' ? 'Santa Rosa' : 'General Pico';
+    const unidadNombre = p.unidad === '0km' ? '0 KM' : p.unidad === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado';
+    
+    document.getElementById('modal-body').innerHTML = `
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+            <p style="margin: 0; font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px;">Puntaje Total</p>
+            <p style="margin: 4px 0 0 0; font-size: 36px; font-weight: 700;">${p.puntaje}%</p>
+        </div>
+        
+        ${(p.version || p.anio || p.color) ? `<div style="background: #f8f9ff; padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #667eea; font-weight: 600;">
+            ${[p.version, p.anio, p.color].filter(Boolean).join(' · ')}
+        </div>` : ''}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+            <p><strong>👤 Cliente:</strong><br>${p.cliente}</p>
+            <p><strong>🚗 Patente:</strong><br>${p.dominio}</p>
+            ${p.km ? `<p><strong>🛣️ KM:</strong><br>${p.km.toLocaleString('es-AR')}</p>` : ''}
+            ${p.vtv ? `<p><strong>📅 VTV:</strong><br>${p.vtv}</p>` : ''}
+            <p><strong>🔧 Mecánico:</strong><br>${p.mecanico}</p>
+            <p><strong>📍 Sucursal:</strong><br>${sucursalNombre}</p>
+            <p><strong>🏷️ Canal:</strong><br>${unidadNombre}</p>
+            <p><strong>📆 Fecha:</strong><br>${p.fecha}</p>
+        </div>
+        
+        ${planillaHTML}
+        ${fotosHTML}
+        ${videosHTML}
+        ${botones}
+    `;
+    document.getElementById('modal-peritaje').classList.add('active');
+}
+
+function abrirFotoCompleta(peritajeId, fotoIdx) {
+    const p = peritajes.find(x => x.id == peritajeId);
+    if (!p || !p.fotosData || !p.fotosData[fotoIdx]) return;
+    
+    // Crear overlay temporal
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:20px;';
+    overlay.onclick = () => overlay.remove();
+    overlay.innerHTML = `<img src="${p.fotosData[fotoIdx].dataUrl}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;">`;
+    document.body.appendChild(overlay);
+}
+
+// Estado de edición de peritaje (paralelo al de cargar)
+let planillaEstadoEdit = {};
+let fotosCargadasEdit = [];
+let videosCargadosEdit = [];
+
+function generarSeccionesPlanillaEdit() {
+    let html = '';
+    Object.entries(PLANILLA).forEach(([key, seccion]) => {
+        const maxPuntos = seccion.items.length * 10;
+        html += `
+            <div class="seccion-peritaje">
+                <button type="button" class="seccion-header" onclick="toggleSeccionEdit('${key}')">
+                    <span>${seccion.titulo}</span>
+                    <span class="puntos-seccion" id="edit-puntos-${key}">0/${maxPuntos}</span>
+                    <span class="seccion-arrow collapsed" id="edit-arrow-${key}">▼</span>
+                </button>
+                <div class="seccion-body" id="edit-seccion-${key}" style="display: none;">
+                    ${seccion.items.map(item => `
+                        <div class="planilla-item">
+                            <div class="planilla-item-nombre">
+                                <span class="planilla-item-numero">${item.id}.</span> ${item.nombre}
+                            </div>
+                            <div class="brm-group">
+                                <button type="button" class="brm-btn b" data-item-edit="${item.id}" data-valor="B" onclick="seleccionarBRMEdit(${item.id}, 'B', '${key}')" title="Bueno">B</button>
+                                <button type="button" class="brm-btn r" data-item-edit="${item.id}" data-valor="R" onclick="seleccionarBRMEdit(${item.id}, 'R', '${key}')" title="Regular">R</button>
+                                <button type="button" class="brm-btn m" data-item-edit="${item.id}" data-valor="M" onclick="seleccionarBRMEdit(${item.id}, 'M', '${key}')" title="Malo">M</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    document.getElementById('edit-secciones-planilla').innerHTML = html;
+}
+
+function toggleSeccionEdit(key) {
+    const body = document.getElementById('edit-seccion-' + key);
+    const arrow = document.getElementById('edit-arrow-' + key);
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        if (arrow) arrow.classList.remove('collapsed');
+    } else {
+        body.style.display = 'none';
+        if (arrow) arrow.classList.add('collapsed');
+    }
+}
+
+function seleccionarBRMEdit(itemId, valor, seccionKey) {
+    planillaEstadoEdit[itemId] = valor;
+    
+    document.querySelectorAll(`.brm-btn[data-item-edit="${itemId}"]`).forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    document.querySelector(`.brm-btn[data-item-edit="${itemId}"][data-valor="${valor}"]`).classList.add('selected');
+    
+    actualizarPuntajeSeccionEdit(seccionKey);
+    actualizarPuntajeTotalEdit();
+}
+
+function actualizarPuntajeSeccionEdit(seccionKey) {
+    const seccion = PLANILLA[seccionKey];
+    let puntos = 0;
+    seccion.items.forEach(item => {
+        if (planillaEstadoEdit[item.id]) {
+            puntos += PUNTOS_BRM[planillaEstadoEdit[item.id]];
+        }
+    });
+    const max = seccion.items.length * 10;
+    document.getElementById('edit-puntos-' + seccionKey).textContent = `${puntos}/${max}`;
+}
+
+function actualizarPuntajeTotalEdit() {
+    let puntos = 0;
+    let max = 0;
+    Object.entries(PLANILLA).forEach(([key, seccion]) => {
+        max += seccion.items.length * 10;
+        seccion.items.forEach(item => {
+            if (planillaEstadoEdit[item.id]) {
+                puntos += PUNTOS_BRM[planillaEstadoEdit[item.id]];
+            }
+        });
+    });
+    const porcentaje = max > 0 ? Math.round((puntos / max) * 100) : 0;
+    document.getElementById('edit-puntaje-en-vivo').textContent = porcentaje + '%';
+}
+
+function agregarFotosEdit(input) {
+    Array.from(input.files).forEach(async (file) => {
+        const dataUrl = await comprimirImagen(file);
+        fotosCargadasEdit.push({ nombre: file.name, dataUrl });
+        actualizarPreviewFotosEdit();
+    });
+    input.value = '';
+}
+
+function agregarVideosEdit(input) {
+    Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            videosCargadosEdit.push({ nombre: file.name, dataUrl: e.target.result });
+            actualizarPreviewVideosEdit();
+        };
+        reader.readAsDataURL(file);
+    });
+    input.value = '';
+}
+
+function actualizarPreviewFotosEdit() {
+    const container = document.getElementById('edit-preview-fotos');
+    container.innerHTML = fotosCargadasEdit.map((f, i) => `
+        <div class="preview-foto">
+            <img src="${f.dataUrl}" alt="Foto ${i+1}">
+            <button type="button" class="remove-btn" onclick="quitarFotoEdit(${i})">×</button>
+        </div>
+    `).join('');
+    actualizarContadorMultimediaEdit();
+}
+
+function actualizarPreviewVideosEdit() {
+    const container = document.getElementById('edit-preview-videos');
+    container.innerHTML = videosCargadosEdit.map((v, i) => `
+        <div class="preview-foto" style="aspect-ratio: 16/9;">
+            <video src="${v.dataUrl}" muted></video>
+            <button type="button" class="remove-btn" onclick="quitarVideoEdit(${i})">×</button>
+        </div>
+    `).join('');
+    actualizarContadorMultimediaEdit();
+}
+
+function quitarFotoEdit(idx) {
+    fotosCargadasEdit.splice(idx, 1);
+    actualizarPreviewFotosEdit();
+}
+
+function quitarVideoEdit(idx) {
+    videosCargadosEdit.splice(idx, 1);
+    actualizarPreviewVideosEdit();
+}
+
+function actualizarContadorMultimediaEdit() {
+    document.getElementById('edit-contador-multimedia').textContent = 
+        `${fotosCargadasEdit.length} fotos · ${videosCargadosEdit.length} videos`;
+}
+
+function editarPeritaje(id) {
+    const p = peritajes.find(x => x.id === id);
+    if (!p) return;
+    
+    // Reset
+    planillaEstadoEdit = {};
+    fotosCargadasEdit = [];
+    videosCargadosEdit = [];
+    
+    // Cargar datos básicos
+    document.getElementById('edit-peritaje-id').value = p.id;
+    document.getElementById('edit-peritaje-marca').value = p.marca || '';
+    document.getElementById('edit-peritaje-modelo').value = p.modelo || '';
+    document.getElementById('edit-peritaje-dominio').value = p.dominio || '';
+    document.getElementById('edit-peritaje-cliente').value = p.cliente || '';
+    document.getElementById('edit-peritaje-km').value = p.km || '';
+    document.getElementById('edit-peritaje-vtv').value = p.vtv || '';
+    document.getElementById('edit-peritaje-mecanico').value = p.mecanico || '';
+    document.getElementById('edit-peritaje-fecha').value = p.fecha || '';
+    document.getElementById('edit-peritaje-sucursal').value = p.sucursal || 'bahia';
+    document.getElementById('edit-peritaje-unidad').value = p.unidad || 'usado';
+    
+    // Generar planilla y precargar valores
+    generarSeccionesPlanillaEdit();
+    
+    if (p.planilla) {
+        planillaEstadoEdit = { ...p.planilla };
+        // Marcar botones seleccionados
+        Object.entries(planillaEstadoEdit).forEach(([itemId, valor]) => {
+            const btn = document.querySelector(`.brm-btn[data-item-edit="${itemId}"][data-valor="${valor}"]`);
+            if (btn) btn.classList.add('selected');
+        });
+        // Actualizar puntajes de cada sección
+        Object.keys(PLANILLA).forEach(key => actualizarPuntajeSeccionEdit(key));
+    }
+    actualizarPuntajeTotalEdit();
+    
+    // Precargar fotos y videos
+    if (p.fotosData && p.fotosData.length > 0) {
+        fotosCargadasEdit = [...p.fotosData];
+        actualizarPreviewFotosEdit();
+    } else {
+        document.getElementById('edit-preview-fotos').innerHTML = '';
+    }
+    
+    if (p.videosData && p.videosData.length > 0) {
+        videosCargadosEdit = [...p.videosData];
+        actualizarPreviewVideosEdit();
+    } else {
+        document.getElementById('edit-preview-videos').innerHTML = '';
+    }
+    
+    actualizarContadorMultimediaEdit();
+    document.getElementById('modal-editar-peritaje').classList.add('active');
+}
+
+function guardarEdicionPeritaje() {
+    const id = parseInt(document.getElementById('edit-peritaje-id').value);
+    const idx = peritajes.findIndex(p => p.id === id);
+    if (idx === -1) return;
+    
+    // Calcular puntaje
+    let puntos = 0;
+    let max = 0;
+    Object.values(PLANILLA).forEach(seccion => {
+        seccion.items.forEach(item => {
+            max += 10;
+            if (planillaEstadoEdit[item.id]) {
+                puntos += PUNTOS_BRM[planillaEstadoEdit[item.id]];
+            }
+        });
+    });
+    const puntajeCalculado = max > 0 ? Math.round((puntos / max) * 100) : 0;
+    
+    peritajes[idx] = {
+        ...peritajes[idx],
+        marca: document.getElementById('edit-peritaje-marca').value,
+        modelo: document.getElementById('edit-peritaje-modelo').value,
+        dominio: document.getElementById('edit-peritaje-dominio').value.toUpperCase(),
+        cliente: document.getElementById('edit-peritaje-cliente').value,
+        km: parseInt(document.getElementById('edit-peritaje-km').value) || 0,
+        vtv: document.getElementById('edit-peritaje-vtv').value || null,
+        mecanico: document.getElementById('edit-peritaje-mecanico').value,
+        fecha: document.getElementById('edit-peritaje-fecha').value,
+        sucursal: document.getElementById('edit-peritaje-sucursal').value,
+        unidad: document.getElementById('edit-peritaje-unidad').value,
+        puntaje: puntajeCalculado,
+        fotos: fotosCargadasEdit.length,
+        videos: videosCargadosEdit.length,
+        fotosData: [...fotosCargadasEdit],
+        videosData: [...videosCargadosEdit],
+        planilla: { ...planillaEstadoEdit }
+    };
+    
+    guardar();
+    actualizarSelectMecanicos();
+    closeModalEditarPeritaje();
+    mostrarPeritajes();
+    actualizarDashboard();
+    alert(`✅ Peritaje actualizado\n\nPuntaje recalculado: ${puntajeCalculado}%`);
+}
+
+function closeModalEditarPeritaje() {
+    document.getElementById('modal-editar-peritaje').classList.remove('active');
+}
+
+function eliminarPeritaje(id) {
+    if (window.confirm('¿Eliminar peritaje?')) {
+        peritajes = peritajes.filter(p => p.id !== id);
+        guardar();
+        closeModal();
+        mostrarPeritajes();
+        actualizarDashboard();
+    }
+}
+
+function closeModal() {
+    document.getElementById('modal-peritaje').classList.remove('active');
+}
+
+function mostrarTurnos() {
+    const lista = document.getElementById('turnos-list');
+    let turnosAMostrar = turnos.filter(t => t.estado === 'pendiente');
+    
+    // Si es vendedor, solo ve los suyos
+    if (esVendedor) {
+        turnosAMostrar = turnosAMostrar.filter(t => t.vendedorEmail === usuarioActual.email);
+    }
+    
+    // Si es mecánico, mostrar también completados al final
+    let turnosCompletados = [];
+    if (esMecanico) {
+        turnosCompletados = turnos.filter(t => t.estado === 'completado')
+            .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora))
+            .slice(0, 10); // últimos 10
+    }
+    
+    if (turnosAMostrar.length === 0 && turnosCompletados.length === 0) {
+        lista.innerHTML = `<div style="color: #999;">${esVendedor ? 'No tenés turnos pendientes' : 'Sin turnos'}</div>`;
+        return;
+    }
+    
+    let html = '';
+    
+    // PENDIENTES
+    if (turnosAMostrar.length > 0) {
+        if (esMecanico) html += '<h3 style="margin-bottom: 12px; font-size: 14px; color: #f59e0b;">⏳ Pendientes</h3>';
+        html += turnosAMostrar.map(t => {
+            const detalleVehiculo = [t.version, t.anio, t.color].filter(Boolean).join(' · ');
+            return `
+            <div class="item">
+                <div class="item-content">
+                    <p class="title">${t.marca} ${t.modelo}</p>
+                    ${detalleVehiculo ? `<p style="font-size: 12px; color: #667eea; margin-bottom: 2px;">${detalleVehiculo}</p>` : ''}
+                    <p><strong>${t.cliente}</strong></p>
+                    <p>${t.fecha} - ${t.hora} | ${t.canal === '0km' ? '0 KM' : t.canal === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado'} | ${t.sucursal === 'bahia' ? 'Bahía Blanca' : t.sucursal === 'santa_rosa' ? 'Santa Rosa' : 'General Pico'}</p>
+                    ${!esVendedor && t.vendedorNombre ? `<p style="font-size: 11px; color: #667eea; margin-top: 4px;">👤 ${t.vendedorNombre}</p>` : ''}
+                </div>
+                <div class="item-actions">
+                    ${esMecanico ? `<button class="icon-btn edit" style="background: #d1fae5; color: #059669;" onclick="abrirModalCargarPeritaje(${t.id})">📋 Cargar Peritaje</button>` : ''}
+                    <button class="icon-btn edit" onclick="editarTurno(${t.id})">✏️ Editar</button>
+                    <button class="icon-btn delete" onclick="eliminarTurno(${t.id})">🗑️ Borrar</button>
+                </div>
+            </div>
+        `;
+        }).join('');
+    }
+    
+    // COMPLETADOS (solo mecánico)
+    if (esMecanico && turnosCompletados.length > 0) {
+        html += '<h3 style="margin: 24px 0 12px 0; font-size: 14px; color: #27ae60;">✅ Completados (últimos 10)</h3>';
+        html += turnosCompletados.map(t => `
+            <div class="item" style="border-left-color: #27ae60; opacity: 0.85;">
+                <div class="item-content">
+                    <p class="title">${t.marca} ${t.modelo}</p>
+                    <p><strong>${t.cliente}</strong></p>
+                    <p>${t.fecha} - ${t.hora} | ${t.canal === '0km' ? '0 KM' : t.canal === 'plan_ahorro' ? 'Plan Ahorro' : 'Usado'} | ${t.sucursal === 'bahia' ? 'Bahía Blanca' : t.sucursal === 'santa_rosa' ? 'Santa Rosa' : 'General Pico'}</p>
+                    ${t.peritajeId ? `<p style="font-size: 11px; color: #27ae60; margin-top: 4px; font-weight: 600;">📋 Peritaje #${t.peritajeId} cargado</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    lista.innerHTML = html;
+}
+
+function editarTurno(id) {
+    const t = turnos.find(x => x.id === id);
+    if (!t) return;
+    
+    // Vendedor solo puede editar sus propios turnos
+    if (esVendedor && t.vendedorEmail !== usuarioActual.email) {
+        alert('⛔ No podés editar turnos que no creaste');
+        return;
+    }
+    
+    document.getElementById('edit-turno-id').value = t.id;
+    document.getElementById('edit-turno-marca').value = t.marca || '';
+    document.getElementById('edit-turno-modelo').value = t.modelo || '';
+    document.getElementById('edit-turno-version').value = t.version || '';
+    document.getElementById('edit-turno-anio').value = t.anio || '';
+    document.getElementById('edit-turno-color').value = t.color || '';
+    document.getElementById('edit-turno-dominio').value = t.dominio || '';
+    document.getElementById('edit-turno-cliente').value = t.cliente || '';
+    document.getElementById('edit-turno-fecha').value = t.fecha || '';
+    document.getElementById('edit-turno-sucursal').value = t.sucursal || 'bahia';
+    document.getElementById('edit-turno-canal').value = t.canal || 'usado';
+    
+    actualizarHorasEditTurno();
+    document.getElementById('edit-turno-hora').value = t.hora;
+    
+    document.getElementById('modal-editar-turno').classList.add('active');
+}
+
+function actualizarHorasEditTurno() {
+    const sucursal = document.getElementById('edit-turno-sucursal').value;
+    const horarios = sucursal === 'bahia' ? horariosBahia : horariosProvincias;
+    const select = document.getElementById('edit-turno-hora');
+    const horaActual = select.value;
+    select.innerHTML = horarios.map(h => `<option value="${h}">${h}</option>`).join('');
+    if (horarios.includes(horaActual)) {
+        select.value = horaActual;
+    }
+}
+
+function guardarEdicionTurno() {
+    const id = parseInt(document.getElementById('edit-turno-id').value);
+    const idx = turnos.findIndex(t => t.id === id);
+    
+    if (idx === -1) return;
+    
+    turnos[idx] = {
+        ...turnos[idx],
+        marca: document.getElementById('edit-turno-marca').value,
+        modelo: document.getElementById('edit-turno-modelo').value,
+        version: document.getElementById('edit-turno-version').value,
+        anio: parseInt(document.getElementById('edit-turno-anio').value) || null,
+        color: document.getElementById('edit-turno-color').value,
+        dominio: document.getElementById('edit-turno-dominio').value.toUpperCase(),
+        cliente: document.getElementById('edit-turno-cliente').value,
+        fecha: document.getElementById('edit-turno-fecha').value,
+        hora: document.getElementById('edit-turno-hora').value,
+        sucursal: document.getElementById('edit-turno-sucursal').value,
+        canal: document.getElementById('edit-turno-canal').value
+    };
+    
+    guardar();
+    closeModalEditarTurno();
+    mostrarTurnos();
+    generarTurnero();
+    actualizarDashboard();
+    alert('✅ Turno actualizado');
+}
+
+function closeModalEditarTurno() {
+    document.getElementById('modal-editar-turno').classList.remove('active');
+}
+
+function eliminarTurno(id) {
+    const t = turnos.find(x => x.id === id);
+    if (!t) return;
+    
+    // Vendedor solo puede borrar sus propios turnos
+    if (esVendedor && t.vendedorEmail !== usuarioActual.email) {
+        alert('⛔ No podés borrar turnos que no creaste');
+        return;
+    }
+    
+    if (window.confirm('¿Eliminar turno?')) {
+        turnos = turnos.filter(t => t.id !== id);
+        guardar();
+        mostrarTurnos();
+        generarTurnero();
+        actualizarDashboard();
+    }
+}
+
+function mostrarUsuarios() {
+    const lista = document.getElementById('usuarios-list');
+    
+    const grupos = {
+        admin: { titulo: '👑 Administradores', color: '#764ba2', usuarios: [] },
+        vendedor: { titulo: '💼 Vendedores', color: '#667eea', usuarios: [] },
+        mecanico: { titulo: '🔧 Mecánicos', color: '#f59e0b', usuarios: [] }
+    };
+    
+    usuarios.forEach(u => {
+        if (grupos[u.rol]) grupos[u.rol].usuarios.push(u);
+    });
+    
+    let html = '';
+    Object.entries(grupos).forEach(([rol, grupo]) => {
+        html += `
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid ${grupo.color};">
+                    <h3 style="color: ${grupo.color}; margin: 0; font-size: 15px; font-weight: 700;">${grupo.titulo}</h3>
+                    <span style="background: ${grupo.color}; color: white; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">${grupo.usuarios.length}</span>
+                </div>
+                ${grupo.usuarios.length === 0 ? 
+                    `<p style="color: #ccc; font-size: 13px; padding: 8px 14px;">Sin usuarios en esta categoría</p>` :
+                    grupo.usuarios.map(u => `
+                        <div class="item" style="border-left-color: ${grupo.color};">
+                            <div class="item-content">
+                                <p class="title">${u.nombre}</p>
+                                <p>${u.email}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button class="icon-btn edit" onclick="editarUsuario(${u.id})">✏️ Editar</button>
+                                ${u.id !== usuarioActual.id ? `<button class="icon-btn delete" onclick="eliminarUsuario(${u.id})">🗑️</button>` : '<span style="font-size: 11px; color: #999; padding: 4px 8px; background: #f0f0f0; border-radius: 6px;">Tú</span>'}
+                            </div>
+                        </div>
+                    `).join('')
+                }
+            </div>
+        `;
+    });
+    
+    lista.innerHTML = html;
+}
+
+function editarUsuario(id) {
+    const u = usuarios.find(x => x.id === id);
+    if (!u) return;
+    
+    document.getElementById('edit-usuario-id').value = u.id;
+    document.getElementById('edit-usuario-nombre').value = u.nombre;
+    document.getElementById('edit-usuario-email').value = u.email;
+    document.getElementById('edit-usuario-password').value = '';
+    document.getElementById('edit-usuario-rol').value = u.rol;
+    
+    // Si es el usuario actual, no permitir cambiar el rol (para evitar que se quede sin admin)
+    const rolSelect = document.getElementById('edit-usuario-rol');
+    if (u.id === usuarioActual.id) {
+        rolSelect.disabled = true;
+        rolSelect.style.opacity = '0.5';
+    } else {
+        rolSelect.disabled = false;
+        rolSelect.style.opacity = '1';
+    }
+    
+    document.getElementById('modal-editar-usuario').classList.add('active');
+}
+
+function guardarEdicionUsuario() {
+    const id = parseInt(document.getElementById('edit-usuario-id').value);
+    const idx = usuarios.findIndex(u => u.id === id);
+    if (idx === -1) return;
+    
+    const nombre = document.getElementById('edit-usuario-nombre').value.trim();
+    const email = document.getElementById('edit-usuario-email').value.trim();
+    const password = document.getElementById('edit-usuario-password').value;
+    const rol = document.getElementById('edit-usuario-rol').value;
+    
+    if (!nombre || !email) {
+        alert('⚠️ Nombre y email son obligatorios');
+        return;
+    }
+    
+    // Verificar que el email no esté en uso por otro usuario
+    const emailEnUso = usuarios.find(u => u.email === email && u.id !== id);
+    if (emailEnUso) {
+        alert('⚠️ Ese email ya está en uso por otro usuario');
+        return;
+    }
+    
+    // Actualizar
+    usuarios[idx].nombre = nombre;
+    usuarios[idx].email = email;
+    if (password) {
+        usuarios[idx].password = password;
+    }
+    // Solo cambiar el rol si no es el usuario actual
+    if (id !== usuarioActual.id) {
+        usuarios[idx].rol = rol;
+    }
+    
+    // Si edité mi propio usuario, actualizar usuarioActual
+    if (id === usuarioActual.id) {
+        usuarioActual = { ...usuarios[idx] };
+        adaptarUIporRol();
+    }
+    
+    guardar();
+    closeModalEditarUsuario();
+    mostrarUsuarios();
+    alert('✅ Usuario actualizado');
+}
+
+function closeModalEditarUsuario() {
+    document.getElementById('modal-editar-usuario').classList.remove('active');
+}
+
+function crearUsuario() {
+    const nombre = document.getElementById('nuevo-nombre').value;
+    const email = document.getElementById('nuevo-email').value;
+    const password = document.getElementById('nuevo-password').value;
+    const rol = document.getElementById('nuevo-rol').value;
+    if (!nombre || !email || !password) {
+        alert('Completa todos los campos');
+        return;
+    }
+    usuarios.push({ id: Math.max(...usuarios.map(u => u.id), 0) + 1, nombre, email, password, rol });
+    guardar();
+    document.getElementById('nuevo-nombre').value = '';
+    document.getElementById('nuevo-email').value = '';
+    document.getElementById('nuevo-password').value = '';
+    mostrarUsuarios();
+    alert('✅ Usuario creado');
+}
+
+function eliminarUsuario(id) {
+    if (window.confirm('¿Eliminar usuario?')) {
+        usuarios = usuarios.filter(u => u.id !== id);
+        guardar();
+        mostrarUsuarios();
+    }
+}
+
+init();
+</script>
+
+</body>
+</html>
