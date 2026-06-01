@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grupo Resasco — Reporte Paid Media Meta · v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0e13;--bg2:#11141b;--card:#161a23;--card2:#1c212c;
+  --line:#262c38;--line2:#323a4a;
+  --txt:#e8ecf3;--txt2:#9aa3b2;--txt3:#646d7e;
+  --gold:#f0b429;--gold2:#f7c948;
+  --good:#2bb673;--bad:#e3514f;--warn:#f0883e;
+  --ford:#1b6ec2;--fiat:#d23f57;--vernon:#3a8dde;--jeep:#3aa564;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--txt);line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 0%,rgba(240,180,41,.05),transparent 35%),radial-gradient(circle at 88% 8%,rgba(27,110,194,.05),transparent 40%);background-attachment:fixed}
+.wrap{max-width:1300px;margin:0 auto;padding:32px 24px 80px}
+h1,h2,h3,h4{font-family:'Sora',sans-serif;font-weight:700;letter-spacing:-.02em}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+.hero{border:1px solid var(--line);border-radius:18px;padding:34px 36px;margin-bottom:24px;background:linear-gradient(135deg,#13171f,#0f1218);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ford),var(--fiat),var(--vernon),var(--jeep))}
+.hero .eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:38px;line-height:1.1;font-weight:800;margin-bottom:10px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--txt2);font-size:15px;max-width:700px}
+.hero-meta{display:flex;gap:28px;margin-top:22px;flex-wrap:wrap;font-size:12.5px;color:var(--txt3)}
+.hero-meta b{color:var(--txt)}
+
+.note{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line2);border-left:3px solid var(--good);background:rgba(43,182,115,.06);border-radius:10px;padding:14px 18px;margin-bottom:28px;font-size:13px;color:var(--txt2)}
+.note b{color:var(--txt)}.note .ic{font-size:16px;flex-shrink:0}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:30px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi .lbl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:9px}
+.kpi .val{font-family:'Sora';font-size:27px;font-weight:800;line-height:1}
+.kpi .sub{font-size:11.5px;color:var(--txt2);margin-top:7px}
+.kpi.gold .val{color:var(--gold)}.kpi.good .val{color:var(--good)}.kpi.warn .val{color:var(--warn)}.kpi.bad .val{color:var(--bad)}
+
+.sec{margin-bottom:36px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.sec-h h2{font-size:22px}
+.sec-h .tag{font-family:'IBM Plex Mono';font-size:11px;color:var(--gold);border:1px solid var(--line2);border-radius:20px;padding:3px 10px}
+.sec-sub{color:var(--txt2);font-size:13.5px;margin-bottom:18px;max-width:780px}
+
+.exec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px}
+.exec p{color:var(--txt2);font-size:14.5px;margin-bottom:14px}.exec p:last-child{margin-bottom:0}
+.exec strong{color:var(--txt);font-weight:600}.exec .hl{color:var(--gold);font-weight:600}
+
+.cmp-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.cmp-table th{text-align:left;padding:13px 16px;color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line2);font-weight:600}
+.cmp-table td{padding:13px 16px;border-bottom:1px solid var(--line)}
+.cmp-table tr:last-child td{border-bottom:0}
+.cmp-table tr:hover td{background:var(--card2)}
+.cmp-table .brand{font-weight:600;display:flex;align-items:center;gap:9px}
+.cmp-table .dot{width:9px;height:9px;border-radius:3px}
+.cmp-table .num{font-family:'IBM Plex Mono';font-weight:500}
+
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.chart-card h4{font-size:15px;margin-bottom:4px}
+.chart-card .csub{font-size:12px;color:var(--txt3);margin-bottom:18px}
+.chart-box{position:relative;height:280px}
+
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.tab{padding:11px 20px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--txt2);cursor:pointer;font-size:14px;font-weight:600;transition:.2s;font-family:'IBM Plex Sans'}
+.tab:hover{border-color:var(--line2);color:var(--txt)}
+.panel{display:none}.panel.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+
+.brand-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.brand-head h3{font-size:24px}
+.brand-head .soc{font-size:13px;color:var(--txt3);margin-top:3px}
+.brand-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.mini{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:15px}
+.mini .l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:7px}
+.mini .v{font-family:'Sora';font-size:21px;font-weight:700}
+.mini .v small{font-size:12px;color:var(--txt3);font-weight:400}
+
+.funnel{margin:24px 0}
+.funnel-h{font-size:13px;color:var(--txt2);margin-bottom:14px;font-weight:600}
+.fstage{display:flex;align-items:center;gap:16px;margin-bottom:10px}
+.fbar{height:46px;border-radius:8px;display:flex;align-items:center;padding:0 18px;color:#fff;font-weight:600;font-size:13px;transition:.3s;min-width:140px}
+.fmeta{font-size:12px;color:var(--txt2)}
+.fmeta b{color:var(--txt)}
+
+.camp-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+.camp-table th{text-align:left;padding:9px 11px;color:var(--txt3);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line2);font-weight:600}
+.camp-table td{padding:10px 11px;border-bottom:1px solid var(--line)}
+.camp-table tr:hover td{background:var(--card2)}
+.camp-table .cn{font-weight:500;font-family:'IBM Plex Mono';font-size:12px}
+.camp-table .num{font-family:'IBM Plex Mono'}
+.stage-pill{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em}
+.s-tof{background:rgba(58,141,222,.15);color:#6cb0ed}
+.s-leads{background:rgba(240,180,41,.13);color:var(--gold2)}
+.s-eng{background:rgba(43,182,115,.13);color:#4cd595}
+.freq-ok{color:var(--good)}.freq-warn{color:var(--warn)}.freq-bad{color:var(--bad);font-weight:600}
+.cpl-good{color:var(--good);font-weight:600}.cpl-bad{color:var(--bad);font-weight:600}
+
+.hooks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.hook-col{border:1px solid var(--line);border-radius:11px;padding:18px;background:var(--card2)}
+.hook-col h5{font-size:12.5px;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-family:'Sora'}
+.hook{font-size:12.5px;color:var(--txt2);padding:7px 0;border-bottom:1px solid var(--line);display:flex;gap:8px}
+.hook:last-child{border:0}
+.hook .dot{flex-shrink:0;margin-top:6px;width:6px;height:6px;border-radius:50%}
+.hook b{color:var(--txt);font-weight:600}
+
+.insight{background:linear-gradient(135deg,rgba(240,180,41,.07),transparent);border:1px solid var(--line2);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;margin-top:20px;font-size:13px;color:var(--txt2)}
+.insight b{color:var(--gold)}
+
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.finding{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px;border-top:3px solid var(--warn)}
+.finding.crit{border-top-color:var(--bad)}.finding.opp{border-top-color:var(--good)}
+.finding h4{font-size:14px;margin-bottom:8px;display:flex;gap:8px;align-items:center}
+.finding p{font-size:12.5px;color:var(--txt2);margin-bottom:8px}
+.finding .ev{font-size:11px;font-family:'IBM Plex Mono';color:var(--txt3)}
+
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.step-col h4{font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin-bottom:12px;display:flex;gap:14px}
+.step-num{font-family:'Sora';font-weight:800;font-size:18px;color:var(--gold);flex-shrink:0;width:24px}
+.step-b .st{font-weight:600;font-size:13.5px;margin-bottom:3px}
+.step-b .sd{font-size:12.5px;color:var(--txt2)}
+.step .imp{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:5px;margin-top:7px;display:inline-block}
+.imp.alta{background:rgba(227,81,79,.15);color:#f07b79}.imp.media{background:rgba(240,136,62,.15);color:var(--warn)}
+
+footer{text-align:center;color:var(--txt3);font-size:12px;margin-top:50px;padding-top:24px;border-top:1px solid var(--line)}
+
+/* canales */
+.canal-cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:8px 0 22px}
+.canal-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--card2);border-top:3px solid var(--line2)}
+.canal-card.pa{border-top-color:#9b6ad6}
+.canal-card.conv{border-top-color:#3a8dde}
+.canal-card.usados{border-top-color:#f0b429}
+.canal-card.fordpro{border-top-color:#2bb673}
+.canal-card .ch{font-family:'Sora';font-size:14px;font-weight:700;margin-bottom:3px}
+.canal-card .csub2{font-size:10.5px;color:var(--txt3);margin-bottom:13px}
+.canal-card .crow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--line)}
+.canal-card .crow:last-child{border:0}
+.canal-card .crow .k{color:var(--txt3)}
+.canal-card .crow .v{font-family:'IBM Plex Mono';font-weight:500}
+.subtabs{display:flex;gap:7px;margin:18px 0 4px;flex-wrap:wrap}
+.subtab{font-size:12px;padding:6px 13px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--txt2);cursor:pointer;font-family:'IBM Plex Sans';font-weight:500}
+.subtab.active{background:var(--card2);color:var(--txt);border-color:var(--line2)}
+.canal-h{font-size:13px;color:var(--txt2);font-weight:600;margin:24px 0 4px}
+.tbl-scroll{overflow-x:auto}
+.camp-table .obs{font-size:11px;line-height:1.35;white-space:normal;min-width:200px;max-width:280px}
+.obs-bad{color:#f07b79}.obs-warn{color:#f0a85e}.obs-ok{color:var(--txt3)}
+.obs b{font-weight:600}
+.ads-toggle{margin-top:22px;width:100%;text-align:left;padding:13px 18px;border:1px solid var(--line2);border-radius:10px;background:var(--card2);color:var(--txt);cursor:pointer;font-family:'Sora';font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;transition:.2s}
+.ads-toggle:hover{border-color:var(--gold);background:var(--card)}
+.ads-toggle .arr{transition:transform .2s;color:var(--gold)}
+.ads-toggle.open .arr{transform:rotate(90deg)}
+.ads-toggle .cnt{margin-left:auto;font-size:11px;color:var(--txt3);font-weight:400}
+.ads-detail{margin-top:12px;animation:fade .3s}
+.ads-note{font-size:11.5px;color:var(--txt3);margin:6px 2px 12px}
+.camp-table .canal-row td{background:rgba(240,180,41,.07);color:var(--gold2);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:8px 11px;border-bottom:1px solid var(--line2)}
+.camp-table .zona-row td{background:rgba(120,140,255,.13);color:#aab6ff;font-size:11.5px;border-top:2px solid rgba(120,140,255,.3)}
+
+@media(max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .chart-grid,.hooks,.steps{grid-template-columns:1fr}
+  .findings{grid-template-columns:1fr}
+  .brand-mini{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:28px}
+  .cmp-table{font-size:12px}.cmp-table th,.cmp-table td{padding:9px 8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Reporte de Performance · Paid Media · v2 con datos reales</div>
+    <h1>Meta Ads — <span>Grupo Resasco</span></h1>
+    <p>Análisis con métricas reales: inversión, leads, costo por lead, frecuencia y funnel completo (awareness → conversión) de las 4 sociedades. Con una pestaña dedicada por marca. Preparado para revisión de gerencia.</p>
+    <div class="hero-meta">
+      <div>Período: <b>1–30 mayo 2026</b></div>
+      <div>Cuentas: <b>4 activas</b></div>
+      <div>Moneda: <b>ARS</b></div>
+      <div>Generado: <b>31 mayo 2026</b></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="ic">✅</span>
+    <div><b>Datos reales.</b> Esta versión incluye <b>inversión, leads, costo por lead (CPL), frecuencia, CTR y CPM reales</b> a nivel campaña, extraídos directamente de Meta. El CPL se basa en el costo por resultado de cada campaña. La única salvedad: los leads se miden por el evento de Meta (formularios/conversaciones), que puede diferir levemente de los leads cargados en Pilot CRM por atribución y ventana temporal.</div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Resumen ejecutivo</h2><span class="tag">para gerencia</span></div>
+    <div class="exec" id="exec"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Comparativa de cuentas</h2><span class="tag">eficiencia real</span></div>
+    <div class="sec-sub">Ranking por eficiencia. El CPL mostrado es el promedio ponderado de las campañas de generación de leads de cada cuenta. La frecuencia es clave: por encima de 4–5, la misma persona ve el aviso demasiadas veces (saturación) y el costo sube.</div>
+    <div class="tbl-scroll"><table class="cmp-table" id="cmpTable"></table></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Lectura visual</h2><span class="tag">comparativo</span></div>
+    <div class="chart-grid">
+      <div class="chart-card"><h4>Inversión vs. Leads por marca</h4><div class="csub">Dónde va la plata y cuántos leads trae</div><div class="chart-box"><canvas id="spendLeads"></canvas></div></div>
+      <div class="chart-card"><h4>CPL y Frecuencia por marca</h4><div class="csub">Costo por lead (barras) y saturación (línea)</div><div class="chart-box"><canvas id="cplFreq"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Análisis por marca</h2><span class="tag">funnel + creatividades</span></div>
+    <div class="sec-sub">Cada marca con su embudo (awareness → conversión), el detalle de campañas con CPL y frecuencia real, y el análisis de qué hooks creativos funcionan. La tabla descompone el CPL en sus 3 palancas: <b>CTR</b> (¿el aviso engancha?), <b>CVR</b> (¿el que clickea deja el dato?) y <b>CPM</b> (¿cuánto cuesta mostrarlo?). Un CPL malo siempre se explica por una de las tres.</div>
+    <div class="tabs" id="brandTabs"></div>
+    <div id="brandPanels"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Hallazgos transversales</h2><span class="tag">lo que mueve la aguja</span></div>
+    <div class="findings">
+      <div class="finding crit">
+        <h4>🔴 Saturación de frecuencia</h4>
+        <p>Vernon, Génova y el TOF de Resasco muestran el mismo aviso 5 a 7 veces por persona. Como la segmentación es solo por zona, el pozo ya está al máximo: la solución no es ampliar audiencia, es rotar creatividades y revisar si la inversión supera el techo de la zona.</p>
+        <p class="ev">Vernon CONV: freq 6,61 · CPL $20.126<br>Génova CONVE: freq 5,12 · CPL $18.625<br>Resasco TOF: freq 7,00</p>
+      </div>
+      <div class="finding opp">
+        <h4>🟢 Usados = oro</h4>
+        <p>Las campañas de usados tienen, lejos, el CPL más bajo del grupo. Hay margen para escalarlas fuerte.</p>
+        <p class="ev">Usados Ford: CPL $3.400 (CTR 3,24%)<br>Usados Génova: CPL $3.985<br>vs. CPL promedio grupo ~$11.000</p>
+      </div>
+      <div class="finding">
+        <h4>🟠 "PA" vs "CONV" no es parejo</h4>
+        <p>El plan de ahorro (PA) y la venta convencional rinden distinto según la marca. No hay una regla única: hay que asignar presupuesto caso por caso.</p>
+        <p class="ev">Vernon: PA $4.979 vs CONV $20.126<br>Ford: CONV $6.873 mejor que PA $13.395</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Próximos pasos</h2><span class="tag">roadmap</span></div>
+      <div class="steps">
+      <div class="step-col">
+        <h4>⚡ Quick wins (esta semana)</h4>
+        <div class="step"><div class="step-num">1</div><div class="step-b"><div class="st">Bajar frecuencia en Vernon y Génova</div><div class="sd">Como el mercado es fijo por zona, no se amplía audiencia: se rotan más creatividades para repartir la exposición. Objetivo: frecuencia bajo 4. Impacto directo en CPL.</div><span class="imp alta">impacto alto</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-b"><div class="st">Escalar campañas de usados</div><div class="sd">Son el CPL más bajo del grupo. Subir presupuesto en Ford y Génova, evaluar replicar en Vernon y Resasco.</div><span class="imp alta">impacto alto</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-b"><div class="st">Revisar "Feria Usados" (Ford)</div><div class="sd">CPL $22.657, el peor del grupo. Pausar o rehacer.</div><span class="imp media">impacto medio</span></div></div>
+      </div>
+      <div class="step-col">
+        <h4>🎯 Estratégico (este mes)</h4>
+        <div class="step"><div class="step-num">4</div><div class="step-b"><div class="st">Renovar lote creativo de Vernon</div><div class="sd">Mayor concentración de baja calidad + frecuencia más alta = combinación que infla el costo. Es la cuenta prioritaria.</div><span class="imp alta">impacto alto</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-b"><div class="st">Replicar hooks ganadores entre marcas</div><div class="sd">Independencia (Fiorino), entrega inmediata (Dakota) y prueba social (Compass) a todas las marcas.</div><span class="imp media">impacto medio</span></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-b"><div class="st">Cruzar CPL de Meta con cierres de Pilot CRM</div><div class="sd">Saber no solo el costo por lead, sino el costo por lead que efectivamente convierte en venta. Ahí está el verdadero ROI.</div><span class="imp media">siguiente nivel</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Grupo Resasco · Reporte de Paid Media con datos reales de Meta Ads · 1–30 mayo 2026 · Confidencial · Las recomendaciones no fueron ejecutadas sobre las cuentas</footer>
+</div>
+
+<script>
+// ===== DATA REAL (Meta Ads, 1-30 may 2026) =====
+const BR = [
+  {key:'ford',marca:'Ford',soc:'Guspamar',color:'#1b6ec2',prioridad:'Prioridad 1',
+   camps:[
+     {n:'GUS|PA|MOFyBOF|BB',st:'leads',spend:3113910,leads:263,cpl:11840,freq:3.50,ctr:1.17,cpm:4140,reach:215027},
+     {n:'GUS|PA|MOFyBOF|LP',st:'leads',spend:2863264,leads:222,cpl:12898,freq:3.52,ctr:1.19,cpm:3756,reach:216693},
+     {n:'GUS|CONV|MOFyBOF|LP',st:'leads',spend:2803986,leads:280,cpl:10014,freq:4.60,ctr:0.79,cpm:3872,reach:157497},
+     {n:'GUS|CONV|MOFyBOF|BB',st:'leads',spend:2774052,leads:330,cpl:8406,freq:4.27,ctr:1.10,cpm:4348,reach:149361},
+     {n:'FORDPRO/BOF',st:'leads',spend:1072170,leads:134,cpl:8001,freq:3.05,ctr:1.21,cpm:2747,reach:127866},
+     {n:'GUS|PA|Neu+Rn',st:'leads',spend:924287,leads:69,cpl:13395,freq:2.90,ctr:1.08,cpm:4471,reach:71386},
+     {n:'GUS|CONV|Neu+Rn',st:'leads',spend:920967,leads:134,cpl:6873,freq:3.65,ctr:1.08,cpm:5386,reach:46791},
+     {n:'USADOS/BOF',st:'leads',spend:741137,leads:218,cpl:3400,freq:3.49,ctr:3.24,cpm:4939,reach:43028},
+     {n:'FERIA USADOS',st:'leads',spend:725008,leads:32,cpl:22657,freq:4.83,ctr:1.51,cpm:3766,reach:39873},
+     {n:'GUS|TOF',st:'tof',spend:1352389,reach:1385278,freq:3.90,ctr:0.12,cpm:250},
+     {n:'USADOS/TOF/BB',st:'tof',spend:298199,reach:586226,freq:3.48,ctr:0.09,cpm:146},
+     {n:'QUICK-ALCANCE-BB',st:'tof',spend:269755,reach:648081,freq:1.57,ctr:0.13,cpm:265},
+     {n:'FORDPRO/TOF',st:'tof',spend:121388,reach:136442,freq:2.10,ctr:2.13,cpm:424},
+     {n:'QUICK-BB',st:'eng',spend:297110,reach:15990,freq:2.81,ctr:4.40,cpm:6610},
+   ],
+   hooksGood:[['Ranger XL/LP','el caballito, CTR +178%'],['Carrusel nuevas Ranger','formato que rankea alto'],['Transit 3 razones','financiación nueva'],['Tasa 0 explicada','número claro convierte']],
+   hooksBad:[['Comparativa vs Amarok','baja calidad, no engancha'],['"La mejor de 2026"','clickbait, no convierte'],['Feria Usados','CPL $22.657, el peor']],
+   insight:'Ford es el motor del grupo: 9 campañas de leads + funnel completo. Los usados rinden 3x mejor que el promedio. El ángulo "comparativa Amarok" hay que enterrarlo.'},
+
+  {key:'fiat',marca:'Fiat',soc:'Génova',color:'#d23f57',prioridad:'Variable',
+   camps:[
+     {n:'GEN/CONVE/MOFyBOF',st:'leads',spend:3296568,leads:177,cpl:18625,freq:5.12,ctr:0.92,cpm:3506,reach:183548},
+     {n:'GEN|PA|MOFyBOF',st:'leads',spend:2199995,leads:180,cpl:12222,freq:5.50,ctr:0.63,cpm:2764,reach:144781},
+     {n:'USADOS-GENOVA-LP',st:'leads',spend:286936,leads:72,cpl:3985,freq:2.67,ctr:1.80,cpm:2626,reach:40889},
+     {n:'GEN|TOF',st:'tof',spend:601121,reach:436117,freq:2.01,ctr:2.12,cpm:684},
+   ],
+   hooksGood:[['Fiorino "dejá de depender"','CVR +255%, el mejor del grupo'],['Cronos 90/10','financiación clara'],['Usados Génova','CPL $3.985'],['Carrusel Titano','calidad sobre promedio']],
+   hooksBad:[['MOBI "the office"','baja calidad'],['Cronos (6 variantes)','sobre-explotado, satura'],['Strada / VIDEO PEQUE','no traccionan']],
+   insight:'Fiat tiene un problema de frecuencia (5,12 y 5,50): le está hablando demasiado a la misma gente. Como la zona es fija, la salida no es ampliar audiencia sino rotar más creatividades y revisar si la inversión supera lo que su mercado puede absorber (CPL $18.625 en la principal lo sugiere). El hook "independencia" (Fiorino) es oro: replicarlo.'},
+
+  {key:'vernon',marca:'Peugeot / Citroën',soc:'Vernon',color:'#3a8dde',prioridad:'Variable',
+   camps:[
+     {n:'VER|CONV|MOFyBOF',st:'leads',spend:3824026,leads:190,cpl:20126,freq:6.61,ctr:0.64,cpm:3611,reach:160272},
+     {n:'VER/PA/BOF',st:'leads',spend:2539478,leads:510,cpl:4979,freq:5.84,ctr:0.55,cpm:1380,reach:314928},
+     {n:'VER|TOF',st:'tof',spend:707339,reach:225485,freq:4.29,ctr:1.49,cpm:732},
+   ],
+   hooksGood:[['Peugeot 208 "beneficios"','tendencia al alza'],['208/2008 100% financiado','el plan vende'],['"Esa es tu primera cuota"','engancha en CTR']],
+   hooksBad:[['Citroën C4 híbrido','CTR -94%, no tracciona'],['Calidad creativa general','mayoría bottom 35%'],['208 cuotas $167.874','no engancha']],
+   insight:'Vernon es la cuenta a intervenir primero. Combina la frecuencia más alta del grupo (6,61), el peor CPL ($20.126 en CONV) y la calidad creativa más baja. PERO la campaña PA es eficientísima (510 leads a $4.979): el problema está concentrado en CONV. Mover presupuesto de CONV a PA + renovar creatividades.'},
+
+  {key:'jeep',marca:'Jeep / RAM',soc:'Resasco',color:'#3aa564',prioridad:'Variable',
+   camps:[
+     {n:'RES|CONV|MOFyBOF',st:'leads',spend:3394697,leads:304,cpl:11167,freq:3.84,ctr:1.52,cpm:4834,reach:182879},
+     {n:'RES|PA|MOFyBOF',st:'leads',spend:2249967,leads:148,cpl:15202,freq:3.46,ctr:0.88,cpm:5166,reach:126038},
+     {n:'RES|TOF',st:'tof',spend:630345,reach:153494,freq:7.00,ctr:1.82,cpm:587},
+   ],
+   hooksGood:[['Dakota "entrega inmediata"','CVR +225%'],['Compass "la que más eligen"','CVR +142%, prueba social'],['Video familia pick-ups','CTR +126%']],
+   hooksBad:[['"Tarjeta de crédito"','todas caen (Rampage/Renegade)'],['Rampage (todo)','producto/audiencia a revisar'],['Frecuencia TOF 7,00','saturación extrema']],
+   insight:'Resasco tiene la mejor calidad creativa y CTR sólido (1,52%), pero su campaña TOF satura fuerte (freq 7,00). El producto Rampage no tracciona en ningún ángulo. "Entrega inmediata" y "prueba social" son los hooks a escalar en pick-ups premium.'},
+];
+
+const $=s=>document.querySelector(s);
+const fmtM=n=>'$'+(n/1e6).toFixed(1)+'M';
+const fmtK=n=>n>=1e6?(n/1e6).toFixed(1)+'M':(n/1e3).toFixed(0)+'k';
+const fmtPeso=n=>'$'+n.toLocaleString('es-AR');
+const stageName={tof:'Awareness',leads:'Leads',eng:'Engagement'};
+
+// CVR y link clicks por campaña (definidos arriba para calcular agregados por marca)
+const CVR={"GUS|PA|MOFyBOF|BB":5.8,"GUS|PA|MOFyBOF|LP":4.5,"GUS|CONV|MOFyBOF|LP":8.7,"GUS|CONV|MOFyBOF|BB":9.5,"FORDPRO/BOF":4.1,"GUS|PA|Neu+Rn":6.2,"GUS|CONV|Neu+Rn":14.0,"USADOS/BOF":8.0,"FERIA USADOS":1.6,"GEN/CONVE/MOFyBOF":3.9,"GEN|PA|MOFyBOF":6.7,"USADOS-GENOVA-LP":5.5,"VER|CONV|MOFyBOF":5.1,"VER/PA/BOF":9.2,"RES|CONV|MOFyBOF":6.1,"RES|PA|MOFyBOF":8.0};
+const CLK={"GUS|PA|MOFyBOF|BB":4544,"GUS|PA|MOFyBOF|LP":4970,"GUS|CONV|MOFyBOF|LP":3235,"GUS|CONV|MOFyBOF|BB":3470,"FORDPRO/BOF":3290,"GUS|PA|Neu+Rn":1115,"GUS|CONV|Neu+Rn":954,"USADOS/BOF":2719,"FERIA USADOS":1989,"GEN/CONVE/MOFyBOF":4563,"GEN|PA|MOFyBOF":2671,"USADOS-GENOVA-LP":1310,"VER|CONV|MOFyBOF":3719,"VER/PA/BOF":5571,"RES|CONV|MOFyBOF":4977,"RES|PA|MOFyBOF":1851};
+
+// agregados por marca
+BR.forEach(b=>{
+  const leadC=b.camps.filter(c=>c.st==='leads');
+  b.spend=b.camps.reduce((s,c)=>s+c.spend,0);
+  b.leads=leadC.reduce((s,c)=>s+c.leads,0);
+  b.leadSpend=leadC.reduce((s,c)=>s+c.spend,0);
+  b.cpl=Math.round(b.leadSpend/b.leads);
+  b.freq=(leadC.reduce((s,c)=>s+c.freq*c.spend,0)/b.leadSpend); // ponderada por spend
+  b.cpmLead=leadC.reduce((s,c)=>s+c.cpm*c.spend,0)/b.leadSpend;   // CPM ponderado (solo leads)
+  b.ctrLead=leadC.reduce((s,c)=>s+c.ctr*c.spend,0)/b.leadSpend;   // CTR ponderado
+  const clkTot=leadC.reduce((s,c)=>s+(CLK[c.n]||0),0);
+  b.cvrLead=clkTot?(b.leads/clkTot*100):0;                        // CVR = leads/clics
+  b.tofSpend=b.camps.filter(c=>c.st==='tof').reduce((s,c)=>s+c.spend,0);
+});
+
+// ===== KPIs grupo =====
+const G={spend:BR.reduce((s,b)=>s+b.spend,0),leads:BR.reduce((s,b)=>s+b.leads,0)};
+G.leadSpend=BR.reduce((s,b)=>s+b.leadSpend,0);
+G.cpl=Math.round(G.leadSpend/G.leads);
+G.freq=(BR.reduce((s,b)=>s+b.freq*b.leadSpend,0)/G.leadSpend);
+G.tofShare=Math.round(BR.reduce((s,b)=>s+b.tofSpend,0)/G.spend*100);
+$('#kpis').innerHTML=`
+  <div class="kpi gold"><div class="lbl">Inversión total</div><div class="val">${fmtM(G.spend)}</div><div class="sub">ARS · 4 cuentas · 30 días</div></div>
+  <div class="kpi good"><div class="lbl">Leads generados</div><div class="val">${G.leads.toLocaleString('es-AR')}</div><div class="sub">vía formularios y conversaciones</div></div>
+  <div class="kpi"><div class="lbl">CPL promedio</div><div class="val">${fmtPeso(G.cpl)}</div><div class="sub">ponderado por inversión</div></div>
+  <div class="kpi ${G.freq>=4.5?'bad':G.freq>=4?'warn':'good'}"><div class="lbl">Frecuencia prom.</div><div class="val">${G.freq.toFixed(1)}</div><div class="sub">veces que se ve el aviso</div></div>
+  <div class="kpi"><div class="lbl">Inversión en awareness</div><div class="val">${G.tofShare}%</div><div class="sub">tope de funnel (TOF)</div></div>`;
+
+// ===== EXEC =====
+const best=[...BR].sort((a,b)=>a.cpl-b.cpl)[0], worst=[...BR].sort((a,b)=>b.cpl-a.cpl)[0];
+$('#exec').innerHTML=`
+  <p>En mayo el grupo invirtió <strong>${fmtM(G.spend)} ARS</strong> en Meta y generó <strong>${G.leads.toLocaleString('es-AR')} leads</strong>, con un <span class="hl">CPL promedio de ${fmtPeso(G.cpl)}</span>. La estructura de funnel está bien armada en las 4 cuentas: invierten en awareness (${G.tofShare}% del total) y en generación de leads, en ese orden.</p>
+  <p>El hallazgo más accionable es la <span class="hl">frecuencia de saturación</span>. Varias campañas le muestran el mismo aviso a la misma persona <strong>5 a 7 veces</strong> (Vernon 6,6 · Génova 5,5 · TOF de Resasco 7,0). Como la segmentación es solo por zona de influencia, el pozo de audiencia ya está al máximo: la solución no es ampliar audiencia, sino <strong>rotar más creatividades</strong> para repartir la exposición y <strong>revisar si la inversión supera el techo de cada zona</strong> (a más plata sobre un mercado finito, más frecuencia y CPL, sin leads incrementales). Es la palanca de mayor impacto inmediato.</p>
+  <p>Hay una <span class="hl">brecha de eficiencia enorme entre campañas</span>: el mejor CPL del grupo es de los <strong>usados (~$3.400–$3.985)</strong> y de <strong>Vernon PA ($4.979)</strong>; el peor llega a <strong>$20.126 (Vernon CONV)</strong> y <strong>$22.657 (Feria Usados Ford)</strong>. Reasignar plata de lo caro a lo eficiente mejora el resultado sin gastar un peso más.</p>
+  <p>Por marca, <strong>${best.marca} es el más eficiente</strong> (CPL ${fmtPeso(best.cpl)}) y <strong>${worst.marca} el que más oportunidad de mejora tiene</strong> (CPL ${fmtPeso(worst.cpl)}, con la frecuencia más alta). La buena noticia: en Vernon el problema está concentrado en una campaña (CONV), mientras su campaña PA es de las más eficientes del grupo.</p>`;
+
+// ===== CMP TABLE =====
+const rankBr=[...BR].sort((a,b)=>a.cpl-b.cpl);
+$('#cmpTable').innerHTML=`
+  <thead><tr><th>Marca</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>CTR</th><th>CVR</th><th>CPM</th><th>Frecuencia</th><th>% awareness</th></tr></thead>
+  <tbody>${rankBr.map(b=>{
+    const fc=b.freq>=5?'freq-bad':b.freq>=4?'freq-warn':'freq-ok';
+    const cc=b.cpl<=8000?'cpl-good':b.cpl>=15000?'cpl-bad':'';
+    const cpmc=b.cpmLead>=4800?'cpl-bad':b.cpmLead<=2500?'cpl-good':'';
+    const cvrc=b.cvrLead>=8?'cpl-good':b.cvrLead<=4?'cpl-bad':'';
+    return `<tr>
+      <td><div class="brand"><span class="dot" style="background:${b.color}"></span>${b.marca}<span style="color:var(--txt3);font-weight:400">· ${b.soc}</span></div></td>
+      <td class="num">${fmtM(b.spend)}</td>
+      <td class="num">${b.leads.toLocaleString('es-AR')}</td>
+      <td class="num ${cc}">${fmtPeso(b.cpl)}</td>
+      <td class="num">${b.ctrLead.toFixed(2)}%</td>
+      <td class="num ${cvrc}">${b.cvrLead.toFixed(1)}%</td>
+      <td class="num ${cpmc}">${fmtPeso(Math.round(b.cpmLead))}</td>
+      <td class="num ${fc}">${b.freq.toFixed(1)}</td>
+      <td class="num">${Math.round(b.tofSpend/b.spend*100)}%</td>
+    </tr>`;}).join('')}</tbody>`;
+
+// ===== CHARTS =====
+Chart.defaults.color='#9aa3b2';Chart.defaults.font.family="'IBM Plex Sans',sans-serif";Chart.defaults.borderColor='#262c38';
+new Chart($('#spendLeads'),{
+  data:{labels:BR.map(b=>b.marca.split(' ')[0]),
+    datasets:[
+      {type:'bar',label:'Inversión (M ARS)',data:BR.map(b=>+(b.spend/1e6).toFixed(1)),backgroundColor:BR.map(b=>b.color),yAxisID:'y',borderRadius:4},
+      {type:'line',label:'Leads',data:BR.map(b=>b.leads),borderColor:'#f0b429',backgroundColor:'#f0b429',yAxisID:'y1',tension:.3,pointRadius:5,pointBackgroundColor:'#f0b429'},
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{position:'left',grid:{color:'#1c212c'},title:{display:true,text:'M ARS'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'Leads'}},x:{grid:{display:false}}},
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14,font:{size:11}}}}}
+});
+new Chart($('#cplFreq'),{
+  data:{labels:BR.map(b=>b.marca.split(' ')[0]),
+    datasets:[
+      {type:'bar',label:'CPL (ARS)',data:BR.map(b=>b.cpl),backgroundColor:BR.map(b=>b.cpl>=15000?'#e3514f':b.cpl<=8000?'#2bb673':'#5b6678'),yAxisID:'y',borderRadius:4},
+      {type:'line',label:'Frecuencia',data:BR.map(b=>+b.freq.toFixed(1)),borderColor:'#f0883e',backgroundColor:'#f0883e',yAxisID:'y1',tension:.3,pointRadius:5},
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{position:'left',grid:{color:'#1c212c'},title:{display:true,text:'CPL ARS'}},y1:{position:'right',min:0,max:8,grid:{display:false},title:{display:true,text:'Frecuencia'}},x:{grid:{display:false}}},
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14,font:{size:11}}}}}
+});
+
+// clasificación de canal por nombre de campaña
+function getCanal(c){
+  if(c.st==='tof')return 'awareness';
+  if(c.st==='eng')return 'otros';
+  const n=c.n.toUpperCase();
+  if(n.includes('USADO')||n.includes('FERIA'))return 'usados';
+  if(n.includes('FORDPRO'))return 'fordpro';
+  if(n.includes('CONV'))return 'conv';
+  if(/\bPA\b|\|PA\||\/PA\/|GUS\|PA/.test(n)||n.includes('|PA|')||n.includes('/PA/'))return 'pa';
+  return 'otros';
+}
+const CANAL_INFO={
+  pa:{label:'Plan de Ahorro',sub:'Compra en cuotas sin interés',cls:'pa'},
+  conv:{label:'Convencional',sub:'Venta directa / financiación',cls:'conv'},
+  usados:{label:'Usados',sub:'Vehículos usados',cls:'usados'},
+  fordpro:{label:'Ford Pro',sub:'Comerciales / empresas',cls:'fordpro'},
+};
+
+// ===== DIAGNÓSTICO: observación accionable solo para campañas flojas =====
+// El CPL es resultado de CPM, CTR y CVR. Si una campaña está floja, se detecta
+// cuál palanca falla y se recomienda la acción. Las eficientes no llevan observación.
+function diagnose(c){
+  // Awareness: solo alertar si hay saturación fuerte
+  if(c.st==='tof'){
+    if(c.freq>=5) return {sev:'warn',txt:`<b>Frecuencia ${c.freq.toFixed(1)} en awareness:</b> poné un límite de frecuencia (cap) para no quemar la audiencia.`};
+    return null;
+  }
+  if(c.st!=='leads') return null;
+  const cvr=CVR[c.n];
+  // floja si: CPL alto, saturada, O CPM caro con CPL no-excelente
+  const needsObs = c.cpl>=12000 || c.freq>=5 || (c.cpm>=4800 && c.cpl>=9000);
+  if(!needsObs) return null;                      // está OK → sin observación
+  // CPL excelente pero saturándose: alerta preventiva, no criticar creatividad
+  if(c.cpl<=8000 && c.freq>=5){
+    return {sev:'warn',txt:`<b>CPL excelente, pero freq ${c.freq.toFixed(1)}:</b> rotá creatividades para sostenerlo antes de que la saturación lo encarezca.`};
+  }
+  const causes=[];
+  if(c.freq>=5)              causes.push(`<b>Saturación (freq ${c.freq.toFixed(1)}):</b> repetir el aviso infla el CPM (${fmtPeso(c.cpm)}) — rotá creatividades`);
+  if(c.cpm>=4300 && c.freq<5)causes.push(`<b>CPM alto (${fmtPeso(c.cpm)}):</b> no es saturación (freq ok) — audiencia premium/cara o aviso poco relevante; mejorá la creatividad`);
+  if(cvr!=null && cvr<=4.5)  causes.push(`<b>CVR bajo (${cvr}%):</b> clickean pero no dejan el dato — reforzá oferta/formulario`);
+  if(c.ctr<0.9)              causes.push(`<b>CTR bajo (${c.ctr}%):</b> el aviso no engancha — renová el gancho creativo`);
+  if(causes.length===0)      causes.push(`<b>CPL alto con métricas medias:</b> revisá si la inversión supera el techo de la zona`);
+  const sev = (c.cpl>=18000 || c.freq>=6) ? 'bad' : 'warn';
+  return {sev, txt: causes.slice(0,2).join(' · ')};
+}
+
+// ===== ANUNCIOS por marca (top por inversión, datos reales Meta) =====
+// [nombre, etapa, inversión, leads, cpl, ctr, cpm, freq]
+// Anuncios agrupados por CANAL REAL (el canal viene de la campaña/conjunto al que
+// pertenece el anuncio en Meta, no del nombre del anuncio). Formato:
+// [nombre, inversión, leads, cpl, ctr, cpm, freq]. Top por inversión dentro de cada canal.
+const ADS={
+ford:{
+ conv:[
+  ["RANGER, explicación tasa 0",1374172,140,9816,1.02,4122,2.96],
+  ["Ranger Limited+",1201274,158,7603,0.92,4463,3.36],
+  ["Ranger Limited+",749392,117,6405,1.05,5314,3.26],
+  ["Ranger Limited+",665472,89,7562,1.24,4550,2.83],
+  ["RANGER XL/LP",509576,33,15924,0.81,3900,2.84],
+  ["Maverick, fin",491056,57,8615,0.63,3358,2.35],
+ ],
+ pa:[
+  ["RANGER XL",2238989,194,11541,1.09,3873,3.13],
+  ["RANGER XL",1685653,143,11788,1.07,3465,2.97],
+  ["RANGER XL",802817,60,13380,1.03,4348,2.73],
+  ["VIDEO TERRI 2",451531,30,15051,1.32,4729,1.91],
+  ["Transit, cansado de depender",345021,24,14376,1.38,3689,2.14],
+  ["Terri híbrida",154431,6,25739,1.51,6211,1.65],
+ ],
+ usados:[
+  ["Usados Bahía Blanca video",358508,99,3696,3.16,5100,2.84],
+  ["Carrusel de joyitas",319611,103,3133,3.34,4930,2.64],
+  ["Cronos usados",36662,9,4074,3.11,4304,1.66],
+  ["Rampage usados",26355,10,2636,3.14,4119,1.66],
+ ],
+ fordpro:[
+  ["veni a conocer",487657,71,6868,1.08,2342,2.33],
+  ["RANGER XL/LPyBB",361957,42,8618,1.59,3639,3.58],
+  ["veni a conocer lp",118220,13,9094,0.96,2201,2.22],
+  ["RANGER XL/LPyBB",48833,6,8139,1.58,3547,2.62],
+ ],
+},
+fiat:{
+ conv:[
+  ["600, el que menos consume",1005045,62,16210,0.80,3144,3.14],
+  ["Nuevo video titano",792366,36,24011,1.21,3927,2.59],
+  ["Cronos, el momento perfecto es hoy",462473,31,15416,0.81,2852,2.35],
+  ["Titano, se la banca",416000,21,19810,0.78,4275,2.36],
+  ["Llévate esta titano",239284,7,34183,0.80,3558,1.98],
+  ["VIDEO PEQUE",185283,15,12352,1.64,4603,1.86],
+ ],
+ pa:[
+  ["Fastback, nuevo",604524,46,13142,0.64,2967,2.82],
+  ["Cronos, avanzar de verdad",384552,42,9379,0.49,2166,2.60],
+  ["Cronos, cuotas accesibles",333822,19,17570,0.43,2263,2.37],
+  ["MOBI, Plan más barato",323260,34,9796,0.77,3430,1.89],
+  ["¿No sabés cómo funciona el Plan?",207260,16,12954,0.79,3897,2.13],
+  ["MOBI, the office",113706,7,16244,0.81,2824,1.91],
+ ],
+},
+vernon:{
+ conv:[
+  ["Video juan 12 m conve",1206575,65,18563,0.69,4026,3.37],
+  ["Video asesor peugeot conve",679517,34,19986,0.41,2436,3.43],
+  ["¿Cuándo fue la última vez?",645271,35,18436,0.64,3488,3.17],
+  ["208 y 2008, nueva financiación",526766,25,21071,0.74,4411,2.26],
+  ["2008 GT, 36 cuotas sin interés",215735,13,16595,0.53,3629,2.42],
+  ["Carrusel patentados",148353,3,49451,1.04,3441,2.28],
+ ],
+ pa:[
+  ["Esa es tu primera cuota",2077234,452,4626,0.55,1273,5.71],
+  ["Video plan fio",281211,36,7811,0.49,2077,1.99],
+  ["PEUGEOT 208, beneficios",98385,8,12298,0.49,2601,1.89],
+  ["2008 y 208, no lo vas a poder creer",13877,2,6938,1.23,3048,1.48],
+  ["Carrusel Citroën PA",7214,2,3607,1.21,3478,1.49],
+ ],
+},
+jeep:{
+ conv:[
+  ["Compass, la suv que más eligen",1825702,222,8224,1.58,3838,2.96],
+  ["Entrega inmediata dakota conve",712107,36,20346,1.45,6241,2.58],
+  ["Dakota, flia de pick ups",243144,11,22104,1.54,8278,2.15],
+  ["Dakota, financiación 35M",180760,8,22595,1.07,6008,1.60],
+  ["Dakota, Manuel pantalla ig web",167951,9,18661,0.99,9642,1.79],
+  ["¿Te imaginás?",161263,9,17918,1.59,8780,1.94],
+ ],
+ pa:[
+  ["¿Sabías que?",1120480,68,16478,0.85,5140,2.34],
+  ["Renegade, tarjeta de crédito",460918,30,15364,0.72,4679,2.07],
+  ["Renegade, tarjeta de crédito",302949,23,13172,0.76,4263,2.12],
+  ["Compass, pagando solo el 30%",159924,14,11423,1.34,7925,1.93],
+  ["Rampage, sin bancos",134659,7,19237,1.73,7303,1.75],
+  ["Compass, anticipo, cuotas desde",39141,2,19570,1.46,8948,1.57],
+ ],
+},
+};
+const ADS_TOTAL={ford:53,fiat:24,vernon:23,jeep:19}; // total real de anuncios por cuenta
+// orden de canales al renderear y cantidad de anuncios mostrados por marca
+const CANAL_AD_ORDER=['pa','conv','usados','fordpro'];
+function adsCount(key){return Object.values(ADS[key]||{}).reduce((s,arr)=>s+arr.length,0);}
+
+// ===== FORD POR ZONA =====
+// Guspamar (Ford) opera en 3 zonas: Bahía Blanca, La Pampa y Neuquén+Río Negro.
+// Cada zona tiene campañas propias de Plan de Ahorro y Convencional. El resumen por
+// zona suma PA+CONV; los anuncios heredan la zona de su campaña padre.
+const ZONA_LABEL={bb:'Bahía Blanca',lp:'La Pampa',neu:'Neuquén + Río Negro'};
+const ZONA_SUB={bb:'Sede central · mayor volumen',lp:'La Pampa',neu:'Patagonia norte'};
+const ZONA_FORD={
+ bb:{spend:5887975,leads:593,cpl:9929,freq:3.86,cpm:4238,
+   ads:{
+     conv:[
+       ["RANGER, explicación tasa 0",1374172,140,9816,1.02,4122,2.96],
+       ["Ranger Limited+",665472,89,7562,1.24,4550,2.83],
+       ["Maverick, fin",158351,37,4524,0.89,3845,1.72],
+       ["Tu usado tu prox paso",247835,32,7745,0.97,4943,1.91],
+       ["RANGER XL/BB",214690,21,10223,1.31,4732,2.39],
+     ],
+     pa:[
+       ["RANGER XL",2238991,194,11541,1.09,3873,3.13],
+       ["Transit, sabías que",116948,10,11695,1.71,4788,1.90],
+       ["Video terri dos",144860,10,14486,1.57,7063,1.49],
+       ["Terri híbrida",154431,6,25739,1.51,6211,1.65],
+       ["Maverick, para acceder a importado",50335,4,12584,1.74,3746,1.76],
+     ],
+   }},
+ lp:{spend:5667288,leads:502,cpl:11289,freq:4.05,cpm:3814,
+   ads:{
+     conv:[
+       ["Ranger Limited+",1201274,158,7603,0.92,4463,3.36],
+       ["Maverick, fin",491056,57,8615,0.63,3358,2.35],
+       ["RANGER XL/LP",509576,33,15924,0.81,3900,2.84],
+       ["Te presentamos esta nueva financiación",210225,11,19111,0.47,2747,1.73],
+       ["Video asrm terri",96746,7,13821,1.98,6576,1.91],
+     ],
+     pa:[
+       ["RANGER XL",1685653,143,11788,1.07,3465,2.97],
+       ["VIDEO TERRI 2",451531,30,15051,1.32,4729,1.91],
+       ["Transit, cansado de depender",345021,24,14376,1.38,3689,2.14],
+       ["Maverick, para acceder a importado",90903,8,11363,1.63,3843,1.73],
+       ["Terri híbrida",138774,7,19825,1.25,4872,1.63],
+     ],
+   }},
+ neu:{spend:1845254,leads:203,cpl:9090,freq:3.27,cpm:4928,
+   ads:{
+     conv:[
+       ["Ranger Limited+",749392,117,6405,1.05,5314,3.26],
+       ["RANGER XL/BB",74175,6,12363,1.36,5836,2.14],
+       ["Maverick, fin",49975,6,8329,0.84,4827,1.46],
+       ["RANGER, explicación tasa 0",19365,2,9682,1.29,6573,1.39],
+       ["Tu usado tu prox paso",11266,1,11266,1.65,8843,1.33],
+     ],
+     pa:[
+       ["RANGER XL",802817,60,13380,1.03,4348,2.73],
+       ["Maverick, si pensás que es imposible",32065,2,16032,0.87,3995,1.75],
+       ["Terri híbrida",29633,3,9878,2.12,7386,1.45],
+       ["Video terri dos",28936,1,28936,1.04,7506,1.29],
+       ["Transit, sabías que",14674,1,14674,1.63,5451,1.63],
+     ],
+   }},
+};
+const ZONA_ORDER=['bb','lp','neu'];
+function renderZonaCards(){
+  return ZONA_ORDER.map(z=>{
+    const d=ZONA_FORD[z];
+    const cplc=d.cpl<=9500?'cpl-good':d.cpl>=12000?'cpl-bad':'';
+    const cpmc=d.cpm>=4800?'cpl-bad':d.cpm<=2500?'cpl-good':'';
+    const fc=d.freq>=5?'var(--bad)':d.freq>=4?'var(--warn)':'var(--good)';
+    return `<div class="canal-card">
+      <div class="ch">${ZONA_LABEL[z]}</div><div class="csub2">${ZONA_SUB[z]}</div>
+      <div class="crow"><span class="k">Inversión</span><span class="v">${fmtM(d.spend)}</span></div>
+      <div class="crow"><span class="k">Leads</span><span class="v">${d.leads}</span></div>
+      <div class="crow"><span class="k">CPL</span><span class="v ${cplc}">${fmtPeso(d.cpl)}</span></div>
+      <div class="crow"><span class="k">CPM</span><span class="v ${cpmc}">${fmtPeso(d.cpm)}</span></div>
+      <div class="crow"><span class="k">Frecuencia</span><span class="v" style="color:${fc}">${d.freq.toFixed(1)}</span></div>
+    </div>`;
+  }).join('');
+}
+function renderZonaAds(){
+  let html='';
+  ZONA_ORDER.forEach(z=>{
+    const d=ZONA_FORD[z];
+    const total=Object.values(d.ads).reduce((s,a)=>s+a.length,0);
+    html+=`<tr class="canal-row zona-row"><td colspan="9">📍 ${ZONA_LABEL[z]} · ${d.leads} leads · CPL ${fmtPeso(d.cpl)}</td></tr>`;
+    CANAL_AD_ORDER.filter(k=>d.ads[k]&&d.ads[k].length).forEach(k=>{
+      const arr=[...d.ads[k]].sort((x,y)=>y[1]-x[1]);
+      html+=`<tr class="canal-row"><td colspan="9" style="padding-left:24px">▸ ${CANAL_AD_LABEL[k]} · ${arr.length}</td></tr>`;
+      arr.forEach(a=>{ html+=renderAdRow(a); });
+    });
+  });
+  return html;
+}
+
+// diagnóstico a nivel anuncio (sin CVR; usa CPL, freq, CTR, CPM)
+function diagnoseAd(a){
+  const [n,sp,l,cpl,ctr,cpm,f]=a;
+  const needsObs = cpl>=15000 || f>=5 || (cpm>=6000 && cpl>=10000);
+  if(!needsObs) return null;
+  if(cpl<=8000 && f>=5) return {sev:'warn',txt:`<b>CPL bueno pero freq ${f.toFixed(1)}:</b> rotá creatividad para sostenerlo.`};
+  const causes=[];
+  if(f>=5)        causes.push(`<b>Saturación (freq ${f.toFixed(1)}):</b> infla el CPM — rotá creatividad`);
+  if(cpm>=6000 && f<5) causes.push(`<b>CPM alto (${fmtPeso(cpm)}):</b> audiencia premium/cara — mejorá relevancia del aviso`);
+  if(ctr<0.7)     causes.push(`<b>CTR bajo (${ctr}%):</b> gancho flojo`);
+  if(causes.length===0) causes.push(`<b>CPL alto:</b> bajo rendimiento, evaluar pausar`);
+  const sev=(cpl>=25000||f>=6)?'bad':'warn';
+  return {sev,txt:causes.slice(0,2).join(' · ')};
+}
+
+const CANAL_AD_LABEL={pa:'Plan de Ahorro / Financiación',conv:'Convencional',usados:'Usados',fordpro:'Ford Pro'};
+
+function renderAdRow(a){
+  const [n,sp,l,cpl,ctr,cpm,f]=a;
+  const cc=cpl<=8000?'cpl-good':cpl>=18000?'cpl-bad':'';
+  const fc=f>=5?'freq-bad':f>=4?'freq-warn':'freq-ok';
+  const cpmc=cpm>=6000?'cpl-bad':cpm<=2000?'cpl-good':'';
+  const o=diagnoseAd(a);
+  const oCell=o?`<span class="obs obs-${o.sev}">${o.txt}</span>`:`<span class="obs obs-ok">✓ eficiente</span>`;
+  return `<tr>
+    <td class="cn">${n}</td>
+    <td><span class="stage-pill s-leads">Leads</span></td>
+    <td class="num">${fmtM(sp)}</td>
+    <td class="num">${l}</td>
+    <td class="num ${cc}">${fmtPeso(cpl)}</td>
+    <td class="num">${ctr}%</td>
+    <td class="num ${cpmc}">${fmtPeso(cpm)}</td>
+    <td class="num ${fc}">${f.toFixed(2)}</td>
+    <td class="obs">${oCell}</td>
+  </tr>`;
+}
+function renderAdsGrouped(key){
+  const canales=ADS[key]||{};
+  let html='';
+  CANAL_AD_ORDER.filter(k=>canales[k]&&canales[k].length).forEach(k=>{
+    const arr=[...canales[k]].sort((x,y)=>y[1]-x[1]);
+    html+=`<tr class="canal-row"><td colspan="9">▸ ${CANAL_AD_LABEL[k]} · ${arr.length} anuncio${arr.length>1?'s':''}</td></tr>`;
+    arr.forEach(a=>{ html+=renderAdRow(a); });
+  });
+  return html;
+}
+
+// ===== BRAND TABS =====
+const tabsEl=$('#brandTabs'),panelsEl=$('#brandPanels');
+BR.forEach((b,i)=>{
+  const tab=document.createElement('div');
+  tab.className='tab'+(i===0?' active':'');tab.textContent=b.marca;
+  if(i===0){tab.style.background=b.color;tab.style.color='#fff';tab.style.borderColor='transparent';}
+  tab.onclick=()=>{
+    document.querySelectorAll('#brandTabs .tab').forEach(t=>{t.classList.remove('active');t.style.background='';t.style.color='';t.style.borderColor='';});
+    tab.classList.add('active');tab.style.background=b.color;tab.style.color='#fff';tab.style.borderColor='transparent';
+    document.querySelectorAll('#brandPanels .panel').forEach(p=>p.classList.remove('active'));
+    $('#bp-'+i).classList.add('active');
+  };
+  tabsEl.appendChild(tab);
+
+  // funnel: TOF reach -> leads
+  const tofReach=b.camps.filter(c=>c.st==='tof').reduce((s,c)=>s+(c.reach||0),0);
+  const leadReach=b.camps.filter(c=>c.st==='leads').reduce((s,c)=>s+(c.reach||0),0);
+  const maxR=Math.max(tofReach,leadReach,1);
+  const camps=[...b.camps].sort((x,y)=>y.spend-x.spend);
+  camps.forEach(c=>c._canal=getCanal(c));
+
+  // ---- agregados por canal (solo campañas de leads) ----
+  const canalOrder=['pa','conv','usados','fordpro'];
+  const canalAgg={};
+  camps.filter(c=>c.st==='leads').forEach(c=>{
+    const k=c._canal; if(!canalAgg[k])canalAgg[k]={spend:0,leads:0,clk:0,freqW:0,cpmW:0};
+    canalAgg[k].spend+=c.spend; canalAgg[k].leads+=c.leads;
+    canalAgg[k].clk+=(CLK[c.n]||0); canalAgg[k].freqW+=c.freq*c.spend; canalAgg[k].cpmW+=c.cpm*c.spend;
+  });
+  const canalCards=canalOrder.filter(k=>canalAgg[k]).map(k=>{
+    const a=canalAgg[k],info=CANAL_INFO[k];
+    const cpl=Math.round(a.spend/a.leads);
+    const cvr=a.clk?(a.leads/a.clk*100).toFixed(1):'—';
+    const freq=(a.freqW/a.spend);
+    const cpm=Math.round(a.cpmW/a.spend);
+    return `<div class="canal-card ${info.cls}">
+      <div class="ch">${info.label}</div><div class="csub2">${info.sub}</div>
+      <div class="crow"><span class="k">Inversión</span><span class="v">${fmtM(a.spend)}</span></div>
+      <div class="crow"><span class="k">Leads</span><span class="v">${a.leads}</span></div>
+      <div class="crow"><span class="k">CPL</span><span class="v" style="color:${cpl<=8000?'var(--good)':cpl>=15000?'var(--bad)':'var(--txt)'}">${fmtPeso(cpl)}</span></div>
+      <div class="crow"><span class="k">CVR</span><span class="v">${cvr}%</span></div>
+      <div class="crow"><span class="k">CPM</span><span class="v" style="color:${cpm>=4800?'var(--bad)':cpm<=2500?'var(--good)':'var(--txt)'}">${fmtPeso(cpm)}</span></div>
+      <div class="crow"><span class="k">Frecuencia</span><span class="v" style="color:${freq>=5?'var(--bad)':freq>=4?'var(--warn)':'var(--good)'}">${freq.toFixed(1)}</span></div>
+    </div>`;
+  }).join('');
+
+  // ---- filas de tabla (con data-canal para filtrar) ----
+  const campRows=camps.map(c=>{
+    const fc=c.freq>=5?'freq-bad':c.freq>=4?'freq-warn':'freq-ok';
+    const isLead=c.st==='leads';
+    const cc=isLead?(c.cpl<=8000?'cpl-good':c.cpl>=15000?'cpl-bad':''):'';
+    const cvr=CVR[c.n];
+    const cvrCol=isLead&&cvr!=null?(cvr>=8?'cpl-good':cvr<=3?'cpl-bad':''):'';
+    const obs=diagnose(c);
+    const obsCell=obs?`<span class="obs obs-${obs.sev}">${obs.txt}</span>`:`<span class="obs obs-ok">✓ eficiente</span>`;
+    return `<tr data-canal="${c._canal}">
+      <td class="cn">${c.n}</td>
+      <td><span class="stage-pill s-${c.st}">${stageName[c.st]}</span></td>
+      <td class="num">${fmtM(c.spend)}</td>
+      <td class="num">${isLead?c.leads:'—'}</td>
+      <td class="num ${cc}">${isLead?fmtPeso(c.cpl):'—'}</td>
+      <td class="num">${c.ctr}%</td>
+      <td class="num ${cvrCol}">${isLead&&cvr!=null?cvr+'%':'—'}</td>
+      <td class="num">${fmtPeso(c.cpm)}</td>
+      <td class="num ${fc}">${c.freq.toFixed(2)}</td>
+      <td class="obs">${obsCell}</td>
+    </tr>`;}).join('');
+
+  // sub-tabs disponibles según canales presentes
+  const presentCanales=canalOrder.filter(k=>canalAgg[k]);
+  const hasAware=camps.some(c=>c._canal==='awareness'||c._canal==='otros');
+  const subtabs=['<button class="subtab active" data-c="all">Todos</button>']
+    .concat(presentCanales.map(k=>`<button class="subtab" data-c="${k}">${CANAL_INFO[k].label}</button>`))
+    .concat(hasAware?['<button class="subtab" data-c="aware">Awareness / Otros</button>']:[])
+    .join('');
+
+  const panel=document.createElement('div');
+  panel.className='panel'+(i===0?' active':'');panel.id='bp-'+i;
+  panel.innerHTML=`
+    <div class="brand-head">
+      <div><h3 style="color:${b.color}">${b.marca}</h3><div class="soc">${b.soc} · ${b.prioridad}</div></div>
+    </div>
+    <div class="brand-mini">
+      <div class="mini"><div class="l">Inversión</div><div class="v">${fmtM(b.spend)}</div></div>
+      <div class="mini"><div class="l">Leads</div><div class="v">${b.leads.toLocaleString('es-AR')}</div></div>
+      <div class="mini"><div class="l">CPL</div><div class="v" style="color:${b.cpl<=8000?'var(--good)':b.cpl>=15000?'var(--bad)':'var(--txt)'}">${fmtPeso(b.cpl)}</div></div>
+      <div class="mini"><div class="l">Frecuencia</div><div class="v" style="color:${b.freq>=5?'var(--bad)':b.freq>=4?'var(--warn)':'var(--good)'}">${b.freq.toFixed(1)}</div></div>
+    </div>
+
+    <div class="canal-h">Comparativa de canales — Plan de Ahorro vs. Convencional vs. Usados</div>
+    <div class="canal-cmp">${canalCards}</div>
+
+    <div class="funnel">
+      <div class="funnel-h">Embudo · alcance por etapa</div>
+      <div class="fstage">
+        <div class="fbar" style="width:${Math.max(tofReach/maxR*100,30)}%;background:${b.color}99">Awareness</div>
+        <div class="fmeta">Alcance: <b>${fmtK(tofReach)}</b> Meta Accounts · inversión ${fmtM(b.tofSpend)}</div>
+      </div>
+      <div class="fstage">
+        <div class="fbar" style="width:${Math.max(leadReach/maxR*100,30)}%;background:${b.color}">Consideración → Leads</div>
+        <div class="fmeta">Alcance: <b>${fmtK(leadReach)}</b> · <b>${b.leads}</b> leads · inversión ${fmtM(b.leadSpend)}</div>
+      </div>
+    </div>
+
+    <div class="canal-h">Campañas — filtrá por canal</div>
+    <div class="subtabs" data-panel="${i}">${subtabs}</div>
+    <div class="tbl-scroll">
+    <table class="camp-table">
+      <thead><tr><th>Campaña</th><th>Etapa</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>CTR</th><th>CVR</th><th>CPM</th><th>Frec.</th><th>Observación</th></tr></thead>
+      <tbody id="ctbody-${i}">${campRows}</tbody>
+    </table>
+    </div>
+
+    <div class="insight">💡 <b>Lectura:</b> ${b.insight}</div>
+
+    <div class="hooks">
+      <div class="hook-col"><h5>✅ Hooks que funcionan</h5>
+        ${b.hooksGood.map(h=>`<div class="hook"><span class="dot" style="background:var(--good)"></span><div><b>${h[0]}</b> — ${h[1]}</div></div>`).join('')}
+      </div>
+      <div class="hook-col"><h5>🚫 Hooks que no</h5>
+        ${b.hooksBad.map(h=>`<div class="hook"><span class="dot" style="background:var(--bad)"></span><div><b>${h[0]}</b> — ${h[1]}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <button class="ads-toggle" data-ads="${i}"><span class="arr">▸</span> Ver anuncios individuales <span class="cnt">${adsCount(b.key)} de ${ADS_TOTAL[b.key]||'—'} · clic para desplegar</span></button>
+    <div class="ads-detail" id="ads-${i}" style="display:none">
+      <div class="ads-note">Anuncios ordenados por inversión (los de mayor gasto). El diagnóstico aplica solo a los flojos; los eficientes quedan con ✓.</div>
+      <div class="tbl-scroll">
+      <table class="camp-table">
+        <thead><tr><th>Anuncio</th><th>Etapa</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>CTR</th><th>CPM</th><th>Frec.</th><th>Observación</th></tr></thead>
+        <tbody>${renderAdsGrouped(b.key)}</tbody>
+      </table>
+      </div>
+    </div>
+    ${b.key==='ford'?`
+    <div class="zona-block">
+      <div class="canal-h" style="margin-top:22px">Desglose por zona — Bahía Blanca · La Pampa · Neuquén+Río Negro</div>
+      <div class="sec-sub" style="margin:0 0 12px">Guspamar opera en tres zonas con campañas separadas. Cada zona suma su Plan de Ahorro y Convencional. Sirve para detectar dónde el peso por lead rinde mejor y dónde hay margen para mover presupuesto.</div>
+      <div class="canal-cmp">${renderZonaCards()}</div>
+      <button class="ads-toggle" data-ads="zona-${i}"><span class="arr">▸</span> Ver anuncios por zona <span class="cnt">desglose zona → canal · clic para desplegar</span></button>
+      <div class="ads-detail" id="ads-zona-${i}" style="display:none">
+        <div class="ads-note">Mismos anuncios, pero separados por la zona en la que corrieron. Un mismo creativo (ej. "RANGER XL") aparece en varias zonas con métricas distintas.</div>
+        <div class="tbl-scroll">
+        <table class="camp-table">
+          <thead><tr><th>Anuncio</th><th>Etapa</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>CTR</th><th>CPM</th><th>Frec.</th><th>Observación</th></tr></thead>
+          <tbody>${renderZonaAds()}</tbody>
+        </table>
+        </div>
+      </div>
+    </div>`:''}`;
+  panelsEl.appendChild(panel);
+});
+
+// toggle de anuncios
+document.querySelectorAll('.ads-toggle').forEach(btn=>{
+  btn.onclick=()=>{
+    const d=document.getElementById('ads-'+btn.dataset.ads);
+    const open=d.style.display!=='none';
+    d.style.display=open?'none':'block';
+    btn.classList.toggle('open',!open);
+  };
+});
+
+// filtrado por canal (sub-tabs)
+document.querySelectorAll('.subtabs').forEach(st=>{
+  st.querySelectorAll('.subtab').forEach(btn=>{
+    btn.onclick=()=>{
+      st.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const f=btn.dataset.c,pi=st.dataset.panel;
+      document.querySelectorAll(`#ctbody-${pi} tr`).forEach(tr=>{
+        const cn=tr.dataset.canal;
+        let show=true;
+        if(f==='aware')show=(cn==='awareness'||cn==='otros');
+        else if(f!=='all')show=(cn===f);
+        tr.style.display=show?'':'none';
+      });
+    };
+  });
+});
+</script>
+</body>
+</html>
