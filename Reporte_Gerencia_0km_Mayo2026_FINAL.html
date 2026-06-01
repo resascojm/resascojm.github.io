@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte Gerencia de Ventas · 0km Tradicional · Mayo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0a0e1a;
+    --bg-card: #131826;
+    --bg-row: #1a2030;
+    --border: #2a3142;
+    --text: #e8ecf3;
+    --text-dim: #8b94a8;
+    --accent: #003478; /* Ford blue */
+    --accent-light: #1768c4;
+    --good: #22c55e;
+    --good-bg: rgba(34, 197, 94, 0.12);
+    --mid: #f59e0b;
+    --mid-bg: rgba(245, 158, 11, 0.12);
+    --bad: #ef4444;
+    --bad-bg: rgba(239, 68, 68, 0.12);
+    --bb-accent: #1768c4;
+    --lp-accent: #c9a86a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 24px;
+    line-height: 1.4;
+}
+.container { max-width: 1500px; margin: 0 auto; }
+header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+}
+.eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+}
+h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+}
+h1 span { color: var(--accent-light); }
+.subtitle {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 720px;
+}
+.meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+.meta-item .label {
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 4px;
+}
+.meta-item .value { color: var(--text); font-weight: 500; }
+
+/* KPI Cards */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+}
+.kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 20px 22px;
+    border-radius: 4px;
+}
+.kpi .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+}
+.kpi .value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    margin: 8px 0 4px;
+    line-height: 1;
+}
+.kpi .delta {
+    font-size: 12px;
+    color: var(--text-dim);
+}
+.kpi.bb { border-left: 3px solid var(--bb-accent); }
+.kpi.lp { border-left: 3px solid var(--lp-accent); }
+
+/* Tabla principal */
+.section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+    padding-top: 24px;
+}
+.section-subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.table-wrapper {
+    overflow-x: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 40px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+thead th {
+    background: var(--bg);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: bottom;
+    font-family: 'JetBrains Mono', monospace;
+}
+thead th .sub {
+    display: block;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 10px;
+    color: var(--text-dim);
+    opacity: 0.7;
+    margin-top: 4px;
+    font-family: 'Inter', sans-serif;
+}
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+tbody tr:hover { background: var(--bg-row); }
+tbody tr.row-total {
+    background: var(--bg-row);
+    font-weight: 600;
+}
+tbody tr.row-total td {
+    border-top: 2px solid var(--accent-light);
+    padding-top: 18px;
+    padding-bottom: 18px;
+}
+tbody tr.section-bb td {
+    background: linear-gradient(90deg, rgba(23, 104, 196, 0.08), transparent);
+    padding: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bb-accent);
+    font-weight: 600;
+}
+tbody tr.section-lp td {
+    background: linear-gradient(90deg, rgba(201, 168, 106, 0.08), transparent);
+    padding: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lp-accent);
+    font-weight: 600;
+}
+td { padding: 14px 12px; vertical-align: middle; }
+.vendor-name {
+    font-weight: 500;
+    color: var(--text);
+    min-width: 180px;
+}
+.leads-total {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.leads-total .small {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-top: 2px;
+}
+.metric-cell {
+    text-align: center;
+    min-width: 95px;
+}
+.metric-cell .big {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.metric-cell .small {
+    display: block;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-weight: 400;
+}
+.metric-cell.good .big { color: var(--good); }
+.metric-cell.mid .big { color: var(--mid); }
+.metric-cell.bad .big { color: var(--bad); }
+
+.legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 32px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
+.legend-dot {
+    width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+}
+.legend-dot.good { background: var(--good); }
+.legend-dot.mid { background: var(--mid); }
+.legend-dot.bad { background: var(--bad); }
+
+.notes {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+.notes h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+.notes ul { list-style: none; padding: 0; }
+.notes li {
+    color: var(--text-dim);
+    font-size: 13px;
+    padding: 6px 0;
+    padding-left: 18px;
+    position: relative;
+}
+.notes li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent-light);
+}
+.notes li strong { color: var(--text); font-weight: 600; }
+
+footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 1100px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    h1 { font-size: 32px; }
+}
+
+/* Charts */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+}
+.chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 18px 20px 14px;
+    border-radius: 4px;
+    min-height: 200px;
+}
+.chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+.chart-subtitle {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.chart-card canvas {
+    max-height: 160px;
+}
+@media (max-width: 1100px) {
+    .charts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+    .charts-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+    <div class="eyebrow">Reporte Gerencia · Performance Vendedores</div>
+    <h1>Comparativa <span>0km Tradicional</span><br>Bahía Blanca vs. La Pampa</h1>
+    <p class="subtitle">Análisis de gestión de leads ingresados durante mayo 2026. Métricas porcentuales sobre <strong>good leads</strong> (excluye imposibles de contactar, datos erróneos y duplicados).</p>
+    <div class="meta">
+        <div class="meta-item"><span class="label">Período</span><span class="value">Mayo 2026</span></div>
+        <div class="meta-item"><span class="label">Canal</span><span class="value">0km Tradicional</span></div>
+        <div class="meta-item"><span class="label">Vendedores</span><span class="value">11 (5 BB + 6 LP)</span></div>
+        <div class="meta-item"><span class="label">Leads analizados</span><span class="value">1164</span></div>
+    </div>
+</header>
+
+<div class="kpis">
+    <div class="kpi bb">
+        <div class="label">Bahía Blanca · Leads</div>
+        <div class="value">706</div>
+        <div class="delta">360 good · 346 bad (49.0%)</div>
+    </div>
+    <div class="kpi bb">
+        <div class="label">BB · Demora prom. Meta Ads</div>
+        <div class="value">2.3h</div>
+        <div class="delta">mediana 1.1h · 466 leads Meta</div>
+    </div>
+    <div class="kpi lp">
+        <div class="label">La Pampa · Leads</div>
+        <div class="value">458</div>
+        <div class="delta">303 good · 155 bad (33.8%)</div>
+    </div>
+    <div class="kpi lp">
+        <div class="label">LP · Demora prom. Meta Ads</div>
+        <div class="value">2.3h</div>
+        <div class="delta">mediana 1.2h · 310 leads Meta</div>
+    </div>
+</div>
+
+<h2 class="section-title">Tabla comparativa por vendedor</h2>
+<p class="section-subtitle">Métricas de gestión sobre leads asignados. Demora y % bad lead sobre el total; las demás métricas sobre good leads.</p>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+    <th>Vendedor</th>
+    <th>Leads<span class="sub">total / good</span></th>
+    <th>% Bad Lead<span class="sub">sobre total</span></th>
+    <th>Demora 1ra gestión<span class="sub">solo Meta Ads · hs comercial</span></th>
+    <th>Grado de interés<span class="sub">% good leads</span></th>
+    <th>Análisis de Nec.<span class="sub">% good leads</span></th>
+    <th>Presupuesto<span class="sub">% good leads</span></th>
+    <th>Vis. Presup. Elec.<span class="sub">% presup. enviados</span></th>
+    <th>Test Drive<span class="sub">% good leads</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="section-bb"><td colspan="9">Bahía Blanca</td></tr>
+
+    <tr>
+        <td class="vendor-name">Sebastian Murias</td>
+        <td class="leads-total">179<span class="small">88 good</span></td>
+        <td class="metric-cell bad"><span class="big">50.8%</span><span class="small">91 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.6h</span><span class="small">med 59 min · 121 Meta</span></td>
+        <td class="metric-cell good"><span class="big">72.7%</span><span class="small">64</span></td>
+        <td class="metric-cell good"><span class="big">81.8%</span><span class="small">72</span></td>
+        <td class="metric-cell good"><span class="big">83.0%</span><span class="small">73</span></td>
+        <td class="metric-cell good"><span class="big">65.8%</span><span class="small">48</span></td>
+        <td class="metric-cell good"><span class="big">63.6%</span><span class="small">56</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Mariano Rodríguez</td>
+        <td class="leads-total">154<span class="small">50 good</span></td>
+        <td class="metric-cell bad"><span class="big">67.5%</span><span class="small">104 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.5h</span><span class="small">med 1.0h · 109 Meta</span></td>
+        <td class="metric-cell good"><span class="big">78.0%</span><span class="small">39</span></td>
+        <td class="metric-cell good"><span class="big">76.0%</span><span class="small">38</span></td>
+        <td class="metric-cell good"><span class="big">80.0%</span><span class="small">40</span></td>
+        <td class="metric-cell mid"><span class="big">45.0%</span><span class="small">18</span></td>
+        <td class="metric-cell good"><span class="big">66.0%</span><span class="small">33</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Marcial Fernandez</td>
+        <td class="leads-total">115<span class="small">76 good</span></td>
+        <td class="metric-cell mid"><span class="big">33.9%</span><span class="small">39 leads</span></td>
+        <td class="metric-cell bad"><span class="big">4.1h</span><span class="small">med 2.8h · 74 Meta</span></td>
+        <td class="metric-cell mid"><span class="big">53.9%</span><span class="small">41</span></td>
+        <td class="metric-cell mid"><span class="big">46.1%</span><span class="small">35</span></td>
+        <td class="metric-cell good"><span class="big">65.8%</span><span class="small">50</span></td>
+        <td class="metric-cell good"><span class="big">76.0%</span><span class="small">38</span></td>
+        <td class="metric-cell mid"><span class="big">39.5%</span><span class="small">30</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Gastón Maceratesi</td>
+        <td class="leads-total">129<span class="small">64 good</span></td>
+        <td class="metric-cell bad"><span class="big">50.4%</span><span class="small">65 leads</span></td>
+        <td class="metric-cell mid"><span class="big">2.0h</span><span class="small">med 1.1h · 90 Meta</span></td>
+        <td class="metric-cell mid"><span class="big">37.5%</span><span class="small">24</span></td>
+        <td class="metric-cell mid"><span class="big">39.1%</span><span class="small">25</span></td>
+        <td class="metric-cell mid"><span class="big">39.1%</span><span class="small">25</span></td>
+        <td class="metric-cell bad"><span class="big">12.0%</span><span class="small">3</span></td>
+        <td class="metric-cell bad"><span class="big">32.8%</span><span class="small">21</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Hernan Rivarola</td>
+        <td class="leads-total">129<span class="small">82 good</span></td>
+        <td class="metric-cell mid"><span class="big">36.4%</span><span class="small">47 leads</span></td>
+        <td class="metric-cell mid"><span class="big">2.9h</span><span class="small">med 1.2h · 72 Meta</span></td>
+        <td class="metric-cell bad"><span class="big">18.3%</span><span class="small">15</span></td>
+        <td class="metric-cell good"><span class="big">62.2%</span><span class="small">51</span></td>
+        <td class="metric-cell bad"><span class="big">31.7%</span><span class="small">26</span></td>
+        <td class="metric-cell bad"><span class="big">30.8%</span><span class="small">8</span></td>
+        <td class="metric-cell mid"><span class="big">50.0%</span><span class="small">41</span></td>
+    </tr>
+
+<tr class="row-total">
+    <td class="vendor-name">TOTAL BAHÍA BLANCA</td>
+    <td class="leads-total">706<span class="small">360 good</span></td>
+    <td class="metric-cell bad"><span class="big">49.0%</span><span class="small">346 leads</span></td>
+    <td class="metric-cell mid"><span class="big">2.3h</span><span class="small">med 1.1h · 466 Meta</span></td>
+    <td class="metric-cell mid"><span class="big">50.8%</span><span class="small">183</span></td>
+    <td class="metric-cell good"><span class="big">61.4%</span><span class="small">221</span></td>
+    <td class="metric-cell mid"><span class="big">59.4%</span><span class="small">214</span></td>
+    <td class="metric-cell mid"><span class="big">53.7%</span><span class="small">115</span></td>
+    <td class="metric-cell mid"><span class="big">50.3%</span><span class="small">181</span></td>
+</tr>
+<tr class="section-lp"><td colspan="9">La Pampa (Santa Rosa + Gral. Pico)</td></tr>
+
+    <tr>
+        <td class="vendor-name">Gastón López Conca</td>
+        <td class="leads-total">40<span class="small">37 good</span></td>
+        <td class="metric-cell good"><span class="big">7.5%</span><span class="small">3 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.2h</span><span class="small">med 28 min · 25 Meta</span></td>
+        <td class="metric-cell good"><span class="big">100.0%</span><span class="small">37</span></td>
+        <td class="metric-cell good"><span class="big">89.2%</span><span class="small">33</span></td>
+        <td class="metric-cell good"><span class="big">83.8%</span><span class="small">31</span></td>
+        <td class="metric-cell mid"><span class="big">41.9%</span><span class="small">13</span></td>
+        <td class="metric-cell good"><span class="big">91.9%</span><span class="small">34</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Julio Sánchez</td>
+        <td class="leads-total">40<span class="small">19 good</span></td>
+        <td class="metric-cell bad"><span class="big">52.5%</span><span class="small">21 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.8h</span><span class="small">med 56 min · 20 Meta</span></td>
+        <td class="metric-cell good"><span class="big">100.0%</span><span class="small">19</span></td>
+        <td class="metric-cell good"><span class="big">100.0%</span><span class="small">19</span></td>
+        <td class="metric-cell good"><span class="big">100.0%</span><span class="small">19</span></td>
+        <td class="metric-cell good"><span class="big">84.2%</span><span class="small">16</span></td>
+        <td class="metric-cell good"><span class="big">100.0%</span><span class="small">19</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Agustín Pignatta</td>
+        <td class="leads-total">104<span class="small">92 good</span></td>
+        <td class="metric-cell good"><span class="big">11.5%</span><span class="small">12 leads</span></td>
+        <td class="metric-cell mid"><span class="big">3.0h</span><span class="small">med 1.3h · 74 Meta</span></td>
+        <td class="metric-cell good"><span class="big">89.1%</span><span class="small">82</span></td>
+        <td class="metric-cell mid"><span class="big">57.6%</span><span class="small">53</span></td>
+        <td class="metric-cell mid"><span class="big">57.6%</span><span class="small">53</span></td>
+        <td class="metric-cell bad"><span class="big">1.9%</span><span class="small">1</span></td>
+        <td class="metric-cell mid"><span class="big">48.9%</span><span class="small">45</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Martín Espil</td>
+        <td class="leads-total">86<span class="small">42 good</span></td>
+        <td class="metric-cell bad"><span class="big">51.2%</span><span class="small">44 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.8h</span><span class="small">med 1.3h · 65 Meta</span></td>
+        <td class="metric-cell good"><span class="big">88.1%</span><span class="small">37</span></td>
+        <td class="metric-cell good"><span class="big">88.1%</span><span class="small">37</span></td>
+        <td class="metric-cell good"><span class="big">85.7%</span><span class="small">36</span></td>
+        <td class="metric-cell bad"><span class="big">0.0%</span><span class="small">0</span></td>
+        <td class="metric-cell good"><span class="big">88.1%</span><span class="small">37</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Laureano San José</td>
+        <td class="leads-total">79<span class="small">42 good</span></td>
+        <td class="metric-cell bad"><span class="big">46.8%</span><span class="small">37 leads</span></td>
+        <td class="metric-cell mid"><span class="big">1.5h</span><span class="small">med 27 min · 55 Meta</span></td>
+        <td class="metric-cell good"><span class="big">76.2%</span><span class="small">32</span></td>
+        <td class="metric-cell good"><span class="big">71.4%</span><span class="small">30</span></td>
+        <td class="metric-cell good"><span class="big">76.2%</span><span class="small">32</span></td>
+        <td class="metric-cell mid"><span class="big">40.6%</span><span class="small">13</span></td>
+        <td class="metric-cell good"><span class="big">71.4%</span><span class="small">30</span></td>
+    </tr>
+    <tr>
+        <td class="vendor-name">Facundo González</td>
+        <td class="leads-total">109<span class="small">71 good</span></td>
+        <td class="metric-cell mid"><span class="big">34.9%</span><span class="small">38 leads</span></td>
+        <td class="metric-cell mid"><span class="big">2.9h</span><span class="small">med 2.0h · 71 Meta</span></td>
+        <td class="metric-cell mid"><span class="big">40.8%</span><span class="small">29</span></td>
+        <td class="metric-cell bad"><span class="big">0.0%</span><span class="small">0</span></td>
+        <td class="metric-cell mid"><span class="big">47.9%</span><span class="small">34</span></td>
+        <td class="metric-cell bad"><span class="big">5.9%</span><span class="small">2</span></td>
+        <td class="metric-cell bad"><span class="big">12.7%</span><span class="small">9</span></td>
+    </tr>
+
+<tr class="row-total">
+    <td class="vendor-name">TOTAL LA PAMPA</td>
+    <td class="leads-total">458<span class="small">303 good</span></td>
+    <td class="metric-cell mid"><span class="big">33.8%</span><span class="small">155 leads</span></td>
+    <td class="metric-cell mid"><span class="big">2.3h</span><span class="small">med 1.2h · 310 Meta</span></td>
+    <td class="metric-cell good"><span class="big">77.9%</span><span class="small">236</span></td>
+    <td class="metric-cell mid"><span class="big">56.8%</span><span class="small">172</span></td>
+    <td class="metric-cell good"><span class="big">67.7%</span><span class="small">205</span></td>
+    <td class="metric-cell bad"><span class="big">22.0%</span><span class="small">45</span></td>
+    <td class="metric-cell mid"><span class="big">57.4%</span><span class="small">174</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="legend">
+    <div class="legend-item"><span class="legend-dot good"></span> Buen desempeño (≥60% / ≤1h / ≤25% bad)</div>
+    <div class="legend-item"><span class="legend-dot mid"></span> Desempeño medio (35-59% / 1-3h / 26-40% bad)</div>
+    <div class="legend-item"><span class="legend-dot bad"></span> A mejorar (&lt;35% / &gt;3h / &gt;40% bad)</div>
+</div>
+
+<h2 class="section-title">Evolución intra-mes</h2>
+<p class="section-subtitle">Cómo varía cada métrica semana a semana durante todo mayo 2026.</p>
+
+<div class="charts-grid">
+    <div class="chart-card">
+        <div class="chart-title">Leads ingresados</div>
+        <div class="chart-subtitle">Volumen semanal</div>
+        <canvas id="ch_leads"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Bad Lead</div>
+        <div class="chart-subtitle">Sobre el total</div>
+        <canvas id="ch_bad"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">Demora 1ra gestión</div>
+        <div class="chart-subtitle">Promedio Meta Ads (horas comerciales)</div>
+        <canvas id="ch_horas"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Grado de interés</div>
+        <div class="chart-subtitle">Sobre good leads</div>
+        <canvas id="ch_grado"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Análisis de necesidades</div>
+        <div class="chart-subtitle">Sobre good leads</div>
+        <canvas id="ch_analisis"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Presupuesto</div>
+        <div class="chart-subtitle">Sobre good leads</div>
+        <canvas id="ch_presup"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Visualización presup. elec.</div>
+        <div class="chart-subtitle">Sobre presupuestos enviados</div>
+        <canvas id="ch_vis"></canvas>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">% Test Drive ofrecido</div>
+        <div class="chart-subtitle">Sobre good leads</div>
+        <canvas id="ch_td"></canvas>
+    </div>
+</div>
+
+<div class="notes">
+    <h3>Notas metodológicas</h3>
+    <ul>
+        <li><strong>Universo:</strong> Leads de 0km canal tradicional ingresados durante mayo 2026, asignados a los 11 vendedores definidos por sucursal.</li>
+        <li><strong>Demora hasta 1ra gestión:</strong> Tiempo en horas comerciales entre creación del lead y primera gestión registrada (no confundir con asignación). <strong>Solo se considera leads con origen ADS - FACEBOOK (Meta Ads)</strong>, ya que son los digitales puros que demandan respuesta inmediata. Horario BB: L-V 8:30-17:30, S 9-13. Horario LP: L-V 8-12:30 / 15:30-19, S 8:30-12:30.</li>
+        <li><strong>Bad lead:</strong> Lead cerrado como "Imposible de contactar", "Dato Erróneo" o "Dato Duplicado".</li>
+        <li><strong>Good lead:</strong> Cualquier lead que NO haya sido clasificado como bad (incluye gestiones en curso, ganados, perdidos por otras causas, etc.).</li>
+        <li><strong>Métricas porcentuales (Grado de interés, Análisis, Presupuesto, Test Drive):</strong> Se computan sobre el universo de good leads de cada vendedor/sucursal.</li>
+        <li><strong>Visualización de Presupuesto Electrónico:</strong> Se computa sobre los <strong>presupuestos enviados</strong> (no sobre good leads), ya que mide el engagement real del cliente con el presupuesto recibido.</li>
+    </ul>
+</div>
+
+<footer>
+    GUSPAMAR S.A. · DEALER OFICIAL FORD · REPORTE INTERNO MAYO 2026
+</footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const evolucion = {"labels": ["1-3 May", "4-10 May", "11-17 May", "18-24 May", "25-31 May"], "leads_totales": {"Bahía Blanca": [34, 165, 201, 160, 146], "La Pampa": [29, 100, 110, 116, 103]}, "pct_bad": {"Bahía Blanca": [50.0, 52.7, 53.7, 51.2, 35.6], "La Pampa": [41.4, 28.0, 38.2, 41.4, 24.3]}, "horas_meta": {"Bahía Blanca": [3.43, 1.92, 2.07, 3.19, 1.89], "La Pampa": [2.91, 1.32, 1.32, 4.07, 2.29]}, "grado_interes": {"Bahía Blanca": [23.5, 57.7, 59.1, 60.3, 34.0], "La Pampa": [88.2, 88.9, 79.4, 82.4, 60.3]}, "analisis": {"Bahía Blanca": [35.3, 67.9, 74.2, 71.8, 39.4], "La Pampa": [52.9, 68.1, 67.6, 52.9, 41.0]}, "presupuesto": {"Bahía Blanca": [41.2, 64.1, 67.7, 64.1, 46.8], "La Pampa": [70.6, 73.6, 72.1, 70.6, 55.1]}, "vis_presup": {"Bahía Blanca": [57.1, 66.0, 49.2, 46.0, 54.5], "La Pampa": [25.0, 34.0, 22.4, 14.6, 14.0]}, "test_drive": {"Bahía Blanca": [23.5, 56.4, 59.1, 60.3, 33.0], "La Pampa": [70.6, 69.4, 61.8, 55.9, 41.0]}};
+
+const labels = evolucion.labels;
+const BB_COLOR = '#1768c4';
+const LP_COLOR = '#c9a86a';
+const TEXT_DIM = '#8b94a8';
+const BORDER = '#2a3142';
+
+// Config común
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = TEXT_DIM;
+Chart.defaults.borderColor = BORDER;
+
+function makeChart(canvasId, dataBB, dataLP, suffix = '') {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Bahía Blanca',
+                    data: dataBB,
+                    borderColor: BB_COLOR,
+                    backgroundColor: BB_COLOR + '20',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: BB_COLOR,
+                    fill: false
+                },
+                {
+                    label: 'La Pampa',
+                    data: dataLP,
+                    borderColor: LP_COLOR,
+                    backgroundColor: LP_COLOR + '20',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: LP_COLOR,
+                    fill: false,
+                    borderDash: [5, 3]
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 10 },
+                        padding: 8,
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + ctx.parsed.y + suffix;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: BORDER, display: false },
+                    ticks: { font: { size: 10 } }
+                },
+                y: {
+                    grid: { color: BORDER },
+                    ticks: { font: { size: 10 } },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+makeChart('ch_leads', evolucion.leads_totales['Bahía Blanca'], evolucion.leads_totales['La Pampa'], ' leads');
+makeChart('ch_bad', evolucion.pct_bad['Bahía Blanca'], evolucion.pct_bad['La Pampa'], '%');
+makeChart('ch_horas', evolucion.horas_meta['Bahía Blanca'], evolucion.horas_meta['La Pampa'], 'h');
+makeChart('ch_grado', evolucion.grado_interes['Bahía Blanca'], evolucion.grado_interes['La Pampa'], '%');
+makeChart('ch_analisis', evolucion.analisis['Bahía Blanca'], evolucion.analisis['La Pampa'], '%');
+makeChart('ch_presup', evolucion.presupuesto['Bahía Blanca'], evolucion.presupuesto['La Pampa'], '%');
+makeChart('ch_vis', evolucion.vis_presup['Bahía Blanca'], evolucion.vis_presup['La Pampa'], '%');
+makeChart('ch_td', evolucion.test_drive['Bahía Blanca'], evolucion.test_drive['La Pampa'], '%');
+</script>
+
+</body>
+</html>
