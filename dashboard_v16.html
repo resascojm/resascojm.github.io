@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Guspamar</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); color: #2c3e50; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        header h1 { font-size: 28px; margin-bottom: 5px; }
+        
+        /* MEGA TABS */
+        .mega-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .mega-tab { flex: 1; padding: 18px 25px; background: white; color: #555; border: 3px solid #ddd; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 18px; transition: all 0.3s; text-align: center; }
+        .mega-tab:hover { border-color: #667eea; color: #667eea; transform: translateY(-2px); }
+        .mega-tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: transparent; color: white; box-shadow: 0 6px 12px rgba(102,126,234,0.3); }
+        
+        .mega-section { display: none; }
+        .mega-section.active { display: block; }
+        
+        /* SUB TABS */
+        .tabs-nav { display: flex; gap: 5px; background: white; padding: 12px; border-radius: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { padding: 9px 16px; border: 2px solid #ddd; background: white; color: #333; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
+        .tab-btn:hover { border-color: #667eea; color: #667eea; }
+        .tab-btn.active { background: #667eea; border-color: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .card { background: white; padding: 22px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 18px; }
+        .card h2 { font-size: 18px; margin-bottom: 15px; color: #2c3e50; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        .card h3 { font-size: 15px; margin-bottom: 10px; color: #555; margin-top: 18px; }
+        .card h3:first-child { margin-top: 0; }
+        .chart-box { position: relative; height: 380px; margin-bottom: 20px; }
+        .filter-box { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .filter-box label { font-weight: 600; font-size: 13px; }
+        .filter-box select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; cursor: pointer; }
+        .note { background: #fff8e1; border-left: 4px solid #ffc107; padding: 10px 14px; border-radius: 4px; font-size: 13px; margin-bottom: 12px; color: #856404; }
+        .footer { text-align: center; color: #999; font-size: 12px; margin-top: 30px; padding: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📊 Dashboard Guspamar</h1>
+        <p>Enero - Mayo 2026 • Bahía Blanca | La Pampa (Santa Rosa + General Pico)</p>
+    </header>
+    
+    <!-- MEGA TABS -->
+    <div class="mega-tabs">
+        <button class="mega-tab active" onclick="megaTab(0,this)">🎯 LEADS</button>
+        <button class="mega-tab" onclick="megaTab(1,this)">💰 VENTAS</button>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECCIÓN: LEADS                                   -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="mega-section active">
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="tab(0,'l',this)">🏢 Por Sucursal</button>
+            <button class="tab-btn" onclick="tab(1,'l',this)">👥 Por Vendedor</button>
+            <button class="tab-btn" onclick="tab(2,'l',this)">🚗 Vendedor x Producto</button>
+            <button class="tab-btn" onclick="tab(3,'l',this)">📡 Por Origen</button>
+        </div>
+        
+        <!-- LEADS L0: POR SUCURSAL -->
+        <div class="tab-content active" data-mega="l">
+            <div class="card">
+                <h2>Leads Gestionados por Sucursal (Evolución Temporal)</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;">📌 Solo leads de <strong>0 Km</strong> (excluye Usados y Plan Ahorro). Total: <strong>6.273 leads</strong> en 2026 | Pasa el mouse sobre los puntos para ver tasa de conversión.</p>
+                <div class="chart-box"><canvas id="leadsRegionChart"></canvas></div>
+            </div>
+            
+            <div class="card">
+                <h2>Tasa de Conversión por Sucursal y Mes</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;">Conversión = Leads que terminaron en venta efectiva.</p>
+                <div class="chart-box"><canvas id="convChart"></canvas></div>
+                <div id="convStats" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; margin-top:15px;"></div>
+            </div>
+        </div>
+        
+        <!-- LEADS L1: POR VENDEDOR -->
+        <div class="tab-content" data-mega="l">
+            <div class="card">
+                <h2>Leads Gestionados por Vendedor (Evolución Temporal)</h2>
+                <div class="filter-box">
+                    <label>Filtrar por Origen:</label>
+                    <select id="filtroLeadsVendOrigen" onchange="updateLeadsVendCharts()">
+                        <option value="Todos">Todos los orígenes</option>
+                        <option value="ADS - FACEBOOK">Facebook ADS</option>
+                        <option value="SALON">Salón</option>
+                        <option value="BASE DE CLIENTES">Base de Clientes</option>
+                        <option value="FORD">Ford</option>
+                        <option value="PAGINA WEB">Página Web</option>
+                        <option value="RRSS - INSTAGRAM">Instagram</option>
+                    </select>
+                </div>
+                <h3>📍 Bahía Blanca</h3>
+                <div class="chart-box"><canvas id="leadsVendBB"></canvas></div>
+                <h3>📍 La Pampa</h3>
+                <div class="chart-box"><canvas id="leadsVendLP"></canvas></div>
+            </div>
+        </div>
+        
+        <!-- LEADS L2: VENDEDOR X PRODUCTO -->
+        <div class="tab-content" data-mega="l">
+            <div class="card">
+                <h2>Leads por Vendedor segun Producto (Evolución Temporal)</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;">💡 Útil para entender si la performance del vendedor depende del producto que recibe.</p>
+                <div class="filter-box">
+                    <label>Vendedor:</label>
+                    <select id="filtroVendProd" onchange="updateVendProdChart()">
+                        <option value="Sebastian Murias">Sebastian Murias</option>
+                        <option value="Mariano Rodríguez">Mariano Rodríguez</option>
+                        <option value="Gastón Maceratesi">Gastón Maceratesi</option>
+                        <option value="Marcial Fernandez">Marcial Fernandez</option>
+                        <option value="Hernan  Rivarola">Hernan Rivarola</option>
+                        <option value="Facundo González">Facundo González</option>
+                        <option value="Martín Espil">Martín Espil</option>
+                        <option value="Laureano San José">Laureano San José</option>
+                        <option value="Agustín Pignatta">Agustín Pignatta</option>
+                        <option value="Julio Sánchez">Julio Sánchez</option>
+                        <option value="Gastón López Conca">Gastón López Conca</option>
+                    </select>
+                    <label style="margin-left:15px;">Origen:</label>
+                    <select id="filtroVendProdOrigen" onchange="updateVendProdChart()">
+                        <option value="Todos">Todos los orígenes</option>
+                        <option value="ADS - FACEBOOK">Facebook ADS</option>
+                        <option value="SALON">Salón</option>
+                        <option value="BASE DE CLIENTES">Base de Clientes</option>
+                        <option value="FORD">Ford</option>
+                        <option value="PAGINA WEB">Página Web</option>
+                        <option value="RRSS - INSTAGRAM">Instagram</option>
+                    </select>
+                </div>
+                <div class="chart-box"><canvas id="vendProdChart"></canvas></div>
+            </div>
+        </div>
+        
+        <!-- LEADS L3: POR ORIGEN -->
+        <div class="tab-content" data-mega="l">
+            <div class="card">
+                <h2>Leads por Origen (Evolución Temporal)</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;">Top orígenes: Facebook ADS (60%), Salón (21%), Base de Clientes (9%), Ford, Web, Instagram</p>
+                <div class="chart-box"><canvas id="origenChart"></canvas></div>
+            </div>
+            
+            <div class="card">
+                <h2>Mix de Orígenes (Resumen Total)</h2>
+                <div class="chart-box"><canvas id="origenMixChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECCIÓN: VENTAS                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="mega-section">
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="tab(0,'v',this)">🏢 Vista Macro</button>
+            <button class="tab-btn" onclick="tab(1,'v',this)">📈 Promedio vs Desviación</button>
+            <button class="tab-btn" onclick="tab(2,'v',this)">👥 Vendedores Total</button>
+            <button class="tab-btn" onclick="tab(3,'v',this)">🛻 Vendedores Ranger</button>
+            <button class="tab-btn" onclick="tab(4,'v',this)">🚙 Vendedores Territory</button>
+        </div>
+        
+        <!-- TAB V0: VISTA MACRO -->
+        <div class="tab-content active" data-mega="v">
+            <div class="note">📌 Vista Macro incluye TODOS los vendedores (propios + otros canales/gerentes). Pestañas siguientes: solo canal tradicional.</div>
+            
+            <div class="card">
+                <h2>1) Evolución de Ventas en Cantidad</h2>
+                <div class="filter-box">
+                    <label>Filtrar:</label>
+                    <select id="filtroQty" onchange="updateQtyChart()">
+                        <option value="tradicional">Tradicional (todos los productos)</option>
+                        <option value="ranger">Ranger (con Directa)</option>
+                        <option value="territory">Territory</option>
+                    </select>
+                </div>
+                <div class="chart-box"><canvas id="macroQty"></canvas></div>
+            </div>
+            
+            <div class="card">
+                <h2>2) Evolución de Ventas en Dinero ($M)</h2>
+                <div class="chart-box"><canvas id="macroDin"></canvas></div>
+            </div>
+            
+            <div class="card">
+                <h2>3) Evolución Financiado / Contado / Retoma</h2>
+                <div class="filter-box">
+                    <label>Filtrar:</label>
+                    <select id="filtroFin" onchange="updateFinChart()">
+                        <optgroup label="Total / Sucursal">
+                            <option value="Total">Total</option>
+                            <option value="Bahia Blanca">Bahía Blanca</option>
+                            <option value="La Pampa">La Pampa</option>
+                        </optgroup>
+                        <optgroup label="Por Vendedor">
+                            <option value="vend_Agustín Pignatta">Agustín Pignatta</option>
+                            <option value="vend_Facundo González">Facundo González</option>
+                            <option value="vend_Gastón López Conca">Gastón López Conca</option>
+                            <option value="vend_Gastón Maceratesi">Gastón Maceratesi</option>
+                            <option value="vend_Hernan Rivarola">Hernan Rivarola</option>
+                            <option value="vend_Julio Sánchez">Julio Sánchez</option>
+                            <option value="vend_Laureano San José">Laureano San José</option>
+                            <option value="vend_Marcial Fernandez">Marcial Fernandez</option>
+                            <option value="vend_Mariano Rodríguez">Mariano Rodríguez</option>
+                            <option value="vend_Martín Espil">Martín Espil</option>
+                            <option value="vend_Sebastian Murias">Sebastian Murias</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="chart-box"><canvas id="finChart"></canvas></div>
+            </div>
+            
+            <div class="card">
+                <h2>4) Aporte de Otros Canales / Gerentes al Canal Tradicional</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;">Cuántas ventas tradicionales aportan los vendedores que <strong>NO son del canal tradicional</strong> (gerentes, otros canales). <em>Excluye a Jorge Campetella (ya no activo) y vendedores de usados.</em></p>
+                <div class="filter-box">
+                    <label>Filtrar:</label>
+                    <select id="filtroOtros" onchange="updateOtrosChart()">
+                        <option value="Total">Total</option>
+                        <option value="Bahia Blanca">Bahía Blanca</option>
+                        <option value="La Pampa">La Pampa</option>
+                    </select>
+                </div>
+                <div id="otrosStatsBox" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:15px;"></div>
+                <div class="chart-box"><canvas id="otrosChart"></canvas></div>
+            </div>
+        </div>
+        
+        <!-- TAB V1: SCATTER -->
+        <div class="tab-content" data-mega="v">
+            <div class="card">
+                <h2>Promedio vs Desviación Estándar — Matriz Gerencial</h2>
+                <p style="font-size:13px; color:#666; margin-bottom:15px;" id="scatterTargetLabel">
+                    🎯 <strong>Target gerencial:</strong> Promedio ≥ 7 ventas/mes | Desviación &lt; 2
+                </p>
+                
+                <div class="filter-box">
+                    <label>Sucursal:</label>
+                    <select id="scatterSuc" onchange="updateScatter()">
+                        <option value="Total">Todas</option>
+                        <option value="Bahia Blanca">Bahía Blanca</option>
+                        <option value="La Pampa">La Pampa</option>
+                    </select>
+                    <label style="margin-left:15px;">Métrica:</label>
+                    <select id="scatterMetric" onchange="updateScatter()">
+                        <option value="total">Ventas Totales</option>
+                        <option value="ranger">Ventas Ranger</option>
+                        <option value="territory">Ventas Territory</option>
+                    </select>
+                </div>
+                
+                <div class="chart-box" style="height: 450px;"><canvas id="scatter"></canvas></div>
+                
+                <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:15px;">
+                    <div style="padding: 12px; background: rgba(220, 38, 38, 0.12); border-left: 4px solid #dc2626; border-radius: 4px;">
+                        <div style="font-weight: 700; color: #991b1b; font-size: 14px;">🔴 Arriba-Izquierda: Coaching</div>
+                        <div style="font-size: 12px; color: #555; margin-top: 4px;">Prom &lt; 6, Desv ≥ 2 — Vende poco e inconsistente. Hay que entender por qué (¿leads malos? ¿producto? ¿performance?).</div>
+                    </div>
+                    <div style="padding: 12px; background: rgba(251, 191, 36, 0.15); border-left: 4px solid #f59e0b; border-radius: 4px;">
+                        <div style="font-weight: 700; color: #92400e; font-size: 14px;">🟡 Arriba-Derecha: Estabilizar variación</div>
+                        <div style="font-size: 12px; color: #555; margin-top: 4px;">Prom ≥ 6, Desv ≥ 2 — Vende mucho pero con picos y valles. Mayor ROI gerencial: estabilizar y volver predecible.</div>
+                    </div>
+                    <div style="padding: 12px; background: rgba(249, 115, 22, 0.15); border-left: 4px solid #f97316; border-radius: 4px;">
+                        <div style="font-weight: 700; color: #9a3412; font-size: 14px;">🟠 Abajo-Izquierda: Activar / Potencial</div>
+                        <div style="font-size: 12px; color: #555; margin-top: 4px;">Prom &lt; 6, Desv &lt; 2 — Predecible pero bajo volumen. Puede ser nuevo, en transición, o tener cartera chica.</div>
+                    </div>
+                    <div style="padding: 12px; background: rgba(34, 197, 94, 0.15); border-left: 4px solid #16a34a; border-radius: 4px;">
+                        <div style="font-weight: 700; color: #14532d; font-size: 14px;">🟢 Abajo-Derecha: Top vendedor (ideal)</div>
+                        <div style="font-size: 12px; color: #555; margin-top: 4px;">Prom ≥ 6, Desv &lt; 2 — Volumen alto y predecible. Es el objetivo de todos.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB V2: TOTAL -->
+        <div class="tab-content" data-mega="v">
+            <div class="card">
+                <h2>Vendedores - Ventas Totales (Tradicional)</h2>
+                <h3>📍 Bahía Blanca</h3>
+                <div class="chart-box"><canvas id="totalBB"></canvas></div>
+                <h3>📍 La Pampa</h3>
+                <div class="chart-box"><canvas id="totalLP"></canvas></div>
+            </div>
+        </div>
+        
+        <!-- TAB V3: RANGER -->
+        <div class="tab-content" data-mega="v">
+            <div class="card">
+                <h2>Vendedores - Ventas Ranger</h2>
+                <div class="note">⚠️ <strong>Aclaración:</strong> Las ventas de Ranger incluyen Tradicional + Directa.</div>
+                <div class="filter-box">
+                    <label>Segmento:</label>
+                    <select id="filtroRangerSeg" onchange="updateRangerCharts()">
+                        <option value="Total">Total (todos los segmentos)</option>
+                        <option value="Low">Low</option>
+                        <option value="Mid">Mid</option>
+                        <option value="High">High</option>
+                        <option value="Raptor">Raptor</option>
+                    </select>
+                </div>
+                <h3>📍 Bahía Blanca</h3>
+                <div class="chart-box"><canvas id="rangerBB"></canvas></div>
+                <h3>📍 La Pampa</h3>
+                <div class="chart-box"><canvas id="rangerLP"></canvas></div>
+            </div>
+        </div>
+        
+        <!-- TAB V4: TERRITORY -->
+        <div class="tab-content" data-mega="v">
+            <div class="card">
+                <h2>Vendedores - Ventas Territory</h2>
+                <h3>📍 Bahía Blanca</h3>
+                <div class="chart-box"><canvas id="territoryBB"></canvas></div>
+                <h3>📍 La Pampa</h3>
+                <div class="chart-box"><canvas id="territoryLP"></canvas></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECCIÓN: LEADS (duplicada eliminada)             -->
+    <!-- ═══════════════════════════════════════════════ -->
+</div>
+
+<div class="footer"><p>Guspamar • Enero - Mayo 2026</p></div>
+
+<script>
+const meses = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05"];
+
+// ═══════════════ VENTAS DATA ═══════════════
+const macroQtyData = {
+    "tradicional": { "Bahia Blanca": [28, 22, 49, 38, 38], "La Pampa": [53, 29, 47, 41, 44] },
+    "ranger": { "Bahia Blanca": [10, 18, 37, 22, 34], "La Pampa": [28, 28, 28, 28, 30] },
+    "territory": { "Bahia Blanca": [8, 7, 8, 17, 11], "La Pampa": [23, 7, 13, 22, 16] }
+};
+const macroDin = { "Bahia Blanca": [1890.9, 1397.4, 3036.4, 2326.0, 2404.6], "La Pampa": [3433.6, 1861.5, 2745.7, 2247.7, 2443.0] };
+
+const finVendedor = {"Agustín Pignatta":{"financiado":[1,3,3,4,3],"contado":[1,0,0,2,2],"retoma":[1,3,2,3,2]},"Facundo González":{"financiado":[9,0,3,5,3],"contado":[5,1,5,0,1],"retoma":[7,1,4,2,2]},"Gastón López Conca":{"financiado":[3,2,4,3,2],"contado":[2,1,1,4,2],"retoma":[1,2,4,4,2]},"Gastón Maceratesi":{"financiado":[0,0,3,2,1],"contado":[0,3,4,8,3],"retoma":[0,1,3,2,1]},"Hernan Rivarola":{"financiado":[0,0,0,0,1],"contado":[0,0,0,3,3],"retoma":[0,0,0,0,2]},"Julio Sánchez":{"financiado":[6,1,1,1,1],"contado":[2,1,1,3,2],"retoma":[3,0,2,1,1]},"Laureano San José":{"financiado":[3,4,6,3,4],"contado":[2,6,7,3,8],"retoma":[2,7,5,2,7]},"Marcial Fernandez":{"financiado":[1,1,5,1,2],"contado":[1,2,3,0,1],"retoma":[0,1,2,1,1]},"Mariano Rodríguez":{"financiado":[3,0,3,2,4],"contado":[2,1,6,3,2],"retoma":[2,1,3,2,1]},"Martín Espil":{"financiado":[9,6,3,1,1],"contado":[5,3,9,4,8],"retoma":[3,2,4,1,0]},"Sebastian Murias":{"financiado":[1,3,1,3,4],"contado":[4,5,1,5,3],"retoma":[2,1,1,1,3]}};
+const finData = {
+    "Total": { "financiado": [43, 23, 41, 33, 38], "contado": [38, 28, 55, 46, 44], "retoma": [22, 20, 34, 21, 26] },
+    "Bahia Blanca": { "financiado": [9, 7, 20, 15, 21], "contado": [19, 15, 29, 23, 17], "retoma": [5, 5, 12, 7, 10] },
+    "La Pampa": { "financiado": [34, 16, 21, 18, 17], "contado": [19, 13, 26, 23, 27], "retoma": [17, 15, 22, 14, 16] }
+};
+const otrosData = {
+    "Total": { otros: [14, 6, 16, 19, 19], pct: [18.9, 12.2, 18.8, 24.1, 23.8] },
+    "Bahia Blanca": { otros: [9, 5, 12, 11, 12], pct: [42.9, 25.0, 31.6, 28.9, 33.3] },
+    "La Pampa": { otros: [5, 1, 4, 8, 7], pct: [9.4, 3.4, 8.5, 19.5, 15.9] }
+};
+const otrosStats = {
+    "Total": { promedio: 14.8, desviacion: 4.79, pctPromedio: 19.6 },
+    "Bahia Blanca": { promedio: 9.8, desviacion: 2.64, pctPromedio: 32.3 },
+    "La Pampa": { promedio: 5.0, desviacion: 2.45, pctPromedio: 11.3 }
+};
+const vendedores = {"Agustín Pignatta":{"suc":"La Pampa","total":[2,3,3,6,5],"ranger":[1,1,3,2,1],"territory":[1,1,0,4,4]},"Facundo González":{"suc":"La Pampa","total":[14,1,8,5,4],"ranger":[9,2,3,2,2],"territory":[5,0,4,4,2]},"Gastón López Conca":{"suc":"La Pampa","total":[5,3,5,7,4],"ranger":[0,2,1,1,2],"territory":[5,1,3,5,2]},"Gastón Maceratesi":{"suc":"Bahia Blanca","total":[0,3,7,10,4],"ranger":[0,1,4,2,6],"territory":[0,2,2,7,0]},"Hernan Rivarola":{"suc":"Bahia Blanca","total":[0,0,0,3,4],"ranger":[0,0,0,0,3],"territory":[0,0,0,1,2]},"Julio Sánchez":{"suc":"La Pampa","total":[8,2,2,4,3],"ranger":[1,2,0,1,1],"territory":[5,0,2,2,2]},"Laureano San José":{"suc":"La Pampa","total":[5,10,13,6,12],"ranger":[3,4,8,3,8],"territory":[2,3,2,4,2]},"Marcial Fernandez":{"suc":"Bahia Blanca","total":[2,3,8,1,3],"ranger":[1,5,3,2,3],"territory":[0,1,2,0,0]},"Mariano Rodríguez":{"suc":"Bahia Blanca","total":[5,1,9,5,6],"ranger":[2,0,3,2,5],"territory":[2,1,2,2,1]},"Martín Espil":{"suc":"La Pampa","total":[14,9,12,5,9],"ranger":[7,7,6,5,4],"territory":[3,2,2,1,2]},"Sebastian Murias":{"suc":"Bahia Blanca","total":[5,8,2,8,7],"ranger":[2,7,2,3,5],"territory":[2,2,0,5,1]}};
+
+// Ranger por segmento (Low/Mid/High/Raptor) - incluye Tradicional + Directa
+const rangerSeg = {"Agustín Pignatta":{"Total":[1,1,3,2,1],"Low":[0,0,2,0,0],"Mid":[0,0,1,1,1],"High":[1,1,0,1,0],"Raptor":[0,0,0,0,0]},"Facundo González":{"Total":[9,2,3,2,2],"Low":[1,1,1,1,2],"Mid":[4,0,1,1,0],"High":[1,0,1,0,0],"Raptor":[3,1,0,0,0]},"Gastón López Conca":{"Total":[0,2,1,1,2],"Low":[0,2,0,0,0],"Mid":[0,0,1,0,1],"High":[0,0,0,1,1],"Raptor":[0,0,0,0,0]},"Gastón Maceratesi":{"Total":[0,1,4,2,6],"Low":[0,0,2,0,2],"Mid":[0,0,1,1,3],"High":[0,1,1,1,1],"Raptor":[0,0,0,0,0]},"Hernan Rivarola":{"Total":[0,0,0,0,3],"Low":[0,0,0,0,1],"Mid":[0,0,0,0,0],"High":[0,0,0,0,2],"Raptor":[0,0,0,0,0]},"Julio Sánchez":{"Total":[1,2,0,1,1],"Low":[0,1,0,0,0],"Mid":[0,0,0,1,0],"High":[0,0,0,0,1],"Raptor":[1,1,0,0,0]},"Laureano San José":{"Total":[3,4,8,3,8],"Low":[0,0,5,1,3],"Mid":[2,4,1,2,4],"High":[1,0,2,0,0],"Raptor":[0,0,0,0,1]},"Marcial Fernandez":{"Total":[1,5,3,2,3],"Low":[0,1,1,1,0],"Mid":[1,2,1,0,1],"High":[0,2,1,1,2],"Raptor":[0,0,0,0,0]},"Mariano Rodríguez":{"Total":[2,0,3,2,5],"Low":[0,0,2,0,1],"Mid":[2,0,0,0,2],"High":[0,0,1,1,2],"Raptor":[0,0,0,1,0]},"Martín Espil":{"Total":[7,7,6,5,4],"Low":[1,3,1,4,1],"Mid":[5,2,3,1,3],"High":[1,2,1,0,0],"Raptor":[0,0,1,0,0]},"Sebastian Murias":{"Total":[2,7,2,3,5],"Low":[1,6,2,1,2],"Mid":[0,0,0,1,2],"High":[0,1,0,1,1],"Raptor":[1,0,0,0,0]}};
+const scatterData = {"Agustín Pignatta":{"sucursal":"La Pampa","total":{"prom":3.8,"desv":1.47},"ranger":{"prom":1.6,"desv":0.8},"territory":{"prom":2.0,"desv":1.67}},"Facundo González":{"sucursal":"La Pampa","total":{"prom":7.2,"desv":3.92},"ranger":{"prom":3.6,"desv":2.73},"territory":{"prom":3.0,"desv":1.79}},"Gastón López Conca":{"sucursal":"La Pampa","total":{"prom":4.8,"desv":1.33},"ranger":{"prom":1.2,"desv":0.75},"territory":{"prom":3.2,"desv":1.6}},"Gastón Maceratesi":{"sucursal":"Bahia Blanca","total":{"prom":5.4,"desv":3.56},"ranger":{"prom":2.6,"desv":2.15},"territory":{"prom":2.2,"desv":2.56}},"Hernan Rivarola":{"sucursal":"Bahia Blanca","total":{"prom":1.6,"desv":2.06},"ranger":{"prom":0.6,"desv":1.2},"territory":{"prom":0.6,"desv":0.8}},"Julio Sánchez":{"sucursal":"La Pampa","total":{"prom":3.8,"desv":2.23},"ranger":{"prom":1.0,"desv":0.63},"territory":{"prom":2.2,"desv":1.6}},"Laureano San José":{"sucursal":"La Pampa","total":{"prom":9.4,"desv":3.01},"ranger":{"prom":5.2,"desv":2.32},"territory":{"prom":2.6,"desv":0.8}},"Marcial Fernandez":{"sucursal":"Bahia Blanca","total":{"prom":4.2,"desv":2.4},"ranger":{"prom":2.8,"desv":1.33},"territory":{"prom":0.6,"desv":0.8}},"Mariano Rodríguez":{"sucursal":"Bahia Blanca","total":{"prom":5.4,"desv":2.65},"ranger":{"prom":2.4,"desv":1.62},"territory":{"prom":1.6,"desv":0.49}},"Martín Espil":{"sucursal":"La Pampa","total":{"prom":11.0,"desv":1.79},"ranger":{"prom":5.8,"desv":1.17},"territory":{"prom":2.0,"desv":0.63}},"Sebastian Murias":{"sucursal":"Bahia Blanca","total":{"prom":7.6,"desv":3.2},"ranger":{"prom":3.8,"desv":1.94},"territory":{"prom":2.0,"desv":1.67}}};
+
+// Targets gerenciales por métrica
+const targets = {
+    total: {x: 7, y: 2, label: 'Promedio ≥ 7 ventas/mes | Desviación < 2'},
+    ranger: {x: 4, y: 1.5, label: 'Promedio ≥ 4 Rangers/mes | Desviación < 1.5'},
+    territory: {x: 3, y: 1, label: 'Promedio ≥ 3 Territory/mes | Desviación < 1'}
+};
+
+// ═══════════════ LEADS DATA ═══════════════
+const convRegion = {"Bahia Blanca":{"leads":[724,610,776,730,892],"vendidos":[33,28,56,35,50],"tasa":[4.6,4.6,7.2,4.8,5.6]},"La Pampa":{"leads":[569,441,519,482,527],"vendidos":[52,38,49,39,41],"tasa":[9.1,8.6,9.4,8.1,7.8]}};
+
+const leadsVendOrigen = {"Agustín Pignatta":{"Todos":[80,86,76,72,104],"ADS - FACEBOOK":[50,55,33,35,74],"SALON":[15,19,28,20,19],"BASE DE CLIENTES":[7,5,5,7,3],"FORD":[6,5,9,7,1],"PAGINA WEB":[0,2,1,2,1],"RRSS - INSTAGRAM":[2,0,0,1,6]},"Facundo González":{"Todos":[97,91,81,88,109],"ADS - FACEBOOK":[32,47,36,39,71],"SALON":[52,35,33,29,28],"BASE DE CLIENTES":[7,1,6,12,9],"FORD":[6,6,6,4,0],"PAGINA WEB":[0,2,0,3,0],"RRSS - INSTAGRAM":[0,0,0,1,1]},"Gastón López Conca":{"Todos":[49,19,26,15,40],"ADS - FACEBOOK":[30,13,17,10,25],"SALON":[3,0,3,1,3],"BASE DE CLIENTES":[12,5,2,2,4],"FORD":[2,1,3,2,2],"PAGINA WEB":[1,0,1,0,4],"RRSS - INSTAGRAM":[1,0,0,0,2]},"Gastón Maceratesi":{"Todos":[51,129,131,96,129],"ADS - FACEBOOK":[25,71,76,54,90],"SALON":[14,34,26,26,20],"BASE DE CLIENTES":[0,2,5,6,5],"FORD":[7,15,19,4,7],"PAGINA WEB":[4,5,3,3,1],"RRSS - INSTAGRAM":[1,2,2,3,6]},"Hernan Rivarola":{"Todos":[9,9,22,90,129],"ADS - FACEBOOK":[1,1,4,46,72],"SALON":[5,6,13,32,32],"BASE DE CLIENTES":[1,0,5,2,5],"FORD":[2,0,0,4,9],"PAGINA WEB":[0,2,0,4,1],"RRSS - INSTAGRAM":[0,0,0,2,9]},"Julio Sánchez":{"Todos":[62,54,64,65,40],"ADS - FACEBOOK":[39,39,40,38,20],"SALON":[10,9,12,15,8],"BASE DE CLIENTES":[4,1,1,2,1],"FORD":[4,3,4,6,5],"PAGINA WEB":[2,1,4,4,5],"RRSS - INSTAGRAM":[0,0,3,0,1]},"Laureano San José":{"Todos":[65,76,68,66,79],"ADS - FACEBOOK":[34,46,39,40,55],"SALON":[17,16,14,9,7],"BASE DE CLIENTES":[5,5,8,5,9],"FORD":[8,7,5,8,2],"PAGINA WEB":[1,2,0,3,4],"RRSS - INSTAGRAM":[0,0,2,1,2]},"Marcial Fernandez":{"Todos":[97,54,49,82,115],"ADS - FACEBOOK":[55,36,11,55,74],"SALON":[25,7,20,12,25],"BASE DE CLIENTES":[4,5,10,8,13],"FORD":[7,2,5,3,1],"PAGINA WEB":[4,3,0,3,1],"RRSS - INSTAGRAM":[1,1,3,1,1]},"Mariano Rodríguez":{"Todos":[143,71,158,84,154],"ADS - FACEBOOK":[90,41,87,46,109],"SALON":[34,26,36,26,41],"BASE DE CLIENTES":[10,1,10,5,3],"FORD":[5,2,13,1,0],"PAGINA WEB":[0,1,5,2,1],"RRSS - INSTAGRAM":[3,0,5,4,0]},"Martín Espil":{"Todos":[88,58,77,83,86],"ADS - FACEBOOK":[42,36,34,44,65],"SALON":[24,10,19,18,8],"BASE DE CLIENTES":[14,9,17,13,6],"FORD":[6,3,4,6,4],"PAGINA WEB":[2,0,1,2,2],"RRSS - INSTAGRAM":[0,0,2,0,1]},"Sebastian Murias":{"Todos":[168,176,146,104,179],"ADS - FACEBOOK":[92,104,78,59,121],"SALON":[39,38,38,28,40],"BASE DE CLIENTES":[14,10,13,8,8],"FORD":[17,19,10,1,3],"PAGINA WEB":[3,3,3,6,4],"RRSS - INSTAGRAM":[3,2,4,2,3]}};
+
+const leadsVendProdOrigen = {"Agustín Pignatta":{"Todos":{"Ranger":[31,34,40,25,60],"Territory":[23,23,23,21,17],"Maverick":[11,8,6,18,21],"Everest":[8,17,3,2,2]},"ADS - FACEBOOK":{"Ranger":[20,24,16,9,46],"Territory":[15,13,12,9,6],"Maverick":[5,3,1,13,19],"Everest":[6,12,3,2,2]},"SALON":{"Ranger":[2,5,15,8,8],"Territory":[6,7,9,7,6],"Maverick":[6,3,3,5,2],"Everest":[0,4,0,0,0]},"BASE DE CLIENTES":{"Ranger":[2,2,4,3,0],"Territory":[2,2,0,4,3],"Maverick":[0,0,0,0,0],"Everest":[1,0,0,0,0]},"FORD":{"Ranger":[5,3,4,4,1],"Territory":[0,0,2,0,0],"Maverick":[0,1,2,0,0],"Everest":[1,1,0,0,0]},"PAGINA WEB":{"Ranger":[0,0,1,0,0],"Territory":[0,1,0,1,1],"Maverick":[0,1,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[2,0,0,1,5],"Territory":[0,0,0,0,1],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Facundo González":{"Todos":{"Ranger":[45,35,38,35,61],"Territory":[27,28,20,17,18],"Maverick":[14,6,9,22,14],"Everest":[3,12,8,1,3]},"ADS - FACEBOOK":{"Ranger":[13,16,19,17,44],"Territory":[9,13,7,6,5],"Maverick":[5,3,4,13,12],"Everest":[2,11,5,1,1]},"SALON":{"Ranger":[24,16,11,11,14],"Territory":[17,12,12,7,8],"Maverick":[6,3,3,6,1],"Everest":[1,0,3,0,2]},"BASE DE CLIENTES":{"Ranger":[5,0,5,4,2],"Territory":[0,1,0,3,5],"Maverick":[1,0,0,1,1],"Everest":[0,0,0,0,0]},"FORD":{"Ranger":[3,3,3,3,0],"Territory":[1,2,1,0,0],"Maverick":[2,0,2,0,0],"Everest":[0,1,0,0,0]},"PAGINA WEB":{"Ranger":[0,0,0,0,0],"Territory":[0,0,0,1,0],"Maverick":[0,0,0,2,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,0,0,0,1],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Gastón López Conca":{"Todos":{"Ranger":[21,3,14,8,21],"Territory":[19,10,8,1,14],"Maverick":[1,3,1,2,1],"Everest":[6,3,0,4,0]},"ADS - FACEBOOK":{"Ranger":[13,1,12,4,18],"Territory":[11,7,5,0,6],"Maverick":[0,2,0,2,1],"Everest":[5,3,0,4,0]},"SALON":{"Ranger":[2,0,1,1,1],"Territory":[1,0,1,0,2],"Maverick":[0,0,1,0,0],"Everest":[0,0,0,0,0]},"BASE DE CLIENTES":{"Ranger":[5,2,1,1,0],"Territory":[6,3,1,1,4],"Maverick":[1,0,0,0,0],"Everest":[0,0,0,0,0]},"FORD":{"Ranger":[0,0,0,2,0],"Territory":[1,0,1,0,1],"Maverick":[0,1,0,0,0],"Everest":[1,0,0,0,0]},"PAGINA WEB":{"Ranger":[0,0,0,0,0],"Territory":[0,0,0,0,1],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[1,0,0,0,2],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Gastón Maceratesi":{"Todos":{"Ranger":[25,61,76,50,89],"Territory":[10,29,24,19,9],"Maverick":[7,8,7,19,16],"Everest":[3,17,7,3,7]},"ADS - FACEBOOK":{"Ranger":[16,33,47,35,65],"Territory":[4,17,15,6,5],"Maverick":[3,1,5,11,13],"Everest":[1,11,4,2,5]},"SALON":{"Ranger":[7,17,13,12,14],"Territory":[1,9,4,10,3],"Maverick":[2,5,2,3,1],"Everest":[1,2,2,1,1]},"BASE DE CLIENTES":{"Ranger":[0,2,2,1,4],"Territory":[0,0,1,3,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"FORD":{"Ranger":[2,6,12,1,3],"Territory":[4,1,3,0,0],"Maverick":[1,2,0,2,1],"Everest":[0,4,1,0,1]},"PAGINA WEB":{"Ranger":[0,2,1,0,0],"Territory":[1,1,1,0,1],"Maverick":[1,0,0,1,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,1,1,1,3],"Territory":[0,1,0,0,0],"Maverick":[0,0,0,2,1],"Everest":[1,0,0,0,0]}},"Hernan Rivarola":{"Todos":{"Ranger":[6,4,10,40,92],"Territory":[2,2,7,17,12],"Maverick":[1,0,1,15,18],"Everest":[0,1,1,5,3]},"ADS - FACEBOOK":{"Ranger":[1,1,1,25,55],"Territory":[0,0,2,6,3],"Maverick":[0,0,0,7,13],"Everest":[0,0,1,5,1]},"SALON":{"Ranger":[3,2,6,11,19],"Territory":[2,1,4,9,7],"Maverick":[0,0,1,7,5],"Everest":[0,1,0,0,0]},"BASE DE CLIENTES":{"Ranger":[0,0,3,0,3],"Territory":[0,0,1,1,1],"Maverick":[1,0,0,0,0],"Everest":[0,0,0,0,0]},"FORD":{"Ranger":[2,0,0,3,7],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,1,0],"Everest":[0,0,0,0,2]},"PAGINA WEB":{"Ranger":[0,1,0,0,0],"Territory":[0,1,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,0,0,1,7],"Territory":[0,0,0,1,1],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Julio Sánchez":{"Todos":{"Ranger":[24,14,29,33,14],"Territory":[17,13,22,11,11],"Maverick":[9,3,2,10,2],"Everest":[6,14,3,2,1]},"ADS - FACEBOOK":{"Ranger":[14,11,20,23,9],"Territory":[11,7,15,5,4],"Maverick":[6,1,2,8,2],"Everest":[5,13,3,2,0]},"SALON":{"Ranger":[3,1,2,7,2],"Territory":[5,5,7,5,5],"Maverick":[2,1,0,0,0],"Everest":[0,1,0,0,0]},"BASE DE CLIENTES":{"Ranger":[2,0,1,2,1],"Territory":[1,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[1,0,0,0,0]},"FORD":{"Ranger":[2,2,4,1,1],"Territory":[0,0,0,1,2],"Maverick":[0,1,0,2,0],"Everest":[0,0,0,0,1]},"PAGINA WEB":{"Ranger":[1,0,0,0,0],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,0,2,0,1],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Laureano San José":{"Todos":{"Ranger":[30,24,37,32,47],"Territory":[16,16,12,12,4],"Maverick":[8,8,4,12,15],"Everest":[5,14,3,4,4]},"ADS - FACEBOOK":{"Ranger":[14,15,23,19,33],"Territory":[10,8,8,6,2],"Maverick":[3,2,1,9,13],"Everest":[3,12,1,4,3]},"SALON":{"Ranger":[10,4,8,5,3],"Territory":[3,5,1,3,1],"Maverick":[2,4,2,0,2],"Everest":[1,1,0,0,0]},"BASE DE CLIENTES":{"Ranger":[4,2,4,2,7],"Territory":[1,2,2,2,1],"Maverick":[0,0,1,1,0],"Everest":[0,0,0,0,1]},"FORD":{"Ranger":[2,3,0,5,2],"Territory":[2,1,1,1,0],"Maverick":[3,2,0,1,0],"Everest":[1,1,2,0,0]},"PAGINA WEB":{"Ranger":[0,0,0,1,0],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,1,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,0,2,0,2],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Marcial Fernandez":{"Todos":{"Ranger":[52,27,32,44,74],"Territory":[11,9,4,13,15],"Maverick":[13,4,3,10,15],"Everest":[5,5,0,5,1]},"ADS - FACEBOOK":{"Ranger":[33,20,9,33,54],"Territory":[2,7,0,8,6],"Maverick":[7,1,1,8,11],"Everest":[4,4,0,5,1]},"SALON":{"Ranger":[11,2,13,6,9],"Territory":[7,1,2,5,6],"Maverick":[4,3,1,1,4],"Everest":[0,0,0,0,0]},"BASE DE CLIENTES":{"Ranger":[2,3,5,2,10],"Territory":[0,1,2,0,1],"Maverick":[0,0,1,0,0],"Everest":[1,1,0,0,0]},"FORD":{"Ranger":[3,0,2,1,0],"Territory":[2,0,0,0,1],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"PAGINA WEB":{"Ranger":[2,1,0,1,0],"Territory":[0,0,0,0,1],"Maverick":[1,0,0,1,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[1,1,3,1,1],"Territory":[0,0,0,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]}},"Mariano Rodríguez":{"Todos":{"Ranger":[70,27,99,46,91],"Territory":[34,13,20,13,16],"Maverick":[15,7,10,7,19],"Everest":[3,6,11,1,2]},"ADS - FACEBOOK":{"Ranger":[47,14,64,32,68],"Territory":[23,5,9,2,5],"Maverick":[9,3,0,3,14],"Everest":[2,6,10,1,1]},"SALON":{"Ranger":[15,10,16,10,20],"Territory":[9,7,7,9,11],"Maverick":[3,4,8,3,5],"Everest":[1,0,0,0,1]},"BASE DE CLIENTES":{"Ranger":[3,1,3,2,3],"Territory":[2,0,2,0,0],"Maverick":[0,0,1,0,0],"Everest":[0,0,0,0,0]},"FORD":{"Ranger":[4,1,10,1,0],"Territory":[0,1,0,0,0],"Maverick":[1,0,1,0,0],"Everest":[0,0,1,0,0]},"PAGINA WEB":{"Ranger":[0,1,0,0,0],"Territory":[0,0,2,0,0],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[1,0,5,1,0],"Territory":[0,0,0,2,0],"Maverick":[2,0,0,1,0],"Everest":[0,0,0,0,0]}},"Martín Espil":{"Todos":{"Ranger":[35,27,41,47,48],"Territory":[28,11,18,11,9],"Maverick":[6,6,3,14,16],"Everest":[7,5,9,5,1]},"ADS - FACEBOOK":{"Ranger":[18,17,18,27,38],"Territory":[13,7,10,1,4],"Maverick":[0,2,0,12,15],"Everest":[4,4,4,4,0]},"SALON":{"Ranger":[7,2,12,8,3],"Territory":[9,3,5,8,2],"Maverick":[5,3,1,0,1],"Everest":[0,0,0,1,1]},"BASE DE CLIENTES":{"Ranger":[8,7,7,7,3],"Territory":[3,1,2,2,0],"Maverick":[1,0,1,2,0],"Everest":[2,1,4,0,0]},"FORD":{"Ranger":[2,1,2,5,3],"Territory":[2,0,1,0,1],"Maverick":[0,1,0,0,0],"Everest":[1,0,1,0,0]},"PAGINA WEB":{"Ranger":[0,0,1,0,0],"Territory":[1,0,0,0,2],"Maverick":[0,0,0,0,0],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[0,0,1,0,1],"Territory":[0,0,0,0,0],"Maverick":[0,0,1,0,0],"Everest":[0,0,0,0,0]}},"Sebastian Murias":{"Todos":{"Ranger":[95,80,99,52,110],"Territory":[31,28,18,14,12],"Maverick":[18,13,8,16,21],"Everest":[8,41,8,8,5]},"ADS - FACEBOOK":{"Ranger":[52,42,58,33,78],"Territory":[18,16,6,5,1],"Maverick":[9,6,4,6,16],"Everest":[6,35,6,8,4]},"SALON":{"Ranger":[20,21,23,13,24],"Territory":[9,10,7,7,11],"Maverick":[6,4,3,8,3],"Everest":[1,1,1,0,0]},"BASE DE CLIENTES":{"Ranger":[7,5,8,4,3],"Territory":[4,1,3,2,0],"Maverick":[2,0,0,0,0],"Everest":[0,0,0,0,1]},"FORD":{"Ranger":[13,11,6,0,2],"Territory":[0,1,1,0,0],"Maverick":[0,3,1,1,0],"Everest":[1,4,1,0,0]},"PAGINA WEB":{"Ranger":[1,0,0,0,1],"Territory":[0,0,1,0,0],"Maverick":[0,0,0,1,1],"Everest":[0,0,0,0,0]},"RRSS - INSTAGRAM":{"Ranger":[2,1,4,2,2],"Territory":[0,0,0,0,0],"Maverick":[1,0,0,0,1],"Everest":[0,1,0,0,0]}}};
+
+const leadsOrigen = {
+    "ADS - FACEBOOK": [738, 630, 744, 758, 904],
+    "SALON": [294, 237, 282, 243, 262],
+    "BASE DE CLIENTES": [126, 82, 130, 108, 123],
+    "FORD": [94, 67, 84, 49, 36],
+    "PAGINA WEB": [24, 22, 19, 32, 27],
+    "RRSS - INSTAGRAM": [12, 7, 28, 17, 34]
+};
+
+const origenTotales = {"ADS - FACEBOOK":3774,"SALON":1318,"BASE DE CLIENTES":569,"FORD":330,"PAGINA WEB":124,"RRSS - INSTAGRAM":98};
+
+// Suc del vendedor (para Leads Por Vendedor)
+const vendSuc = {
+    "Agustín Pignatta": "La Pampa", "Facundo González": "La Pampa", "Gastón López Conca": "La Pampa",
+    "Gastón Maceratesi": "Bahia Blanca", "Hernan  Rivarola": "Bahia Blanca", "Julio Sánchez": "La Pampa",
+    "Laureano San José": "La Pampa", "Marcial Fernandez": "Bahia Blanca", "Mariano Rodríguez": "Bahia Blanca",
+    "Martín Espil": "La Pampa", "Sebastian Murias": "Bahia Blanca"
+};
+
+// ═══════════════ COLORES ═══════════════
+const colorSuc = { "Bahia Blanca": "#667eea", "La Pampa": "#e91e63" };
+const palette = ["#667eea","#e91e63","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#84cc16","#ec4899","#f97316","#0ea5e9"];
+
+// ═══════════════ FUNCIONES NAVEGACIÓN ═══════════════
+function megaTab(i, btn) {
+    document.querySelectorAll('.mega-section').forEach((el,idx) => el.classList.toggle('active', idx===i));
+    document.querySelectorAll('.mega-tab').forEach(el => el.classList.remove('active'));
+    btn.classList.add('active');
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+}
+
+function tab(i, prefix, btn) {
+    const sections = document.querySelectorAll(`.tab-content[data-mega="${prefix}"]`);
+    sections.forEach((el,idx) => el.classList.toggle('active', idx===i));
+    const buttons = btn.parentElement.querySelectorAll('.tab-btn');
+    buttons.forEach(el => el.classList.remove('active'));
+    btn.classList.add('active');
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+}
+
+// ═══════════════ VENTAS CHARTS ═══════════════
+let qtyChart;
+function updateQtyChart() {
+    const tipo = document.getElementById('filtroQty').value;
+    const data = macroQtyData[tipo];
+    if (qtyChart) qtyChart.destroy();
+    qtyChart = new Chart(document.getElementById('macroQty'), {
+        type: 'line',
+        data: { labels: meses, datasets: Object.keys(data).map(suc => ({
+            label: suc, data: data[suc], borderColor: colorSuc[suc], backgroundColor: colorSuc[suc]+'22',
+            tension: 0.4, borderWidth: 3
+        })) },
+        options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
+    });
+}
+updateQtyChart();
+
+new Chart(document.getElementById('macroDin'), {
+    type: 'bar',
+    data: { labels: meses, datasets: Object.keys(macroDin).map(suc => ({ label: suc, data: macroDin[suc], backgroundColor: colorSuc[suc] })) },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
+});
+
+let finChart;
+function updateFinChart() {
+    const sel = document.getElementById('filtroFin').value;
+    let data = sel.startsWith('vend_') ? finVendedor[sel.replace('vend_', '')] : finData[sel];
+    if (finChart) finChart.destroy();
+    finChart = new Chart(document.getElementById('finChart'), {
+        type: 'line',
+        data: { labels: meses, datasets: [
+            { label: 'Financiado', data: data.financiado, borderColor: '#1e40af', backgroundColor: '#1e40af22', tension: 0.4, borderWidth: 3 },
+            { label: 'Contado', data: data.contado, borderColor: '#dc2626', backgroundColor: '#dc262622', tension: 0.4, borderWidth: 3 },
+            { label: 'Retoma', data: data.retoma, borderColor: '#16a34a', backgroundColor: '#16a34a22', tension: 0.4, borderWidth: 3 }
+        ]},
+        options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
+    });
+}
+updateFinChart();
+
+let otrosChart;
+function updateOtrosChart() {
+    const sel = document.getElementById('filtroOtros').value;
+    const d = otrosData[sel];
+    const s = otrosStats[sel];
+    document.getElementById('otrosStatsBox').innerHTML = `
+        <div style="background:#e0e7ff; padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:11px; color:#1e40af; font-weight:600; text-transform:uppercase;">Promedio</div>
+            <div style="font-size:28px; font-weight:bold; color:#1e40af;">${s.promedio} <span style="font-size:12px;">u/mes</span></div>
+        </div>
+        <div style="background:#fef3c7; padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:11px; color:#92400e; font-weight:600; text-transform:uppercase;">Desviación</div>
+            <div style="font-size:28px; font-weight:bold; color:#92400e;">±${s.desviacion}</div>
+        </div>
+        <div style="background:#d1fae5; padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:11px; color:#065f46; font-weight:600; text-transform:uppercase;">% Promedio Aporte</div>
+            <div style="font-size:28px; font-weight:bold; color:#065f46;">${s.pctPromedio}%</div>
+        </div>
+    `;
+    if (otrosChart) otrosChart.destroy();
+    otrosChart = new Chart(document.getElementById('otrosChart'), {
+        type: 'line',
+        data: { labels: meses, datasets: [
+            { label: 'Ventas Otros Canales', data: d.otros, borderColor: '#1e40af', backgroundColor: '#1e40af22', tension: 0.4, borderWidth: 3 },
+            { label: '% del Total Tradicional', data: d.pct, borderColor: '#dc2626', borderWidth: 2, tension: 0.4, yAxisID: 'y1' }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } },
+            scales: {
+                y: { title: {display:true, text:'Unidades aportadas'}, beginAtZero: true },
+                y1: { position: 'right', title: {display:true, text:'% del Total'}, beginAtZero: true, max: 100, grid: { drawOnChartArea: false } }
+            }
+        }
+    });
+}
+updateOtrosChart();
+
+let scatterChart;
+let currentTarget = targets.total; // se actualiza en updateScatter
+
+// Plugin custom para pintar los 4 cuadrantes
+const quadrantPlugin = {
+    id: 'quadrantPlugin',
+    beforeDatasetsDraw(chart, args, options) {
+        const { ctx, chartArea: { left, top, right, bottom }, scales: { x, y } } = chart;
+        const xCut = x.getPixelForValue(currentTarget.x);
+        const yCut = y.getPixelForValue(currentTarget.y);
+        
+        ctx.save();
+        
+        // Top-Left: ROJO (Coaching)
+        ctx.fillStyle = 'rgba(220, 38, 38, 0.10)';
+        ctx.fillRect(left, top, xCut - left, yCut - top);
+        // Top-Right: AMARILLO (Estabilizar)
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.15)';
+        ctx.fillRect(xCut, top, right - xCut, yCut - top);
+        // Bottom-Left: NARANJA (Activar)
+        ctx.fillStyle = 'rgba(249, 115, 22, 0.12)';
+        ctx.fillRect(left, yCut, xCut - left, bottom - yCut);
+        // Bottom-Right: VERDE (Top)
+        ctx.fillStyle = 'rgba(34, 197, 94, 0.15)';
+        ctx.fillRect(xCut, yCut, right - xCut, bottom - yCut);
+        
+        // Líneas de corte
+        ctx.strokeStyle = 'rgba(100,100,100,0.5)';
+        ctx.setLineDash([6, 4]);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(xCut, top); ctx.lineTo(xCut, bottom);
+        ctx.moveTo(left, yCut); ctx.lineTo(right, yCut);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Etiquetas
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(153, 27, 27, 0.8)';
+        ctx.fillText('🔴 COACHING', (left + xCut) / 2, top + 18);
+        ctx.fillStyle = 'rgba(146, 64, 14, 0.85)';
+        ctx.fillText('🟡 ESTABILIZAR', (xCut + right) / 2, top + 18);
+        ctx.fillStyle = 'rgba(154, 52, 18, 0.85)';
+        ctx.fillText('🟠 ACTIVAR', (left + xCut) / 2, bottom - 10);
+        ctx.fillStyle = 'rgba(20, 83, 45, 0.9)';
+        ctx.fillText('🟢 TOP VENDEDOR', (xCut + right) / 2, bottom - 10);
+        
+        ctx.restore();
+    }
+};
+
+function updateScatter() {
+    const sucFilter = document.getElementById('scatterSuc').value;
+    const metric = document.getElementById('scatterMetric').value;
+    
+    // Actualizar target activo
+    currentTarget = targets[metric];
+    document.getElementById('scatterTargetLabel').innerHTML = '🎯 <strong>Target gerencial:</strong> ' + currentTarget.label;
+    
+    // Definir ejes dinámicos según métrica
+    const axisRanges = {
+        total: { xMax: 12, yMax: 5 },
+        ranger: { xMax: 7, yMax: 3.5 },
+        territory: { xMax: 5, yMax: 3 }
+    };
+    const range = axisRanges[metric];
+    
+    const sucGroups = {};
+    for (const vend in scatterData) {
+        const d = scatterData[vend];
+        if (sucFilter !== "Total" && d.sucursal !== sucFilter) continue;
+        if (!sucGroups[d.sucursal]) sucGroups[d.sucursal] = [];
+        sucGroups[d.sucursal].push({ x: d[metric].prom, y: d[metric].desv, label: vend });
+    }
+    const datasets = Object.keys(sucGroups).map(suc => ({
+        label: suc, data: sucGroups[suc], backgroundColor: colorSuc[suc],
+        borderColor: '#fff', borderWidth: 2, pointRadius: 10, pointHoverRadius: 13
+    }));
+    if (scatterChart) scatterChart.destroy();
+    scatterChart = new Chart(document.getElementById('scatter'), {
+        type: 'scatter', data: { datasets },
+        plugins: [quadrantPlugin],
+        options: { responsive:true, maintainAspectRatio:false,
+            scales: {
+                x: { title: {display:true, text:'Promedio Ventas/mes →', font:{weight:'bold'}}, min:0, max: range.xMax },
+                y: { title: {display:true, text:'← Desviación Estándar', font:{weight:'bold'}}, min:0, max: range.yMax }
+            },
+            plugins: { legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: ctx => ctx.raw.label + ' (prom:' + ctx.parsed.x + ', desv:' + ctx.parsed.y + ')' } } }
+        }
+    });
+}
+updateScatter();
+
+function chartVendedores(canvasId, sucursal, metrica) {
+    const vendsSuc = Object.keys(vendedores).filter(v => vendedores[v].suc === sucursal);
+    new Chart(document.getElementById(canvasId), {
+        type: 'line',
+        data: { labels: meses, datasets: vendsSuc.map((v, i) => ({
+            label: v, data: vendedores[v][metrica], borderColor: palette[i % palette.length],
+            backgroundColor: palette[i % palette.length] + '22', tension: 0.3, borderWidth: 2, fill: false
+        })) },
+        options: { responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+}
+chartVendedores('totalBB', 'Bahia Blanca', 'total');
+chartVendedores('totalLP', 'La Pampa', 'total');
+chartVendedores('territoryBB', 'Bahia Blanca', 'territory');
+chartVendedores('territoryLP', 'La Pampa', 'territory');
+
+// RANGER con filtro de segmento
+let rangerChartBB, rangerChartLP;
+function updateRangerCharts() {
+    const seg = document.getElementById('filtroRangerSeg').value;
+    
+    function buildRangerChart(canvasId, sucursal, existingChart) {
+        const vendsSuc = Object.keys(rangerSeg).filter(v => {
+            const vKey = v === "Hernan Rivarola" ? "Hernan Rivarola" : v;
+            return vendedores[vKey] && vendedores[vKey].suc === sucursal;
+        });
+        if (existingChart) existingChart.destroy();
+        return new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: { labels: meses, datasets: vendsSuc.map((v, i) => ({
+                label: v, data: rangerSeg[v][seg], borderColor: palette[i % palette.length],
+                backgroundColor: palette[i % palette.length] + '22', tension: 0.3, borderWidth: 2, fill: false
+            })) },
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    }
+    rangerChartBB = buildRangerChart('rangerBB', 'Bahia Blanca', rangerChartBB);
+    rangerChartLP = buildRangerChart('rangerLP', 'La Pampa', rangerChartLP);
+}
+updateRangerCharts();
+
+// ═══════════════ LEADS CHARTS ═══════════════
+
+// Leads por sucursal CON tooltip de conversión
+new Chart(document.getElementById('leadsRegionChart'), {
+    type: 'line',
+    data: { labels: meses, datasets: Object.keys(convRegion).map(suc => ({
+        label: suc, data: convRegion[suc].leads, borderColor: colorSuc[suc], backgroundColor: colorSuc[suc]+'22',
+        tension: 0.4, borderWidth: 3
+    })) },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+            legend:{position:'bottom'},
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(ctx) {
+                        const suc = ctx.dataset.label;
+                        const idx = ctx.dataIndex;
+                        const v = convRegion[suc].vendidos[idx];
+                        const t = convRegion[suc].tasa[idx];
+                        return `Vendidos: ${v} (${t}% conversión)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Gráfico de tasa de conversión por sucursal y mes
+new Chart(document.getElementById('convChart'), {
+    type: 'line',
+    data: { labels: meses, datasets: Object.keys(convRegion).map(suc => ({
+        label: suc + ' (% conversión)', data: convRegion[suc].tasa, borderColor: colorSuc[suc], backgroundColor: colorSuc[suc]+'22',
+        tension: 0.4, borderWidth: 3
+    })) },
+    options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+            legend:{position:'bottom'},
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(ctx) {
+                        const suc = ctx.dataset.label.split(' (')[0];
+                        const idx = ctx.dataIndex;
+                        return `Leads: ${convRegion[suc].leads[idx]} | Vendidos: ${convRegion[suc].vendidos[idx]}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: { title: { display: true, text: '% Conversión' }, beginAtZero: true, max: 12,
+                 ticks: { callback: function(v){ return v + '%'; } } }
+        }
+    }
+});
+
+// Stats cards (totales por sucursal)
+const bbTot = convRegion['Bahia Blanca'].leads.reduce((a,b)=>a+b,0);
+const bbVend = convRegion['Bahia Blanca'].vendidos.reduce((a,b)=>a+b,0);
+const lpTot = convRegion['La Pampa'].leads.reduce((a,b)=>a+b,0);
+const lpVend = convRegion['La Pampa'].vendidos.reduce((a,b)=>a+b,0);
+
+document.getElementById('convStats').innerHTML = `
+    <div style="background:#e0e7ff; padding:18px; border-radius:8px; text-align:center;">
+        <div style="font-size:13px; color:#1e40af; font-weight:600;">Bahía Blanca</div>
+        <div style="font-size:24px; font-weight:bold; color:#1e40af; margin-top:8px;">${bbTot} leads → ${bbVend} ventas</div>
+        <div style="font-size:32px; font-weight:bold; color:#1e40af; margin-top:5px;">${(bbVend/bbTot*100).toFixed(1)}%</div>
+    </div>
+    <div style="background:#fce4ec; padding:18px; border-radius:8px; text-align:center;">
+        <div style="font-size:13px; color:#c2185b; font-weight:600;">La Pampa</div>
+        <div style="font-size:24px; font-weight:bold; color:#c2185b; margin-top:8px;">${lpTot} leads → ${lpVend} ventas</div>
+        <div style="font-size:32px; font-weight:bold; color:#c2185b; margin-top:5px;">${(lpVend/lpTot*100).toFixed(1)}%</div>
+    </div>
+`;
+
+// Leads por Vendedor con filtro de origen
+let chartLeadsVendBB, chartLeadsVendLP;
+function updateLeadsVendCharts() {
+    const origen = document.getElementById('filtroLeadsVendOrigen').value;
+    
+    function buildChart(canvasId, sucursal, existingChart) {
+        const vendsSuc = Object.keys(leadsVendOrigen).filter(v => vendSuc[v] === sucursal);
+        if (existingChart) existingChart.destroy();
+        return new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: { labels: meses, datasets: vendsSuc.map((v, i) => ({
+                label: v, data: leadsVendOrigen[v][origen], borderColor: palette[i % palette.length],
+                backgroundColor: palette[i % palette.length] + '22', tension: 0.3, borderWidth: 2, fill: false
+            })) },
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
+    chartLeadsVendBB = buildChart('leadsVendBB', 'Bahia Blanca', chartLeadsVendBB);
+    chartLeadsVendLP = buildChart('leadsVendLP', 'La Pampa', chartLeadsVendLP);
+}
+updateLeadsVendCharts();
+
+// Leads vendedor x producto con filtro de origen
+let vendProdChart;
+function updateVendProdChart() {
+    const v = document.getElementById('filtroVendProd').value;
+    const o = document.getElementById('filtroVendProdOrigen').value;
+    const data = leadsVendProdOrigen[v][o];
+    if (vendProdChart) vendProdChart.destroy();
+    vendProdChart = new Chart(document.getElementById('vendProdChart'), {
+        type: 'line',
+        data: { labels: meses, datasets: [
+            { label: 'Ranger', data: data.Ranger, borderColor: '#1e40af', backgroundColor: '#1e40af22', tension: 0.4, borderWidth: 3 },
+            { label: 'Territory', data: data.Territory, borderColor: '#16a34a', backgroundColor: '#16a34a22', tension: 0.4, borderWidth: 3 },
+            { label: 'Maverick', data: data.Maverick, borderColor: '#f59e0b', backgroundColor: '#f59e0b22', tension: 0.4, borderWidth: 3 },
+            { label: 'Everest', data: data.Everest, borderColor: '#dc2626', backgroundColor: '#dc262622', tension: 0.4, borderWidth: 3 }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+}
+updateVendProdChart();
+
+new Chart(document.getElementById('origenChart'), {
+    type: 'line',
+    data: { labels: meses, datasets: Object.keys(leadsOrigen).map((o, i) => ({
+        label: o, data: leadsOrigen[o], borderColor: palette[i % palette.length],
+        backgroundColor: palette[i % palette.length] + '22', tension: 0.4, borderWidth: 2, fill: false
+    })) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
+
+new Chart(document.getElementById('origenMixChart'), {
+    type: 'doughnut',
+    data: { labels: Object.keys(origenTotales), datasets: [{ data: Object.values(origenTotales), backgroundColor: palette }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+});
+
+</script>
+</body>
+</html>
