@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIT · Playbook de contenido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAF6EC;
+    --bg-card: #FFFCF4;
+    --ink: #15140F;
+    --ink-soft: #4A4639;
+    --ink-faint: #8A8472;
+    --rule: #E5DECA;
+    --rule-soft: #F0EBDB;
+    --green: #4A6A12;
+    --green-deep: #2F4309;
+    --green-tint: #E8EFD4;
+    --ochre: #B8651A;
+    --ochre-tint: #FAEFD8;
+    --warn: #9A2A1E;
+    --warn-tint: #F8E2DE;
+    --shadow: 0 1px 0 rgba(21,20,15,.04), 0 12px 32px -16px rgba(21,20,15,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight:400;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── DECORATIVE BACKGROUND ── */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      radial-gradient(ellipse 600px 300px at 90% -10%, var(--green-tint), transparent 70%),
+      radial-gradient(ellipse 400px 400px at -5% 60%, var(--ochre-tint), transparent 70%);
+    opacity:.55;
+    z-index:-1;
+    pointer-events:none;
+  }
+  body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(21,20,15,.012) 79px, rgba(21,20,15,.012) 80px);
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  /* ── LAYOUT ── */
+  .wrap{
+    display:grid;
+    grid-template-columns: 280px 1fr;
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: 60px;
+    padding: 0 28px;
+  }
+
+  /* ── SIDEBAR ── */
+  aside{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 56px 0 56px;
+    overflow-y: auto;
+    border-right: 1px solid var(--rule);
+  }
+  .brand{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .brand .dot{color: var(--green); font-style: normal;}
+  .brand-sub{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--ink-faint);
+    margin-bottom: 36px;
+  }
+  .toc-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
+  }
+  .toc{list-style:none;}
+  .toc li{
+    margin-bottom: 2px;
+  }
+  .toc a{
+    display:flex;
+    align-items:baseline;
+    gap: 10px;
+    padding: 7px 0;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.35;
+    transition: color .15s, transform .15s;
+    border-bottom: 1px dotted transparent;
+  }
+  .toc a:hover{
+    color: var(--green-deep);
+    transform: translateX(2px);
+  }
+  .toc .num{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 12, 'wght' 500;
+    font-size: 12px;
+    color: var(--ink-faint);
+    min-width: 18px;
+    font-feature-settings: "tnum";
+  }
+  .toc a:hover .num{color: var(--green);}
+  .toc-foot{
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    line-height: 1.5;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  /* ── MAIN ── */
+  main{
+    padding: 56px 0 120px;
+    min-width: 0;
+  }
+
+  /* ── HERO ── */
+  .hero{
+    padding-bottom: 56px;
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    color: var(--green);
+    margin-bottom: 24px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .eyebrow::before{
+    content:'';
+    width: 36px;
+    height: 1px;
+    background: var(--green);
+    display:inline-block;
+  }
+  h1{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 40, 'wght' 360;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: .98;
+    letter-spacing: -.025em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  h1 em{
+    font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 80, 'wght' 360;
+    color: var(--green-deep);
+  }
+  .hero-deck{
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 640px;
+  }
+  .hero-meta{
+    display:flex;
+    gap: 32px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .hero-meta div{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .hero-meta div span{
+    display:block;
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 4px;
+  }
+
+  /* ── SECTIONS ── */
+  section{
+    margin-bottom: 88px;
+    scroll-margin-top: 24px;
+  }
+  .sec-head{
+    display:grid;
+    grid-template-columns: 100px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .sec-num{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'wght' 300;
+    font-style: italic;
+    font-size: 88px;
+    line-height: 1;
+    color: var(--green);
+    font-feature-settings: "tnum";
+  }
+  .sec-meta{
+    display:flex;
+    flex-direction:column;
+  }
+  .sec-kicker{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  h2{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 460;
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -.018em;
+    color: var(--ink);
+  }
+  h2 em{
+    font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'wght' 360;
+    color: var(--green-deep);
+  }
+  h3{
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: -.005em;
+    color: var(--ink);
+    margin: 32px 0 12px;
+    line-height: 1.3;
+  }
+  h4{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--green);
+    margin: 24px 0 10px;
+  }
+  p{
+    margin-bottom: 16px;
+    color: var(--ink-soft);
+  }
+  p strong{color: var(--ink); font-weight: 600;}
+  a{color: var(--green-deep);}
+
+  ul, ol{
+    margin: 14px 0 20px 22px;
+    color: var(--ink-soft);
+  }
+  li{
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  li::marker{color: var(--ink-faint);}
+  ul ul{margin-top:8px;}
+
+  /* ── PULL QUOTE ── */
+  .pull{
+    border-left: 3px solid var(--green);
+    padding: 4px 0 4px 24px;
+    margin: 28px 0;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 80, 'wght' 360;
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--ink);
+    font-style: italic;
+    letter-spacing: -.005em;
+  }
+  .pull-attr{
+    display:block;
+    margin-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--ink-faint);
+    font-style: normal;
+  }
+
+  /* ── CARDS / BOXES ── */
+  .box{
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 24px 0;
+    box-shadow: var(--shadow);
+  }
+  .box-rule{
+    border-left: 4px solid var(--green);
+    background: linear-gradient(to right, var(--green-tint) 0%, var(--bg-card) 30%);
+  }
+  .box-rule .box-label{color: var(--green-deep);}
+
+  .box-warn{
+    border-left: 4px solid var(--ochre);
+    background: linear-gradient(to right, var(--ochre-tint) 0%, var(--bg-card) 30%);
+  }
+  .box-warn .box-label{color: var(--ochre);}
+
+  .box-stop{
+    border-left: 4px solid var(--warn);
+    background: linear-gradient(to right, var(--warn-tint) 0%, var(--bg-card) 30%);
+  }
+  .box-stop .box-label{color: var(--warn);}
+
+  .box-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    margin-bottom: 10px;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    font-weight: 500;
+  }
+  .box p:last-child, .box ul:last-child, .box ol:last-child{margin-bottom:0;}
+  .box h4{margin-top: 18px;}
+  .box h4:first-child{margin-top: 0;}
+
+  /* ── TABLE ── */
+  .table-wrap{
+    margin: 28px 0;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--bg-card);
+  }
+  table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th{
+    text-align: left;
+    padding: 16px 20px;
+    background: var(--rule-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+  td{
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tr:last-child td{border-bottom: none;}
+  td:first-child{
+    font-weight: 600;
+    color: var(--ink);
+    width: 30%;
+  }
+  td code{
+    background: var(--rule-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--green-deep);
+  }
+
+  /* ── METRIC CARDS ── */
+  .metric{
+    display:grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    align-items:start;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .metric:last-child{border-bottom:none;}
+  .metric-num{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 80, 'wght' 360;
+    font-style: italic;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--green);
+    text-align: right;
+  }
+  .metric-body h3{margin-top:0;}
+  .metric-formula{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--green-deep);
+    background: var(--green-tint);
+    padding: 6px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 8px 0 12px;
+  }
+  .metric-lever{
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding-top: 8px;
+    border-top: 1px dashed var(--rule);
+    margin-top: 8px;
+  }
+  .metric-lever strong{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--green);
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  /* ── ANGLE GRID ── */
+  .angles{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .angle{
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .angle:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--green);
+  }
+  .angle-cat{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--green);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .angle-name{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 24, 'SOFT' 60, 'wght' 500;
+    font-size: 17px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .angle-ex{
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist{
+    list-style: none;
+    margin-left: 0;
+  }
+  .checklist li{
+    padding: 12px 0 12px 36px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .checklist li::before{
+    content:'';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--green);
+    border-radius: 4px;
+    background: var(--bg-card);
+  }
+  .checklist li.no::before{
+    border-color: var(--warn);
+  }
+  .checklist li.no::after{
+    content: '✕';
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    color: var(--warn);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── FUNNEL DIAGRAM ── */
+  .funnel{
+    margin: 28px 0;
+    display:grid;
+    gap: 4px;
+  }
+  .funnel-row{
+    display:grid;
+    grid-template-columns: 110px 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .funnel-stage{
+    background: var(--green);
+    color: white;
+    padding: 18px 20px;
+    border-radius: 10px 0 0 10px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .funnel-stage:nth-of-type(1){background: linear-gradient(135deg, #6E8C29, #4A6A12);}
+  .funnel-row:nth-child(2) .funnel-stage{background: linear-gradient(135deg, #5A7818, #3A560C);}
+  .funnel-row:nth-child(3) .funnel-stage{background: linear-gradient(135deg, #3F5C0E, #2F4309);}
+  .funnel-code{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+    opacity: .85;
+    margin-bottom: 4px;
+  }
+  .funnel-name{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 24, 'wght' 500;
+    font-size: 18px;
+    line-height: 1.1;
+  }
+  .funnel-body{
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .funnel-body strong{color: var(--ink); display:block; margin-bottom: 4px;}
+  .funnel-body small{
+    display: block;
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--green);
+  }
+
+  /* ── INLINE CALLOUT ── */
+  .callout{
+    font-family: 'Fraunces', serif;
+    font-variation-settings: 'opsz' 48, 'SOFT' 80, 'wght' 380;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--green-deep);
+    padding: 8px 0;
+    margin: 28px 0;
+    letter-spacing: -.005em;
+  }
+
+  /* ── BAD/GOOD ── */
+  .vs{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .vs-card{
+    border-radius: 10px;
+    padding: 18px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+  }
+  .vs-bad{border-left: 4px solid var(--warn);}
+  .vs-good{border-left: 4px solid var(--green);}
+  .vs-card .vs-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .vs-bad .vs-label{color: var(--warn);}
+  .vs-good .vs-label{color: var(--green);}
+  .vs-card p{
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* ── FOOTER ── */
+  footer{
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ink-faint);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* ── MOBILE NAV TOGGLE ── */
+  .menu-btn{
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px){
+    .wrap{
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0 20px;
+    }
+    aside{
+      position: fixed;
+      top: 0; left: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--bg);
+      z-index: 50;
+      border-right: 1px solid var(--rule);
+      transform: translateX(-100%);
+      transition: transform .25s;
+      padding: 24px 20px;
+    }
+    aside.open{transform: translateX(0);}
+    main{padding: 32px 0 96px;}
+    .menu-btn{display:flex; align-items:center; justify-content:center;}
+    .sec-head{grid-template-columns: 60px 1fr; gap: 16px;}
+    .sec-num{font-size: 56px;}
+    .hero-meta{gap: 20px;}
+    .metric{grid-template-columns: 44px 1fr; gap: 14px;}
+    .metric-num{font-size: 32px;}
+    .funnel-row{grid-template-columns: 1fr;}
+    .funnel-stage{border-radius: 10px 10px 0 0;}
+    .funnel-body{border-left: 1px solid var(--rule); border-top: none; border-radius: 0 0 10px 10px;}
+    .vs{grid-template-columns: 1fr;}
+  }
+
+  /* ── PRINT ── */
+  @media print{
+    body::before, body::after{display:none;}
+    aside, .menu-btn{display:none;}
+    .wrap{grid-template-columns: 1fr; padding: 0;}
+    main{padding: 0;}
+    section{page-break-inside: avoid;}
+    .sec-head{page-break-after: avoid;}
+    h2{page-break-after: avoid;}
+    .box, .table-wrap, .funnel, .angles{page-break-inside: avoid;}
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="document.querySelector('aside').classList.toggle('open')">☰</button>
+
+<div class="wrap">
+
+  <!-- ════════ SIDEBAR ════════ -->
+  <aside>
+    <div class="brand">Voit<span class="dot">.</span></div>
+    <div class="brand-sub">Playbook de contenido · v1</div>
+
+    <div class="toc-label">Contenidos</div>
+    <ol class="toc">
+      <li><a href="#s01"><span class="num">01</span>El norte</a></li>
+      <li><a href="#s02"><span class="num">02</span>El embudo TOF/MOF/BOF</a></li>
+      <li><a href="#s03"><span class="num">03</span>Zona y modalidad</a></li>
+      <li><a href="#s04"><span class="num">04</span>Pauta vs orgánico</a></li>
+      <li><a href="#s05"><span class="num">05</span>La voz de la marca</a></li>
+      <li><a href="#s06"><span class="num">06</span>El ángulo</a></li>
+      <li><a href="#s07"><span class="num">07</span>La regla del guión</a></li>
+      <li><a href="#s08"><span class="num">08</span>Los hooks</a></li>
+      <li><a href="#s09"><span class="num">09</span>Las métricas que mandan</a></li>
+      <li><a href="#s10"><span class="num">10</span>Ganadores y perdedores</a></li>
+      <li><a href="#s11"><span class="num">11</span>Ritmo y mezcla</a></li>
+      <li><a href="#s12"><span class="num">12</span>UGC y canjes</a></li>
+      <li><a href="#s13"><span class="num">13</span>Checklist pre-grabación</a></li>
+      <li><a href="#s14"><span class="num">14</span>Marketing de salud</a></li>
+    </ol>
+
+    <div class="toc-foot">
+      Documento interno<br>
+      Equipo de marketing Voit<br>
+      Bahía Blanca · Argentina
+    </div>
+  </aside>
+
+  <!-- ════════ MAIN ════════ -->
+  <main>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="eyebrow">Playbook de contenido · Marketing</div>
+      <h1>El contenido no busca <em>likes</em>. Busca <em>turnos</em>.</h1>
+      <p class="hero-deck">
+        Este es el manual de cómo pensamos, escribimos y producimos contenido en Voit. No es un decálogo cerrado: es la base común que usamos para que cualquiera del equipo entienda <em>qué hacemos, por qué lo hacemos así, y cómo se piensa cada pieza</em>. Si abrís este archivo y entendés cómo funciona Voit en redes, hicimos bien la tarea.
+      </p>
+      <div class="hero-meta">
+        <div>Centro<span>Voit Nutrición</span></div>
+        <div>Equipo<span>5 nutricionistas · 2 médicos</span></div>
+        <div>Modalidad<span>Presencial Bahía + Online país</span></div>
+        <div>Foco<span>Adultos 25-55 con objetivos de hábitos</span></div>
+      </div>
+    </header>
+
+    <!-- ════════ 01 — EL NORTE ════════ -->
+    <section id="s01">
+      <div class="sec-head">
+        <div class="sec-num">01</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 1 · Estrategia</div>
+          <h2>El <em>norte</em>: para qué hacemos contenido</h2>
+        </div>
+      </div>
+
+      <p class="pull">
+        El cierre real no es un like, un comentario ni un follow. Es <strong>la primera consulta</strong>.
+        <span class="pull-attr">— Norte editorial Voit</span>
+      </p>
+
+      <p>Esta es la verdad que ordena todo lo demás. Si una pieza no contribuye a que un paciente nuevo saque turno o a que uno actual decida quedarse con nosotros, no la hacemos. No importa qué tan creativa sea. No importa cuántos likes prometa.</p>
+
+      <p>Hacemos contenido por dos razones reales:</p>
+
+      <div class="box box-rule">
+        <div class="box-label">▸ Las dos cosas que perseguimos</div>
+        <h4>1. Generar consultas (la métrica dura)</h4>
+        <p>Turnos nuevos atribuibles al contenido y la pauta. Es la métrica que paga sueldos. Si esto no funciona, lo demás importa poco.</p>
+        <h4>2. Construir autoridad y confianza profesional (la métrica blanda, pero estructural)</h4>
+        <p>Que cuando alguien escuche "nutrición en Bahía" o "nutrición online seria" piense en Voit. Esto no se mide bien con likes; se mide con retención de pacientes, derivaciones boca-a-boca, y el "te conozco de Instagram" que aparece en la primera consulta.</p>
+      </div>
+
+      <p class="callout">El contenido alimenta a la consulta. No la reemplaza.</p>
+
+      <p>Eso significa que en Voit <strong>no jugamos a ser influencers</strong>. No queremos seguidores que nos miren todos los días pero nunca saquen turno. Queremos personas que nos descubran, que confíen en el equipo, y que cuando estén listas, agenden.</p>
+
+      <h3>Lo que <em>no</em> son métricas reales</h3>
+      <p>Los likes, las vistas, los shares son <strong>proxies</strong>. Indicadores que nos dan pistas, pero que pueden mentir. Un Reel con 50.000 vistas y cero turnos vale menos que uno con 3.000 vistas y 12 turnos generados. Lo decimos ahora porque más adelante, cuando empiece a aparecer un Reel con muchas vistas, alguien va a querer celebrarlo. Está bien celebrarlo si trajo turnos. Si no, es ego, no negocio.</p>
+    </section>
+
+    <!-- ════════ 02 — EMBUDO ════════ -->
+    <section id="s02">
+      <div class="sec-head">
+        <div class="sec-num">02</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 1 · Estrategia</div>
+          <h2>El embudo <em>TOF / MOF / BOF</em></h2>
+        </div>
+      </div>
+
+      <p>Toda persona que termina sacando un turno con nosotros pasa antes por tres momentos. No siempre los pasa en orden lineal — a veces salta etapas — pero el embudo nos sirve para no confundir contenidos. Cada pieza pertenece a una etapa. Pretender que una sola pieza haga las tres es la forma más segura de no lograr ninguna.</p>
+
+      <div class="funnel">
+        <div class="funnel-row">
+          <div class="funnel-stage">
+            <div class="funnel-code">TOF</div>
+            <div class="funnel-name">Descubrimiento</div>
+          </div>
+          <div class="funnel-body">
+            <strong>Que nos conozcan</strong>
+            Personas que no saben que Voit existe se topan con un contenido nuestro. El objetivo no es que saquen turno: es que registren que existimos, idealmente con un primer aprendizaje útil.
+            <small>Métricas · Alcance · Vistas únicas · CPM · CTR cuando hay pauta</small>
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-stage">
+            <div class="funnel-code">MOF</div>
+            <div class="funnel-name">Consideración</div>
+          </div>
+          <div class="funnel-body">
+            <strong>Que confíen en el equipo y en el método</strong>
+            Ya nos conocen. Ahora tienen que entender por qué confiar en nosotros y no en otra cosa (la nutri de Instagram, la app del celular, una dieta de revista). Acá juega el respaldo profesional, los testimonios, el método.
+            <small>Métricas · Retención de video · Tiempo de visualización · Guardados · DMs · Visitas a perfil</small>
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-stage">
+            <div class="funnel-code">BOF</div>
+            <div class="funnel-name">Conversión</div>
+          </div>
+          <div class="funnel-body">
+            <strong>Que saquen turno</strong>
+            La persona ya confía. Solo le falta el empujón final con una propuesta concreta y un camino claro para agendar.
+            <small>Métricas · Clicks al link de turnos · Leads (form / WhatsApp) · Costo por consulta agendada</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ Cuidado</div>
+        <p>El error clásico es producir el 80% del contenido en BOF ("sacá tu turno") porque eso es lo que parece "vender". <strong>No funciona.</strong> Una persona que recién nos conoce y ya le pedimos plata se va. El BOF se gana cuando los otros dos están sembrados.</p>
+      </div>
+    </section>
+
+    <!-- ════════ 03 — ZONA / MODALIDAD ════════ -->
+    <section id="s03">
+      <div class="sec-head">
+        <div class="sec-num">03</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 1 · Estrategia</div>
+          <h2>Zona y <em>modalidad</em>: dos juegos en paralelo</h2>
+        </div>
+      </div>
+
+      <p>Voit atiende <strong>presencial en Bahía Blanca</strong> y <strong>online a todo el país</strong>. Esto suena trivial pero cambia toda la estrategia de pauta y de contenido. No estamos jugando un solo juego: estamos jugando dos en paralelo, con argumentos distintos y competidores distintos.</p>
+
+      <h3>Juego A · Bahía Blanca (presencial)</h3>
+      <div class="box box-rule">
+        <div class="box-label">▸ Argumentos diferenciales</div>
+        <ul>
+          <li><strong>Los consultorios físicos.</strong> Dos puntos en Bahía. Podés conocer al equipo en persona, ver dónde te atendés.</li>
+          <li><strong>Respaldo médico real.</strong> 5 nutricionistas + 2 médicos. Si en una consulta surge algo que excede al nutri, hay con quién interconsultar adentro del mismo equipo.</li>
+          <li><strong>"Somos de Bahía".</strong> Conocemos la zona, los hábitos locales, los lugares donde compramos comida. Es un detalle, pero suma.</li>
+          <li><strong>Boca a boca.</strong> En Bahía juega fuerte. Una paciente recomienda y cae la prima, la amiga, la compañera de gimnasio.</li>
+        </ul>
+      </div>
+
+      <p><strong>Pauta:</strong> targeting geográfico Bahía Blanca + 30km. Mensajes que aprovechan lo local. Foto del consultorio, equipo, "agendá tu primera consulta en nuestros consultorios de Bahía".</p>
+
+      <p><strong>Contenido orgánico:</strong> equipo en pantalla, detrás de escena del consultorio, eventos locales, alianzas con gimnasios o profesionales de la zona.</p>
+
+      <h3>Juego B · Resto del país (online)</h3>
+      <div class="box box-rule">
+        <div class="box-label">▸ Argumentos diferenciales</div>
+        <ul>
+          <li><strong>Equipo profesional con respaldo médico</strong> vs. la nutri-influencer que atiende sola desde su living. Esto es un diferencial enorme y muchas veces subestimado.</li>
+          <li><strong>Plan personalizado, no genérico.</strong> No es una app, no es un PDF descargable. Es seguimiento real con una persona.</li>
+          <li><strong>Trabajamos con método.</strong> Hay un proceso definido, no improvisamos.</li>
+          <li><strong>Lo digital está pensado.</strong> Si vamos a competir con apps y nutris online, nuestras herramientas digitales tienen que estar al menos a la par.</li>
+        </ul>
+      </div>
+
+      <p><strong>Pauta:</strong> targeting amplio nacional, idealmente excluyendo Bahía Blanca (no queremos canibalizar el presencial, donde el ticket promedio es mayor por seguimiento sostenido). Si el presupuesto no da, evaluar también excluir CABA y GBA al principio, donde la competencia local es feroz y el CPM tiende a ser más caro.</p>
+
+      <p><strong>Contenido orgánico:</strong> mucho énfasis en <em>cómo funciona la consulta online</em>, herramientas digitales que usamos, equipo en cámara explicando qué pasa en una primera consulta a distancia. Antes/después de hábitos (energía, calidad de sueño, relación con la comida) — <em>nunca</em> antes/después de peso (ver §14).</p>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ Implicancia operativa</div>
+        <p>En la práctica, esto significa que muchas piezas se producen en <strong>dos versiones</strong>: una para Bahía (con CTA "vení al consultorio") y otra para todo el país (con CTA "agendá tu consulta online"). No siempre, pero sí cuando el ángulo lo justifica. Decidirlo en el guión, no después.</p>
+      </div>
+    </section>
+
+    <!-- ════════ 04 — PAUTA VS ORGÁNICO ════════ -->
+    <section id="s04">
+      <div class="sec-head">
+        <div class="sec-num">04</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 2 · Operación</div>
+          <h2>Pauta vs. orgánico: <em>dos cabezas distintas</em></h2>
+        </div>
+      </div>
+
+      <p>Pauta y orgánico no son lo mismo. No se piensan igual, no se miden igual, no se escriben igual. Mezclarlos es uno de los errores más comunes y caros. Acá la división:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Pauta</th>
+              <th>Orgánico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Para qué</td>
+              <td>Generar turnos. Es la fuerza comercial directa.</td>
+              <td>Construir autoridad, retener seguidores, ser referencia.</td>
+            </tr>
+            <tr>
+              <td>Métricas</td>
+              <td>CPM, CTR, CPL, costo por consulta. Frío y duro.</td>
+              <td>Retención, guardados, comentarios cualitativos, crecimiento sano.</td>
+            </tr>
+            <tr>
+              <td>Duración típica</td>
+              <td>15–30 segundos. Directo al hueso.</td>
+              <td>Variable. Puede ser 60s, 90s o un carrusel largo si el contenido educativo lo justifica.</td>
+            </tr>
+            <tr>
+              <td>Tono</td>
+              <td>Foco en el problema y la solución concreta. CTA visible.</td>
+              <td>Profundizar, mostrar el equipo, educar, explicar mecanismos.</td>
+            </tr>
+            <tr>
+              <td>Iteración</td>
+              <td>Probar varios ángulos en paralelo, escalar el ganador, cortar el perdedor.</td>
+              <td>Construir línea editorial coherente. La iteración es más lenta.</td>
+            </tr>
+            <tr>
+              <td>CTA</td>
+              <td><code>Sacá tu turno</code>, <code>Reservá ahora</code>, link directo.</td>
+              <td>Muchas veces <em>sin</em> CTA explícito. La pieza educa, el follow se gana.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="callout">Una pieza de pauta que parece orgánica puede funcionar muy bien. Una pieza orgánica disfrazada de venta dura, en cambio, mata seguidores y no convierte.</p>
+
+      <p>Por eso, cuando una pieza orgánica funciona muy bien y se quiere "poner pauta" para amplificar, vale la regla: <strong>nunca subir pauta directamente sobre un orgánico sin revisar el copy y el CTA</strong>. Lo que funciona como entretenimiento gratuito no siempre funciona como pauta. Y al revés.</p>
+    </section>
+
+    <!-- ════════ 05 — VOZ DE LA MARCA ════════ -->
+    <section id="s05">
+      <div class="sec-head">
+        <div class="sec-num">05</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 2 · Operación</div>
+          <h2>La <em>voz</em> de Voit</h2>
+        </div>
+      </div>
+
+      <p>Voit habla <strong>profesional pero cálido</strong>. Nunca paternalista. Nunca culpabilizando al paciente. Nunca prometiendo lo que no podemos cumplir. Tres ideas centrales:</p>
+
+      <div class="box box-rule">
+        <div class="box-label">▸ Reglas no negociables del tono</div>
+        <ul>
+          <li><strong>No culpabilizamos.</strong> "Estás gordo porque comés mal" es un mensaje que vende a corto plazo y destruye a largo plazo. No es Voit.</li>
+          <li><strong>No prometemos resultados específicos en tiempo específico.</strong> "Bajá 8 kilos en 30 días" no lo decimos. Lo dicen otros, no nosotros.</li>
+          <li><strong>No demonizamos alimentos.</strong> Ni el azúcar es veneno, ni la harina es la enemiga. Hablamos de contexto, frecuencia, porciones.</li>
+          <li><strong>Hablamos de hábitos sostenibles, energía, salud, calidad de vida</strong> — no del número de la balanza como único KPI del paciente.</li>
+        </ul>
+      </div>
+
+      <h3>Subtonos según servicio</h3>
+
+      <h4>Composición corporal · Cambio de hábitos (el más usado)</h4>
+      <p>Cercano, motivacional, realista. "Sé que es difícil, pero acá hay método." Reconocimiento del esfuerzo. Sin urgencia falsa. Es el tono base.</p>
+
+      <h4>Nutrición deportiva · Rendimiento</h4>
+      <p>Más técnico. Hablamos de macros, periodización, recuperación. Asumimos un piso de conocimiento. Tono más experto, casi de colega. Si en composición corporal somos un acompañante, acá somos un consultor.</p>
+
+      <h4>Patologías puntuales</h4>
+      <p>Respetuoso, serio, sin alarmismo. Mucho peso al respaldo médico y al trabajo interdisciplinario. La persona ya tiene un diagnóstico y muchas veces ansiedad; no le sumamos. Le damos claridad.</p>
+
+      <h4>Estética · Composición corporal "verse mejor"</h4>
+      <p>Este es el más delicado. Hablamos de <strong>sentirse bien</strong>, de cómo entra la ropa, de energía, de presencia. <em>Nunca</em> de "el cuerpo de tus sueños" o "la versión más flaca de vos". Si una pieza estética cruza esa línea, no se publica. Es marketing irresponsable y además castiga el algoritmo (§14).</p>
+
+      <p class="callout">Una buena prueba: si lo que estamos por publicar lo pudiera decir un nutri-influencer cualquiera de Instagram, probablemente no es Voit. Si para decirlo necesitamos el respaldo de un equipo profesional con médico, vamos por buen camino.</p>
+    </section>
+
+    <!-- ════════ 06 — EL ÁNGULO ════════ -->
+    <section id="s06">
+      <div class="sec-head">
+        <div class="sec-num">06</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 2 · Operación</div>
+          <h2>El ángulo: <em>una pieza, un ángulo</em></h2>
+        </div>
+      </div>
+
+      <p>Una pieza ataca <strong>un solo ángulo</strong>. Si querés decir tres cosas en un Reel de 30 segundos, no vas a decir ninguna. La gente no presta atención: <em>regalá</em> atención solo lo que ya sabía. El ángulo es la decisión de qué va a aprender, sentir, o querer hacer la persona cuando termina de mirar.</p>
+
+      <p>Acá va el catálogo de ángulos propios del rubro nutrición, organizado por categoría. No es exhaustivo — sirve como punto de partida para cada planificación mensual:</p>
+
+      <div class="angles">
+
+        <div class="angle">
+          <div class="angle-cat">Educativo</div>
+          <div class="angle-name">Mitos vs. realidad</div>
+          <div class="angle-ex">"¿La fruta engorda de noche?"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Educativo</div>
+          <div class="angle-name">Mecanismo / cómo funciona</div>
+          <div class="angle-ex">"Por qué tu metabolismo no se 'arruina'"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Educativo</div>
+          <div class="angle-name">Datos del cuerpo</div>
+          <div class="angle-ex">"Qué pasa cuando dormís mal una semana"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Prevención / Salud</div>
+          <div class="angle-name">Enfermedades silenciosas</div>
+          <div class="angle-ex">"3 señales de hígado graso que se pasan por alto"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Prevención / Salud</div>
+          <div class="angle-name">Síntomas que no son "normales"</div>
+          <div class="angle-ex">"Hinchazón después de comer: cuándo importa"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Deportivo</div>
+          <div class="angle-name">Qué comer pre/post entreno</div>
+          <div class="angle-ex">"Cómo armar tu comida post-entrenamiento"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Deportivo</div>
+          <div class="angle-name">Errores del que entrena y no ve resultados</div>
+          <div class="angle-ex">"Entrenás duro pero no cambiás: revisá esto"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Deportivo</div>
+          <div class="angle-name">Suplementación responsable</div>
+          <div class="angle-ex">"Creatina: para quién sí, para quién no"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Testimonial</div>
+          <div class="angle-name">Cambio en hábitos (no en peso)</div>
+          <div class="angle-ex">"Lo que más me cambió no fue el cuerpo: fue cómo me levanto a la mañana"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Testimonial</div>
+          <div class="angle-name">Caso real con voz del paciente</div>
+          <div class="angle-ex">"María cuenta cómo es vivir con prediabetes diagnosticada"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Autoridad / Equipo</div>
+          <div class="angle-name">Conocé al equipo</div>
+          <div class="angle-ex">"Quién es la nutri X, qué se especializa, dónde se formó"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Autoridad / Equipo</div>
+          <div class="angle-name">Detrás de escena</div>
+          <div class="angle-ex">"Cómo trabajamos un caso en equipo: nutri + médico"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Autoridad / Equipo</div>
+          <div class="angle-name">El método Voit</div>
+          <div class="angle-ex">"Qué pasa en cada una de las primeras 4 consultas"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">La primera consulta</div>
+          <div class="angle-name">"¿Qué pasa en una primera?"</div>
+          <div class="angle-ex">Desarmar el miedo a la primera vez</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">La primera consulta</div>
+          <div class="angle-name">"¿Tengo que pesarme?"</div>
+          <div class="angle-ex">Qué medimos, por qué, y cuándo no medimos peso</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">La primera consulta</div>
+          <div class="angle-name">Cómo funciona la online</div>
+          <div class="angle-ex">"Qué necesitás tener listo para una consulta online"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Recetas / Tips</div>
+          <div class="angle-name">Snacks proteicos rápidos</div>
+          <div class="angle-ex">"4 snacks para llevarte a la oficina"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Recetas / Tips</div>
+          <div class="angle-name">Meal prep realista</div>
+          <div class="angle-ex">"Cocinar el domingo para 3 días sin volverte loco"</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Recetas / Tips</div>
+          <div class="angle-name">Compras inteligentes</div>
+          <div class="angle-ex">"Cómo leer una etiqueta en 10 segundos"</div>
+        </div>
+
+        <div class="angle">
+          <div class="angle-cat">Promocional · BOF</div>
+          <div class="angle-name">Reservá tu turno</div>
+          <div class="angle-ex">CTA directo con propuesta de valor concreta</div>
+        </div>
+        <div class="angle">
+          <div class="angle-cat">Promocional · BOF</div>
+          <div class="angle-name">Lanzamiento de programa</div>
+          <div class="angle-ex">"Nuevo: programa de 12 semanas con seguimiento médico"</div>
+        </div>
+
+      </div>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ Cuidado con "estética"</div>
+        <p>Notar que en el catálogo <strong>no aparece "estética" como categoría propia</strong>. Es a propósito. La estética se aborda <em>desde</em> composición corporal, cambio de hábitos, energía y bienestar — nunca desde "el cuerpo perfecto". Si una pieza tiene como ángulo central "vas a estar más linda/o", probablemente cruza líneas (ver §14).</p>
+      </div>
+    </section>
+
+    <!-- ════════ 07 — REGLA DE ORO DEL GUIÓN ════════ -->
+    <section id="s07">
+      <div class="sec-head">
+        <div class="sec-num">07</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 3 · Producción</div>
+          <h2>La <em>regla de oro</em> del guión</h2>
+        </div>
+      </div>
+
+      <p>Todo guión tiene una jerarquía de cosas que importan. La trampa es pensar que importan todas por igual. <strong>No</strong>. Hay un orden, y depende de para qué se está escribiendo. Dos rankings, según el objetivo:</p>
+
+      <h3>Si es pauta orientada a turnos (BOF)</h3>
+      <div class="box box-rule">
+        <ol>
+          <li><strong>Hook.</strong> Si no frenamos el scroll en los primeros 2-3 segundos, el resto no importa.</li>
+          <li><strong>Propuesta de valor concreta.</strong> Qué te ofrecemos, en qué es distinto, qué te resuelve. No prometer, sí explicar con claridad.</li>
+          <li><strong>Autoridad.</strong> Por qué confiar en nosotros: equipo, método, matrículas, respaldo médico.</li>
+        </ol>
+        <p style="margin-top:14px"><em>La creatividad no aparece en este top 3.</em> Una pieza de pauta puede ser visualmente sencilla y funcionar barbaro. Lo que no puede ser es confusa.</p>
+      </div>
+
+      <h3>Si es contenido orgánico / construcción de autoridad</h3>
+      <div class="box box-rule">
+        <ol>
+          <li><strong>Hook.</strong> El primer requisito sigue siendo el mismo: que se queden.</li>
+          <li><strong>Valor educativo.</strong> Que cuando la persona termine de mirar sienta que <em>aprendió algo concreto</em>. Si se va con la misma información que entró, la pieza falló.</li>
+          <li><strong>Creatividad.</strong> Acá sí importa que sea memorable, que tenga ganas de guardar, de mostrarle al amigo, de comentar.</li>
+        </ol>
+      </div>
+
+      <p class="callout">No mezclar las dos lógicas en una sola pieza. Una pieza no puede ser "muy creativa, muy educativa <em>y</em> con CTA fuerte de turno". Eso es un brief sin foco. Elegir uno.</p>
+    </section>
+
+    <!-- ════════ 08 — LOS HOOKS ════════ -->
+    <section id="s08">
+      <div class="sec-head">
+        <div class="sec-num">08</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 3 · Producción</div>
+          <h2>Los hooks: <em>cómo frenamos el scroll</em></h2>
+        </div>
+      </div>
+
+      <p>El hook es lo único que está garantizado que la persona va a percibir. Después de los primeros segundos, la mayoría ya decidió si se queda o sigue scrolleando. Hay tres canales por los que se puede frenar el scroll. Los buenos contenidos pelean en al menos dos de los tres.</p>
+
+      <h3>Canal 1 · Visual (lo que se ve)</h3>
+      <p>El primer frame. Es el más importante porque <strong>la mayoría mira sin sonido</strong>. Si lo único que sostiene el hook es el audio, perdiste.</p>
+
+      <p><strong>Lo que funciona:</strong></p>
+      <ul>
+        <li>Cara a cámara con expresión específica (sorpresa, escepticismo, complicidad).</li>
+        <li>Vista cenital de comida que rompe expectativa ("esto es saludable", siendo algo que parece no serlo).</li>
+        <li>Movimiento brusco al inicio (algo cae, algo se rompe, algo se transforma).</li>
+        <li>Un alimento sostenido a cámara con una frase contraintuitiva en pantalla.</li>
+        <li>Comparación visual lado a lado <em>de hábitos o platos</em> (nunca de cuerpos).</li>
+      </ul>
+
+      <p><strong>Lo que no funciona:</strong></p>
+      <ul>
+        <li>Empezar con el logo de Voit. Eso es para una marca con presupuesto de TV, no para una pieza orgánica.</li>
+        <li>Plano genérico de cocina sin nada distintivo.</li>
+        <li>Cara mirando a cámara sin expresión, sin texto en pantalla, sin contexto.</li>
+        <li>Texto chiquito y largo en el primer frame: nadie lo lee.</li>
+      </ul>
+
+      <h3>Canal 2 · Sonido (lo que se escucha)</h3>
+      <p>Acá la regla central es: <strong>la mayoría mira sin sonido</strong>. Eso no significa que el sonido no importe. Significa que el sonido <em>nunca</em> puede ser lo único que sostiene el hook. Si la persona engancha por lo visual y prende el sonido, ahí el audio te empuja al final.</p>
+      <ul>
+        <li>Si el contenido es voiceover o entrevista, <strong>subtítulos siempre</strong>, grandes y legibles.</li>
+        <li>La música ambiente no es el hook. Puede acompañar, no traccionar.</li>
+        <li>Sonidos disruptivos (chasquidos, golpes, transiciones) sirven, pero solo si están sincronizados con algo visual.</li>
+      </ul>
+
+      <h3>Canal 3 · Frase (lo que se lee o se dice)</h3>
+      <p>El texto sobreimpreso del primer segundo o la primera frase del audio. Las que funcionan en nutrición:</p>
+
+      <div class="vs">
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Funciona</div>
+          <p>"Las galletitas 'saludables' tienen MÁS azúcar que las normales."</p>
+        </div>
+        <div class="vs-card vs-bad">
+          <div class="vs-label">✕ No engancha</div>
+          <p>"Hoy te quiero hablar de las galletitas saludables."</p>
+        </div>
+      </div>
+
+      <div class="vs">
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Funciona</div>
+          <p>"3 cosas que tu nutricionista debería preguntarte en la primera consulta. (Si no las pregunta, cambiá de nutri)."</p>
+        </div>
+        <div class="vs-card vs-bad">
+          <div class="vs-label">✕ No engancha</div>
+          <p>"Hablemos de cómo es una buena primera consulta de nutrición."</p>
+        </div>
+      </div>
+
+      <div class="vs">
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Funciona</div>
+          <p>"No necesitás más voluntad. Necesitás esto."</p>
+        </div>
+        <div class="vs-card vs-bad">
+          <div class="vs-label">✕ No engancha</div>
+          <p>"La fuerza de voluntad no lo es todo a la hora de cambiar hábitos."</p>
+        </div>
+      </div>
+
+      <p><strong>Patrones de frase que funcionan:</strong></p>
+      <ul>
+        <li><strong>Contradicción.</strong> "X parece Y pero en realidad es Z."</li>
+        <li><strong>Pregunta urgente.</strong> "¿Hacés esto? Cuidado con esto otro."</li>
+        <li><strong>Numerada.</strong> "3 cosas que…", "5 errores de…".</li>
+        <li><strong>Contranarrativa.</strong> "No, NO necesitás X. Necesitás Y."</li>
+        <li><strong>Promesa específica</strong> (sin prometer resultados de peso). "Cómo armar tu cena en 8 minutos sin volver a pedir delivery."</li>
+      </ul>
+    </section>
+
+    <!-- ════════ 09 — MÉTRICAS ════════ -->
+    <section id="s09">
+      <div class="sec-head">
+        <div class="sec-num">09</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 4 · Performance</div>
+          <h2>Las métricas que <em>mandan</em></h2>
+        </div>
+      </div>
+
+      <p>De más importante a menos. La trampa común es enamorarse de las métricas de arriba del embudo (vistas, alcance) porque son grandes y se ven bonitas en el reporte. La verdad es que la que paga sueldos es la primera de esta lista.</p>
+
+      <div class="metric">
+        <div class="metric-num">01</div>
+        <div class="metric-body">
+          <h3>Costo por consulta agendada</h3>
+          <p>La métrica que decide todo. Cuánto cuesta cada turno nuevo atribuible a nuestro contenido pago.</p>
+          <div class="metric-formula">$ gastados en pauta ÷ consultas agendadas atribuibles</div>
+          <p>Si la consulta tiene un arancel de $X y nos cuesta menos de $X/3 conseguir un turno nuevo, <strong>escalá</strong>. Si nos cuesta cerca o más que el arancel, hay un problema antes de la pauta: o el ad no engancha, o el embudo de agendamiento pierde gente, o la audiencia está equivocada.</p>
+          <div class="metric-lever">
+            <strong>Palancas para mejorar</strong>
+            Bajar el costo del lead (mejor hook, mejor copy). Mejorar la conversión del lead a turno (respuesta más rápida del equipo administrativo, embudo de WhatsApp más prolijo). Cambiar la creatividad si la métrica viene mal hace 3-4 días.
+          </div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-num">02</div>
+        <div class="metric-body">
+          <h3>CTR · Click Through Rate</h3>
+          <p>Porcentaje de personas que vieron el aviso y lo clickearon. Es la métrica más confiable para saber si el creativo está enganchando.</p>
+          <div class="metric-formula">(clicks ÷ impresiones) × 100</div>
+          <p>Referencia para salud/nutrición en Meta Ads: <strong>1–2 % en feed</strong> es saludable, <strong>0,5–1 % en stories/reels</strong> es saludable. Si estás abajo, el ad no engancha.</p>
+          <div class="metric-lever">
+            <strong>Palancas para mejorar</strong>
+            Cambiar el hook (los primeros 3 segundos). Reescribir el copy. Hacer el CTA más concreto. Cambiar el thumbnail si la pieza va a feed.
+          </div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-num">03</div>
+        <div class="metric-body">
+          <h3>CPM · Costo por mil impresiones</h3>
+          <p>Cuánto cuesta que mil personas vean el aviso. Es una métrica de "salud" del aviso y del targeting.</p>
+          <div class="metric-formula">($ gastados ÷ impresiones) × 1000</div>
+          <p>Si el CPM se va por las nubes hay tres posibilidades: la audiencia es muy chica y ya está saturada, el creativo está penalizado por Meta (típico en salud, ver §14), o estás compitiendo en una franja horaria/segmento caro.</p>
+          <div class="metric-lever">
+            <strong>Palancas para mejorar</strong>
+            Ampliar la audiencia. Renovar creatividades. Revisar el copy por palabras restringidas en salud. Probar otro lugar de colocación (feed vs reels vs stories).
+          </div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-num">04</div>
+        <div class="metric-body">
+          <h3>Frecuencia</h3>
+          <p>Cuántas veces vio el aviso, en promedio, cada persona alcanzada.</p>
+          <div class="metric-formula">impresiones ÷ alcance</div>
+          <p>Mayor a <strong>3-4</strong> ya es saturación. La gente se cansa, el CTR baja, el CPM sube. Es el indicador más claro de que necesitás creatividades nuevas.</p>
+          <div class="metric-lever">
+            <strong>Palancas para mejorar</strong>
+            Rotar creatividades. Ampliar la audiencia. Pausar el aviso por unos días y volver con uno nuevo.
+          </div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-num">05</div>
+        <div class="metric-body">
+          <h3>Alcance vs. impresiones</h3>
+          <p>Alcance: personas únicas que vieron al menos una vez. Impresiones: cantidad de veces que se mostró el aviso (puede ser varias por persona).</p>
+          <div class="metric-formula">impresiones / alcance = frecuencia</div>
+          <p>Cuando el alcance se estanca pero las impresiones siguen subiendo, estás "quemando" a la misma audiencia. Señal clara para ampliar segmentación o renovar piezas.</p>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-num">06</div>
+        <div class="metric-body">
+          <h3>CPL · Costo por lead</h3>
+          <p>Si usás formulario o WhatsApp como paso intermedio, cuánto cuesta una persona que deja sus datos pero todavía no agenda.</p>
+          <div class="metric-formula">$ gastados ÷ leads</div>
+          <p>Cuidado: <strong>lead ≠ consulta</strong>. Entre el lead y el turno hay un paso que es responsabilidad del equipo administrativo: contestar rápido, ser amable, agendar bien. Si tenés un CPL razonable pero un costo por consulta caro, el problema no está en marketing, está en la conversión del lead.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ 10 — GANADORES Y PERDEDORES ════════ -->
+    <section id="s10">
+      <div class="sec-head">
+        <div class="sec-num">10</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 4 · Performance</div>
+          <h2>Conjuntos <em>ganadores</em> y <em>perdedores</em></h2>
+        </div>
+      </div>
+
+      <p>Cuando una campaña tiene varios anuncios corriendo en paralelo, hay que aprender a leer cuál funciona y cuál no, sin enamorarse del que parece "creativo" ni cortar antes de tiempo el que necesita madurar.</p>
+
+      <h3>Regla cero: dejar madurar</h3>
+      <p>En los primeros días un anuncio tiene muy pocos datos. <strong>No tomar decisiones antes de 50-100 impresiones por anuncio</strong>. Más vale esperar tres días con paciencia que cortar algo que iba a ganar.</p>
+
+      <h3>Cómo leer un ganador</h3>
+      <div class="box box-rule">
+        <div class="box-label">▸ Señales de un ganador</div>
+        <ul>
+          <li>CTR por encima del promedio histórico de la cuenta.</li>
+          <li>Costo por consulta o costo por lead por debajo del target.</li>
+          <li>Frecuencia bajo control (&lt; 3).</li>
+          <li>CPM razonable, sin subir bruscamente.</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Acción:</strong> escalar. Subir el presupuesto <strong>20-30% por día</strong>, no más. Saltar de $5.000 a $20.000 de un día para el otro le rompe el aprendizaje al algoritmo y el ganador deja de funcionar.</p>
+      </div>
+
+      <h3>Cómo leer un perdedor</h3>
+      <div class="box box-stop">
+        <div class="box-label">▸ Señales de un perdedor</div>
+        <ul>
+          <li>CTR muy por debajo del promedio.</li>
+          <li>CPM creciendo en lugar de bajar.</li>
+          <li>Frecuencia disparándose porque el algoritmo no encuentra audiencia que enganche.</li>
+          <li>Cero o casi cero consultas atribuidas después de 3-4 días con presupuesto razonable.</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Acción:</strong> cortar. No "darle un día más a ver". Si en 3-4 días no funcionó, no va a funcionar mañana. Cortar libera presupuesto para el ganador.</p>
+      </div>
+
+      <h3>El estado intermedio: neutro</h3>
+      <p>A veces un ad no es claramente ganador ni perdedor. Métricas medias, costo aceptable pero no extraordinario. Acá la regla es: <strong>iterar, no escalar</strong>. Cambiar el hook, cambiar el copy, mismo target, mismo presupuesto. Si con la iteración mejora, vamos por ahí. Si no, se corta.</p>
+
+      <p class="callout">El ganador no se toca. Los demás se prueban en paralelo. Si tocás el ganador "para ver si mejora más", normalmente lo arruinás.</p>
+    </section>
+
+    <!-- ════════ 11 — RITMO Y MEZCLA ════════ -->
+    <section id="s11">
+      <div class="sec-head">
+        <div class="sec-num">11</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 5 · Proceso</div>
+          <h2>Ritmo, proceso y <em>mezcla</em></h2>
+        </div>
+      </div>
+
+      <h3>El flujo de una pieza</h3>
+      <ol>
+        <li><strong>Idea.</strong> Sale del brainstorm semanal, de un feedback de un paciente, de un comentario que se repite, de algo que el equipo médico nos cuenta.</li>
+        <li><strong>Guión.</strong> Un ángulo, un hook, un CTA. Documento corto, no novela.</li>
+        <li><strong>Aprobación.</strong> Marketing valida tono y formato. Si la pieza es técnica (deportiva, patologías), revisa un nutri del equipo antes de grabar.</li>
+        <li><strong>Producción.</strong> Grabación, edición, subtítulos, miniatura.</li>
+        <li><strong>Publicación.</strong> En calendario fijo, no "cuando tengo ganas". La regularidad es parte del posicionamiento.</li>
+        <li><strong>Medición.</strong> A los 3 días (¿enganchó?) y a la semana (¿convirtió?).</li>
+        <li><strong>Aprendizaje.</strong> Si funcionó, qué se replica. Si no, qué cambiamos para la próxima.</li>
+      </ol>
+
+      <h3>La mezcla sana: regla 4-2-1</h3>
+      <p>Cada 7 piezas que publicamos:</p>
+
+      <div class="box box-rule">
+        <div class="box-label">▸ Regla 4-2-1</div>
+        <ul>
+          <li><strong>4 de autoridad / educación</strong> (TOF y MOF).</li>
+          <li><strong>2 de consideración</strong> (equipo, testimonios, "cómo es una consulta").</li>
+          <li><strong>1 de pedir el turno</strong> (BOF, promocional).</li>
+        </ul>
+      </div>
+
+      <p>Si estás todo el día pidiendo turnos, la audiencia se cansa y se va. Si no pedís nunca, no convertís. La mezcla 4-2-1 te mantiene en equilibrio: la mayoría educás y construís, una vez por semana cerrás.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ La mezcla aplica al contenido propio</div>
+        <p>Esta regla es para lo que produce el equipo. <strong>El UGC y los canjes con microinfluencers (§12) corren por un canal paralelo</strong>, con su propio ritmo. No se cuentan adentro del 4-2-1 — son una palanca aparte para conseguir notoriedad local.</p>
+      </div>
+
+      <h3>Procesos recurrentes del equipo de marketing</h3>
+      <ul>
+        <li><strong>Lunes (30 min):</strong> reunión rápida — qué se hizo la semana pasada, qué viene, métricas clave.</li>
+        <li><strong>Quincenal:</strong> revisión profunda de pauta — qué corre, qué cortar, qué escalar.</li>
+        <li><strong>Mensual:</strong> replanteo de ángulos, calendario del mes siguiente, presupuesto.</li>
+        <li><strong>Trimestral:</strong> revisión de fondo — ¿estamos creciendo turnos? ¿el costo está bajando con el tiempo? ¿qué ángulo viejo dejó de funcionar?</li>
+      </ul>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ Importante</div>
+        <p>El equipo administrativo / secretaría es parte del embudo. Sin ellos, los leads que generamos se pierden. La reunión mensual incluye a marketing <strong>y</strong> a quien gestiona la agenda de pacientes. El número que importa es turnos agendados, no leads.</p>
+      </div>
+    </section>
+
+    <!-- ════════ 12 — UGC Y CANJES ════════ -->
+    <section id="s12">
+      <div class="sec-head">
+        <div class="sec-num">12</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 5 · Proceso</div>
+          <h2>UGC y canjes: <em>nuestra red en Bahía</em></h2>
+        </div>
+      </div>
+
+      <p>El contenido propio del equipo tiene un techo natural: alcanza, mayormente, a quien ya nos sigue. Para romper ese techo y empezar a posicionarnos en la mente de Bahía Blanca, activamos un segundo brazo: <strong>canjes con microinfluencers locales</strong>. La nutri ofrece su acompañamiento, el seguidor documenta el proceso. Cada canje activa la red de seguidores del paciente-creator y nos abre una puerta a una comunidad nueva.</p>
+
+      <h3>La aritmética del programa</h3>
+      <div class="box box-rule">
+        <div class="box-label">▸ El número que cambia el juego</div>
+        <p><strong>5 nutris × 2-3 canjes activos al mes = 10-15 pacientes-creators trabajando con nosotros en cualquier momento.</strong></p>
+        <p>Si cada uno produce entre 4 y 8 piezas durante 2-3 meses de seguimiento, son <strong>entre 40 y 120 piezas mensuales de UGC en cuentas locales de Bahía</strong>. A costo de pauta cero (solo el costo profesional de la consulta).</p>
+        <p>Eso es notoriedad imposible de comprar. Y es local, dirigida exactamente al público que nos importa.</p>
+      </div>
+
+      <h3>Quién es un buen candidato (y quién no)</h3>
+
+      <p>No cualquier persona con seguidores sirve. Buscamos un perfil muy específico:</p>
+
+      <h4>Sí</h4>
+      <ul>
+        <li><strong>Vive en Bahía Blanca</strong> o área metropolitana cercana. Si es online, tiene sentido solo cuando la audiencia es nacional o regional grande.</li>
+        <li><strong>Audiencia engaged, no necesariamente grande.</strong> 1.000–10.000 seguidores reales locales es el punto dulce. Más chica es poca difusión; más grande probablemente esperan plata, no canje.</li>
+        <li><strong>Su perfil está alineado con salud, deporte, lifestyle local, gastronomía sana, maternidad, profesionales 25-45.</strong></li>
+        <li><strong>Tiene un objetivo nutricional real.</strong> No "actúa" como si lo tuviera. Si no necesita nutricionista, el proceso no es genuino y se nota.</li>
+        <li><strong>Se siente cómoda frente a cámara y posteando.</strong> Si tenemos que arrastrarla a producir, el canje no va a funcionar.</li>
+      </ul>
+
+      <h4>No</h4>
+      <ul>
+        <li><strong>Nutricionistas, entrenadores, profesionales del bienestar.</strong> Sería competencia o canibalización. Y técnicamente saben demasiado para ser un caso "normal".</li>
+        <li><strong>Cuentas con seguidores comprados</strong> (alto número, engagement bajísimo). Inútil.</li>
+        <li><strong>Personas con objetivos irrealistas o trastorno alimentario activo.</strong> Es un riesgo ético, no una oportunidad de marketing.</li>
+        <li><strong>Personas con relación comercial activa con un competidor</strong> (otra nutri, otra clínica). No queremos comparaciones públicas ni conflictos.</li>
+        <li><strong>Cuentas anónimas o con bajo capital reputacional propio.</strong> El UGC funciona cuando hay cara y nombre detrás.</li>
+      </ul>
+
+      <h3>Qué ofrecemos · Qué pedimos</h3>
+
+      <div class="vs">
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Nosotros damos</div>
+          <p><strong>Plan completo de 2-3 meses:</strong> primera consulta + 2-3 controles + plan alimentario personalizado + acompañamiento por WhatsApp dentro de horarios razonables + interconsulta médica si la patología lo amerita.</p>
+        </div>
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Ellos dan</div>
+          <p><strong>Un mínimo claro de contenido:</strong><br>
+          • 1 Reel o carrusel de presentación al inicio<br>
+          • 4-6 stories durante el proceso (1 por semana aprox.)<br>
+          • 1 Reel de balance al cierre (sobre <em>cómo se sintió</em>, no sobre kilos bajados)<br>
+          • Etiqueta a <strong>@voit</strong> en todo<br>
+          • <strong>#canje</strong> o <strong>#colaboración</strong> visible (transparencia legal, ver más abajo)</p>
+        </div>
+      </div>
+
+      <p>Es importante que el acuerdo sea claro desde el día uno. La nutri no es "regalando" consultas; <strong>está intercambiando su servicio profesional por difusión</strong>. Eso ordena la relación.</p>
+
+      <h3>Las reglas que el UGC creator debe respetar</h3>
+
+      <p>Antes de la primera consulta, marketing le entrega un documento breve (una página, no un contrato notarial) con las reglas. Son las mismas que ya tenemos en §5 y §14, traducidas a algo accionable para el creator:</p>
+
+      <div class="box box-rule">
+        <div class="box-label">▸ Mini-brief para el creator (entregable)</div>
+        <h4>Lo que SÍ podés / debés mostrar</h4>
+        <ul>
+          <li>Tu proceso real: lo bueno y lo difícil.</li>
+          <li>Tus comidas, tu cocina, tu logística diaria.</li>
+          <li>Cómo te vas sintiendo (energía, sueño, ánimo, presencia).</li>
+          <li>El equipo de Voit, el consultorio, tu nutri.</li>
+          <li>Hábitos nuevos que vas incorporando.</li>
+          <li>Honestidad si una semana te costó o abandonaste algo.</li>
+        </ul>
+        <h4>Lo que NO podés mostrar / decir</h4>
+        <ul>
+          <li>No prometas resultados a otros ("vos también vas a bajar X").</li>
+          <li>No demonices alimentos ("la harina es veneno").</li>
+          <li>No hagas "antes y después" de peso o de cuerpo.</li>
+          <li>No des consejos médicos ni nutricionales en nombre propio (esa parte la dice la nutri).</li>
+          <li>No menciones tarifas, descuentos ni "te recomiendo que vayas porque es barata".</li>
+        </ul>
+        <h4>Lo administrativo</h4>
+        <ul>
+          <li>Siempre etiquetar a <strong>@voit</strong>.</li>
+          <li>Siempre usar <strong>#canje</strong> o <strong>#colaboración</strong>. No es solo formalidad: es obligación de Defensa al Consumidor cuando hay relación comercial detrás de una recomendación.</li>
+          <li>Las piezas grandes (Reel de presentación y Reel de balance) se nos pasan a revisar antes de publicar. Las stories son libres dentro de las reglas anteriores.</li>
+        </ul>
+      </div>
+
+      <h3>El proceso operativo (mensual)</h3>
+
+      <ol>
+        <li><strong>Captación (primera semana del mes).</strong> Marketing arma una lista de 10-15 candidatos por mes — mucho más que las plazas — usando búsqueda de IG por ubicación Bahía Blanca, recomendaciones del equipo, alianzas locales (gyms, estudios de yoga, pilates).</li>
+        <li><strong>Approach.</strong> DM cálido y personalizado. Nada de mensajes copiados. Mostramos que vimos su contenido, contamos en una línea quién es Voit y proponemos el canje.</li>
+        <li><strong>Filtro.</strong> Sobre los que responden, marketing chequea cuenta (engagement real, no comprado), alineamiento de valores, disposición a respetar las reglas. Quedan los 10-15 mejores.</li>
+        <li><strong>Asignación.</strong> A qué nutri va cada uno. Lo ideal es por afinidad temática (la nutri con perfil más deportivo recibe los creators más fit; la que se especializa en patologías recibe los casos clínicos; etc.).</li>
+        <li><strong>Briefing (15 minutos virtual).</strong> Marketing les pasa las reglas, qué esperamos, qué no. Acá se firma el acuerdo (puede ser por WhatsApp o mail, no necesita escribanía).</li>
+        <li><strong>Onboarding.</strong> Primera consulta como cualquier paciente — pero con una bienvenida especial (kit chico: tarjeta del equipo, una bolsa con algún snack saludable, lo que sea, bajo costo). Que sienta que está entrando a una comunidad.</li>
+        <li><strong>Seguimiento.</strong> Cada UGC creator tiene <strong>un responsable de marketing asignado</strong> durante todo su proceso. Esa persona recibe sus posts, da feedback amable, ayuda con etiquetas, alerta si algo cruza la línea.</li>
+        <li><strong>Revisión de piezas grandes</strong> antes de publicar (Reel inicial y Reel de balance). Las stories no se revisan una por una, pero el feedback rápido sí.</li>
+        <li><strong>Cierre.</strong> Agradecimiento explícito. Le ofrecemos seguir como paciente con tarifa preferencial si quiere continuar. Le pedimos permiso para usar fragmentos de su UGC en nuestras propias piezas y en pauta paga (es uno de los grandes beneficios del programa).</li>
+      </ol>
+
+      <h3>Cómo medimos si está funcionando</h3>
+
+      <p>El UGC no se mide igual que la pauta. Las métricas relevantes son:</p>
+
+      <ul>
+        <li><strong>Encuesta en cada primera consulta nueva:</strong> "¿Cómo nos conociste?" Si las menciones a "vi a Fulana, te seguía" empiezan a aparecer, el programa está funcionando.</li>
+        <li><strong>Crecimiento de seguidores de @voit</strong> en meses con muchos canjes activos vs. meses sin.</li>
+        <li><strong>DMs entrantes</strong>: aumento mensual y atribución (si el lead menciona a un creator específico).</li>
+        <li><strong>Engagement orgánico</strong> en posts donde el creator nos etiquetó.</li>
+        <li><strong>Notoriedad local cualitativa:</strong> cada 6 meses, encuesta a pacientes nuevos sobre "¿habías escuchado de Voit antes de hoy? ¿Dónde?". Cuando esa respuesta empiece a incluir nombres de creators, el programa se posicionó.</li>
+      </ul>
+
+      <h3>Los riesgos del programa (y cómo gestionarlos)</h3>
+
+      <div class="box box-stop">
+        <div class="box-label">▸ Lo que puede salir mal</div>
+
+        <h4>Que el creator abandone el proceso a mitad de camino</h4>
+        <p>Pasa. Política clara desde el inicio: si abandonás antes de las 4 semanas, las consultas se facturan como paciente normal. No es castigo, es contrato.</p>
+
+        <h4>Que postee algo problemático</h4>
+        <p>Se previene en tres capas: briefing inicial fuerte, revisión previa de las piezas grandes, y feedback rápido en stories. Si pasa un post que cruza la línea: contacto directo, pedimos editar o borrar. Si insiste, se cierra el canje.</p>
+
+        <h4>Que se vuelva tóxico si no ve los resultados que esperaba</h4>
+        <p><strong>Este es el riesgo más serio.</strong> Se mitiga filtrando bien al inicio: no aceptamos canjes con objetivos irrealistas. Alguien con un objetivo de salud realista y un perfil emocionalmente sólido es la única candidata. Si una semana viene complicada, marketing y la nutri trabajan juntos en cómo acompañar la comunicación. Honestidad pública > resultados maquillados.</p>
+
+        <h4>Cuestión legal de publicidad</h4>
+        <p>Siempre <strong>#canje</strong> o <strong>#publicidad</strong>. No es opcional. Defensa al Consumidor pide transparencia cuando hay relación comercial detrás de una recomendación pública. Cumplir es protección para Voit y para el creator.</p>
+
+        <h4>Otros pacientes que exigen el mismo trato</h4>
+        <p>Política clara: el canje no es un "servicio barato". Es una colaboración comercial de marketing, con obligaciones del lado del paciente (producir contenido, respetar reglas, etiquetar). No es comparable a "consulta gratis".</p>
+      </div>
+
+      <h3>El programa no reemplaza nada</h3>
+
+      <p class="callout">El UGC es un brazo adicional, no el brazo principal. El equipo de Voit sigue produciendo su contenido propio. Los creators amplifican y traen calle.</p>
+
+      <p>Pensarlo así evita dos errores comunes: el primero, esperar que los creators reemplacen el trabajo editorial del equipo (no van a hablar del método como nosotros, no van a explicar técnicamente; eso lo hacemos nosotros). El segundo, descuidar el programa de canjes porque "ya tenemos contenido propio". Sin los canjes, somos una clínica que se habla a sí misma. Con los canjes, somos una clínica que habla todo Bahía.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">▸ Cuándo escalar el modelo</div>
+        <p>Empezamos con 2-3 canjes por nutri al mes porque ese es un volumen que el equipo puede sostener sin que la calidad de atención baje. Si después de 3-4 meses el sistema rueda bien, el responsable de marketing está al día, y hay candidatas/os esperando entrar — recién ahí evaluamos subir a 3-4 por nutri. Antes no. Forzar el programa cuando el equipo no puede con la carga lleva a canjes mal hechos, que son <em>peores</em> que no tener canjes.</p>
+      </div>
+
+    </section>
+
+    <!-- ════════ 13 — CHECKLIST ════════ -->
+    <section id="s13">
+      <div class="sec-head">
+        <div class="sec-num">13</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Parte 5 · Proceso</div>
+          <h2>Checklist <em>antes de grabar</em></h2>
+        </div>
+      </div>
+
+      <p>Si no podés contestar que sí a todo esto, no prendas la cámara. Volvé al guión.</p>
+
+      <h3>Fundamentos</h3>
+      <ul class="checklist">
+        <li>¿Qué ángulo es? Uno solo, definido.</li>
+        <li>¿Cuál es el hook visual? ¿Cuál es el hook textual?</li>
+        <li>¿Qué quiero que la persona haga después de mirar? CTA claro.</li>
+        <li>¿Esta pieza es TOF, MOF o BOF? ¿Lo respeta el tono?</li>
+        <li>¿Si menciono cifras o datos, tengo la fuente?</li>
+      </ul>
+
+      <h3>Tono y línea editorial</h3>
+      <ul class="checklist">
+        <li>¿Estoy hablando con respeto, sin culpabilizar?</li>
+        <li>¿El tono es cálido y profesional, no paternalista?</li>
+        <li>¿Estoy ofreciendo un aprendizaje concreto, no solo opiniones?</li>
+        <li>¿Estoy apoyándome en el respaldo del equipo profesional?</li>
+      </ul>
+
+      <h3>Cosas que cortan la grabación (si alguna es "sí", reescribir)</h3>
+      <ul class="checklist">
+        <li class="no">¿Estoy prometiendo resultados específicos en tiempo específico ("bajá X kilos en X semanas")?</li>
+        <li class="no">¿Estoy demonizando algún alimento como "veneno", "matador" o similar?</li>
+        <li class="no">¿Estoy mostrando un antes/después de peso o de cuerpos?</li>
+        <li class="no">¿Estoy usando lenguaje que estigmatiza ("gordo", "flaca", "transformá tu cuerpo")?</li>
+        <li class="no">¿Mi pieza puede hacer sentir mal a alguien con un trastorno alimentario?</li>
+      </ul>
+
+      <h3>Producción</h3>
+      <ul class="checklist">
+        <li>¿La iluminación es buena? ¿Cara visible, ojos visibles?</li>
+        <li>¿Grabación en vertical (9:16) para Reels y Stories?</li>
+        <li>¿Tengo plan para los subtítulos? (siempre van)</li>
+        <li>¿La duración es la justa? (15-30 segundos para pauta; orgánico flexible).</li>
+        <li>¿El audio está limpio, sin ruidos de fondo molestos?</li>
+      </ul>
+    </section>
+
+    <!-- ════════ 14 — MARKETING DE SALUD ════════ -->
+    <section id="s14">
+      <div class="sec-head">
+        <div class="sec-num">14</div>
+        <div class="sec-meta">
+          <div class="sec-kicker">Apartado especial</div>
+          <h2>Marketing de salud: <em>lo que no negociamos</em></h2>
+        </div>
+      </div>
+
+      <p>Este es el apartado que más diferencia a Voit de la nutri-influencer suelta. Estamos haciendo marketing de salud, y eso significa que hay líneas que no cruzamos, no porque queden bonitas, sino porque <strong>cruzarlas hace daño</strong> y, además, Meta penaliza con CPM más caros, restricciones de anuncios y bloqueos de cuentas.</p>
+
+      <h3>El "antes y después" — por qué evitarlo</h3>
+      <div class="box box-stop">
+        <div class="box-label">▸ Por qué cuesta tanto</div>
+        <ol>
+          <li><strong>Es éticamente problemático.</strong> Asocia "antes" a algo malo y "después" a algo bueno, reduciendo a la persona a un cuerpo. Refuerza sesgos de imagen corporal que están detrás de los trastornos alimentarios.</li>
+          <li><strong>Meta lo penaliza activamente.</strong> En la política de Meta Ads de la categoría salud y bienestar, los antes/después son una de las causas más frecuentes de rechazo de anuncios y de subida de CPM por "engagement bait".</li>
+          <li><strong>Atrae al público equivocado.</strong> Es marketing que llama a quien busca "milagro", no a quien busca acompañamiento profesional. Esos pacientes desertan rápido y dejan mal reseña.</li>
+        </ol>
+      </div>
+
+      <h3>Alternativas que sí podemos usar</h3>
+      <div class="box box-rule">
+        <div class="box-label">▸ Antes / después responsables</div>
+        <ul>
+          <li><strong>Antes / después de un plato.</strong> Cómo lo armaba antes, cómo lo arma ahora. Mismo objetivo nutricional, mejor ejecución. Es educativo y visual.</li>
+          <li><strong>Antes / después de un hábito.</strong> Testimonios sobre cómo cambió la energía, el sueño, el ánimo, la relación con la comida. Sin números de peso, sin imágenes de cuerpos.</li>
+          <li><strong>Antes / después de una rutina.</strong> Cómo era la semana antes (caos, picoteo, sin estructura) y cómo es ahora.</li>
+          <li><strong>Antes / después de la heladera.</strong> Visualmente atractivo, educativo, sin tocar el cuerpo.</li>
+        </ul>
+      </div>
+
+      <h3>Palabras que conviene evitar en pauta de salud</h3>
+      <p>Meta tiene listas internas de palabras que disparan revisión manual o bloqueo en categoría salud y peso. La regla práctica:</p>
+
+      <div class="vs">
+        <div class="vs-card vs-bad">
+          <div class="vs-label">✕ Evitar</div>
+          <p>"Bajá X kilos en X días", "perdé peso", "transformá tu cuerpo", "delgada", "flaca", "antes/después", "milagro", "garantizado", "100% efectivo", "te vas a sentir hermosa"</p>
+        </div>
+        <div class="vs-card vs-good">
+          <div class="vs-label">✓ Alternativas</div>
+          <p>"Mejorá tu composición corporal", "alcanzá tus objetivos de salud", "construí hábitos sostenibles", "sentirte mejor", "energía", "calidad de vida", "acompañamiento profesional"</p>
+        </div>
+      </div>
+
+      <h3>Imagen corporal: la línea que no cruzamos</h3>
+      <ul>
+        <li><strong>Nunca</strong> usar imágenes que muestren cuerpos como "antes feos" / "después lindos".</li>
+        <li><strong>Nunca</strong> usar estereotipos físicos como "deseable" vs "no deseable".</li>
+        <li><strong>Nunca</strong> sugerir que un tipo de cuerpo es objetivo universal.</li>
+        <li>Sí podemos hablar de <strong>composición corporal</strong> como una métrica de salud, contextualizada (no como "verse más linda").</li>
+        <li>Sí podemos mostrar pacientes reales con su consentimiento, contando su experiencia con la voz puesta en cómo se <em>sienten</em>, no en cómo se <em>ven</em>.</li>
+      </ul>
+
+      <h3>El respaldo profesional como diferencial</h3>
+      <p>Todo lo anterior no es solo "buena onda" o "marketing responsable". Es <strong>nuestro diferencial real</strong>. Cuando alguien compara Voit con una nutri suelta de Instagram, lo que tiene que percibir es esto: acá hay un equipo serio, hay médicos de respaldo, hay método, y por eso no prometemos magia. Esa seriedad es lo que vendemos. El paciente que está cansado de promesas vacías y de productos milagro es exactamente el paciente que queremos.</p>
+
+      <p class="pull">
+        Lo que para otros es una restricción incómoda, para nosotros es la marca.
+        <span class="pull-attr">— Cierre del playbook</span>
+      </p>
+    </section>
+
+    <footer>
+      Voit · Playbook de contenido v1<br>
+      Documento interno · Equipo de marketing
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Close mobile menu on link click
+  document.querySelectorAll('.toc a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelector('aside').classList.remove('open');
+    });
+  });
+  // Highlight active section in sidebar
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.toc a').forEach(a => {
+          if (a.getAttribute('href') === '#' + id) {
+            a.style.color = 'var(--green-deep)';
+            a.style.fontWeight = '500';
+            const num = a.querySelector('.num');
+            if (num) num.style.color = 'var(--green)';
+          } else {
+            a.style.color = '';
+            a.style.fontWeight = '';
+            const num = a.querySelector('.num');
+            if (num) num.style.color = '';
+          }
+        });
+      }
+    });
+  }, {rootMargin: '-40% 0px -55% 0px'});
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
