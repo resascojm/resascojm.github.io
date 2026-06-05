@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook de Contenido · Marketing Grupo Resasco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16140f;--paper:#f4efe6;--paper-2:#ebe3d4;--card:#fbf8f1;
+    --amber:#e8581c;--amber-deep:#b73d10;--olive:#5e6240;--steel:#3a4a52;
+    --line:#d8cdb8;--muted:#736b5c;--green:#3f6b3f;--red:#a8402c;--gold:#9a7b2e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Spline Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 6%,rgba(232,88,28,.06),transparent 40%),radial-gradient(circle at 88% 94%,rgba(94,98,64,.07),transparent 45%);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  header.hero{position:relative;padding:84px 0 60px;border-bottom:3px solid var(--ink);overflow:hidden}
+  .kicker{font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .kicker::after{content:"";flex:1;height:1px;background:var(--line)}
+  h1.title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.6rem,7vw,5.4rem);line-height:.94;letter-spacing:-.02em;max-width:15ch}
+  h1.title em{font-style:normal;color:var(--amber)}
+  .hero p.lead{margin-top:28px;max-width:62ch;font-size:1.12rem;color:#34302a}
+  .hero .meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px}
+  .tag{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 13px;border:1px solid var(--ink);border-radius:100px;background:var(--ink);color:var(--paper)}
+  .tag.ghost{background:transparent;color:var(--ink)}
+
+  nav.toc{padding:30px 0;border-bottom:1px solid var(--line)}
+  nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2px 30px;counter-reset:idx}
+  nav.toc li{counter-increment:idx;border-top:1px solid var(--line)}
+  nav.toc a{display:flex;gap:14px;align-items:baseline;padding:13px 4px;text-decoration:none;color:var(--ink);transition:.2s}
+  nav.toc a:hover{color:var(--amber);padding-left:10px}
+  nav.toc a::before{content:counter(idx,decimal-leading-zero);font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--amber-deep);font-weight:600}
+
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  .sec-num{font-family:'Spline Sans Mono',monospace;font-size:.74rem;letter-spacing:.2em;color:var(--amber-deep);font-weight:600;text-transform:uppercase;margin-bottom:14px;display:block}
+  h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.9rem,4vw,3rem);line-height:1.02;letter-spacing:-.015em;margin-bottom:22px;max-width:20ch}
+  h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.3rem;margin:30px 0 12px;letter-spacing:-.01em}
+  p{margin-bottom:16px;max-width:70ch}
+  p.big{font-size:1.15rem;color:#34302a}
+  strong{font-weight:600}
+  .accent{color:var(--amber-deep);font-weight:600}
+
+  /* NORTE */
+  .north{border:2px solid var(--ink);border-radius:20px;background:var(--ink);color:var(--paper);padding:38px 40px;margin-top:24px}
+  .north .big-stmt{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.4rem,3vw,2rem);line-height:1.15;letter-spacing:-.01em;margin-bottom:22px}
+  .north .big-stmt em{color:var(--amber);font-style:normal}
+  .north-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .north-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:18px 20px}
+  .north-card .nt{font-family:'Spline Sans Mono',monospace;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:8px}
+  .north-card p{font-size:.9rem;color:#e8e1d4;margin:0}
+
+  /* FUNNEL */
+  .funnel{display:grid;gap:14px;margin-top:24px}
+  .stage{display:grid;grid-template-columns:120px 1fr 200px;border:1.5px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--card)}
+  .stage-side{padding:22px 18px;color:var(--paper);display:flex;flex-direction:column;justify-content:center}
+  .stage-side .code{font-family:'Spline Sans Mono',monospace;font-size:1.4rem;font-weight:600}
+  .stage-side .lbl{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-top:4px}
+  .stage:nth-child(1) .stage-side{background:var(--steel)}
+  .stage:nth-child(2) .stage-side{background:var(--olive)}
+  .stage:nth-child(3) .stage-side{background:var(--amber)}
+  .stage-body{padding:20px 24px}
+  .stage-body h4{font-family:'Bricolage Grotesque',sans-serif;font-size:1.12rem;font-weight:600;margin-bottom:6px}
+  .stage-body .desc{font-size:.92rem;color:var(--muted);margin-bottom:10px}
+  .stage-body ul{list-style:none;display:flex;flex-wrap:wrap;gap:7px}
+  .stage-body li{font-size:.78rem;background:var(--paper-2);padding:5px 10px;border-radius:7px;color:#3a352d}
+  .stage-kpi{border-left:1px dashed var(--line);padding:20px 22px;background:var(--paper-2)}
+  .stage-kpi .kt{font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;margin-bottom:8px}
+  .stage-kpi .km{font-size:.85rem;font-weight:600;line-height:1.4}
+  .stage-kpi .ks{font-size:.78rem;color:var(--muted)}
+
+  .callout{border-left:4px solid var(--amber);background:var(--card);padding:22px 26px;border-radius:0 14px 14px 0;margin:26px 0}
+  .callout .ct{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
+  .callout.zone{border-left-color:var(--steel)}
+  .callout.warn{border-left-color:var(--red)}
+
+  /* SPLIT */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .col{border:1.5px solid var(--ink);border-radius:16px;padding:28px;background:var(--card);position:relative;overflow:hidden}
+  .col.paid{background:linear-gradient(160deg,#fbf8f1,#f6ede0)}
+  .col.organic{background:linear-gradient(160deg,#fbf8f1,#eef0e6)}
+  .col .badge{font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:6px 12px;border-radius:100px;display:inline-block;margin-bottom:16px}
+  .col.paid .badge{background:var(--amber);color:#fff}
+  .col.organic .badge{background:var(--olive);color:#fff}
+  .col h3{margin-top:0}
+  .col ul{list-style:none;margin-top:14px}
+  .col li{padding:9px 0 9px 26px;position:relative;border-top:1px dashed var(--line);font-size:.94rem}
+  .col li:first-child{border-top:none}
+  .col li::before{content:"→";position:absolute;left:0;color:var(--amber-deep);font-weight:600}
+
+  /* MATRIX */
+  .matrix{margin-top:26px;border:1.5px solid var(--ink);border-radius:16px;overflow:hidden}
+  .matrix table{width:100%;border-collapse:collapse}
+  .matrix th,.matrix td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top}
+  .matrix th:last-child,.matrix td:last-child{border-right:none}
+  .matrix thead th{background:var(--ink);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+  .matrix tbody th{background:var(--paper-2);font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;width:130px}
+  .matrix td{font-size:.9rem;background:var(--card)}
+  .matrix td .mh{font-weight:600;display:block;margin-bottom:3px}
+  .matrix tr:last-child td,.matrix tr:last-child th{border-bottom:none}
+
+  /* RANK */
+  .rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .rank{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card)}
+  .rank-head{padding:18px 24px;color:#fff}
+  .rank.lead .rank-head{background:var(--amber)}
+  .rank.reach .rank-head{background:var(--steel)}
+  .rank-head .t{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem}
+  .rank-head .s{font-size:.78rem;opacity:.9;margin-top:2px}
+  .rank-body{padding:8px 24px 22px}
+  .step{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.8rem;width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:11px;background:var(--paper-2);color:var(--ink)}
+  .step.must .n{background:var(--amber);color:#fff}
+  .step .txt strong{display:block;font-size:1.02rem}
+  .step .txt span{font-size:.84rem;color:var(--muted)}
+  .must-flag{font-family:'Spline Sans Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;background:var(--amber-deep);color:#fff;padding:3px 8px;border-radius:5px;margin-left:8px;vertical-align:middle}
+
+  /* HOOK BANK */
+  .hooks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:22px}
+  .hook{border:1.5px solid var(--ink);border-radius:13px;padding:16px 18px;background:var(--card)}
+  .hook .hk{font-family:'Spline Sans Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;margin-bottom:7px}
+  .hook .hx{font-size:.88rem;font-style:italic;color:#3a352d}
+
+  /* ANGULOS */
+  .ang-intro{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0 8px}
+  .ang-def{border:1.5px solid var(--ink);border-radius:15px;padding:22px 24px;background:var(--card)}
+  .ang-def .at{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
+  .ang-def .at .pin{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:middle}
+  .ang-def.angle .at .pin{background:var(--amber)}
+  .ang-def.hook .at .pin{background:var(--steel)}
+  .ang-def p{font-size:.9rem;margin:0;color:#3a352d}
+  .catbar{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 6px}
+  .catchip{font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:6px 13px;border-radius:100px;color:#fff;display:flex;align-items:center;gap:7px}
+  .cat-emo{background:#a8456e}.cat-fun{background:#3a6076}.cat-com{background:#3f6b3f}.cat-cmp{background:#b97318}.cat-pro{background:#a8402c}
+  .angles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:18px}
+  .angle{border:1.5px solid var(--ink);border-left-width:5px;border-radius:12px;padding:16px 18px;background:var(--card);display:flex;flex-direction:column}
+  .angle.emo{border-left-color:#a8456e}.angle.fun{border-left-color:#3a6076}.angle.com{border-left-color:#3f6b3f}.angle.cmp{border-left-color:#b97318}.angle.pro{border-left-color:#a8402c}
+  .angle .an{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.02rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .angle .acat{font-family:'Spline Sans Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:2px 7px;border-radius:5px;color:#fff;margin-left:auto;flex:none}
+  .angle .acat.emo{background:#a8456e}.angle .acat.fun{background:#3a6076}.angle .acat.com{background:#3f6b3f}.angle .acat.cmp{background:#b97318}.angle .acat.pro{background:#a8402c}
+  .angle .aw{font-size:.83rem;color:var(--muted);margin:0}
+
+  /* HOOK TYPES */
+  .htypes{display:grid;gap:16px;margin-top:24px}
+  .htype{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card)}
+  .htype .hh{display:flex;align-items:center;gap:14px;padding:16px 24px;color:#fff}
+  .htype.visual .hh{background:#3a6076}.htype.audio .hh{background:#6a4a7a}.htype.frase .hh{background:var(--amber)}
+  .htype .hh .ic{font-size:1.5rem;line-height:1}
+  .htype .hh .ht{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.25rem}
+  .htype .hh .hs{font-size:.8rem;opacity:.9;margin-left:auto;font-family:'Spline Sans Mono',monospace;letter-spacing:.04em}
+  .htype .hbody{padding:20px 24px}
+  .htype .hbody>p{font-size:.93rem;margin-bottom:14px}
+  .htype .egs{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .eg{background:var(--paper-2);border-radius:10px;padding:12px 14px}
+  .eg .el{font-family:'Spline Sans Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;margin-bottom:5px}
+  .eg .ex2{font-size:.84rem;color:#3a352d;font-style:italic}
+
+  /* BRAND VOICE */
+  .voices{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
+  .voice{border:1.5px solid var(--ink);border-radius:15px;overflow:hidden;background:var(--card)}
+  .voice .vh{padding:14px 20px;color:#fff;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;display:flex;justify-content:space-between;align-items:center}
+  .voice .vh small{font-family:'Spline Sans Mono',monospace;font-size:.6rem;font-weight:500;opacity:.85;letter-spacing:.06em}
+  .voice:nth-child(1) .vh{background:#1f4e8c}
+  .voice:nth-child(2) .vh{background:#5a2d3a}
+  .voice:nth-child(3) .vh{background:#2f5d4f}
+  .voice:nth-child(4) .vh{background:#8a3d1a}
+  .voice .vb{padding:16px 20px}
+  .voice .vb p{font-size:.88rem;margin:0;color:#3a352d}
+  .voice .vb .kw{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+  .voice .vb .kw span{font-size:.72rem;background:var(--paper-2);padding:4px 9px;border-radius:6px;color:#4a443a}
+
+  /* METRIC */
+  .metric{border:1.5px solid var(--ink);border-radius:16px;background:var(--card);margin-bottom:18px;overflow:hidden}
+  .metric-top{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:20px 26px;background:var(--ink);color:var(--paper)}
+  .metric-top .mname{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.35rem}
+  .metric-top .mabbr{font-family:'Spline Sans Mono',monospace;font-size:.74rem;color:var(--amber);letter-spacing:.1em}
+  .formula{margin-left:auto;font-family:'Spline Sans Mono',monospace;font-size:.9rem;background:rgba(255,255,255,.08);padding:9px 15px;border-radius:9px;border:1px solid rgba(255,255,255,.15)}
+  .metric-body{padding:22px 26px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+  .metric-body .what p{font-size:.93rem;margin-bottom:10px}
+  .levers{background:var(--paper-2);border-radius:12px;padding:16px 18px}
+  .levers .lt{font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-deep);font-weight:600;margin-bottom:10px}
+  .levers ul{list-style:none}
+  .levers li{font-size:.85rem;padding:6px 0 6px 22px;position:relative}
+  .levers li::before{content:"▸";position:absolute;left:0;color:var(--amber)}
+  .ex{font-family:'Spline Sans Mono',monospace;font-size:.8rem;background:var(--paper-2);padding:10px 14px;border-radius:9px;display:inline-block;margin-top:4px;color:#3a352d}
+
+  table.std{width:100%;border-collapse:collapse;margin-top:16px;font-size:.92rem;background:var(--card);border:1.5px solid var(--ink);border-radius:12px;overflow:hidden}
+  table.std th,table.std td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  table.std th{background:var(--ink);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  table.std tr:last-child td{border-bottom:none}
+  td .pill{font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:3px 9px;border-radius:6px;font-weight:600}
+  .pill.bad{background:#f3dcd5;color:var(--red)}
+  .pill.ok{background:#e6e8d8;color:var(--olive)}
+  .pill.good{background:#d8ead8;color:var(--green)}
+
+  /* GOOD LEAD */
+  .leadgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .leadcard{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden}
+  .leadcard .h{padding:16px 22px;color:#fff;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.12rem}
+  .leadcard.good .h{background:var(--green)}
+  .leadcard.bad .h{background:var(--red)}
+  .leadcard .b{padding:16px 22px;background:var(--card)}
+  .leadcard ul{list-style:none}
+  .leadcard li{font-size:.9rem;padding:8px 0 8px 24px;position:relative;border-bottom:1px solid var(--line)}
+  .leadcard li:last-child{border-bottom:none}
+  .leadcard.good li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  .leadcard.bad li::before{content:"✕";position:absolute;left:0;color:var(--red);font-weight:700}
+
+  /* BASE */
+  .basecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:24px}
+  .basecard{border:1.5px solid var(--ink);border-radius:14px;padding:20px;background:var(--card)}
+  .basecard .bi{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:7px;color:var(--amber-deep)}
+  .basecard p{font-size:.87rem;margin:0;color:#3a352d}
+
+  /* WINNERS */
+  .wl{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .wlcard{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden}
+  .wlcard .h{padding:16px 22px;color:#fff;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.12rem}
+  .wlcard.win .h{background:var(--green)}
+  .wlcard.lose .h{background:var(--red)}
+  .wlcard .b{padding:18px 22px;background:var(--card)}
+  .wlcard ul{list-style:none}
+  .wlcard li{font-size:.9rem;padding:8px 0 8px 24px;position:relative;border-bottom:1px solid var(--line)}
+  .wlcard li:last-child{border-bottom:none}
+  .wlcard.win li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  .wlcard.lose li::before{content:"✕";position:absolute;left:0;color:var(--red);font-weight:700}
+
+  /* PROCESS */
+  .flow{display:flex;flex-wrap:wrap;gap:0;margin-top:24px;align-items:stretch}
+  .flow-step{flex:1;min-width:150px;border:1.5px solid var(--ink);background:var(--card);padding:18px;position:relative;display:flex;flex-direction:column}
+  .flow-step:not(:last-child){border-right:none}
+  .flow-step:first-child{border-radius:14px 0 0 14px}
+  .flow-step:last-child{border-radius:0 14px 14px 0}
+  .flow-step .fn{font-family:'Spline Sans Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--amber-deep);font-weight:600;margin-bottom:7px}
+  .flow-step .ft{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1rem;margin-bottom:4px}
+  .flow-step .fd{font-size:.8rem;color:var(--muted)}
+  .ratio{display:flex;height:54px;border-radius:11px;overflow:hidden;margin-top:18px;border:1.5px solid var(--ink)}
+  .ratio div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:.82rem;font-weight:600;font-family:'Spline Sans Mono',monospace;text-align:center;padding:0 8px}
+  .ratio .r1{flex:5;background:var(--steel)}
+  .ratio .r2{flex:3;background:var(--olive)}
+  .ratio .r3{flex:2;background:var(--amber)}
+
+  /* CHECKLIST */
+  .checklist{background:var(--ink);color:var(--paper);border-radius:18px;padding:38px 40px;margin-top:24px}
+  .checklist h3{color:var(--paper);margin-top:0}
+  .checklist .row{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);align-items:flex-start}
+  .checklist .row:last-child{border-bottom:none}
+  .checklist .q{font-family:'Spline Sans Mono',monospace;color:var(--amber);font-weight:600;flex:none}
+  .checklist .row p{margin:0;color:#e8e1d4}
+
+  footer{padding:50px 0 70px;text-align:center}
+  footer .fl{font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:820px){
+    .split,.rule-grid,.wl,.metric-body,.leadgrid,.voices,.north-grid{grid-template-columns:1fr}
+    .stage{grid-template-columns:90px 1fr}
+    .stage-kpi{grid-column:1/-1;border-left:none;border-top:1px dashed var(--line)}
+    .formula{margin-left:0}
+    .flow-step{min-width:100%;border-right:1.5px solid var(--ink)!important;border-radius:0!important;border-bottom:none}
+    .flow-step:first-child{border-radius:14px 14px 0 0!important}
+    .flow-step:last-child{border-radius:0 0 14px 14px!important;border-bottom:1.5px solid var(--ink)}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Marketing Grupo Resasco · Playbook interno</div>
+    <h1 class="title">Cómo pensamos <em>cada</em> contenido</h1>
+    <p class="lead">La guía base del equipo. No es teoría suelta: es el criterio con el que decidimos qué grabamos, qué pautamos y qué medimos. Si alguien nuevo entra al equipo, esto le explica <strong>qué hacemos, por qué lo hacemos así y cómo se mide el éxito</strong>.</p>
+    <div class="meta">
+      <span class="tag">El norte</span>
+      <span class="tag ghost">Embudo · KPI por etapa</span>
+      <span class="tag ghost">Multimarca</span>
+      <span class="tag ghost">Ángulos</span>
+      <span class="tag ghost">Hooks: visual · sonido · frase</span>
+      <span class="tag ghost">Métricas</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <ol>
+      <li><a href="#norte">El norte: para qué existe esto</a></li>
+      <li><a href="#embudo">El embudo y qué medimos</a></li>
+      <li><a href="#zona">Nuestra zona manda</a></li>
+      <li><a href="#pauta-organico">Pauta vs. Orgánico (+ matriz)</a></li>
+      <li><a href="#marcas">Cada marca tiene su voz</a></li>
+      <li><a href="#angulos">El ángulo: qué decimos</a></li>
+      <li><a href="#regla">La regla de oro del guión</a></li>
+      <li><a href="#hooks">Los hooks: cómo arrancamos</a></li>
+      <li><a href="#metricas">Las métricas que mandan</a></li>
+      <li><a href="#ganadores">Ganadores y perdedores</a></li>
+      <li><a href="#proceso">Ritmo, proceso y mezcla</a></li>
+      <li><a href="#check">Checklist antes de grabar</a></li>
+    </ol>
+  </div>
+</nav>
+
+<!-- 1. NORTE -->
+<section id="norte">
+  <div class="wrap reveal">
+    <span class="sec-num">01 · El norte</span>
+    <h2>Para qué existe el marketing acá</h2>
+    <p class="big">Antes de hablar de formatos y métricas, hay que tener clarísima una verdad que cambia todo lo demás: <strong>nuestro objetivo no son los likes, ni siquiera los leads a secas. Es vender autos en nuestra zona y ganar share.</strong></p>
+
+    <div class="north">
+      <div class="big-stmt">Lo digital <em>alimenta</em> al salón. No lo reemplaza.</div>
+      <p style="color:#d6cebf;max-width:65ch;margin:0 0 8px">La venta de un auto se cierra con una persona, en el salón. El contenido existe para generar demanda, ocupar la cabeza del cliente y traerlo hasta nosotros. Por eso cada pieza tiene que tener un propósito claro dentro de ese camino, y no grabarse "porque sí".</p>
+      <div class="north-grid">
+        <div class="north-card"><div class="nt">Que me conozcan</div><p>Aparecer y quedar en el radar de quien todavía no nos busca.</p></div>
+        <div class="north-card"><div class="nt">Que me elijan</div><p>Mostrar por qué somos la mejor opción frente al resto.</p></div>
+        <div class="north-card"><div class="nt">Que compren — en zona</div><p>Traer a la persona al salón con un motivo concreto para actuar.</p></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">Antes de pensar en cualquier pieza</div>
+      <p style="margin:0">Esta guía es sobre <span class="accent">cómo crear el contenido</span>. Medir si después ese contenido trajo buenos leads y ventas es una segunda instancia, con sus propias reglas. Acá nos enfocamos en pensar y armar bien la pieza desde el arranque.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. EMBUDO -->
+<section id="embudo">
+  <div class="wrap reveal">
+    <span class="sec-num">02 · El embudo</span>
+    <h2>Cada contenido vive en una etapa — y se mide distinto</h2>
+    <p class="big">Nadie compra un auto porque vio un reel. La persona recorre un camino: primero nos descubre, después nos considera, y recién al final levanta la mano. Cada pieza tiene que saber <strong>en qué etapa juega</strong>, porque eso define qué métrica la juzga. No le pidas ventas a un contenido de marca ni likes a uno de conversión.</p>
+
+    <div class="funnel">
+      <div class="stage">
+        <div class="stage-side"><span class="code">TOF</span><span class="lbl">Top of funnel</span></div>
+        <div class="stage-body">
+          <h4>Descubrimiento — "que me conozcan"</h4>
+          <div class="desc">Todavía no nos buscan. El objetivo es aparecer, frenar el scroll y quedar en el radar.</div>
+          <ul><li>Producto en acción</li><li>Detrás de escena</li><li>Historia / marca</li><li>Tips y curiosidades</li></ul>
+        </div>
+        <div class="stage-kpi"><div class="kt">Qué miramos</div><div class="km">Alcance · CPM · Thumb-stop</div><div class="ks">¿Llegamos y frenamos el scroll?</div></div>
+      </div>
+      <div class="stage">
+        <div class="stage-side"><span class="code">MOF</span><span class="lbl">Middle of funnel</span></div>
+        <div class="stage-body">
+          <h4>Consideración — "que nos elijan"</h4>
+          <div class="desc">Saben que existimos y están evaluando. Mostramos por qué somos la mejor opción.</div>
+          <ul><li>Propuesta de valor</li><li>Posventa y repuestos</li><li>Comparativas</li><li>Testimonios</li></ul>
+        </div>
+        <div class="stage-kpi"><div class="kt">Qué miramos</div><div class="km">Engagement · Views · Tráfico</div><div class="ks">¿Generamos interés y consideración?</div></div>
+      </div>
+      <div class="stage">
+        <div class="stage-side"><span class="code">BOF</span><span class="lbl">Bottom of funnel</span></div>
+        <div class="stage-body">
+          <h4>Conversión — "que compren ahora"</h4>
+          <div class="desc">Están a un paso. Acá va la condición comercial concreta y el pedido de acción.</div>
+          <ul><li>Cuota / financiación</li><li>Bonificación</li><li>Plan de ahorro</li><li>CTA a lead</li></ul>
+        </div>
+        <div class="stage-kpi"><div class="kt">Qué miramos</div><div class="km">Leads · CPL · Conversión</div><div class="ks">¿Levantan la mano y cierran?</div></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">La regla mental</div>
+      <p style="margin:0">Antes de grabar: <span class="accent">¿esto es para que me conozcan, para que me elijan, o para que compren hoy?</span> La respuesta define el tono, la duración, el gancho, la condición comercial y la métrica con la que lo vas a juzgar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ZONA -->
+<section id="zona">
+  <div class="wrap reveal">
+    <span class="sec-num">03 · La restricción que no se negocia</span>
+    <h2>Nuestra zona de influencia manda</h2>
+    <p class="big">Somos un concesionario con territorio definido: <strong>Bahía Blanca, Santa Rosa y General Pico</strong>. La venta se concreta cuando la persona se acerca al salón. Eso cambia la regla del juego respecto a un e-commerce que vende a todo el país.</p>
+
+    <h3>Por qué no nos conviene expandir el alcance "porque sí"</h3>
+    <div class="split">
+      <div class="col organic" style="grid-column:1/-1;background:linear-gradient(160deg,#fbf8f1,#eef0e6)">
+        <span class="badge">Los 3 motivos</span>
+        <ul>
+          <li><strong>No suma a nuestro share.</strong> Si vendemos fuera de zona, esa venta no cuenta para el share que nos mide la terminal en nuestro territorio. Trabajamos para inflar un número que no es el nuestro.</li>
+          <li><strong>Dificultad operativa real.</strong> El cliente tiene que poder llegar al concesionario para cerrar. Si está lejos, el lead se cae solo o genera fricción que no podemos resolver.</li>
+          <li><strong>Ensucia el análisis.</strong> Leads de fuera de zona inflan el volumen, bajan la conversión real y nos hacen sacar conclusiones erróneas sobre qué funciona.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout zone">
+      <div class="ct">Criterio operativo</div>
+      <p style="margin:0">Toda segmentación de pauta arranca por <span class="accent">geografía cerrada a nuestra zona</span>. Antes de optimizar creatividad o presupuesto, el público tiene que estar bien delimitado. Un anuncio excelente apuntando mal es plata tirada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. PAUTA VS ORGANICO + MATRIZ -->
+<section id="pauta-organico">
+  <div class="wrap reveal">
+    <span class="sec-num">04 · La gran división</span>
+    <h2>Pauta vs. Orgánico</h2>
+    <p class="big">Son dos mundos con reglas distintas, y mezclarlos es el error más común. Uno se mide con plata y resultados; el otro construye marca y relación. Los dos importan, pero <strong>no se piensan igual ni se juzgan con la misma vara</strong>.</p>
+
+    <div class="split">
+      <div class="col paid">
+        <span class="badge">Pauta · plata de por medio</span>
+        <h3>Bien comercial</h3>
+        <p style="font-size:.9rem;color:var(--muted)">Pagamos para que lo vean, entonces cada peso tiene que volver. Directo, con objetivo claro, regido por métricas. Si no performa, se corta.</p>
+        <ul>
+          <li>Objetivo concreto: alcance o leads</li>
+          <li>Mensaje afilado, sin relleno</li>
+          <li>Se juzga por números, no por gusto</li>
+          <li>Se prueba, se mide y se corta lo que no anda</li>
+          <li>En lead gen: condición comercial obligatoria</li>
+        </ul>
+      </div>
+      <div class="col organic">
+        <span class="badge">Orgánico · construye marca</span>
+        <h3>Acá podemos respirar</h3>
+        <p style="font-size:.9rem;color:var(--muted)">No pagamos por el alcance, así que tenemos libertad para mostrar quiénes somos. Más largo, más humano, más explicativo. Es donde construimos la propuesta de valor.</p>
+        <ul>
+          <li>Propuesta de valor y diferencial</li>
+          <li>Posventa, repuestos, accesorios</li>
+          <li>Explicaciones más largas y técnicas</li>
+          <li>Historia, equipo, detrás de escena</li>
+          <li>Sin condición comercial obligatoria</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>La matriz completa: objetivo × tipo</h3>
+    <p>El alcance puede ser pago u orgánico; los leads casi siempre son de pauta. Esta matriz ordena las cuatro combinaciones y deja claro qué métrica manda en cada una.</p>
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr><th></th><th>Alcance / Marca</th><th>Generación de leads</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Pauta</th>
+            <td><span class="mh">Campaña de alcance pago</span>Llegar a más gente en zona. Sin condición comercial obligatoria. Se mide por alcance, CPM y thumb-stop.</td>
+            <td><span class="mh">Campaña de conversión</span>Que dejen los datos. Condición comercial obligatoria. Se mide por leads, CPL y calidad.</td>
+          </tr>
+          <tr>
+            <th>Orgánico</th>
+            <td><span class="mh">Contenido de marca y valor</span>El corazón del orgánico. Producto, posventa, historia. Se mide por engagement y comunidad.</td>
+            <td><span class="mh">Llamado puntual</span>Posteo orgánico con CTA (DM, WhatsApp). Sirve sobre todo con la base ya existente.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="ct">El punto clave</div>
+      <p style="margin:0"><span class="accent">El contenido de pauta se basa en métricas. Punto.</span> No se defiende con "a mí me gusta" ni "quedó lindo". Lo lindo está bien para el orgánico; en pauta, manda el número.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. MARCAS -->
+<section id="marcas">
+  <div class="wrap reveal">
+    <span class="sec-num">05 · Multimarca</span>
+    <h2>Cada marca tiene su voz</h2>
+    <p class="big">Manejamos varias marcas y cada una le habla a un público distinto, con un tono distinto. No se le habla igual a alguien que quiere una RAM que a una familia buscando su primer Fiat. Antes de escribir un guión, ubicate en <strong>la voz de esa marca</strong>.</p>
+
+    <div class="voices">
+      <div class="voice">
+        <div class="vh">Ford <small>Guspamar</small></div>
+        <div class="vb">
+          <p>Trabajo, robustez y confianza. Ranger y la línea Pro mandan, con un ángulo fuerte hacia el cliente empresa (flotas, deducibilidad, leasing). Tono sólido y profesional.</p>
+          <div class="kw"><span>robusto</span><span>trabajo</span><span>B2B / Pro</span><span>confiable</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="vh">Jeep · RAM · Dodge <small>Héctor R. Resasco</small></div>
+        <div class="vb">
+          <p>Potencia, aventura y carácter premium. Jeep es libertad y 4x4; RAM es trabajo pesado con estatus; Dodge es performance. Tono aspiracional y con actitud.</p>
+          <div class="kw"><span>aventura</span><span>premium</span><span>potencia</span><span>actitud</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="vh">Peugeot · Citroën <small>Vernon</small></div>
+        <div class="vb">
+          <p>Diseño europeo, confort y tecnología. Público urbano y familiar que valora la estética y el andar. Tono cuidado, moderno y cálido.</p>
+          <div class="kw"><span>diseño</span><span>europeo</span><span>confort</span><span>familiar</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="vh">Fiat <small>Génova</small></div>
+        <div class="vb">
+          <p>Accesible, italiano y cercano. Mucha primera compra y uso familiar; ahora también pickup con Titano. Tono simpático, directo y emocional.</p>
+          <div class="kw"><span>accesible</span><span>familiar</span><span>italiano</span><span>cercano</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="ct">Guardrails — esto no es opcional</div>
+      <p style="margin:0 0 8px">Somos concesionario oficial. El contenido tiene que respetar las reglas de la terminal y la ley:</p>
+      <p style="margin:0">→ Respetar el <strong>manual de marca</strong> de cada terminal (logos, colores, claims). → <strong>Nunca inventar precios ni condiciones</strong>. → Financiación, cuotas y plan de ahorro llevan <strong>letra chica obligatoria</strong> (CFT, condiciones, vigencia). → Ante la duda con una condición comercial, se valida antes de publicar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ANGULOS -->
+<section id="angulos">
+  <div class="wrap reveal">
+    <span class="sec-num">06 · El qué</span>
+    <h2>El ángulo: desde dónde atacamos</h2>
+    <p class="big">El ángulo es <strong>el punto de vista desde el que le hablamos al cliente</strong>. No es lo que vendemos (una Ranger), es por qué razón se la mostramos a esta persona ahora. La regla de oro: <span class="accent">cada anuncio ataca UN solo ángulo.</span> Si un anuncio quiere decir todo, no dice nada.</p>
+
+    <div class="ang-intro">
+      <div class="ang-def angle">
+        <div class="at"><span class="pin"></span>Ángulo = el QUÉ</div>
+        <p>Desde qué razón o necesidad atacamos. "Tu usado entra como parte de pago", "esta cuota es accesible", "es el más seguro de su segmento". Se elige primero, antes de escribir el guión.</p>
+      </div>
+      <div class="ang-def hook">
+        <div class="at"><span class="pin"></span>Hook = el CÓMO</div>
+        <p>La forma en que arrancamos para frenar el scroll (ver sección 08). Un mismo ángulo se puede contar con hooks muy distintos. Primero el ángulo, después el hook.</p>
+      </div>
+    </div>
+
+    <h3>Catálogo de ángulos</h3>
+    <p>Estos son nuestros ángulos comunicacionales, agrupados por categoría. Antes de armar una pieza, elegí cuál vas a atacar.</p>
+    <div class="catbar">
+      <span class="catchip cat-emo">● Emocional</span>
+      <span class="catchip cat-fun">● Funcional</span>
+      <span class="catchip cat-com">● Comercial</span>
+      <span class="catchip cat-cmp">● Comparativo</span>
+      <span class="catchip cat-pro">● Promocional</span>
+    </div>
+
+    <div class="angles">
+      <div class="angle emo"><div class="an">✨ Lifestyle / Aspiracional <span class="acat emo">Emocional</span></div><p class="aw">El auto como parte de un estilo de vida. Aventura, status, viajes.</p></div>
+      <div class="angle emo"><div class="an">🛡️ Post-Venta / Confianza <span class="acat emo">Emocional</span></div><p class="aw">Servicio, repuestos, trayectoria de la concesionaria. Refuerza marca y reduce el riesgo percibido.</p></div>
+      <div class="angle emo"><div class="an">🚀 Lanzamiento / Modelo Nuevo <span class="acat emo">Emocional</span></div><p class="aw">Cuando entra un modelo o versión nueva. Generar expectativa y urgencia inicial.</p></div>
+      <div class="angle emo"><div class="an">⭐ Testimonial Cliente <span class="acat emo">Emocional</span></div><p class="aw">Prueba social. Un cliente real contando su experiencia de compra o uso.</p></div>
+
+      <div class="angle fun"><div class="an">🛡️ Seguridad / Tecnología <span class="acat fun">Funcional</span></div><p class="aw">Airbags, ADAS, conectividad, asistencias. Para familias y compradores conscientes.</p></div>
+      <div class="angle fun"><div class="an">🚗 Test Drive <span class="acat fun">Funcional</span></div><p class="aw">Invitar a probar el vehículo en la concesionaria. CTA claro de agendar prueba.</p></div>
+      <div class="angle fun"><div class="an">⚙️ Performance / Técnico <span class="acat fun">Funcional</span></div><p class="aw">Motor, prestaciones, capacidad de carga. Para usuarios que valoran las specs.</p></div>
+
+      <div class="angle com"><div class="an">🔄 Plan Canje / Usados <span class="acat com">Comercial</span></div><p class="aw">Tomar el usado del cliente como parte de pago para entrar en un 0km.</p></div>
+      <div class="angle com"><div class="an">🔑 Fácil de acceder <span class="acat com">Comercial</span></div><p class="aw">Cuando el driver es la cuota baja o la entrega chica para retirarlo.</p></div>
+      <div class="angle com"><div class="an">📦 Stock / Entrega Inmediata <span class="acat com">Comercial</span></div><p class="aw">Cuando hay disponibilidad y urgencia de mover unidades. CTA de retiro rápido.</p></div>
+      <div class="angle com"><div class="an">💲 Financiación / Cuotas <span class="acat com">Comercial</span></div><p class="aw">Cuando el driver de compra es la facilidad de pago. Comunicar tasa y cuotas.</p></div>
+
+      <div class="angle cmp"><div class="an">📊 Comparativa <span class="acat cmp">Comparativo</span></div><p class="aw">Versus la competencia o entre modelos propios. Resaltar ventajas concretas.</p></div>
+      <div class="angle cmp"><div class="an">💭 Objeción común <span class="acat cmp">Comparativo</span></div><p class="aw">Atacar una creencia limitante (precio alto, mantenimiento caro) con un mensaje específico.</p></div>
+
+      <div class="angle pro"><div class="an">🎁 Promo / Bonificación <span class="acat pro">Promocional</span></div><p class="aw">Descuentos, bonificación de patentamiento, ofertas por tiempo limitado.</p></div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">Cómo se conecta con todo lo anterior</div>
+      <p style="margin:0">El ángulo no es libre: depende de la <span class="accent">etapa del embudo</span> (un lanzamiento es TOF, una promo es BOF), del <span class="accent">tipo de campaña</span> (los comerciales y promocionales son para leads; los emocionales y funcionales construyen marca) y de la <span class="accent">voz de la marca</span>. Elegís el ángulo primero, y todo lo demás se acomoda atrás.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. REGLA DE ORO -->
+<section id="regla">
+  <div class="wrap reveal">
+    <span class="sec-num">07 · La regla de oro</span>
+    <h2>Cómo elegimos y priorizamos un guión</h2>
+    <p class="big">Toda idea o guión se evalúa con un ranking de prioridades. El orden cambia según el tipo de campaña. Esto es lo que separa una idea que se puede grabar de una que hay que mandar de vuelta.</p>
+
+    <div class="rule-grid">
+      <div class="rank lead">
+        <div class="rank-head"><div class="t">Pauta · Generación de leads</div><div class="s">Acá venimos a convertir</div></div>
+        <div class="rank-body">
+          <div class="step must"><div class="n">1</div><div class="txt"><strong>Hook</strong><span>Los primeros 3 segundos que frenan el scroll</span></div></div>
+          <div class="step must"><div class="n">2</div><div class="txt"><strong>Condición comercial <span class="must-flag">Obligatoria</span></strong><span>Cuota, precio, financiación, beneficio. Parte fija del guión.</span></div></div>
+          <div class="step"><div class="n">3</div><div class="txt"><strong>Creatividad</strong><span>Suma, pero no reemplaza al motivo para clickear</span></div></div>
+        </div>
+      </div>
+      <div class="rank reach">
+        <div class="rank-head"><div class="t">Alcance · Contenido orgánico</div><div class="s">Acá venimos a construir</div></div>
+        <div class="rank-body">
+          <div class="step"><div class="n">1</div><div class="txt"><strong>Hook</strong><span>Sin atención no existe el resto, en cualquier formato</span></div></div>
+          <div class="step"><div class="n">2</div><div class="txt"><strong>Creatividad</strong><span>Acá tenemos libertad para ser ingeniosos y memorables</span></div></div>
+          <div class="step"><div class="n">3</div><div class="txt"><strong>Aportar valor</strong><span>Producto, posventa, financiación. Sin condición comercial.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">Por qué la condición comercial es obligatoria en lead gen</div>
+      <p style="margin:0">Un anuncio puede ser ingenioso y divertido, pero si no tiene una condición comercial interesante, <span class="accent">la gente lo consume como contenido y sigue scrolleando</span>. En un auto el ticket es alto y la decisión no es impulsiva: la persona necesita una excusa racional para clickear, aunque la emoción la haya frenado. El hook para el scroll; la condición justifica el clic. Falta una de las dos y no hay lead.</p>
+    </div>
+
+    <div class="callout">
+      <div class="ct">El orden completo para armar una pieza</div>
+      <p style="margin:0"><span class="accent">1) Elegís el ángulo</span> (qué decimos, sección 06) → <span class="accent">2) Aplicás el ranking del guión</span> según el tipo de campaña → <span class="accent">3) Resolvés el hook</span> (cómo arrancamos, sección 08). El hook es siempre la prioridad número uno: sin atención, no existe el resto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. HOOKS -->
+<section id="hooks">
+  <div class="wrap reveal">
+    <span class="sec-num">08 · El cómo</span>
+    <h2>Los hooks: cómo frenamos el scroll</h2>
+    <p class="big">El hook son los <strong>primeros 3 segundos</strong>. Es lo único que decide si la persona se queda o sigue de largo. Y no es solo lo que se dice: un hook se construye con tres canales que pueden trabajar juntos. El mejor anuncio los combina; el peor no cuida ninguno.</p>
+
+    <div class="htypes">
+      <div class="htype visual">
+        <div class="hh"><span class="ic">👁️</span><span class="ht">Hook visual</span><span class="hs">lo que se ve</span></div>
+        <div class="hbody">
+          <p>El primer frame es lo primero que entra por el ojo, y en el feed la mayoría arranca <strong>con el sonido apagado</strong>. Por eso el hook visual es el más importante: tiene que romper el patrón del scroll. Sirve el movimiento, el contraste, un encuadre raro o algo inesperado. Un truco que funciona muy bien: arrancar con una <strong>toma de respaldo (B-roll) en blanco y negro</strong> o con un plano cerrado intrigante, y recién después revelar el auto en color.</p>
+          <div class="egs">
+            <div class="eg"><div class="el">Patrón roto</div><div class="ex2">Abrir en blanco y negro y cortar a color de golpe.</div></div>
+            <div class="eg"><div class="el">Movimiento</div><div class="ex2">La pickup arrancando o entrando a cuadro, nunca estática.</div></div>
+            <div class="eg"><div class="el">Plano cerrado</div><div class="ex2">Detalle intrigante (la llanta, el motor) antes de revelar.</div></div>
+            <div class="eg"><div class="el">Cara a cámara</div><div class="ex2">El vendedor mirando al lente y hablándole al cliente.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="htype audio">
+        <div class="hh"><span class="ic">🔊</span><span class="ht">Hook de sonido</span><span class="hs">lo que se escucha</span></div>
+        <div class="hbody">
+          <p>El audio potencia cuando la persona tiene el sonido activado: es lo que la termina de enganchar después de que el visual la frenó. Puede ser una <strong>frase impactante dicha en el primer segundo</strong>, un efecto de sonido que sorprende (el rugido del motor, un portazo), un audio o música en tendencia que el algoritmo premia, o incluso un <strong>silencio</strong> que genera tensión. Importante: como muchos ven sin sonido, el audio nunca debe ser la única pata del hook — siempre acompañalo con texto en pantalla.</p>
+          <div class="egs">
+            <div class="eg"><div class="el">Frase de apertura</div><div class="ex2">"Pará, esto no lo sabías..." en el primer segundo.</div></div>
+            <div class="eg"><div class="el">Efecto de sonido</div><div class="ex2">El motor arrancando, un portazo seco, un clic.</div></div>
+            <div class="eg"><div class="el">Audio trending</div><div class="ex2">Sonido o canción del momento que Meta distribuye más.</div></div>
+            <div class="eg"><div class="el">Silencio / quiebre</div><div class="ex2">Cortar el sonido de golpe para generar tensión.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="htype frase">
+        <div class="hh"><span class="ic">💬</span><span class="ht">Hook de frase</span><span class="hs">lo que se lee / dice</span></div>
+        <div class="hbody">
+          <p>Las primeras palabras, sobreimpresas en pantalla y/o dichas. Es la pata que comunica el ángulo de entrada en texto. Tiene que ser corta, grande y directa: una pregunta que pica, un dato que sorprende, una promesa o una afirmación que rompe una creencia. Como gran parte ve sin audio, <strong>el texto en pantalla en los primeros segundos es casi obligatorio.</strong></p>
+          <div class="egs">
+            <div class="eg"><div class="el">Pregunta directa</div><div class="ex2">"¿Sabías cuánto sale hoy la cuota de una Ranger?"</div></div>
+            <div class="eg"><div class="el">Cifra / dato</div><div class="ex2">"Esta pickup arranca en X cuotas fijas."</div></div>
+            <div class="eg"><div class="el">Rompe-creencia</div><div class="ex2">"Pensás que no llegás a un 0km. Mirá esto."</div></div>
+            <div class="eg"><div class="el">Promesa</div><div class="ex2">"En 30 segundos te muestro por qué conviene."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">La regla de oro del hook</div>
+      <p style="margin:0">Los tres canales <span class="accent">se suman, no se eligen</span>. Un hook fuerte tiene algo que para el ojo (visual), algo que engancha el oído (sonido) y algo que se lee de una (frase). Y como mucha gente mira sin sonido: <strong>el visual y el texto tienen que funcionar solos, aunque el audio esté apagado.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 9. METRICAS -->
+<section id="metricas">
+  <div class="wrap reveal">
+    <span class="sec-num">09 · El tablero</span>
+    <h2>Las métricas que mandan</h2>
+    <p class="big">Las cuatro métricas con las que leemos una campaña de pauta. Para cada una: qué es, cómo se calcula y —lo más importante— <strong>qué palanca podés mover para mejorarla</strong>.</p>
+
+    <div class="metric">
+      <div class="metric-top"><span class="mname">CTR</span><span class="mabbr">Click-Through Rate</span><span class="formula">(Clics ÷ Impresiones) × 100</span></div>
+      <div class="metric-body">
+        <div class="what">
+          <p>Porcentaje de gente que hizo clic sobre el total que vio el anuncio. El mejor termómetro de si la creatividad y la propuesta enganchan.</p>
+          <p><strong>CTR (All)</strong> cuenta todos los clics (likes, comentarios); <strong>CTR (Link)</strong> solo los clics al destino. Para medir intención real, miramos el Link CTR.</p>
+          <span class="ex">Referencia automotriz: 0,5%–1,5% normal · +1,5% bueno</span>
+        </div>
+        <div class="levers"><div class="lt">Palancas</div><ul><li>Hook más fuerte al inicio</li><li>Condición comercial más clara</li><li>Mejor match anuncio–público</li><li>CTA más directo</li></ul></div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-top"><span class="mname">CPM</span><span class="mabbr">Costo por mil impresiones</span><span class="formula">(Inversión ÷ Impresiones) × 1.000</span></div>
+      <div class="metric-body">
+        <div class="what">
+          <p>Lo que cuesta mostrar el anuncio 1.000 veces. Lo mueven la competencia en la subasta, el tamaño de la audiencia y la época del año.</p>
+          <p>La palanca que sí controlamos: un anuncio con buen engagement le sale <strong>más barato</strong> a Meta. Si el CTR sube, el CPM tiende a bajar.</p>
+          <span class="ex">Ej: $10.000 ÷ 500.000 imp × 1.000 = $20 CPM</span>
+        </div>
+        <div class="levers"><div class="lt">Palancas</div><ul><li>Subir el engagement</li><li>Evitar fechas caras sin necesidad</li><li>Audiencias no tan chicas</li><li>Mejorar ranking de relevancia</li></ul></div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-top"><span class="mname">Frecuencia</span><span class="mabbr">Veces que cada persona lo vio</span><span class="formula">Impresiones ÷ Alcance</span></div>
+      <div class="metric-body">
+        <div class="what">
+          <p>Cuántas veces, en promedio, una misma persona vio el anuncio. La que más hay que vigilar en nuestra zona, porque las audiencias son chicas y la frecuencia se dispara rápido.</p>
+          <p>Cuando sube de más: cae el CTR, sube el CPM y el CPL se va a las nubes. El anuncio se "quema".</p>
+          <span class="ex">2–4 óptimo · 4–7 fatiga · +7 quemado</span>
+        </div>
+        <div class="levers"><div class="lt">Palancas</div><ul><li>Rotar creatividades</li><li>Ampliar audiencia (en zona)</li><li>Bajar presupuesto diario</li><li>Pausar el anuncio quemado</li></ul></div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-top"><span class="mname">CPL</span><span class="mabbr">Costo por lead</span><span class="formula">Inversión ÷ Leads</span></div>
+      <div class="metric-body">
+        <div class="what">
+          <p>Cuánto cuesta cada dato que entra. La métrica de cierre de una campaña de leads: la que dice si la plata rinde.</p>
+          <p>Es consecuencia de las otras tres. Conviene mirarlo siempre junto a la segmentación: un CPL bajo no sirve si los datos vienen de fuera de zona.</p>
+          <span class="ex">CPL ≈ CPM ÷ (CTR × 10) · ojo con leads fuera de zona</span>
+        </div>
+        <div class="levers"><div class="lt">Palancas</div><ul><li>Mejorar CTR</li><li>Bajar CPM</li><li>Afinar segmentación geográfica</li><li>Optimizar el destino (landing/WhatsApp)</li></ul></div>
+      </div>
+    </div>
+
+    <h3>Recordá: alcance no es lo mismo que impresiones</h3>
+    <p><strong>Alcance</strong> = personas distintas que vieron el anuncio. <strong>Impresiones</strong> = veces totales que se mostró. Si la misma persona lo vio 3 veces, son 1 de alcance y 3 de impresiones. De ahí sale la frecuencia.</p>
+    <table class="std">
+      <tr><th>Métrica</th><th>Qué mide</th><th>Etapa</th><th>Lectura rápida</th></tr>
+      <tr><td><strong>CTR</strong></td><td>Si engancha la creatividad/propuesta</td><td>TOF–BOF</td><td><span class="pill bad">&lt;0,5% flojo</span> <span class="pill good">&gt;1,5% bueno</span></td></tr>
+      <tr><td><strong>CPM</strong></td><td>Qué tan caro está mostrarlo</td><td>TOF</td><td><span class="pill ok">subasta y fecha</span></td></tr>
+      <tr><td><strong>Frecuencia</strong></td><td>Saturación de la audiencia</td><td>Todas</td><td><span class="pill good">2–4 ok</span> <span class="pill bad">+7 quemado</span></td></tr>
+      <tr><td><strong>CPL</strong></td><td>Eficiencia real de la campaña de leads</td><td>BOF</td><td><span class="pill ok">cruzar con calidad</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 8. GANADORES -->
+<section id="ganadores">
+  <div class="wrap reveal">
+    <span class="sec-num">10 · Optimización</span>
+    <h2>Conjuntos de anuncios ganadores y perdedores</h2>
+    <p class="big">No nos casamos con ninguna pieza. La gracia de la pauta es <strong>probar varias y dejar correr la plata en la que funciona</strong>. Por eso siempre subimos más de una creatividad por campaña y dejamos que los números decidan, no nuestro gusto.</p>
+    <p>Meta reparte el presupuesto entre los anuncios de un conjunto según cuál performa mejor. Nuestro laburo es leer eso rápido: identificar el <strong>ganador</strong> para escalarlo y cortar al <strong>perdedor</strong> antes de seguir quemando plata.</p>
+    <div class="wl">
+      <div class="wlcard win">
+        <div class="h">Anuncio ganador</div>
+        <div class="b"><ul>
+          <li>CTR por encima del promedio del conjunto</li>
+          <li>CPL más bajo y con leads de calidad en zona</li>
+          <li>Frecuencia todavía sana (no quemado)</li>
+          <li>Buen ranking de relevancia en Meta</li>
+        </ul><p style="margin:14px 0 0;font-size:.9rem;color:var(--green);font-weight:600">→ Acción: escalarlo. Más presupuesto y usarlo de molde.</p></div>
+      </div>
+      <div class="wlcard lose">
+        <div class="h">Anuncio perdedor</div>
+        <div class="b"><ul>
+          <li>CTR bajo: no engancha o el público no es</li>
+          <li>CPL alto o leads basura / fuera de zona</li>
+          <li>Frecuencia alta sin resultados (quemado)</li>
+          <li>Casi sin gasto: Meta ya lo descartó solo</li>
+        </ul><p style="margin:14px 0 0;font-size:.9rem;color:var(--red);font-weight:600">→ Acción: pausarlo. Entender por qué falló y no repetirlo.</p></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="ct">El mindset</div>
+      <p style="margin:0">Cada campaña es un test. <span class="accent">No hay anuncios "malos", hay anuncios sin data y anuncios que ya nos dijeron algo.</span> El ganador de hoy se quema en unas semanas, así que siempre hay que estar alimentando el conjunto con piezas nuevas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9. PROCESO -->
+<section id="proceso">
+  <div class="wrap reveal">
+    <span class="sec-num">11 · Cómo se hace</span>
+    <h2>Ritmo, proceso y mezcla de contenido</h2>
+    <p class="big">Tener buen criterio no alcanza si no hay un flujo claro y un ritmo sostenido. Esto baja el caos, sobre todo cuando el equipo cambia o está estirado entre varias marcas.</p>
+
+    <h3>El flujo de cada pieza</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="fn">01</div><div class="ft">Idea</div><div class="fd">Surge la idea o el pedido comercial.</div></div>
+      <div class="flow-step"><div class="fn">02</div><div class="ft">Guión</div><div class="fd">Pasa el filtro de prioridades (sección 06).</div></div>
+      <div class="flow-step"><div class="fn">03</div><div class="ft">Aprobación</div><div class="fd">Se valida marca, condición y guardrails.</div></div>
+      <div class="flow-step"><div class="fn">04</div><div class="ft">Producción</div><div class="fd">Se graba, edita y arma la pieza.</div></div>
+      <div class="flow-step"><div class="fn">05</div><div class="ft">Publica</div><div class="fd">Pauta u orgánico según objetivo.</div></div>
+      <div class="flow-step"><div class="fn">06</div><div class="ft">Mide</div><div class="fd">Se lee la métrica de su etapa y se decide.</div></div>
+    </div>
+
+    <h3>La mezcla: no todo puede ser venta</h3>
+    <p>Si todo el feed grita "comprá", la audiencia se quema y deja de seguirnos. Una mezcla sana mantiene el equilibrio entre construir marca y pedir la venta. Como punto de partida para discutir (no es ley):</p>
+    <div class="ratio">
+      <div class="r1">50% · Marca y valor (TOF)</div>
+      <div class="r2">30% · Consideración (MOF)</div>
+      <div class="r3">20% · Venta (BOF)</div>
+    </div>
+    <p style="margin-top:14px;font-size:.92rem;color:var(--muted)">La mayoría del contenido construye y aporta valor; una porción menor pero clave pide la acción. Esta proporción se ajusta según el momento comercial (un lanzamiento o una campaña fuerte sube el BOF por un tiempo).</p>
+  </div>
+</section>
+
+<!-- 10. CHECKLIST -->
+<section id="check" style="border-bottom:none">
+  <div class="wrap reveal">
+    <span class="sec-num">12 · Antes de grabar</span>
+    <h2>Las preguntas que nos hacemos antes de cada pieza</h2>
+    <div class="checklist">
+      <h3>Checklist rápido</h3>
+      <div class="row"><span class="q">01</span><p>¿Esto acerca una venta en el salón o solo busca un like? ¿Para qué etapa del embudo es?</p></div>
+      <div class="row"><span class="q">02</span><p>¿De qué marca es y estoy usando su voz? ¿Respeta el manual de la terminal?</p></div>
+      <div class="row"><span class="q">03</span><p>¿Qué ángulo ataca? ¿Es uno solo y bien claro, o estoy queriendo decir todo a la vez?</p></div>
+      <div class="row"><span class="q">04</span><p>¿Es pauta u orgánico? Si es pauta, ya sé que se juzga por números.</p></div>
+      <div class="row"><span class="q">05</span><p>Si es pauta de leads: ¿tiene condición comercial concreta?</p></div>
+      <div class="row"><span class="q">06</span><p>¿El hook frena el scroll en los primeros 3 segundos? ¿Funciona aunque esté sin sonido?</p></div>
+      <div class="row"><span class="q">07</span><p>¿La segmentación está cerrada a nuestra zona de influencia?</p></div>
+      <div class="row"><span class="q">08</span><p>¿Tengo más de una creatividad para testear y sé qué métrica voy a mirar?</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fl">Marketing Grupo Resasco · Playbook de contenido · Documento vivo</div>
+  </div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
