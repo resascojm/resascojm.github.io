@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Cómo funciona el Dashboard Guspamar? — Guía interactiva</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel2:#273549; --border:#334155;
+    --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --green:#4ade80;
+    --red:#f87171; --yellow:#fbbf24; --purple:#c084fc;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6;}
+  .wrap{max-width:980px; margin:0 auto; padding:24px 20px 80px;}
+  header{text-align:center; padding:36px 0 20px;}
+  header h1{font-size:1.9rem; margin-bottom:8px;}
+  header h1 span{color:var(--accent);}
+  header p{color:var(--muted); max-width:640px; margin:0 auto;}
+
+  /* Tabs */
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:28px 0 24px; position:sticky; top:0; background:var(--bg); padding:12px 0; z-index:10; border-bottom:1px solid var(--border);}
+  .tab{background:var(--panel); border:1px solid var(--border); color:var(--muted); padding:10px 18px; border-radius:99px; cursor:pointer; font-size:.95rem; transition:.2s;}
+  .tab:hover{color:var(--text); border-color:var(--accent);}
+  .tab.active{background:var(--accent); color:#0a0f1d; font-weight:600; border-color:var(--accent);}
+  section{display:none; animation:fade .3s ease;}
+  section.visible{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px;}
+  .card h2{font-size:1.25rem; margin-bottom:10px; color:var(--accent);}
+  .card h3{font-size:1.05rem; margin:14px 0 6px;}
+  .card p{margin-bottom:10px; color:var(--text);}
+  .muted{color:var(--muted);}
+  .pill{display:inline-block; padding:2px 10px; border-radius:99px; font-size:.8rem; font-weight:600; margin-right:6px;}
+  .pill.ok{background:rgba(74,222,128,.15); color:var(--green);}
+  .pill.bad{background:rgba(248,113,113,.15); color:var(--red);}
+  .pill.warn{background:rgba(251,191,36,.15); color:var(--yellow);}
+
+  /* Actores grid */
+  .actores{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px;}
+  .actor{background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:16px; cursor:pointer; transition:.2s; text-align:center;}
+  .actor:hover{border-color:var(--accent); transform:translateY(-3px);}
+  .actor .emoji{font-size:2rem;}
+  .actor h4{margin:8px 0 4px;}
+  .actor small{color:var(--muted);}
+  .actor-detail{background:var(--panel2); border-left:4px solid var(--accent); border-radius:0 12px 12px 0; padding:16px 18px; margin-top:14px; display:none;}
+  .actor-detail.show{display:block; animation:fade .25s;}
+
+  /* Flujo (dos caminos) */
+  .flow{display:flex; flex-direction:column; gap:10px; margin-top:14px;}
+  .flow-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .node{background:var(--panel2); border:2px solid var(--border); border-radius:10px; padding:10px 14px; cursor:pointer; transition:.2s; font-size:.92rem; flex:1; min-width:130px; text-align:center;}
+  .node:hover{border-color:var(--accent);}
+  .node.sel{border-color:var(--accent); background:rgba(56,189,248,.1);}
+  .node .nico{font-size:1.4rem; display:block;}
+  .arrow{color:var(--muted); font-size:1.3rem; flex:0;}
+  .node.blocked{border-color:var(--red);}
+  .node.okk{border-color:var(--green);}
+  .flow-info{background:var(--panel2); border-radius:10px; padding:14px 16px; margin-top:10px; min-height:64px; border-left:4px solid var(--accent);}
+
+  /* Timeline */
+  .tl{position:relative; padding-left:30px;}
+  .tl::before{content:''; position:absolute; left:9px; top:6px; bottom:6px; width:2px; background:var(--border);}
+  .tl-item{position:relative; margin-bottom:8px; cursor:pointer;}
+  .tl-item::before{content:''; position:absolute; left:-27px; top:8px; width:14px; height:14px; border-radius:50%; background:var(--panel); border:3px solid var(--muted);}
+  .tl-item.bad::before{border-color:var(--red);}
+  .tl-item.ok::before{border-color:var(--green);}
+  .tl-item.warn::before{border-color:var(--yellow);}
+  .tl-head{padding:10px 14px; background:var(--panel2); border:1px solid var(--border); border-radius:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .tl-head:hover{border-color:var(--accent);}
+  .tl-body{display:none; padding:12px 16px; color:var(--muted); border-left:3px solid var(--border); margin:6px 0 6px 8px;}
+  .tl-item.open .tl-body{display:block;}
+  .chev{transition:.2s; color:var(--muted);}
+  .tl-item.open .chev{transform:rotate(90deg);}
+  code{background:#0a0f1d; padding:2px 7px; border-radius:6px; font-size:.85em; color:#7dd3fc; word-break:break-all;}
+
+  /* Glosario */
+  .glos .tl-head{cursor:pointer;}
+
+  /* Quiz */
+  .q{margin-bottom:18px;}
+  .q p{font-weight:600; margin-bottom:8px;}
+  .opt{display:block; width:100%; text-align:left; background:var(--panel2); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:10px; margin-bottom:8px; cursor:pointer; font-size:.95rem; transition:.15s;}
+  .opt:hover{border-color:var(--accent);}
+  .opt.right{border-color:var(--green); background:rgba(74,222,128,.12);}
+  .opt.wrong{border-color:var(--red); background:rgba(248,113,113,.12);}
+  .feedback{font-size:.9rem; margin:4px 0 0; display:none;}
+  .q.done .feedback{display:block;}
+  #score{text-align:center; font-size:1.1rem; margin-top:10px; display:none;}
+
+  /* Checklist pendientes */
+  .todo{display:flex; gap:12px; align-items:flex-start; background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:10px;}
+  .todo .ic{font-size:1.3rem;}
+  @media(max-width:640px){ .flow-row{flex-direction:column;} .arrow{transform:rotate(90deg);} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>¿Cómo funciona el <span>Dashboard Guspamar</span>?</h1>
+    <p>Guía interactiva para entender qué piezas participan, por qué a veces falla, y qué falta para que el informe de los lunes corra solo. Tocá todo: casi todo se abre.</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-t="t1">🧩 Las piezas</button>
+    <button class="tab" data-t="t2">🛣️ Los dos caminos</button>
+    <button class="tab" data-t="t3">🔍 ¿Qué pasó hoy?</button>
+    <button class="tab" data-t="t4">✅ Qué falta</button>
+    <button class="tab" data-t="t5">📖 Glosario</button>
+    <button class="tab" data-t="t6">🎯 Quiz</button>
+  </nav>
+
+  <!-- TAB 1: PIEZAS -->
+  <section id="t1" class="visible">
+    <div class="card">
+      <h2>Los 5 protagonistas</h2>
+      <p class="muted">Tocá cada tarjeta para ver qué hace y qué puede salir mal.</p>
+      <div class="actores">
+        <div class="actor" data-d="d1"><span class="emoji">🏢</span><h4>Pilot CRM</h4><small>Donde viven los datos</small></div>
+        <div class="actor" data-d="d2"><span class="emoji">🔌</span><h4>Conector MCP</h4><small>El "enchufe" del chat</small></div>
+        <div class="actor" data-d="d3"><span class="emoji">📜</span><h4>La skill + script</h4><small>La receta del dashboard</small></div>
+        <div class="actor" data-d="d4"><span class="emoji">📦</span><h4>El sandbox</h4><small>Compu aislada donde corre el script</small></div>
+        <div class="actor" data-d="d5"><span class="emoji">🔑</span><h4>Las credenciales</h4><small>Las llaves de entrada</small></div>
+      </div>
+      <div class="actor-detail" id="d1">
+        <h3>🏢 Pilot CRM</h3>
+        <p>Es el sistema donde los vendedores de Guspamar cargan todo: ventas, leads, clientes, stock. Tiene dos puertas de entrada: la <b>web</b> (la que usás vos con tu usuario) y la <b>API</b> (una puerta para programas, no para personas).</p>
+        <p class="muted">⚠️ Detalle clave: la API de Pilot no acepta cuentas vinculadas a varias concesionarias a la vez. Por eso tu usuario personal sirve para la web pero la API lo rechaza.</p>
+      </div>
+      <div class="actor-detail" id="d2">
+        <h3>🔌 Conector MCP de Pilot</h3>
+        <p>Es el "enchufe" que me deja consultarle cosas a Pilot directamente desde el chat: "traeme las ventas de junio", "buscá tal cliente". Alguien lo configuró una vez con credenciales válidas, que quedan guardadas de forma segura — ni vos ni yo las vemos.</p>
+        <p class="muted">✅ Ideal para consultas puntuales. ❌ No sirve para bajar un año entero de datos: el chat se desborda.</p>
+      </div>
+      <div class="actor-detail" id="d3">
+        <h3>📜 La skill <code>dashboard-guspamar</code></h3>
+        <p>Es la "receta" guardada que sabe armar tu informe: qué datos bajar, las reglas de negocio (los 11 vendedores tradicionales, el filtro 0km, las exclusiones, la segmentación Ranger), y cómo generar el HTML final.</p>
+        <p>El corazón es un script de Python (<code>generar_dashboard.py</code>) que hace todo de una: se autentica en Pilot, baja los datos del año, los procesa y escupe el dashboard.</p>
+      </div>
+      <div class="actor-detail" id="d4">
+        <h3>📦 El sandbox</h3>
+        <p>Una computadora virtual aislada (Linux) donde corren los scripts. Está aislada a propósito: lo que corre ahí no puede tocar tu PC ni hacer cualquier cosa en internet. Tiene su propia salida a internet con una <b>lista de sitios permitidos</b>.</p>
+        <p class="muted">⚠️ Hoy el problema doble fue: primero no arrancaba (la VM estaba caída), y después resultó que <code>api.pilotsolution.net</code> no está en su lista de sitios permitidos.</p>
+      </div>
+      <div class="actor-detail" id="d5">
+        <h3>🔑 Las credenciales</h3>
+        <p>El script necesita dos datos para entrar a Pilot: <code>PILOT_USER</code> y <code>PILOT_PASSWORD</code> (usuario y contraseña, guardados como "variables de entorno" — una especie de cajita de configuración de la compu).</p>
+        <p>No puede usar tu usuario personal (la API lo rechaza por estar en varias instancias). Necesita un <b>usuario de API dedicado</b>, vinculado solo a Guspamar. Encontramos el candidato: <code>pluginleads.resasco@myworkplace.com.ar</code> — falta la contraseña correcta.</p>
+        <p class="muted">🔒 Buena práctica: las contraseñas nunca van por el chat. Se configuran una vez en el entorno y listo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 2: DOS CAMINOS -->
+  <section id="t2">
+    <div class="card">
+      <h2>Camino 1: el chat (conector MCP) — <span class="pill ok">FUNCIONA</span></h2>
+      <p class="muted">Tocá cada cajita para ver su rol.</p>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="node okk" data-i="Vos me pedís algo puntual en el chat: 'ventas de esta semana'."><span class="nico">💬</span>Vos en el chat</div>
+          <div class="arrow">→</div>
+          <div class="node okk" data-i="Yo traduzco tu pedido a una consulta concreta para el conector."><span class="nico">🤖</span>Claude</div>
+          <div class="arrow">→</div>
+          <div class="node okk" data-i="El conector usa SU propia llave guardada (que nadie ve) y sale por la red de Claude, que está abierta."><span class="nico">🔌</span>Conector MCP</div>
+          <div class="arrow">→</div>
+          <div class="node okk" data-i="Pilot responde con los datos pedidos. Perfecto para consultas chicas."><span class="nico">🏢</span>Pilot CRM</div>
+        </div>
+      </div>
+      <div class="flow-info" id="info1">👆 Tocá una cajita.</div>
+    </div>
+    <div class="card">
+      <h2>Camino 2: el script (dashboard) — <span class="pill bad">HOY BLOQUEADO</span></h2>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="node" data-i2="La tarea programada de los lunes (o vos a mano) dispara la skill."><span class="nico">⏰</span>Tarea del lunes</div>
+          <div class="arrow">→</div>
+          <div class="node" data-i2="El script corre adentro del sandbox. Hoy primero la VM no arrancaba (eso ya se arregló solo)."><span class="nico">📦</span>Sandbox</div>
+          <div class="arrow">→</div>
+          <div class="node blocked" data-i2="🚧 BLOQUEO 1: la salida a internet del sandbox no tiene permitido api.pilotsolution.net. 🚧 BLOQUEO 2: faltan las credenciales correctas (PILOT_USER / PILOT_PASSWORD)."><span class="nico">🚧</span>Red + llaves</div>
+          <div class="arrow">→</div>
+          <div class="node" data-i2="Si pasara los bloqueos: baja TODO el año de ventas y leads, aplica las reglas y genera el HTML del dashboard."><span class="nico">🏢</span>Pilot CRM</div>
+          <div class="arrow">→</div>
+          <div class="node" data-i2="El archivo final: dashboard_guspamar_FECHA.html, listo para compartir con los gerentes."><span class="nico">📊</span>Dashboard</div>
+        </div>
+      </div>
+      <div class="flow-info" id="info2">👆 Tocá una cajita.</div>
+    </div>
+    <div class="card">
+      <h2>¿Por qué no usar siempre el camino del chat?</h2>
+      <p>Por <b>volumen</b>. El chat es como pasarse mensajitos: bárbaro para preguntas puntuales. El dashboard necesita <b>miles de registros desde enero</b> — eso es un camión de mudanza, no un mensajito. Para eso está el script, que mueve todo afuera del chat y solo te muestra el resultado final.</p>
+      <p class="muted">Y la llave del conector no se puede "prestar" al script: está guardada a propósito donde nadie la puede leer. Es una medida de seguridad, no una traba caprichosa.</p>
+    </div>
+  </section>
+
+  <!-- TAB 3: QUE PASO HOY -->
+  <section id="t3">
+    <div class="card">
+      <h2>La historia del debugging, paso a paso</h2>
+      <p class="muted">Tocá cada hito para ver el detalle. Así fuimos descartando causas.</p>
+      <div class="tl">
+        <div class="tl-item bad"><div class="tl-head"><span>1. La tarea del lunes falló: el sandbox no arrancaba</span><span class="chev">▶</span></div>
+          <div class="tl-body">La computadora virtual donde corre el script no levantó (<code>VM service not running</code>). Sin ella, no hay dónde ejecutar Python. Dos lunes seguidos pasó lo mismo.</div></div>
+        <div class="tl-item ok"><div class="tl-head"><span>2. Reintentamos juntos: el sandbox revivió</span><span class="chev">▶</span></div>
+          <div class="tl-body">Al probar de nuevo, la VM arrancó bien: Python 3.10 disponible y el script de la skill en su lugar. Primer obstáculo superado (era transitorio).</div></div>
+        <div class="tl-item bad"><div class="tl-head"><span>3. Pero faltaban las credenciales</span><span class="chev">▶</span></div>
+          <div class="tl-body">Las variables <code>PILOT_USER</code> y <code>PILOT_PASSWORD</code> estaban vacías en el entorno. El script no tiene con qué autenticarse.</div></div>
+        <div class="tl-item bad"><div class="tl-head"><span>4. Probamos tu usuario personal: la API lo rechazó</span><span class="chev">▶</span></div>
+          <div class="tl-body">Pilot respondió: <code>Accounts with multiple Pilot instances linked can not be used for API authenticate</code>. Traducción: tu cuenta está vinculada a varias concesionarias del grupo y la API solo acepta cuentas de una sola. No es problema de contraseña.</div></div>
+        <div class="tl-item bad"><div class="tl-head"><span>5. Descubrimos otro bloqueo: la red del sandbox</span><span class="chev">▶</span></div>
+          <div class="tl-body">Al intentar conectar desde el sandbox, el proxy devolvió <code>403 Forbidden</code>: <code>api.pilotsolution.net</code> no está en la lista de sitios permitidos. Las pruebas siguientes las hice por otra vía de red que sí funciona.</div></div>
+        <div class="tl-item bad"><div class="tl-head"><span>6. Probamos un usuario "api.pilot@...": no existe</span><span class="chev">▶</span></div>
+          <div class="tl-body">Tres combinaciones, todas <code>user_not_found</code>. Ese usuario no figura en Pilot. Dato útil: tu usuario daba un error distinto, o sea que el mensaje de error nos dice mucho.</div></div>
+        <div class="tl-item warn"><div class="tl-head"><span>7. Encontramos el usuario correcto… falta la contraseña</span><span class="chev">▶</span></div>
+          <div class="tl-body"><code>pluginleads.resasco@myworkplace.com.ar</code> SÍ existe: ahora el error es <code>Incorrect password</code>. Estamos a una contraseña de distancia. Las que probamos no son.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Moraleja</h2>
+      <p>Cada error nos acercó: <span class="pill bad">VM caída</span> → <span class="pill warn">sin credenciales</span> → <span class="pill bad">usuario rechazado</span> → <span class="pill bad">red bloqueada</span> → <span class="pill bad">usuario inexistente</span> → <span class="pill warn">usuario OK, contraseña no</span>. Leer el mensaje de error exacto es el 80% del trabajo.</p>
+    </div>
+  </section>
+
+  <!-- TAB 4: QUE FALTA -->
+  <section id="t4">
+    <div class="card">
+      <h2>Checklist para que el lunes corra solo</h2>
+      <div class="todo"><span class="ic">🔑</span><div><b>1. Conseguir la contraseña de <code>pluginleads.resasco@myworkplace.com.ar</code></b><br><span class="muted">Preguntale a quien configuró el conector MCP de Pilot, o reseteala desde Pilot web → Configuración → Usuarios. Es lo único que falta del lado de credenciales.</span></div></div>
+      <div class="todo"><span class="ic">📦</span><div><b>2. Guardar las credenciales como variables de entorno</b><br><span class="muted">Que <code>PILOT_USER</code> y <code>PILOT_PASSWORD</code> queden configuradas en el entorno, no pasadas por el chat. Así la tarea automática las encuentra sola cada lunes.</span></div></div>
+      <div class="todo"><span class="ic">🌐</span><div><b>3. Habilitar <code>api.pilotsolution.net</code> en la red</b><br><span class="muted">Si Grupo Resasco usa plan Team/Enterprise de Claude, el Owner lo habilita en Admin settings → Capabilities. Si no, revisar la configuración de red de Cowork en los ajustes de la app.</span></div></div>
+      <div class="todo"><span class="ic">🔒</span><div><b>4. Cambiar tu contraseña personal de Pilot</b><br><span class="muted">Quedó escrita en el chat de hoy. Mejor renovarla y no volver a mandarla por ningún chat.</span></div></div>
+      <div class="todo"><span class="ic">✅</span><div><b>5. Probar una corrida manual completa</b><br><span class="muted">Antes del lunes, pedime "actualizá el dashboard de Guspamar" y verificamos juntos que el HTML salga bien (más de 50 KB, sin errores).</span></div></div>
+    </div>
+    <div class="card">
+      <h2>Plan B mientras tanto</h2>
+      <p>Para consultas puntuales (ventas del mes, performance de un vendedor, leads por origen) el conector MCP funciona hoy mismo — pedímelo por chat y te lo saco al toque. Lo que no puedo por esa vía es regenerar el dashboard completo del año.</p>
+    </div>
+  </section>
+
+  <!-- TAB 5: GLOSARIO -->
+  <section id="t5">
+    <div class="card glos">
+      <h2>Glosario sin chamuyo técnico</h2>
+      <p class="muted">Tocá cada término.</p>
+      <div class="tl" style="padding-left:0;">
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>API</b> — la puerta para programas</span><span class="chev">▶</span></div>
+          <div class="tl-body">Como la web de Pilot, pero pensada para que la usen programas en vez de personas. En lugar de pantallas con botones, devuelve datos crudos. El script del dashboard habla con Pilot por acá.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>MCP / Conector</b> — el enchufe estándar</span><span class="chev">▶</span></div>
+          <div class="tl-body">Un estándar para "enchufar" servicios externos (Pilot, Gmail, etc.) al chat de Claude. Cada conector guarda sus propias credenciales de forma segura y me deja hacer consultas en tu nombre.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Skill</b> — la receta guardada</span><span class="chev">▶</span></div>
+          <div class="tl-body">Un paquete de instrucciones + scripts que me enseña a hacer una tarea específica de tu negocio siempre igual. La de Guspamar tiene grabadas todas tus reglas: los 11 vendedores, el filtro 0km, las exclusiones, los targets.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Script</b> — el robot que hace el trabajo pesado</span><span class="chev">▶</span></div>
+          <div class="tl-body">Un programa (acá en Python) que ejecuta una secuencia de pasos sin intervención: autenticarse, bajar datos, calcular, generar el HTML. Corre afuera del chat para poder mover volumen.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Sandbox / VM</b> — la pecera</span><span class="chev">▶</span></div>
+          <div class="tl-body">Una computadora virtual aislada donde corren los scripts. Como una pecera: lo de adentro no puede tocar lo de afuera. Por seguridad, su salida a internet solo permite sitios de una lista.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Variable de entorno</b> — la cajita de configuración</span><span class="chev">▶</span></div>
+          <div class="tl-body">Un valor con nombre que queda guardado en la compu (ej: <code>PILOT_USER</code>). Los programas lo leen al arrancar. Sirve para no escribir contraseñas adentro del código ni pasarlas por chat.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Token</b> — la pulsera del boliche</span><span class="chev">▶</span></div>
+          <div class="tl-body">Cuando el script se autentica bien, Pilot le da un "token": un pase temporal para las consultas siguientes, sin mandar usuario y contraseña cada vez. Como la pulsera que te ponen en la entrada.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Proxy / lista de permitidos</b> — el portero de la red</span><span class="chev">▶</span></div>
+          <div class="tl-body">Todo lo que sale del sandbox a internet pasa por un portero que chequea una lista. Si el sitio no está en la lista (como hoy <code>api.pilotsolution.net</code>), devuelve <code>403 Forbidden</code> y no te deja pasar.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>403 / errores HTTP</b> — los carteles del camino</span><span class="chev">▶</span></div>
+          <div class="tl-body">Códigos estándar de respuesta: <b>403</b> = prohibido, <b>404</b> = no existe, <b>500</b> = se rompió el servidor, <b>200</b> = todo OK. Leerlos te dice exactamente dónde está el problema.</div></div>
+        <div class="tl-item" style="margin-left:0;"><div class="tl-head"><span><b>Tarea programada</b> — el despertador</span><span class="chev">▶</span></div>
+          <div class="tl-body">Una instrucción que se ejecuta sola en un horario fijo — tu dashboard de los lunes. Para que funcione sin vos, todas las piezas (credenciales, red, sandbox) tienen que estar en orden de antemano.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 6: QUIZ -->
+  <section id="t6">
+    <div class="card">
+      <h2>A ver si quedó claro 🎯</h2>
+      <div class="q" data-a="1">
+        <p>1. ¿Por qué la API de Pilot rechaza tu usuario personal?</p>
+        <button class="opt">Porque la contraseña está vencida</button>
+        <button class="opt">Porque está vinculado a varias concesionarias y la API solo acepta cuentas de una sola</button>
+        <button class="opt">Porque no tenés permisos de gerente</button>
+        <div class="feedback"></div>
+      </div>
+      <div class="q" data-a="2">
+        <p>2. ¿Por qué no se puede armar el dashboard completo usando el conector del chat?</p>
+        <button class="opt">Porque el conector está roto</button>
+        <button class="opt">Porque Pilot cobra extra por eso</button>
+        <button class="opt">Porque son miles de registros y el chat no está hecho para mover ese volumen</button>
+        <div class="feedback"></div>
+      </div>
+      <div class="q" data-a="0">
+        <p>3. ¿Dónde deben guardarse las credenciales del script?</p>
+        <button class="opt">En variables de entorno (PILOT_USER / PILOT_PASSWORD)</button>
+        <button class="opt">En el chat, así quedan a mano</button>
+        <button class="opt">Adentro del código del script</button>
+        <div class="feedback"></div>
+      </div>
+      <div class="q" data-a="2">
+        <p>4. El sandbox dio "403 Forbidden" al conectar a Pilot. ¿Qué significa?</p>
+        <button class="opt">Que la contraseña es incorrecta</button>
+        <button class="opt">Que Pilot está caído</button>
+        <button class="opt">Que el portero de red del sandbox no tiene ese sitio en la lista de permitidos</button>
+        <div class="feedback"></div>
+      </div>
+      <div class="q" data-a="1">
+        <p>5. ¿Qué falta hoy para que el dashboard de los lunes vuelva a correr solo?</p>
+        <button class="opt">Comprar otra licencia de Pilot</button>
+        <button class="opt">La contraseña del usuario de API + habilitar el dominio en la red del sandbox</button>
+        <button class="opt">Cambiar la skill por otra nueva</button>
+        <div class="feedback"></div>
+      </div>
+      <div id="score"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+// Tabs
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('visible'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.t).classList.add('visible');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+// Actores
+document.querySelectorAll('.actor').forEach(a=>{
+  a.addEventListener('click',()=>{
+    const d=document.getElementById(a.dataset.d);
+    const wasOpen=d.classList.contains('show');
+    document.querySelectorAll('.actor-detail').forEach(x=>x.classList.remove('show'));
+    if(!wasOpen) d.classList.add('show');
+  });
+});
+// Flow nodes
+document.querySelectorAll('.node[data-i]').forEach(n=>{
+  n.addEventListener('click',()=>{
+    document.querySelectorAll('.node[data-i]').forEach(x=>x.classList.remove('sel'));
+    n.classList.add('sel');
+    document.getElementById('info1').textContent=n.dataset.i;
+  });
+});
+document.querySelectorAll('.node[data-i2]').forEach(n=>{
+  n.addEventListener('click',()=>{
+    document.querySelectorAll('.node[data-i2]').forEach(x=>x.classList.remove('sel'));
+    n.classList.add('sel');
+    document.getElementById('info2').textContent=n.dataset.i2;
+  });
+});
+// Timeline / glosario expandibles
+document.querySelectorAll('.tl-head').forEach(h=>{
+  h.addEventListener('click',()=>h.parentElement.classList.toggle('open'));
+});
+// Quiz
+let answered=0, correct=0;
+const qs=document.querySelectorAll('.q');
+qs.forEach(q=>{
+  const right=parseInt(q.dataset.a);
+  q.querySelectorAll('.opt').forEach((o,i)=>{
+    o.addEventListener('click',()=>{
+      if(q.classList.contains('done'))return;
+      q.classList.add('done'); answered++;
+      const fb=q.querySelector('.feedback');
+      if(i===right){o.classList.add('right'); correct++; fb.textContent='✅ ¡Exacto!'; fb.style.color='var(--green)';}
+      else{o.classList.add('wrong'); q.querySelectorAll('.opt')[right].classList.add('right'); fb.textContent='❌ No — la correcta es la marcada en verde.'; fb.style.color='var(--red)';}
+      if(answered===qs.length){
+        const s=document.getElementById('score');
+        s.style.display='block';
+        s.innerHTML = correct===qs.length ? '🏆 <b>'+correct+'/'+qs.length+'</b> — ¡Dominado! Ya podés explicárselo a los gerentes.' :
+          '📊 <b>'+correct+'/'+qs.length+'</b> — Repasá las pestañas y volvé a intentar (recargá la página).';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
