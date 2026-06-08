@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard Guspamar</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script><style>
+:root { color-scheme: light; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,Verdana,sans-serif; background:linear-gradient(135deg,#f5f7fa 0%,#e9ecef 100%); color:#2c3e50; }
+.container { max-width:1600px; margin:0 auto; padding:16px; }
+header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px; border-radius:10px; margin-bottom:16px; }
+header h1 { font-size:24px; margin-bottom:4px; }
+header p { font-size: 13px; opacity:.9; }
+#loader { background:white; border-radius:10px; padding:40px 24px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+#dash { display:none; }
+.mega-tabs { display:flex; gap:8px; margin-bottom:14px; }
+.mega-tab { flex:1; padding:14px 20px; background:white; color:#555; border:3px solid #ddd; border-radius:12px; cursor:pointer; font-weight:700; font-size:16px; transition:all .3s; text-align:center; }
+.mega-tab:hover { border-color:#667eea; color:#667eea; }
+.mega-tab.active { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-color:transparent; color:white; }
+.mega-section { display:none; }
+.mega-section.active { display:block; }
+.tabs-nav { display:flex; gap:5px; background:white; padding:10px; border-radius:10px; margin-bottom:16px; flex-wrap:wrap; }
+.tab-btn { padding:8px 14px; border:2px solid #ddd; background:white; color:#333; border-radius:6px; cursor:pointer; font-weight:600; font-size:12px; transition:all .3s; }
+.tab-btn:hover { border-color:#667eea; color:#667eea; }
+.tab-btn.active { background:#667eea; border-color:#667eea; color:white; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+.card { background:white; padding:18px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:16px; }
+.card h2 { font-size:16px; margin-bottom:12px; color:#2c3e50; border-bottom:3px solid #667eea; padding-bottom:8px; }
+.card h3 { font-size:14px; margin:14px 0 8px; color:#555; }
+.card h3:first-of-type { margin-top:0; }
+.chart-box { position:relative; height:340px; margin-bottom:16px; }
+.filter-box { background:#f8f9fa; padding:10px; border-radius:8px; margin-bottom:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.filter-box label { font-weight:600; font-size:12px; }
+.filter-box select { padding:5px 9px; border:1px solid #ddd; border-radius:4px; font-size:12px; cursor:pointer; background:white; }
+.note { background:#fff8e1; border-left:4px solid #ffc107; padding:8px 12px; border-radius:4px; font-size:12px; margin-bottom:10px; color:#856404; }
+.sub { font-size:12px; color:#666; margin-bottom:12px; }
+.grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+.statbox { padding:12px; border-radius:8px; text-align:center; }
+.quad { padding:10px; border-radius:4px; font-size:12px; }
+.footer { text-align:center; color:#999; font-size:11px; padding:14px; }
+</style></head><body><div id="loader" style="display:none"></div><div class="container"><header><h1>📊 Dashboard Guspamar</h1><p id="hdrInfo"></p></header><div id="dash" style="display:block">
+    <div class="mega-tabs">
+      <button class="mega-tab active" onclick="megaTab(0,this)">🎯 LEADS</button>
+      <button class="mega-tab" onclick="megaTab(1,this)">💰 VENTAS</button>
+    </div>
+
+    <!-- ════════ LEADS ════════ -->
+    <div class="mega-section active">
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="tab(0,'l',this)">🏢 Por Sucursal</button>
+        <button class="tab-btn" onclick="tab(1,'l',this)">👥 Por Vendedor</button>
+        <button class="tab-btn" onclick="tab(2,'l',this)">🚗 Vendedor x Producto</button>
+        <button class="tab-btn" onclick="tab(3,'l',this)">📡 Por Origen</button>
+      </div>
+
+      <div class="tab-content active" data-mega="l">
+        <div class="card">
+          <h2>Leads Gestionados por Sucursal (Evolución Temporal)</h2>
+          <p class="sub">📌 Solo leads de <strong>0 Km</strong> (excluye Usados y Plan Ahorro). Total: <strong id="totLeadsLbl">6.777 leads</strong> | Pasá el mouse para ver conversión.</p>
+          <div class="chart-box"><canvas id="leadsRegionChart"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Tasa de Conversión por Sucursal y Mes</h2>
+          <p class="sub">Conversión = Leads que terminaron en venta efectiva.</p>
+          <div class="chart-box"><canvas id="convChart"></canvas></div>
+          <div id="convStats" class="grid2"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="l">
+        <div class="card">
+          <h2>Leads Gestionados por Vendedor</h2>
+          <div class="filter-box">
+            <label>Filtrar por Origen:</label>
+            <select id="filtroLeadsVendOrigen" onchange="updateLeadsVendCharts()"></select>
+          </div>
+          <h3>📍 Bahía Blanca</h3>
+          <div class="chart-box"><canvas id="leadsVendBB"></canvas></div>
+          <h3>📍 La Pampa</h3>
+          <div class="chart-box"><canvas id="leadsVendLP"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="l">
+        <div class="card">
+          <h2>Leads por Vendedor según Producto</h2>
+          <p class="sub">💡 Útil para entender si la performance del vendedor depende del producto que recibe.</p>
+          <div class="filter-box">
+            <label>Vendedor:</label>
+            <select id="filtroVendProd" onchange="updateVendProdChart()"></select>
+            <label style="margin-left:12px;">Origen:</label>
+            <select id="filtroVendProdOrigen" onchange="updateVendProdChart()"></select>
+          </div>
+          <div class="chart-box"><canvas id="vendProdChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="l">
+        <div class="card">
+          <h2>Leads por Origen (Evolución Temporal)</h2>
+          <div class="chart-box"><canvas id="origenChart"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Mix de Orígenes (Resumen Total)</h2>
+          <div class="chart-box"><canvas id="origenMixChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ VENTAS ════════ -->
+    <div class="mega-section">
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="tab(0,'v',this)">🏢 Vista Macro</button>
+        <button class="tab-btn" onclick="tab(1,'v',this)">📈 Promedio vs Desviación</button>
+        <button class="tab-btn" onclick="tab(2,'v',this)">👥 Vendedores Total</button>
+        <button class="tab-btn" onclick="tab(3,'v',this)">🛻 Vendedores Ranger</button>
+        <button class="tab-btn" onclick="tab(4,'v',this)">🚙 Vendedores Territory</button>
+      </div>
+
+      <div class="tab-content active" data-mega="v">
+        <div class="note">📌 Vista Macro incluye TODOS los vendedores (propios + otros canales/gerentes). Pestañas siguientes: solo canal tradicional.</div>
+        <div class="card">
+          <h2>1) Evolución de Ventas en Cantidad</h2>
+          <div class="filter-box">
+            <label>Filtrar:</label>
+            <select id="filtroQty" onchange="updateQtyChart()">
+              <option value="tradicional">Tradicional (todos los productos)</option>
+              <option value="ranger">Ranger (con Directa)</option>
+              <option value="territory">Territory</option>
+            </select>
+          </div>
+          <div class="chart-box"><canvas id="macroQty"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>2) Evolución de Ventas en Dinero ($M)</h2>
+          <div class="chart-box"><canvas id="macroDinC"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>3) Evolución Financiado / Contado / Retoma</h2>
+          <div class="filter-box">
+            <label>Filtrar:</label>
+            <select id="filtroFin" onchange="updateFinChart()"></select>
+          </div>
+          <div class="chart-box"><canvas id="finChart"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>4) Aporte de Otros Canales / Gerentes al Canal Tradicional</h2>
+          <p class="sub">Ventas tradicionales de vendedores que <strong>NO son del canal tradicional</strong>. <em>Excluye a Jorge Campetella y vendedores de usados.</em></p>
+          <div class="filter-box">
+            <label>Filtrar:</label>
+            <select id="filtroOtros" onchange="updateOtrosChart()">
+              <option value="Total">Total</option>
+              <option value="Bahia Blanca">Bahía Blanca</option>
+              <option value="La Pampa">La Pampa</option>
+            </select>
+          </div>
+          <div id="otrosStatsBox" class="grid3"></div>
+          <div class="chart-box"><canvas id="otrosChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="v">
+        <div class="card">
+          <h2>Promedio vs Desviación Estándar — Matriz Gerencial</h2>
+          <p class="sub" id="scatterTargetLabel">🎯 <strong>Target gerencial:</strong> Promedio ≥ 7 ventas/mes | Desviación &lt; 2</p>
+          <div class="filter-box">
+            <label>Sucursal:</label>
+            <select id="scatterSuc" onchange="updateScatter()">
+              <option value="Total">Todas</option>
+              <option value="Bahia Blanca">Bahía Blanca</option>
+              <option value="La Pampa">La Pampa</option>
+            </select>
+            <label style="margin-left:12px;">Métrica:</label>
+            <select id="scatterMetric" onchange="updateScatter()">
+              <option value="total">Ventas Totales</option>
+              <option value="ranger">Ventas Ranger</option>
+              <option value="territory">Ventas Territory</option>
+            </select>
+          </div>
+          <div class="chart-box" style="height:420px;"><canvas id="scatter"></canvas></div>
+          <div class="grid2">
+            <div class="quad" style="background:rgba(220,38,38,.12); border-left:4px solid #dc2626;"><b style="color:#991b1b;">🔴 Arriba-Izquierda: Coaching</b><br>Vende poco e inconsistente. Entender por qué (¿leads malos? ¿producto? ¿performance?).</div>
+            <div class="quad" style="background:rgba(251,191,36,.15); border-left:4px solid #f59e0b;"><b style="color:#92400e;">🟡 Arriba-Derecha: Estabilizar</b><br>Vende mucho pero con picos y valles. Mayor ROI gerencial: volverlo predecible.</div>
+            <div class="quad" style="background:rgba(249,115,22,.15); border-left:4px solid #f97316;"><b style="color:#9a3412;">🟠 Abajo-Izquierda: Activar</b><br>Predecible pero bajo volumen. Puede ser nuevo o tener cartera chica.</div>
+            <div class="quad" style="background:rgba(34,197,94,.15); border-left:4px solid #16a34a;"><b style="color:#14532d;">🟢 Abajo-Derecha: Top vendedor</b><br>Volumen alto y predecible. El objetivo de todos.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="v">
+        <div class="card">
+          <h2>Vendedores - Ventas Totales (Tradicional)</h2>
+          <h3>📍 Bahía Blanca</h3>
+          <div class="chart-box"><canvas id="totalBB"></canvas></div>
+          <h3>📍 La Pampa</h3>
+          <div class="chart-box"><canvas id="totalLP"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="v">
+        <div class="card">
+          <h2>Vendedores - Ventas Ranger</h2>
+          <div class="note">⚠️ Las ventas de Ranger incluyen Tradicional + Directa.</div>
+          <div class="filter-box">
+            <label>Segmento:</label>
+            <select id="filtroRangerSeg" onchange="updateRangerCharts()">
+              <option value="Total">Total (todos los segmentos)</option>
+              <option value="Low">Low</option>
+              <option value="Mid">Mid</option>
+              <option value="High">High</option>
+              <option value="Raptor">Raptor</option>
+            </select>
+          </div>
+          <h3>📍 Bahía Blanca</h3>
+          <div class="chart-box"><canvas id="rangerBB"></canvas></div>
+          <h3>📍 La Pampa</h3>
+          <div class="chart-box"><canvas id="rangerLP"></canvas></div>
+        </div>
+      </div>
+
+      <div class="tab-content" data-mega="v">
+        <div class="card">
+          <h2>Vendedores - Ventas Territory</h2>
+          <h3>📍 Bahía Blanca</h3>
+          <div class="chart-box"><canvas id="territoryBB"></canvas></div>
+          <h3>📍 La Pampa</h3>
+          <div class="chart-box"><canvas id="territoryLP"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" id="footerInfo">Guspamar — Período: 2026-01 a 2026-06 · 326 ventas 0km · 6777 leads 0km</div>
+  </div></div><script>const meses=["2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
+const M={"macroQty":{"tradicional":{"Bahia Blanca":[23,18,26,22,21,6],"La Pampa":[30,21,31,24,23,11]},"ranger":{"Bahia Blanca":[8,14,23,21,17,6],"La Pampa":[19,21,19,22,17,3]},"territory":{"Bahia Blanca":[7,4,5,7,8,1],"La Pampa":[14,7,6,11,7,5]}},"macroDin":{"Bahia Blanca":[1474.78,1072.44,1633.37,1354,1294.94,409.5],"La Pampa":[1775.15,1328.17,1898.92,1346.56,1195.72,501.35]},"finData":{"Total":{"financiado":[31,18,24,24,19,6],"contado":[22,21,33,22,25,11],"retoma":[13,15,21,11,19,8]},"Bahia Blanca":{"financiado":[7,6,11,11,11,1],"contado":[16,12,15,11,10,5],"retoma":[4,3,8,4,9,3]},"La Pampa":{"financiado":[24,12,13,13,8,5],"contado":[6,9,18,11,15,6],"retoma":[9,12,13,7,10,5]}},"finVend":{"Agustín Pignatta":{"financiado":[1,3,1,1,1,1],"contado":[0,0,0,0,2,0],"retoma":[0,3,1,0,1,1]},"Facundo González":{"financiado":[4,1,4,4,1,2],"contado":[1,1,2,0,1,1],"retoma":[2,2,2,1,1,2]},"Gastón López Conca":{"financiado":[2,1,1,3,1,0],"contado":[1,1,1,0,1,1],"retoma":[1,1,1,1,1,1]},"Gastón Maceratesi":{"financiado":[0,0,2,2,0,0],"contado":[0,3,1,3,1,1],"retoma":[0,1,1,1,0,1]},"Hernan Rivarola":{"financiado":[0,0,0,0,1,0],"contado":[0,0,0,1,2,0],"retoma":[0,0,0,0,2,0]},"Julio Sánchez":{"financiado":[4,1,0,1,0,0],"contado":[0,0,0,1,0,0],"retoma":[3,0,0,1,0,0]},"Laureano San José":{"financiado":[3,4,3,2,3,1],"contado":[2,5,5,3,6,2],"retoma":[3,6,5,2,5,1]},"Marcial Fernandez":{"financiado":[1,0,3,0,1,1],"contado":[2,2,2,0,0,0],"retoma":[1,1,2,0,0,0]},"Mariano Rodríguez":{"financiado":[2,0,0,1,0,0],"contado":[1,0,4,2,1,1],"retoma":[1,0,1,1,0,0]},"Martín Espil":{"financiado":[8,2,3,1,0,1],"contado":[0,2,8,2,3,2],"retoma":[0,0,3,1,0,0]},"Sebastian Murias":{"financiado":[2,4,1,1,2,0],"contado":[4,2,2,2,2,0],"retoma":[1,1,0,1,4,0]}},"otrosData":{"Total":{"otros":[10,6,11,16,12,3],"pct":[20.83,15.79,20.37,34.78,29.27,17.65]},"Bahia Blanca":{"otros":[6,6,8,10,8,3],"pct":[33.33,35.29,34.78,45.45,44.44,50]},"La Pampa":{"otros":[4,0,3,6,4,0],"pct":[13.33,0,9.68,25,17.39,0]}},"otrosStats":{"Total":{"promedio":9.67,"desviacion":4.19,"pctPromedio":23.12},"Bahia Blanca":{"promedio":6.83,"desviacion":2.19,"pctPromedio":40.55},"La Pampa":{"promedio":2.83,"desviacion":2.19,"pctPromedio":10.9}},"vendedores":{"Agustín Pignatta":{"suc":"La Pampa","total":[1,3,1,1,3,1],"ranger":[1,1,1,0,1,0],"territory":[0,1,0,1,2,0]},"Facundo González":{"suc":"La Pampa","total":[5,2,6,4,2,3],"ranger":[3,2,3,1,2,2],"territory":[1,1,2,3,1,1]},"Gastón López Conca":{"suc":"La Pampa","total":[3,2,2,3,2,1],"ranger":[1,1,0,0,1,0],"territory":[2,1,1,2,1,1]},"Gastón Maceratesi":{"suc":"Bahia Blanca","total":[0,3,3,5,1,1],"ranger":[0,1,2,2,3,0],"territory":[0,2,1,3,0,0]},"Hernan Rivarola":{"suc":"Bahia Blanca","total":[0,0,0,1,3,0],"ranger":[0,0,0,0,2,0],"territory":[0,0,0,0,1,0]},"Julio Sánchez":{"suc":"La Pampa","total":[4,1,0,2,0,0],"ranger":[0,1,0,0,0,0],"territory":[4,0,0,2,0,0]},"Laureano San José":{"suc":"La Pampa","total":[5,9,8,5,9,3],"ranger":[3,4,5,3,6,1],"territory":[2,3,1,3,1,1]},"Marcial Fernandez":{"suc":"Bahia Blanca","total":[3,2,5,0,1,1],"ranger":[1,3,3,0,1,1],"territory":[1,1,1,0,0,0]},"Mariano Rodríguez":{"suc":"Bahia Blanca","total":[3,0,4,3,1,1],"ranger":[1,0,2,1,1,1],"territory":[2,0,0,1,1,0]},"Martín Espil":{"suc":"La Pampa","total":[8,4,11,3,3,3],"ranger":[5,3,6,4,2,0],"territory":[3,1,2,0,0,2]},"Sebastian Murias":{"suc":"Bahia Blanca","total":[6,6,3,3,4,0],"ranger":[3,4,2,3,3,0],"territory":[1,1,1,1,0,0]}},"scatter":{"Agustín Pignatta":{"sucursal":"La Pampa","total":{"prom":1.67,"desv":0.94},"ranger":{"prom":0.67,"desv":0.47},"territory":{"prom":0.67,"desv":0.75}},"Facundo González":{"sucursal":"La Pampa","total":{"prom":4.17,"desv":1.07},"ranger":{"prom":2.17,"desv":0.69},"territory":{"prom":1.5,"desv":0.76}},"Gastón López Conca":{"sucursal":"La Pampa","total":{"prom":2.17,"desv":0.69},"ranger":{"prom":0.5,"desv":0.5},"territory":{"prom":1.33,"desv":0.47}},"Gastón Maceratesi":{"sucursal":"Bahia Blanca","total":{"prom":2.5,"desv":1.61},"ranger":{"prom":1.33,"desv":1.11},"territory":{"prom":1,"desv":1.15}},"Hernan Rivarola":{"sucursal":"Bahia Blanca","total":{"prom":0.67,"desv":1.11},"ranger":{"prom":0.33,"desv":0.75},"territory":{"prom":0.17,"desv":0.37}},"Julio Sánchez":{"sucursal":"La Pampa","total":{"prom":1.17,"desv":1.46},"ranger":{"prom":0.17,"desv":0.37},"territory":{"prom":1,"desv":1.53}},"Laureano San José":{"sucursal":"La Pampa","total":{"prom":6.67,"desv":2.21},"ranger":{"prom":3.67,"desv":1.6},"territory":{"prom":1.83,"desv":0.9}},"Marcial Fernandez":{"sucursal":"Bahia Blanca","total":{"prom":2.33,"desv":1.8},"ranger":{"prom":1.5,"desv":1.12},"territory":{"prom":0.5,"desv":0.5}},"Mariano Rodríguez":{"sucursal":"Bahia Blanca","total":{"prom":2.17,"desv":1.34},"ranger":{"prom":1,"desv":0.58},"territory":{"prom":0.67,"desv":0.75}},"Martín Espil":{"sucursal":"La Pampa","total":{"prom":6,"desv":2.71},"ranger":{"prom":3.33,"desv":1.97},"territory":{"prom":1.33,"desv":1.11}},"Sebastian Murias":{"sucursal":"Bahia Blanca","total":{"prom":4.33,"desv":2.49},"ranger":{"prom":2.5,"desv":1.26},"territory":{"prom":0.67,"desv":0.47}}},"rangerSeg":{"Agustín Pignatta":{"Total":[1,1,1,0,1,0],"Low":[1,0,1,0,0,0],"Mid":[0,0,0,0,1,0],"High":[0,1,0,0,0,0],"Raptor":[0,0,0,0,0,0]},"Facundo González":{"Total":[3,2,3,1,2,2],"Low":[0,1,2,0,2,0],"Mid":[3,1,0,1,0,1],"High":[0,0,1,0,0,1],"Raptor":[0,0,0,0,0,0]},"Gastón López Conca":{"Total":[1,1,0,0,1,0],"Low":[1,1,0,0,0,0],"Mid":[0,0,0,0,0,0],"High":[0,0,0,0,1,0],"Raptor":[0,0,0,0,0,0]},"Gastón Maceratesi":{"Total":[0,1,2,2,3,0],"Low":[0,0,0,0,2,0],"Mid":[0,0,1,1,1,0],"High":[0,1,1,1,0,0],"Raptor":[0,0,0,0,0,0]},"Hernan Rivarola":{"Total":[0,0,0,0,2,0],"Low":[0,0,0,0,0,0],"Mid":[0,0,0,0,0,0],"High":[0,0,0,0,2,0],"Raptor":[0,0,0,0,0,0]},"Julio Sánchez":{"Total":[0,1,0,0,0,0],"Low":[0,1,0,0,0,0],"Mid":[0,0,0,0,0,0],"High":[0,0,0,0,0,0],"Raptor":[0,0,0,0,0,0]},"Laureano San José":{"Total":[3,4,5,3,6,1],"Low":[0,0,4,1,2,0],"Mid":[2,4,1,2,3,1],"High":[1,0,0,0,0,0],"Raptor":[0,0,0,0,1,0]},"Marcial Fernandez":{"Total":[1,3,3,0,1,1],"Low":[0,0,1,0,0,0],"Mid":[1,1,1,0,0,0],"High":[0,2,1,0,1,1],"Raptor":[0,0,0,0,0,0]},"Mariano Rodríguez":{"Total":[1,0,2,1,1,1],"Low":[0,0,1,0,1,0],"Mid":[1,0,0,1,0,1],"High":[0,0,1,0,0,0],"Raptor":[0,0,0,0,0,0]},"Martín Espil":{"Total":[5,3,6,4,2,0],"Low":[0,1,1,3,1,0],"Mid":[4,1,4,1,1,0],"High":[1,1,1,0,0,0],"Raptor":[0,0,0,0,0,0]},"Sebastian Murias":{"Total":[3,4,2,3,3,0],"Low":[2,3,1,1,1,0],"Mid":[0,0,1,1,0,0],"High":[1,1,0,1,2,0],"Raptor":[0,0,0,0,0,0]}},"convRegion":{"Bahia Blanca":{"leads":[723,612,781,736,893,194],"vendidos":[40,35,63,40,50,9],"tasa":[5.53,5.72,8.07,5.43,5.6,4.64]},"La Pampa":{"leads":[591,484,559,537,530,134],"vendidos":[58,44,56,45,44,8],"tasa":[9.81,9.09,10.02,8.38,8.3,5.97]}},"leadsVendOrigen":{"Agustín Pignatta":{"Todos":[80,84,78,72,106,24],"ADS - FACEBOOK":[50,53,35,35,76,19],"SALON":[15,19,28,20,19,3],"BASE DE CLIENTES":[7,5,5,7,3,0],"FORD":[6,5,9,7,1,1],"PAGINA WEB":[0,2,1,2,1,1],"RRSS - INSTAGRAM":[2,0,0,1,6,0]},"Facundo González":{"Todos":[99,91,82,88,111,28],"ADS - FACEBOOK":[33,46,36,40,71,14],"SALON":[52,35,34,29,28,12],"BASE DE CLIENTES":[7,1,6,12,9,0],"FORD":[7,7,6,3,1,0],"PAGINA WEB":[0,2,0,3,1,0],"RRSS - INSTAGRAM":[0,0,0,1,1,2]},"Gastón López Conca":{"Todos":[68,65,62,67,41,8],"ADS - FACEBOOK":[41,44,44,48,26,3],"SALON":[4,3,9,2,3,1],"BASE DE CLIENTES":[12,17,3,7,4,0],"FORD":[7,1,5,9,2,1],"PAGINA WEB":[2,0,1,1,4,3],"RRSS - INSTAGRAM":[2,0,0,0,2,0]},"Gastón Maceratesi":{"Todos":[49,130,132,97,130,30],"ADS - FACEBOOK":[24,71,77,55,90,21],"SALON":[14,34,26,26,21,4],"BASE DE CLIENTES":[0,2,5,6,5,1],"FORD":[7,15,19,4,7,0],"PAGINA WEB":[3,6,3,3,1,2],"RRSS - INSTAGRAM":[1,2,2,3,6,2]},"Hernan Rivarola":{"Todos":[9,9,22,90,129,24],"ADS - FACEBOOK":[1,1,4,46,72,15],"SALON":[5,6,13,32,32,7],"BASE DE CLIENTES":[1,0,5,2,5,0],"FORD":[2,0,0,4,9,0],"PAGINA WEB":[0,2,0,4,1,0],"RRSS - INSTAGRAM":[0,0,0,2,9,1]},"Julio Sánchez":{"Todos":[62,54,63,66,40,12],"ADS - FACEBOOK":[39,39,39,39,20,4],"SALON":[10,9,12,15,8,5],"BASE DE CLIENTES":[4,1,1,2,1,0],"FORD":[4,3,4,6,5,0],"PAGINA WEB":[2,1,4,4,5,3],"RRSS - INSTAGRAM":[0,0,3,0,1,0]},"Laureano San José":{"Todos":[65,75,70,65,77,26],"ADS - FACEBOOK":[34,45,40,39,53,15],"SALON":[17,16,14,9,7,4],"BASE DE CLIENTES":[5,5,9,5,9,5],"FORD":[8,7,5,8,2,0],"PAGINA WEB":[1,2,0,3,4,1],"RRSS - INSTAGRAM":[0,0,2,1,2,1]},"Marcial Fernandez":{"Todos":[99,55,49,81,115,21],"ADS - FACEBOOK":[57,36,11,54,74,14],"SALON":[25,8,20,12,25,4],"BASE DE CLIENTES":[4,5,10,8,13,3],"FORD":[7,2,5,3,1,0],"PAGINA WEB":[4,3,0,3,1,0],"RRSS - INSTAGRAM":[1,1,3,1,1,0]},"Mariano Rodríguez":{"Todos":[143,70,160,85,153,37],"ADS - FACEBOOK":[90,40,88,47,108,23],"SALON":[34,26,37,26,41,10],"BASE DE CLIENTES":[10,1,10,5,3,3],"FORD":[5,2,13,1,0,1],"PAGINA WEB":[0,1,5,2,1,0],"RRSS - INSTAGRAM":[3,0,5,4,0,0]},"Martín Espil":{"Todos":[88,58,78,85,86,29],"ADS - FACEBOOK":[41,36,35,45,65,17],"SALON":[25,10,19,18,8,8],"BASE DE CLIENTES":[14,9,17,14,6,3],"FORD":[6,3,4,6,4,1],"PAGINA WEB":[2,0,1,2,2,0],"RRSS - INSTAGRAM":[0,0,2,0,1,0]},"Sebastian Murias":{"Todos":[167,175,148,106,178,50],"ADS - FACEBOOK":[91,103,80,60,120,30],"SALON":[39,38,38,29,40,16],"BASE DE CLIENTES":[14,10,13,8,8,3],"FORD":[17,19,10,1,3,0],"PAGINA WEB":[3,3,3,6,4,0],"RRSS - INSTAGRAM":[3,2,4,2,3,1]}},"leadsVPO":{"Agustín Pignatta":{"Todos":{"Ranger":[31,32,42,25,61,9],"Territory":[23,23,23,21,18,2],"Maverick":[11,8,6,18,22,7],"Everest":[8,17,3,2,2,1]}},"Facundo González":{"Todos":{"Ranger":[46,35,37,35,62,10],"Territory":[27,28,20,17,19,5],"Maverick":[15,7,10,22,14,6],"Everest":[3,11,9,1,3,1]}},"Gastón López Conca":{"Todos":{"Ranger":[28,21,30,34,21,1],"Territory":[29,26,26,13,14,3],"Maverick":[1,8,1,15,2,1],"Everest":[6,10,2,5,0,0]}},"Gastón Maceratesi":{"Todos":{"Ranger":[25,61,76,50,89,7],"Territory":[10,29,24,20,9,4],"Maverick":[7,8,7,19,16,16],"Everest":[2,17,8,3,7,1]}},"Hernan Rivarola":{"Todos":{"Ranger":[6,4,10,40,92,10],"Territory":[2,2,7,17,12,4],"Maverick":[1,0,1,15,18,6],"Everest":[0,1,1,5,3,1]}},"Julio Sánchez":{"Todos":{"Ranger":[24,14,28,34,14,3],"Territory":[17,13,22,11,11,3],"Maverick":[9,3,2,10,2,0],"Everest":[6,14,3,2,1,0]}},"Laureano San José":{"Todos":{"Ranger":[30,23,39,32,47,6],"Territory":[16,16,12,12,4,5],"Maverick":[8,8,4,12,13,7],"Everest":[5,14,3,4,4,1]}},"Marcial Fernandez":{"Todos":{"Ranger":[53,28,32,44,74,10],"Territory":[11,9,4,13,14,4],"Maverick":[13,4,3,9,16,4],"Everest":[5,5,0,5,1,1]}},"Mariano Rodríguez":{"Todos":{"Ranger":[70,27,101,46,91,11],"Territory":[34,13,19,14,16,7],"Maverick":[15,7,10,7,18,9],"Everest":[3,5,12,1,2,1]}},"Martín Espil":{"Todos":{"Ranger":[36,27,41,48,48,7],"Territory":[27,12,18,11,9,8],"Maverick":[6,6,3,15,16,6],"Everest":[7,4,10,5,1,0]}},"Sebastian Murias":{"Todos":{"Ranger":[95,79,100,52,110,16],"Territory":[30,29,18,16,12,10],"Maverick":[18,13,8,16,22,16],"Everest":[8,41,8,8,5,1]}}},"leadsOrigen":{"ADS - FACEBOOK":[749,657,777,803,905,194],"SALON":[297,241,290,245,263,82],"BASE DE CLIENTES":[126,94,132,115,123,27],"FORD":[100,68,86,55,37,4],"PAGINA WEB":[24,23,19,33,28,11],"RRSS - INSTAGRAM":[13,7,28,17,34,8]},"origenTotales":{"ADS - FACEBOOK":4085,"SALON":1418,"BASE DE CLIENTES":617,"FORD":350,"PAGINA WEB":138,"RRSS - INSTAGRAM":107},"totalLeads":6777,"totalVentas":326,"vendSuc":{"Agustín Pignatta":"La Pampa","Facundo González":"La Pampa","Gastón López Conca":"La Pampa","Gastón Maceratesi":"Bahia Blanca","Hernan Rivarola":"Bahia Blanca","Julio Sánchez":"La Pampa","Laureano San José":"La Pampa","Marcial Fernandez":"Bahia Blanca","Mariano Rodríguez":"Bahia Blanca","Martín Espil":"La Pampa","Sebastian Murias":"Bahia Blanca"}};
+const targets={"total":{"x":7,"y":2,"label":"Promedio ≥ 7 ventas/mes | Desviación < 2"},"ranger":{"x":4,"y":1.5,"label":"Promedio ≥ 4 Rangers/mes | Desviación < 1.5"},"territory":{"x":3,"y":1,"label":"Promedio ≥ 3 Territory/mes | Desviación < 1"}};
+const colorSuc={"Bahia Blanca":"#667eea","La Pampa":"#e91e63"};
+const palette=["#667eea","#e91e63","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#84cc16","#ec4899","#f97316","#0ea5e9"];
+const VENDEDORES=["Agustín Pignatta","Facundo González","Gastón López Conca","Gastón Maceratesi","Hernan Rivarola","Julio Sánchez","Laureano San José","Marcial Fernandez","Mariano Rodríguez","Martín Espil","Sebastian Murias"];
+const TOP_ORIGENES=["ADS - FACEBOOK","SALON","BASE DE CLIENTES","FORD","PAGINA WEB","RRSS - INSTAGRAM"];
+const PRODUCTOS=["Ranger","Territory","Maverick","Everest"];
+const lineOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}};
+const mk=(id,cfg) => new Chart(document.getElementById(id),cfg);
+const lineDs=(label,data,color,w=3) => ({label,data,borderColor:color,backgroundColor:color+"22",tension:.35,borderWidth:w,fill:false});
+let qtyChart,finChart,otrosChart,scatterChart,rBB,rLP,lvBB,lvLP,vpChart;
+let currentTarget=targets.total;
+const quadrantPlugin={id:"quad",beforeDatasetsDraw:function(c){
+  const {ctx,chartArea:{left,top,right,bottom},scales:{x,y}}=c;
+  const xc=x.getPixelForValue(currentTarget.x), yc=y.getPixelForValue(currentTarget.y);
+  ctx.save();
+  ctx.fillStyle='rgba(220,38,38,.10)'; ctx.fillRect(left,top,xc-left,yc-top);
+  ctx.fillStyle='rgba(251,191,36,.15)'; ctx.fillRect(xc,top,right-xc,yc-top);
+  ctx.fillStyle='rgba(249,115,22,.12)'; ctx.fillRect(left,yc,xc-left,bottom-yc);
+  ctx.fillStyle='rgba(34,197,94,.15)'; ctx.fillRect(xc,yc,right-xc,bottom-yc);
+  ctx.strokeStyle='rgba(100,100,100,.5)'; ctx.setLineDash([6,4]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(xc,top); ctx.lineTo(xc,bottom); ctx.moveTo(left,yc); ctx.lineTo(right,yc); ctx.stroke(); ctx.setLineDash([]);
+  ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+  ctx.fillStyle='rgba(153,27,27,.8)'; ctx.fillText('🔴 COACHING',(left+xc)/2,top+16);
+  ctx.fillStyle='rgba(146,64,14,.85)'; ctx.fillText('🟡 ESTABILIZAR',(xc+right)/2,top+16);
+  ctx.fillStyle='rgba(154,52,18,.85)'; ctx.fillText('🟠 ACTIVAR',(left+xc)/2,bottom-10);
+  ctx.fillStyle='rgba(20,83,45,.9)'; ctx.fillText('🟢 TOP VENDEDOR',(xc+right)/2,bottom-10);
+  ctx.restore(); }};
+function megaTab(i,btn){ document.querySelectorAll('.mega-section').forEach((el,idx)=>el.classList.toggle('active',idx===i));
+  document.querySelectorAll('.mega-tab').forEach(el=>el.classList.remove('active')); btn.classList.add('active');
+  setTimeout(()=>window.dispatchEvent(new Event('resize')),100); }
+
+function tab(i,p,btn){ document.querySelectorAll(`.tab-content[data-mega="${p}"]`).forEach((el,idx)=>el.classList.toggle('active',idx===i));
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active')); btn.classList.add('active');
+  setTimeout(()=>window.dispatchEvent(new Event('resize')),100); }
+
+function updateQtyChart(){
+  const t = document.getElementById('filtroQty').value, d = M.macroQty[t];
+  if(qtyChart)qtyChart.destroy();
+  qtyChart = mk('macroQty',{type:'line',data:{labels:meses,datasets:Object.keys(d).map(s=>lineDs(s,d[s],colorSuc[s]))},options:lineOpts});
+}
+
+function updateFinChart(){
+  const sel = document.getElementById('filtroFin').value;
+  const d = sel.startsWith('vend_') ? M.finVend[sel.slice(5)] : M.finData[sel];
+  if(finChart)finChart.destroy();
+  finChart = mk('finChart',{type:'line',data:{labels:meses,datasets:[
+    lineDs('Financiado',d.financiado,'#1e40af'),lineDs('Contado',d.contado,'#dc2626'),lineDs('Retoma',d.retoma,'#16a34a')]},options:lineOpts});
+}
+
+function updateOtrosChart(){
+  const sel = document.getElementById('filtroOtros').value, d=M.otrosData[sel], s=M.otrosStats[sel];
+  document.getElementById('otrosStatsBox').innerHTML = `
+    <div class="statbox" style="background:#e0e7ff;"><div style="font-size:10px;color:#1e40af;font-weight:600;">PROMEDIO</div><div style="font-size:24px;font-weight:bold;color:#1e40af;">${s.promedio} <span style="font-size:11px;">u/mes</span></div></div>
+    <div class="statbox" style="background:#fef3c7;"><div style="font-size:10px;color:#92400e;font-weight:600;">DESVIACIÓN</div><div style="font-size:24px;font-weight:bold;color:#92400e;">±${s.desviacion}</div></div>
+    <div class="statbox" style="background:#d1fae5;"><div style="font-size:10px;color:#065f46;font-weight:600;">% PROMEDIO APORTE</div><div style="font-size:24px;font-weight:bold;color:#065f46;">${s.pctPromedio}%</div></div>`;
+  if(otrosChart)otrosChart.destroy();
+  otrosChart = mk('otrosChart',{type:'line',data:{labels:meses,datasets:[
+    lineDs('Ventas Otros Canales',d.otros,'#1e40af'),
+    Object.assign(lineDs('% del Total Tradicional',d.pct,'#dc2626',2),{yAxisID:'y1'})]},
+    options:{...lineOpts,scales:{y:{title:{display:true,text:'Unidades'},beginAtZero:true},
+      y1:{position:'right',title:{display:true,text:'% del Total'},beginAtZero:true,max:100,grid:{drawOnChartArea:false}}}}});
+}
+
+function updateScatter(){
+  const suc = document.getElementById('scatterSuc').value, metric = document.getElementById('scatterMetric').value;
+  currentTarget = targets[metric];
+  document.getElementById('scatterTargetLabel').innerHTML = '🎯 <strong>Target gerencial:</strong> '+currentTarget.label;
+  const ranges = {total:{xMax:12,yMax:5},ranger:{xMax:7,yMax:3.5},territory:{xMax:5,yMax:3}}[metric];
+  const groups = {};
+  for (const v in M.scatter) { const d=M.scatter[v];
+    if (suc!=="Total"&&d.sucursal!==suc) continue;
+    (groups[d.sucursal]=groups[d.sucursal]||[]).push({x:d[metric].prom,y:d[metric].desv,label:v}); }
+  if(scatterChart)scatterChart.destroy();
+  scatterChart = new Chart(document.getElementById('scatter'),{type:'scatter',
+    data:{datasets:Object.keys(groups).map(s=>({label:s,data:groups[s],backgroundColor:colorSuc[s],borderColor:'#fff',borderWidth:2,pointRadius:10,pointHoverRadius:13}))},
+    plugins:[quadrantPlugin],
+    options:{responsive:true,maintainAspectRatio:false,
+      scales:{x:{title:{display:true,text:'Promedio Ventas/mes →',font:{weight:'bold'}},min:0,max:ranges.xMax},
+              y:{title:{display:true,text:'← Desviación Estándar',font:{weight:'bold'}},min:0,max:ranges.yMax}},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.raw.label+' (prom:'+c.parsed.x+', desv:'+c.parsed.y+')'}}}}});
+}
+
+function chartVend(id,suc,met){
+  const vs = VENDEDORES.filter(v=>M.vendedores[v].suc===suc);
+  mk(id,{type:'line',data:{labels:meses,datasets:vs.map((v,i)=>lineDs(v,M.vendedores[v][met],palette[i%palette.length],2))},
+    options:{...lineOpts,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+}
+
+function updateRangerCharts(){
+  const seg = document.getElementById('filtroRangerSeg').value;
+  const build = (id,suc,old)=>{ if(old)old.destroy();
+    const vs = VENDEDORES.filter(v=>M.vendedores[v].suc===suc);
+    return mk(id,{type:'line',data:{labels:meses,datasets:vs.map((v,i)=>lineDs(v,M.rangerSeg[v][seg],palette[i%palette.length],2))},
+      options:{...lineOpts,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}}); };
+  rBB = build('rangerBB','Bahia Blanca',rBB); rLP = build('rangerLP','La Pampa',rLP);
+}
+
+function updateLeadsVendCharts(){
+  const o = document.getElementById('filtroLeadsVendOrigen').value;
+  const build = (id,suc,old)=>{ if(old)old.destroy();
+    const vs = VENDEDORES.filter(v=>M.vendSuc[v]===suc);
+    return mk(id,{type:'line',data:{labels:meses,datasets:vs.map((v,i)=>lineDs(v,M.leadsVendOrigen[v][o],palette[i%palette.length],2))},
+      options:{...lineOpts,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}}},scales:{y:{beginAtZero:true}}}}); };
+  lvBB = build('leadsVendBB','Bahia Blanca',lvBB); lvLP = build('leadsVendLP','La Pampa',lvLP);
+}
+
+function updateVendProdChart(){
+  const v = document.getElementById('filtroVendProd').value, o = document.getElementById('filtroVendProdOrigen').value;
+  const vpo = M.leadsVPO[v]||{}; const d = (vpo[o]||vpo["Todos"]||{Ranger:[],Territory:[],Maverick:[],Everest:[]});
+  if(vpChart)vpChart.destroy();
+  vpChart = mk('vendProdChart',{type:'line',data:{labels:meses,datasets:[
+    lineDs('Ranger',d.Ranger,'#1e40af'),lineDs('Territory',d.Territory,'#16a34a'),
+    lineDs('Maverick',d.Maverick,'#f59e0b'),lineDs('Everest',d.Everest,'#dc2626')]},
+    options:{...lineOpts,scales:{y:{beginAtZero:true}}}});
+}
+
+function render(updatedAt, fuente){
+  document.getElementById("loader").style.display="none";
+  document.getElementById("dash").style.display="block";
+  const per = meses[0]+" a "+meses[meses.length-1];
+  document.getElementById("hdrInfo").textContent = per+" • Bahía Blanca | La Pampa (Santa Rosa + General Pico)";
+  document.getElementById("totLeadsLbl").textContent = M.totalLeads.toLocaleString("es-AR")+" leads";
+  document.getElementById("footerInfo").textContent = `Guspamar — Período: ${per} · ${M.totalVentas} ventas 0km · ${M.totalLeads} leads 0km`;
+
+  const selO1 = document.getElementById('filtroLeadsVendOrigen'), selO2 = document.getElementById('filtroVendProdOrigen');
+  [selO1,selO2].forEach(sel=>{ sel.innerHTML='<option value="Todos">Todos los orígenes</option>'+TOP_ORIGENES.map(o=>`<option value="${o}">${o}</option>`).join(""); });
+  document.getElementById('filtroVendProd').innerHTML = VENDEDORES.map(v=>`<option value="${v}">${v}</option>`).join("");
+  document.getElementById('filtroFin').innerHTML = '<optgroup label="Total / Sucursal"><option value="Total">Total</option><option value="Bahia Blanca">Bahía Blanca</option><option value="La Pampa">La Pampa</option></optgroup>'+
+    '<optgroup label="Por Vendedor">'+VENDEDORES.map(v=>`<option value="vend_${v}">${v}</option>`).join("")+'</optgroup>';
+
+  mk('leadsRegionChart',{type:'line',data:{labels:meses,datasets:Object.keys(M.convRegion).map(s=>lineDs(s,M.convRegion[s].leads,colorSuc[s]))},
+    options:{...lineOpts,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{afterLabel:c=>{
+      const s=c.dataset.label,i=c.dataIndex; return `Vendidos: ${M.convRegion[s].vendidos[i]} (${M.convRegion[s].tasa[i]}% conversión)`;}}}}}});
+  mk('convChart',{type:'line',data:{labels:meses,datasets:Object.keys(M.convRegion).map(s=>lineDs(s+' (% conv.)',M.convRegion[s].tasa,colorSuc[s]))},
+    options:{...lineOpts,scales:{y:{title:{display:true,text:'% Conversión'},beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{afterLabel:c=>{
+        const s=c.dataset.label.split(' (')[0],i=c.dataIndex; return `Leads: ${M.convRegion[s].leads[i]} | Vendidos: ${M.convRegion[s].vendidos[i]}`;}}}}}});
+  const cv=M.convRegion, bbT=cv["Bahia Blanca"].leads.reduce((a,b)=>a+b,0), bbW=cv["Bahia Blanca"].vendidos.reduce((a,b)=>a+b,0),
+        lpT=cv["La Pampa"].leads.reduce((a,b)=>a+b,0), lpW=cv["La Pampa"].vendidos.reduce((a,b)=>a+b,0);
+  document.getElementById('convStats').innerHTML = `
+    <div class="statbox" style="background:#e0e7ff;"><div style="font-size:12px;color:#1e40af;font-weight:600;">Bahía Blanca</div>
+      <div style="font-size:18px;font-weight:bold;color:#1e40af;margin-top:6px;">${bbT} leads → ${bbW} ventas</div>
+      <div style="font-size:26px;font-weight:bold;color:#1e40af;">${bbT?(bbW/bbT*100).toFixed(1):0}%</div></div>
+    <div class="statbox" style="background:#fce4ec;"><div style="font-size:12px;color:#c2185b;font-weight:600;">La Pampa</div>
+      <div style="font-size:18px;font-weight:bold;color:#c2185b;margin-top:6px;">${lpT} leads → ${lpW} ventas</div>
+      <div style="font-size:26px;font-weight:bold;color:#c2185b;">${lpT?(lpW/lpT*100).toFixed(1):0}%</div></div>`;
+  updateLeadsVendCharts();
+  updateVendProdChart();
+  mk('origenChart',{type:'line',data:{labels:meses,datasets:TOP_ORIGENES.map((o,i)=>lineDs(o,M.leadsOrigen[o],palette[i%palette.length],2))},options:lineOpts});
+  mk('origenMixChart',{type:'doughnut',data:{labels:Object.keys(M.origenTotales),datasets:[{data:Object.values(M.origenTotales),backgroundColor:palette}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+
+  updateQtyChart();
+  mk('macroDinC',{type:'bar',data:{labels:meses,datasets:Object.keys(M.macroDin).map(s=>({label:s,data:M.macroDin[s],backgroundColor:colorSuc[s]}))},options:lineOpts});
+  updateFinChart();
+  updateOtrosChart();
+  updateScatter();
+  chartVend('totalBB','Bahia Blanca','total'); chartVend('totalLP','La Pampa','total');
+  chartVend('territoryBB','Bahia Blanca','territory'); chartVend('territoryLP','La Pampa','territory');
+  updateRangerCharts();
+}
+window.addEventListener("load",function(){ try{ render(); }catch(e){ document.body.insertAdjacentHTML("afterbegin","<p style=color:red>Error: "+e.message+"</p>"); } });</script></body></html>
