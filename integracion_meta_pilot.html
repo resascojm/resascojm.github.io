@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integración Meta → Pilot · Diagnóstico</title>
+<style>
+  :root{
+    --bg:#0d1117; --surface:#161b22; --surface-2:#1c2230;
+    --line:#2a313c; --txt:#e6edf3; --muted:#8b949e; --faint:#586069;
+    --meta:#388bfd;          /* leads generados en Meta */
+    --pilot:#3fb950;         /* leads que entraron a Pilot */
+    --alarm:#f85149;         /* la pérdida */
+    --warn:#d29922;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--txt); font-family:var(--sans);
+    line-height:1.5; padding:32px 20px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto}
+
+  /* ---- header ---- */
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--alarm); display:flex;
+    align-items:center; gap:8px; margin-bottom:14px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--alarm);
+    box-shadow:0 0 0 0 rgba(248,81,73,.5); animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(248,81,73,.45)}
+    70%{box-shadow:0 0 0 10px rgba(248,81,73,0)}100%{box-shadow:0 0 0 0 rgba(248,81,73,0)}}
+  h1{font-size:30px; line-height:1.2; font-weight:700; letter-spacing:-.02em}
+  h1 b{color:var(--alarm)}
+  .sub{color:var(--muted); margin-top:10px; font-size:15px}
+  .meta-line{font-family:var(--mono); font-size:12.5px; color:var(--faint);
+    margin-top:18px; padding-top:16px; border-top:1px solid var(--line)}
+
+  /* ---- KPIs ---- */
+  .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:30px 0}
+  .kpi{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px}
+  .kpi .num{font-family:var(--mono); font-size:34px; font-weight:600; letter-spacing:-.02em}
+  .kpi .lbl{color:var(--muted); font-size:13px; margin-top:6px}
+  .kpi.bad .num{color:var(--alarm)}
+  .kpi.ok .num{color:var(--pilot)}
+  .kpi.neutral .num{color:var(--meta)}
+
+  /* ---- section ---- */
+  .section{background:var(--surface); border:1px solid var(--line);
+    border-radius:14px; padding:26px; margin-bottom:18px}
+  .section h2{font-size:13px; font-family:var(--mono); text-transform:uppercase;
+    letter-spacing:.1em; color:var(--muted); margin-bottom:4px}
+  .section .h2sub{font-size:19px; font-weight:600; margin-bottom:20px; letter-spacing:-.01em}
+
+  /* ---- chart ---- */
+  .legend{display:flex; gap:20px; font-size:13px; color:var(--muted); margin-bottom:18px; flex-wrap:wrap}
+  .legend span{display:inline-flex; align-items:center; gap:7px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .chart{display:flex; align-items:flex-end; gap:6px; height:200px;
+    padding-top:10px; border-bottom:1px solid var(--line)}
+  .col{flex:1; display:flex; flex-direction:column; justify-content:flex-end;
+    align-items:center; height:100%; position:relative}
+  .bar{width:100%; border-radius:3px 3px 0 0; position:relative; display:flex;
+    flex-direction:column-reverse; background:var(--surface-2)}
+  .gen{width:100%; background:repeating-linear-gradient(45deg,
+    rgba(56,139,253,.18),rgba(56,139,253,.18) 4px,transparent 4px,transparent 8px);
+    border:1px solid rgba(56,139,253,.35); border-bottom:none; border-radius:3px 3px 0 0;
+    position:absolute; bottom:0; left:0}
+  .cap{width:100%; background:var(--pilot); border-radius:3px 3px 0 0; position:absolute; bottom:0; left:0;
+    transform-origin:bottom; animation:grow .8s ease-out both}
+  @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  .xlabels{display:flex; gap:6px; margin-top:8px}
+  .xlabels div{flex:1; text-align:center; font-family:var(--mono); font-size:10px; color:var(--faint)}
+  .annot{display:flex; gap:8px; align-items:flex-start; margin-top:20px;
+    background:var(--surface-2); border-left:3px solid var(--alarm);
+    border-radius:0 8px 8px 0; padding:14px 16px; font-size:14px; color:var(--muted)}
+  .annot b{color:var(--txt)}
+
+  /* ---- causes ---- */
+  .cause{display:flex; gap:16px; padding:18px 0; border-top:1px solid var(--line)}
+  .cause:first-of-type{border-top:none; padding-top:0}
+  .rank{font-family:var(--mono); font-size:13px; color:var(--bg); background:var(--warn);
+    min-width:26px; height:26px; border-radius:7px; display:flex; align-items:center;
+    justify-content:center; font-weight:700; flex-shrink:0}
+  .cause:nth-of-type(1) .rank{background:var(--alarm)}
+  .cause .ctitle{font-weight:600; margin-bottom:4px}
+  .cause .cbody{font-size:14px; color:var(--muted)}
+  .tag{font-family:var(--mono); font-size:11px; color:var(--meta);
+    background:rgba(56,139,253,.1); padding:2px 7px; border-radius:5px; margin-left:6px}
+
+  /* ---- next ---- */
+  .next{background:linear-gradient(135deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line)}
+  .next ul{list-style:none; margin-top:8px}
+  .next li{padding:10px 0; padding-left:26px; position:relative; font-size:14.5px; color:var(--muted)}
+  .next li:before{content:"→"; position:absolute; left:0; color:var(--pilot); font-family:var(--mono)}
+  .next li b{color:var(--txt)}
+
+  footer{text-align:center; color:var(--faint); font-size:12px;
+    font-family:var(--mono); margin-top:30px}
+
+  @media (max-width:640px){
+    .kpis{grid-template-columns:1fr}
+    h1{font-size:24px}
+    .chart{height:160px}
+  }
+  @media (prefers-reduced-motion:reduce){.cap{animation:none}.dot{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span>Incidente de integración · activo</div>
+    <h1>Los leads de Meta <b>dejaron de entrar a Pilot</b> el 3 de junio</h1>
+    <p class="sub">Cruce entre los formularios de Meta (Lead Ads) y el CRM Pilot de Héctor R. Resasco (Jeep, RAM y Dodge). La conexión venía funcionando y se cortó de un día para el otro.</p>
+    <div class="meta-line">PERÍODO: 01/06/2026 → 17/06/2026 &nbsp;·&nbsp; FUENTE: 13 exports de Meta + export Pilot &nbsp;·&nbsp; MÉTODO: match por teléfono / email</div>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi neutral">
+      <div class="num">248</div>
+      <div class="lbl">Leads generados en Meta<br>(únicos, sin duplicados)</div>
+    </div>
+    <div class="kpi ok">
+      <div class="num">42</div>
+      <div class="lbl">Entraron a Pilot<br>(17% de captura)</div>
+    </div>
+    <div class="kpi bad">
+      <div class="num">206</div>
+      <div class="lbl">Leads perdidos<br>(83% nunca llegó al CRM)</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <h2>La prueba</h2>
+    <div class="h2sub">Leads generados vs. capturados, por día</div>
+    <div class="legend">
+      <span><i class="sw" style="background:repeating-linear-gradient(45deg,rgba(56,139,253,.6),rgba(56,139,253,.6) 3px,transparent 3px,transparent 6px);border:1px solid rgba(56,139,253,.5)"></i>Generados en Meta</span>
+      <span><i class="sw" style="background:var(--pilot)"></i>Entraron a Pilot</span>
+    </div>
+
+    <div class="chart" id="chart"></div>
+    <div class="xlabels" id="xlabels"></div>
+
+    <div class="annot">
+      <span>⚠️</span>
+      <div><b>1 de junio: entraban todos (23 de 23).</b> El 2 cayó a la mitad. Desde el <b>3 de junio</b> la API quedó prácticamente muerta — 0 o 1 lead por día, mientras Meta sigue generando ~13/15 diarios. Lo poco que entra después es carga manual del equipo, no la integración.</div>
+    </div>
+  </div>
+
+  <!-- CAUSES -->
+  <div class="section">
+    <h2>Posibles causas</h2>
+    <div class="h2sub">De la más probable a la menos</div>
+
+    <div class="cause">
+      <div class="rank">1</div>
+      <div>
+        <div class="ctitle">Token de Meta vencido o revocado <span class="tag">la más común</span></div>
+        <div class="cbody">Meta expira los tokens de acceso cada ~60 días, o cuando se cambia una contraseña, un permiso o un admin de la página. Una vez vencido, los formularios siguen capturando leads en Meta pero el envío al CRM se corta en seco — exactamente el patrón que vemos. Es la causa que mejor explica un corte de un día para el otro.</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">2</div>
+      <div>
+        <div class="ctitle">Página de Facebook desvinculada del CRM</div>
+        <div class="cbody">Si se desconectó la integración entre la página y Pilot (o se reconfiguró la cuenta publicitaria), el flujo se interrumpe igual. Suele pasar después de tocar permisos en el Business Manager.</div>
+      </div>
+    </div>
+
+    <div class="cause">
+      <div class="rank">3</div>
+      <div>
+        <div class="ctitle">Cambio en el mapeo del formulario</div>
+        <div class="cbody">Los dos formularios activos son <span style="font-family:var(--mono);color:var(--txt)">FORMCONVEGENERAL</span> y <span style="font-family:var(--mono);color:var(--txt)">FORMPAGENERAL</span>. Si se editó un campo o se creó una variante del formulario sin re-mapearla en Pilot, los leads de ese form quedan sin destino.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT -->
+  <div class="section next">
+    <h2>Qué hacer ahora</h2>
+    <div class="h2sub">Dos frentes en paralelo</div>
+    <ul>
+      <li><b>Arreglar la conexión:</b> revisar en Pilot el estado del token y la página vinculada de Meta Lead Ads, y reconectar. Esto frena la hemorragia.</li>
+      <li><b>Rescatar lo perdido:</b> exportar los ~206 leads que están en los CSV de Meta pero no en el CRM (nombre, teléfono, modelo, fecha) y cargarlos para que el equipo los llame antes de que se enfríen.</li>
+    </ul>
+  </div>
+
+  <footer>Diagnóstico generado el 17/06/2026 · Grupo Resasco</footer>
+</div>
+
+<script>
+  // datos: [dia, generados_meta, entraron_pilot]
+  const data = [
+    ["01",23,23],["02",20,9],["03",8,0],["04",17,1],["05",19,2],
+    ["06",19,1],["07",16,1],["08",8,1],["09",15,2],["10",12,1],
+    ["11",16,0],["12",12,0],["13",20,1],["14",14,0],["15",13,0],
+    ["16",13,0],["17",3,0]
+  ];
+  const max = Math.max(...data.map(d=>d[1]));
+  const chart = document.getElementById('chart');
+  const xl = document.getElementById('xlabels');
+  data.forEach((d,i)=>{
+    const col = document.createElement('div'); col.className='col';
+    const bar = document.createElement('div'); bar.className='bar'; bar.style.height='100%';
+    const gen = document.createElement('div'); gen.className='gen';
+    gen.style.height=(d[1]/max*100)+'%';
+    const cap = document.createElement('div'); cap.className='cap';
+    cap.style.height=(d[2]/max*100)+'%';
+    cap.style.animationDelay=(i*0.04)+'s';
+    bar.appendChild(gen); bar.appendChild(cap);
+    col.appendChild(bar); chart.appendChild(col);
+    const lab = document.createElement('div'); lab.textContent=d[0]; xl.appendChild(lab);
+  });
+</script>
+</body>
+</html>
