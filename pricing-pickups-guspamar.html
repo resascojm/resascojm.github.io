@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relevamiento de precios — Competencia segmento pickups · Guspamar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Spline+Sans+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ford:#00274d;          /* azul Ford profundo */
+    --ford-2:#1561c4;        /* azul acento */
+    --ford-3:#e8f0fb;        /* azul muy claro */
+    --ink:#1a1f2b;
+    --ink-2:#48515f;
+    --ink-3:#7b8595;
+    --line:#e3e7ee;
+    --line-2:#cfd6e0;
+    --bg:#f6f7f9;
+    --panel:#ffffff;
+    --rival:#9aa3b2;
+    --rival-bar:#c4ccd8;
+    --paper:#fbfcfd;
+    --mono:'Spline Sans Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 26px}
+
+  /* DOC HEADER */
+  .doc-head{background:var(--ford);color:#fff;padding:34px 0 30px}
+  .doc-head .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+  .kicker{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:#9fc0ea;font-weight:600}
+  .doc-head h1{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(22px,3vw,32px);line-height:1.08;margin-top:8px;letter-spacing:-.4px}
+  .doc-head .lead{color:#cfe0f5;font-size:14px;margin-top:8px;max-width:560px}
+  .stamp{text-align:right;font-size:12px;color:#9fc0ea;line-height:1.7}
+  .stamp .oval{display:inline-block;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.5px;color:var(--ford);background:#fff;border-radius:40px;padding:7px 16px;margin-bottom:10px}
+  .stamp b{color:#fff;font-weight:600}
+
+  /* EXEC SUMMARY */
+  .summary{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-top:26px}
+  .summary p{font-size:14px;color:var(--ink-2);max-width:760px}
+  .findings{list-style:none;margin-top:16px;display:grid;gap:10px}
+  .findings li{font-size:13.5px;color:var(--ink);padding-left:26px;position:relative}
+  .findings li::before{content:'';position:absolute;left:0;top:8px;width:11px;height:11px;border-radius:3px;background:var(--ford-2)}
+  .findings b{color:var(--ford)}
+
+  /* CONTROLS */
+  .controls{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin:30px 0 8px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .fgroup{display:flex;flex-direction:column;gap:7px}
+  .fgroup > span{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);font-weight:700}
+  .seg{display:flex;background:var(--panel);border:1px solid var(--line-2);border-radius:9px;padding:3px}
+  .seg button{background:none;border:none;color:var(--ink-2);font-family:inherit;font-size:13px;font-weight:600;padding:8px 16px;border-radius:6px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .seg button:hover{color:var(--ford)}
+  .seg button.on{background:var(--ford);color:#fff}
+  .gastos-input{display:flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line-2);border-radius:9px;padding:7px 11px}
+  .gastos-input span{font-size:12.5px;color:var(--ink-3)}
+  .gastos-input input{background:none;border:none;color:var(--ford);font-family:var(--mono);font-weight:700;font-size:13px;width:84px;text-align:right}
+  .gastos-input input:focus{outline:none}
+  .gastos-input.dim{opacity:.45;pointer-events:none}
+
+  .basenote{font-size:12px;color:var(--ink-3);margin:14px 0 4px}
+  .basenote b{color:var(--ford-2)}
+
+  /* SECTION TITLE */
+  .vtitle{font-family:'Archivo',sans-serif;font-weight:700;font-size:19px;color:var(--ford);margin:26px 0 4px;letter-spacing:-.2px}
+  .vtitle-sub{font-size:13px;color:var(--ink-3);margin-bottom:18px}
+
+  /* SEGMENT PANEL */
+  .seg-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:16px}
+  .seg-panel .sp-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+  .seg-panel h3{font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;color:var(--ink)}
+  .seg-panel .sp-tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;color:var(--ford-2);background:var(--ford-3);padding:4px 10px;border-radius:20px}
+  .seg-panel .sp-desc{font-size:12.5px;color:var(--ink-3);margin-bottom:20px}
+
+  .vrow{display:grid;grid-template-columns:200px 1fr 150px;gap:16px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+  .vrow:first-of-type{border-top:none}
+  .vlabel{display:flex;flex-direction:column;gap:3px}
+  .vlabel .vn{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px}
+  .vlabel .vn .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .vlabel.ford .vn{color:var(--ford)}
+  .vlabel .vbrand{font-size:11px;color:var(--ink-3)}
+  .ford-tag{font-size:8.5px;font-weight:800;letter-spacing:.5px;background:var(--ford);color:#fff;padding:2px 6px;border-radius:4px}
+
+  .bar-track{position:relative;height:30px;background:linear-gradient(var(--bg),var(--bg)) ;border-radius:6px;border:1px solid var(--line)}
+  .bar-fill{position:absolute;top:5px;bottom:5px;border-radius:4px;background:var(--rival-bar)}
+  .vlabel.ford ~ .bar-cell .bar-fill,.bar-fill.ford{background:linear-gradient(90deg,var(--ford),var(--ford-2))}
+  .bar-point{position:absolute;top:50%;width:2px;height:16px;background:var(--ink);transform:translate(-50%,-50%);opacity:.55}
+  .bar-single{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);background:var(--rival)}
+  .bar-single.ford{background:var(--ford)}
+  .bar-na{position:absolute;top:50%;left:12px;transform:translateY(-50%);font-size:11.5px;color:var(--ink-3);font-style:italic}
+
+  .vprice{text-align:right}
+  .vprice .pr{font-family:var(--mono);font-weight:700;font-size:14px;white-space:nowrap}
+  .vlabel.ford ~ .vprice .pr,.vprice.ford .pr{color:var(--ford)}
+  .vprice .pa{font-size:11px;color:var(--ink-3);font-family:var(--mono)}
+
+  .vdetail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px 14px;padding:2px 0 2px 4px;margin-top:-2px}
+  .vchip{font-size:11px;color:var(--ink-2);display:inline-flex;align-items:center;gap:5px}
+  .vchip .vc-conc{font-weight:600;color:var(--ink)}
+  .vchip .vc-price{font-family:var(--mono);font-weight:600}
+  .vchip .vc-zone{color:var(--ink-3)}
+  .cond-mark{color:var(--ford-2);font-weight:700;cursor:help}
+  .flag{color:#c77800;font-weight:700;cursor:help}
+
+  /* BRAND PANEL */
+  .brand-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+  .bp-head{display:flex;align-items:center;gap:11px;padding:16px 22px;border-bottom:2px solid var(--line)}
+  .bp-head .bdot{width:14px;height:14px;border-radius:50%}
+  .bp-head h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:17px}
+  .bp-head .bcount{margin-left:auto;font-size:11.5px;color:var(--ink-3);font-family:var(--mono)}
+  .bp-ver{padding:13px 22px;border-top:1px solid var(--line)}
+  .bp-ver:first-of-type{border-top:none}
+  .bp-ver .bv-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .bp-ver .bv-name{font-weight:700;font-size:14px}
+  .bp-ver.ford .bv-name{color:var(--ford)}
+  .bp-ver .bv-range{font-family:var(--mono);font-weight:700;font-size:14px;white-space:nowrap}
+  .bp-ver .bv-rows{margin-top:8px;display:grid;gap:5px}
+  .bp-ver .bv-r{display:grid;grid-template-columns:1fr auto;gap:12px;font-size:12.5px;align-items:baseline}
+  .bp-ver .bv-r .l{color:var(--ink-2)}
+  .bp-ver .bv-r .l b{color:var(--ink)}
+  .bp-ver .bv-r .p{font-family:var(--mono);font-weight:600;white-space:nowrap}
+
+  /* TABLE */
+  .tbl-wrap{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+  thead th{background:var(--ford);color:#fff;text-align:left;padding:12px 15px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;cursor:pointer;user-select:none;white-space:nowrap}
+  thead th.numcol{text-align:right}
+  thead th .arr{opacity:.5;font-size:10px}
+  tbody td{padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:nth-child(even){background:var(--paper)}
+  tbody tr.ranger-row{background:var(--ford-3)}
+  tbody tr:hover{background:#eef3fb}
+  .m-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:-1px}
+  .price{font-family:var(--mono);font-weight:700;text-align:right;white-space:nowrap;font-size:13.5px}
+  .cond-txt{font-size:12px;color:var(--ink-2)}
+
+  /* PRICE BRIDGE */
+  .bridge{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:16px}
+  .br-info{display:flex;gap:30px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .br-info .k{color:var(--ink-3);text-transform:uppercase;letter-spacing:.7px;font-size:10px;font-weight:700}
+  .br-info .v{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--ink);margin-top:3px}
+  .br-row{display:grid;grid-template-columns:1fr 220px 140px;gap:16px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+  .br-row:first-of-type{border-top:none}
+  .br-row .brl{color:var(--ink-2)}
+  .br-row.base .brl,.br-row.final .brl{font-weight:700;color:var(--ink)}
+  .br-bar{height:22px;background:var(--bg);border-radius:4px;position:relative;border:1px solid var(--line);overflow:hidden}
+  .br-bar i{position:absolute;top:0;bottom:0;left:0;border-radius:3px}
+  .br-amt{text-align:right;font-family:var(--mono);font-weight:700;white-space:nowrap}
+  .br-row.deduct .br-amt{color:#b35a00}
+  .br-row.final{border-top:2px solid var(--ford);margin-top:5px;padding-top:15px}
+  .br-row.final .br-amt{color:var(--ford);font-size:15px}
+  .br-cap{font-size:12px;color:var(--ink-3);margin-top:16px;padding-top:14px;border-top:1px dashed var(--line-2);line-height:1.6}
+  .br-cap b{color:var(--ford-2)}
+  @media(max-width:720px){.br-row{grid-template-columns:1fr 100px}.br-bar{display:none}}
+
+  /* NOTES */
+  .notes{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;font-size:13px;color:var(--ink-2);margin-top:18px}
+  .notes h3{font-family:'Archivo',sans-serif;color:var(--ford);font-size:14px;margin-bottom:12px;font-weight:700}
+  .notes ol{margin-left:18px;display:grid;gap:8px}
+  .notes li{padding-left:4px}
+  .notes b{color:var(--ink)}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3)}
+  .legend span b{color:var(--ford-2)}
+
+  footer{margin:30px 0 50px;text-align:center;font-size:11.5px;color:var(--ink-3)}
+
+  @media(max-width:720px){
+    .vrow{grid-template-columns:140px 1fr;gap:10px}
+    .vrow .vprice{grid-column:2;text-align:left;margin-top:-6px}
+    .bar-cell{grid-column:1 / -1;order:3}
+    .stamp{text-align:left}
+  }
+  @media print{
+    body{background:#fff}
+    .controls{display:none}
+    .seg-panel,.brand-panel,.summary,.tbl-wrap{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="wrap">
+    <div>
+      <div class="kicker">Relevamiento de mercado · Cliente incógnito</div>
+      <h1>Precios de la competencia<br>Segmento pickups medianas</h1>
+      <p class="lead">Referencias de precio de contado informadas por la competencia en Bahía Blanca y La Pampa, para el posicionamiento de la línea Ranger.</p>
+    </div>
+    <div class="stamp">
+      <span class="oval">Guspamar</span><br>
+      Preparado por <b>Guspamar — Grupo Resasco</b><br>
+      Período: <b>Junio 2026</b><br>
+      Zonas: <b>Bahía Blanca · La Pampa</b>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- RESUMEN EJECUTIVO -->
+  <div class="summary">
+    <p>El presente relevamiento compila los precios informados por asesores comerciales de las principales concesionarias de la competencia, obtenidos mediante metodología de cliente incógnito. Los valores se agrupan por versión y se enfrentan según su competidor directo, con el objetivo de aportar referencias de mercado para la definición de precios de la línea Ranger.</p>
+    <ul class="findings" id="findings"></ul>
+  </div>
+
+  <!-- CONTROLES -->
+  <div class="controls">
+    <div class="fgroup">
+      <span>Vista</span>
+      <div class="seg" id="viewSeg">
+        <button class="on" data-v="seg">Por segmento competitivo</button>
+        <button data-v="brand">Por marca</button>
+        <button data-v="table">Tabla completa</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span>Base de precio</span>
+      <div class="seg" id="baseSeg">
+        <button data-net="0">Informado por asesor</button>
+        <button class="on" data-net="1">Homologado s/ flete y gastos</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span>Gastos a homologar</span>
+      <div class="gastos-input" id="gastosWrap"><span>−$</span><input id="gastosInput" type="text" value="1.000.000"></div>
+    </div>
+  </div>
+  <div class="basenote" id="baseNote"></div>
+
+  <div id="view"></div>
+
+  <!-- PRECIO REAL DE TRANSACCIÓN -->
+  <div class="vtitle" style="margin-top:36px">Precio real de transacción</div>
+  <div class="vtitle-sub">Ejemplo Ranger Limited V6 en Ford Simone: del precio de lista al valor efectivo de venta, según las palancas de bonificación que ofrece la concesionaria.</div>
+  <div id="bridge"></div>
+
+  <!-- NOTAS -->
+  <div class="vtitle" style="margin-top:34px">Notas metodológicas</div>
+  <div class="notes">
+    <h3>Consideraciones para la lectura</h3>
+    <ol>
+      <li><b>Comparabilidad de precios.</b> La vista <b>"Homologado s/ flete y gastos"</b> descuenta un estimado de flete y formularios (editable, por defecto $1.000.000) a los valores que el mystery aclara.</li>
+      <li><b>Ford Simone — financiación.</b> Comunica tasa 0 con un quebranto del 12%, sin aclarar que dicho quebranto es <b>+ IVA</b>.</li>
+      <li><b>Volkswagen — financiación.</b> Ofrece $20.000.000 a tasa 0 <b>sin quebranto</b>, lo que representa una ventaja de costo financiero frente a la propuesta de Ford.</li>
+      <li><b>Toyota Bassha — Hilux DX.</b> Además del precio con flete y formularios, informó precio de contado (inferior, por bonificación de pago contado además de la quita de gastos).</li>
+      <li><b>Reventa Minujin — Ranger.</b> El relevamiento registró dos versiones "XLS V6" con precios distintos; la de mayor valor se interpretó como <b>XLT V6</b> por coherencia con la oferta de la marca.</li>
+      <li><b>VW Dietrich — Trendline.</b> Se registraron dos unidades "4x2"; la de mayor valor se interpretó como <b>4x4</b> por su precio.</li>
+      <li><b>Exclusiones.</b> Chevrolet S10 WT quedó fuera del análisis por carga errónea de precio. Reventa Gamba y VW Pampawagen (consulta V6) no brindaron valor de contado.</li>
+      <li><b>Ranger XL.</b> No fue relevada en concesionarios Ford por su facturación directa. Se deja indicada en el segmento de entrada para completar con lista vigente.</li>
+      <li><b>Criterio de precio.</b> Cuando una concesionaria informa más de un valor para la misma versión (p. ej. contado y con gastos), se toma el <b>menor</b> como referencia, por reflejar mejor el precio real de transacción (caso Toyota Bassha).</li>
+    </ol>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <footer>Documento de uso interno · Guspamar — Grupo Resasco · Las cifras corresponden a valores informados al momento del relevamiento y están sujetas a verificación.</footer>
+</div>
+
+<script>
+// ===== DATA =====
+const DATA=[
+  // ---- PREMIUM (tope V6): Limited+ vs Extreme vs SRX ----
+  {brand:'Ford',model:'Ranger',ver:'Ranger Limited V6',seg:'premium',conc:'Ford Simone',zone:'Bahía Blanca',price:78500000,cond:'gastos',flag:'Tasa 0 c/ quebranto 12% — no aclaran que es + IVA'},
+  {brand:'Ford',model:'Ranger',ver:'Ranger Limited V6',seg:'premium',conc:'Reventa Minujin',zone:'Bahía Blanca',price:79000000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Extreme V6',seg:'premium',conc:'VW Dietrich',zone:'Bahía Blanca',price:74000000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Extreme V6',seg:'premium',conc:'Reventa Bravo',zone:'Bahía Blanca',price:75200000,cond:'gastos'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Extreme V6',seg:'premium',conc:'Reventa Minujin',zone:'Bahía Blanca',price:76000000,cond:'sin'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux SRX 2.8 4x4 AT',seg:'premium',conc:'Toyota Bassha',zone:'La Pampa',price:78595080,cond:'sin'},
+  // ---- MEDIA-ALTA: XLT V6 vs Highline ----
+  {brand:'Ford',model:'Ranger',ver:'Ranger XLT V6',seg:'media-alta',conc:'Reventa Minujin',zone:'Bahía Blanca',price:71000000,cond:'sin',flag:'Cargado como "XLS"; asumido XLT'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Highline V6',seg:'media-alta',conc:'VW Dietrich',zone:'Bahía Blanca',price:69000000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Highline V6',seg:'media-alta',conc:'Reventa Bravo',zone:'Bahía Blanca',price:70600000,cond:'gastos'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Highline V6',seg:'media-alta',conc:'Reventa Minujin',zone:'Bahía Blanca',price:72000000,cond:'sin'},
+  // ---- MEDIA: XLS V6 vs Comfortline ----
+  {brand:'Ford',model:'Ranger',ver:'Ranger XLS V6',seg:'media',conc:'Reventa Minujin',zone:'Bahía Blanca',price:61000000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Comfortline V6',seg:'media',conc:'VW Dietrich',zone:'Bahía Blanca',price:59200000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Comfortline V6',seg:'media',conc:'Reventa Bravo',zone:'Bahía Blanca',price:60000000,cond:'gastos'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Comfortline V6',seg:'media',conc:'Reventa Minujin',zone:'Bahía Blanca',price:62000000,cond:'sin'},
+  // ---- ENTRADA: XL · DX · Trendline · S10 ----
+  {brand:'Ford',model:'Ranger',ver:'Ranger XL',seg:'entrada',conc:'—',zone:'—',price:null,cond:'sin',placeholder:true},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x4 Cabina Doble',seg:'entrada',conc:'Toyota Autos del Sur',zone:'Bahía Blanca',price:56380000,cond:'patent'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x4 Cabina Doble',seg:'entrada',conc:'Toyota Bassha',zone:'La Pampa',price:53564790,cond:'sin',sub:'c/ flete y form. $58.764.000'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x2 Cabina Doble',seg:'entrada',conc:'Toyota Autos del Sur',zone:'Bahía Blanca',price:49345000,cond:'patent'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x2 Cabina Doble',seg:'entrada',conc:'Toyota Bassha',zone:'La Pampa',price:45880750,cond:'sin',sub:'c/ flete y form. $50.320.000'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x4 Cabina Simple',seg:'entrada',conc:'Toyota Bassha',zone:'La Pampa',price:53613000,cond:'gastos'},
+  {brand:'Toyota',model:'Hilux',ver:'Hilux DX 4x2 Cabina Simple',seg:'entrada',conc:'Toyota Bassha',zone:'La Pampa',price:44766000,cond:'gastos'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Trendline 4x2',seg:'entrada',conc:'VW Dietrich',zone:'Bahía Blanca',price:43800000,cond:'sin'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Trendline 4x2',seg:'entrada',conc:'VW Pampawagen',zone:'La Pampa',price:47900000,cond:'gastos',sub:'TDI'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Trendline 4x4',seg:'entrada',conc:'VW Dietrich',zone:'Bahía Blanca',price:55000000,cond:'sin',flag:'Cargado como "4x2"; asumido 4x4'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Trendline 4x4',seg:'entrada',conc:'VW Pampawagen',zone:'La Pampa',price:59900000,cond:'gastos'},
+  {brand:'VW',model:'Amarok',ver:'Amarok Trendline 140 HP',seg:'entrada',conc:'VW Pampawagen',zone:'La Pampa',price:45000000,cond:'gastos'},
+  {brand:'Chevrolet',model:'S10',ver:'S10 WT Cabina Doble',seg:'entrada',conc:'Chevrolet Milenaria',zone:'La Pampa',price:4950000,cond:'sin',exclude:true,flag:'Precio mal cargado (falta dígito)'},
+];
+
+const BRAND_COLOR={Ford:'#00274d',VW:'#5a6fd6',Toyota:'#d65a5a',Chevrolet:'#d6a23a'};
+const BRAND_FULL={Ford:'Ford',VW:'Volkswagen',Toyota:'Toyota',Chevrolet:'Chevrolet'};
+const SEGMENTS=[
+  {key:'premium',title:'Tope de gama V6',sub:'Ranger Limited+ vs Amarok Extreme vs Hilux SRX',tag:'Premium'},
+  {key:'media-alta',title:'Media-alta V6',sub:'Ranger XLT V6 vs Amarok Highline',tag:'Media-alta'},
+  {key:'media',title:'Media V6',sub:'Ranger XLS V6 vs Amarok Comfortline',tag:'Media'},
+  {key:'entrada',title:'Entrada de gama',sub:'Ranger XL · Hilux DX · Amarok Trendline · Chevrolet S10',tag:'Entrada'},
+];
+const COND_FULL={patent:'Incluye patentamiento, flete y gastos',gastos:'Incluye flete y gastos administrativos',sin:'Sin gastos incluidos'};
+const COND_MARK={patent:'‡',gastos:'†',sin:''};
+const MODEL_ORDER=['Ranger','Amarok','Hilux','S10'];
+
+const fmt=n=>n==null?'s/d':'$'+Math.round(n).toLocaleString('es-AR');
+const fmtM=n=>n==null?'s/d':'$'+(n/1e6).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+'M';
+const parseNum=s=>parseInt((s||'').replace(/[^\d]/g,''))||0;
+
+const state={view:'seg',net:true,gastos:1000000};
+const hasGastos=d=>d.cond!=='sin';
+const eff=d=> d.price==null?null : d.price-(state.net&&hasGastos(d)?state.gastos:0);
+
+function priced(){return DATA.filter(d=>!d.exclude&&!d.placeholder&&d.price!=null);}
+
+// group por versión
+function versionGroups(list){
+  const g={};
+  list.forEach(d=>{(g[d.ver]=g[d.ver]||{ver:d.ver,brand:d.brand,model:d.model,seg:d.seg,placeholder:d.placeholder,items:[]});
+    if(!d.placeholder) g[d.ver].items.push(d); else g[d.ver].placeholder=true;});
+  return g;
+}
+
+// ===== FINDINGS =====
+function renderFindings(){
+  const g=versionGroups(priced());
+  const rng=v=>{const p=g[v].items.map(eff);return [Math.min(...p),Math.max(...p)];};
+  const ltd=rng('Ranger Limited V6'),ext=rng('Amarok Extreme V6'),srx=rng('Hilux SRX 2.8 4x4 AT');
+  const xlt=rng('Ranger XLT V6'),high=rng('Amarok Highline V6');
+  const xls=rng('Ranger XLS V6'),comf=rng('Amarok Comfortline V6');
+  document.getElementById('findings').innerHTML=`
+    <li><b>Tope de gama:</b> la Ranger Limited V6 (${fmtM(ltd[0])}–${fmtM(ltd[1])}) se ubica en el techo del segmento, a la par de la Hilux SRX (${fmtM(srx[0])}) y por encima de la Amarok Extreme (${fmtM(ext[0])}–${fmtM(ext[1])}).</li>
+    <li><b>Media-alta:</b> la Ranger XLT V6 (${fmtM(xlt[0])}) queda dentro del rango de la Amarok Highline (${fmtM(high[0])}–${fmtM(high[1])}).</li>
+    <li><b>Media:</b> la Ranger XLS V6 (${fmtM(xls[0])}) se posiciona en línea con la Amarok Comfortline (${fmtM(comf[0])}–${fmtM(comf[1])}).</li>
+    <li><b>Entrada:</b> la competencia de 4 cilindros (Hilux DX y Amarok Trendline) opera entre ~$44M y ~$60M; resta posicionar la Ranger XL contra ese rango.</li>
+    <li><b>Financiación:</b> Volkswagen ofrece $20M a tasa 0 <b>sin quebranto</b>, frente a Ford Simone, que aplica un quebranto del 12% + IVA sobre su tasa 0 — diferencial relevante en el costo financiero al consumidor.</li>`;
+}
+
+// ===== VISTA POR SEGMENTO =====
+function renderSeg(){
+  const g=versionGroups(DATA.filter(d=>!d.exclude));
+  let html='<div class="vtitle">Análisis por segmento competitivo</div><div class="vtitle-sub">Cada panel enfrenta versiones rivales. La franja azul marca el rango de precios relevados por versión; la Ranger va resaltada.</div>';
+  SEGMENTS.forEach(S=>{
+    const vers=Object.values(g).filter(v=>v.seg===S.key)
+      .sort((a,b)=>{
+        if(a.model!==b.model){if(a.model==='Ranger')return -1;if(b.model==='Ranger')return 1;return MODEL_ORDER.indexOf(a.model)-MODEL_ORDER.indexOf(b.model);}
+        return 0;
+      });
+    // escala del segmento
+    const allP=vers.flatMap(v=>v.items.map(eff)).filter(x=>x!=null);
+    const lo=Math.min(...allP),hi=Math.max(...allP),span=(hi-lo)||1,pad=span*0.08;
+    const sLo=lo-pad,sHi=hi+pad,sSpan=sHi-sLo;
+    const pct=x=>((x-sLo)/sSpan)*100;
+    html+=`<div class="seg-panel">
+      <div class="sp-head"><h3>${S.title}</h3><span class="sp-tag">${S.tag}</span></div>
+      <div class="sp-desc">${S.sub}</div>`;
+    vers.forEach(v=>{
+      const isF=v.brand==='Ford';
+      if(v.placeholder && !v.items.length){
+        html+=`<div class="vrow">
+          <div class="vlabel ${isF?'ford':''}"><span class="vn"><span class="dot" style="background:${BRAND_COLOR[v.brand]}"></span>${v.ver}${isF?' <span class="ford-tag">FORD</span>':''}</span><span class="vbrand">${BRAND_FULL[v.brand]}</span></div>
+          <div class="bar-cell"><div class="bar-track"><span class="bar-na">No relevada — completar con lista Ford</span></div></div>
+          <div class="vprice ${isF?'ford':''}"><div class="pr">s/d</div></div>
+        </div>`;
+        return;
+      }
+      const ps=v.items.map(eff),mn=Math.min(...ps),mx=Math.max(...ps),av=ps.reduce((a,b)=>a+b,0)/ps.length;
+      let bar;
+      if(v.items.length===1){
+        bar=`<span class="bar-single ${isF?'ford':''}" style="left:${pct(mn)}%"></span>`;
+      }else{
+        bar=`<span class="bar-fill ${isF?'ford':''}" style="left:${pct(mn)}%;width:${Math.max(pct(mx)-pct(mn),1.5)}%"></span><span class="bar-point" style="left:${pct(av)}%"></span>`;
+      }
+      const detail=[...v.items].sort((a,b)=>eff(a)-eff(b)).map(d=>{
+        const showOrig=state.net&&hasGastos(d);
+        return `<span class="vchip"><span class="vc-conc">${d.conc}</span><span class="vc-zone">(${d.zone})</span><span class="vc-price">${fmt(eff(d))}</span>${COND_MARK[d.cond]?`<span class="cond-mark" title="${COND_FULL[d.cond]}">${COND_MARK[d.cond]}</span>`:''}${d.sub?`<span class="vc-zone">· ${d.sub}</span>`:''}${d.flag?`<span class="flag" title="${d.flag}">⚠</span>`:''}</span>`;
+      }).join('');
+      html+=`<div class="vrow">
+        <div class="vlabel ${isF?'ford':''}"><span class="vn"><span class="dot" style="background:${BRAND_COLOR[v.brand]}"></span>${v.ver.replace(/^Ranger |^Amarok |^Hilux |^S10 /,'')}${isF?' <span class="ford-tag">FORD</span>':''}</span><span class="vbrand">${BRAND_FULL[v.brand]}</span></div>
+        <div class="bar-cell"><div class="bar-track">${bar}</div></div>
+        <div class="vprice ${isF?'ford':''}"><div class="pr">${mn===mx?fmt(mn):fmtM(mn)+' – '+fmtM(mx)}</div>${v.items.length>1?`<div class="pa">prom ${fmtM(av)}</div>`:''}</div>
+        <div class="vdetail">${detail}</div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  return html;
+}
+
+// ===== VISTA POR MARCA =====
+function renderBrand(){
+  const g=versionGroups(DATA.filter(d=>!d.exclude));
+  const brands=['Ford','VW','Toyota','Chevrolet'].filter(b=>Object.values(g).some(v=>v.brand===b));
+  let html='<div class="vtitle">Análisis por marca</div><div class="vtitle-sub">Oferta relevada de cada terminal, con el rango de precios por versión y el detalle de cada concesionaria.</div>';
+  brands.forEach(b=>{
+    const vers=Object.values(g).filter(v=>v.brand===b);
+    const total=vers.reduce((s,v)=>s+v.items.length,0);
+    html+=`<div class="brand-panel">
+      <div class="bp-head"><span class="bdot" style="background:${BRAND_COLOR[b]}"></span><h3>${BRAND_FULL[b]}</h3><span class="bcount">${vers.length} versiones · ${total} relevamientos</span></div>`;
+    vers.sort((a,b)=>{const pa=a.items.length?Math.min(...a.items.map(eff)):1e15,pb=b.items.length?Math.min(...b.items.map(eff)):1e15;return pb-pa;}).forEach(v=>{
+      const isF=b==='Ford';
+      if(!v.items.length){
+        html+=`<div class="bp-ver ${isF?'ford':''}"><div class="bv-top"><span class="bv-name">${v.ver}</span><span class="bv-range" style="color:var(--ink-3)">no relevada</span></div></div>`;
+        return;
+      }
+      const ps=v.items.map(eff),mn=Math.min(...ps),mx=Math.max(...ps);
+      const rows=[...v.items].sort((a,b)=>eff(a)-eff(b)).map(d=>`<div class="bv-r"><span class="l"><b>${d.conc}</b> · ${d.zone}${COND_MARK[d.cond]?` <span class="cond-mark" title="${COND_FULL[d.cond]}">${COND_MARK[d.cond]}</span>`:''}${d.sub?` · ${d.sub}`:''}${d.flag?` <span class="flag" title="${d.flag}">⚠</span>`:''}</span><span class="p">${fmt(eff(d))}</span></div>`).join('');
+      html+=`<div class="bp-ver ${isF?'ford':''}">
+        <div class="bv-top"><span class="bv-name">${v.ver}</span><span class="bv-range">${mn===mx?fmt(mn):fmtM(mn)+' – '+fmtM(mx)}</span></div>
+        <div class="bv-rows">${rows}</div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  return html;
+}
+
+// ===== VISTA TABLA =====
+let sortK='price',sortDir=-1;
+function renderTable(){
+  let rows=priced().slice();
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortK==='price'){va=eff(a);vb=eff(b);} else if(sortK==='ver'){va=a.ver;vb=b.ver;} else if(sortK==='conc'){va=a.conc;vb=b.conc;} else if(sortK==='zone'){va=a.zone;vb=b.zone;} else {va=a.cond;vb=b.cond;}
+    if(va<vb)return -sortDir;if(va>vb)return sortDir;return 0;
+  });
+  const body=rows.map(d=>{
+    const showOrig=state.net&&hasGastos(d);
+    return `<tr class="${d.brand==='Ford'?'ranger-row':''}">
+      <td><span class="m-dot" style="background:${BRAND_COLOR[d.brand]}"></span>${d.ver}${d.flag?` <span class="flag" title="${d.flag}">⚠</span>`:''}</td>
+      <td style="color:var(--ink-2)">${d.conc}</td>
+      <td>${d.zone}</td>
+      <td class="cond-txt">${COND_FULL[d.cond]}${d.sub?` · ${d.sub}`:''}</td>
+      <td class="price">${fmt(eff(d))}${showOrig?` <span style="color:var(--ink-3);font-size:10px;text-decoration:line-through;font-weight:500">${fmtM(d.price)}</span>`:''}</td>
+    </tr>`;
+  }).join('');
+  return `<div class="vtitle">Detalle completo</div><div class="vtitle-sub">Todas las versiones relevadas con precio. Clic en los encabezados para ordenar.</div>
+  <div class="tbl-wrap"><table id="tbl"><thead><tr>
+    <th data-k="ver">Marca / Versión <span class="arr">↕</span></th>
+    <th data-k="conc">Concesionaria <span class="arr">↕</span></th>
+    <th data-k="zone">Zona <span class="arr">↕</span></th>
+    <th data-k="cond">Condición del precio <span class="arr">↕</span></th>
+    <th data-k="price" class="numcol">Precio <span class="arr">↓</span></th>
+  </tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+// ===== RENDER ROUTER =====
+function renderView(){
+  const host=document.getElementById('view');
+  if(state.view==='seg') host.innerHTML=renderSeg();
+  else if(state.view==='brand') host.innerHTML=renderBrand();
+  else { host.innerHTML=renderTable(); bindTableSort(); }
+}
+function bindTableSort(){
+  document.querySelectorAll('#tbl thead th').forEach(th=>{
+    th.addEventListener('click',()=>{
+      const k=th.dataset.k;
+      if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=(k==='price'?-1:1);}
+      renderView();
+    });
+  });
+}
+function updateBaseNote(){
+  document.getElementById('baseNote').innerHTML=state.net
+    ? `Vista <b>homologada</b>: a los precios con flete/gastos se les descuenta <b>$${state.gastos.toLocaleString('es-AR')}</b> para igualar la base de comparación. (†) incluye flete y gastos · (‡) incluye además patentamiento.`
+    : `Vista <b>tal como lo informó cada asesor</b>. (†) el precio incluye flete y gastos administrativos · (‡) incluye además patentamiento.`;
+}
+function renderLegend(){
+  document.getElementById('legend').innerHTML=`
+    <span><b>†</b> Incluye flete y gastos administrativos</span>
+    <span><b>‡</b> Incluye además patentamiento</span>
+    <span><b>⚠</b> Dato interpretado / a verificar</span>`;
+}
+
+// ===== EVENTS =====
+document.getElementById('viewSeg').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  [...e.currentTarget.children].forEach(b=>b.classList.remove('on'));
+  e.target.classList.add('on');state.view=e.target.dataset.v;renderView();
+});
+document.getElementById('baseSeg').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  [...e.currentTarget.children].forEach(b=>b.classList.remove('on'));
+  e.target.classList.add('on');state.net=e.target.dataset.net==='1';
+  document.getElementById('gastosWrap').classList.toggle('dim',!state.net);
+  updateBaseNote();renderFindings();renderView();
+});
+document.getElementById('gastosInput').addEventListener('input',e=>{state.gastos=parseNum(e.target.value);updateBaseNote();renderFindings();renderView();});
+document.getElementById('gastosInput').addEventListener('blur',e=>{e.target.value=state.gastos.toLocaleString('es-AR');});
+
+// ===== PRECIO REAL DE TRANSACCIÓN (price bridge) =====
+const BRIDGE={
+  title:'Ranger Limited V6 · Ford Simone',
+  informado:78500000,
+  base:83355000,
+  capPct:6,
+  steps:[
+    {label:'Descuento del 6% (tope máximo de la concesionaria)',amount:5000000,subtotal:'Subtotal con descuento máximo'},
+    {label:'Bonificación de fletes y formularios',amount:1332000},
+    {label:'Bonificación del IVA del quebranto (financiando a tasa 0%)',amount:756000},
+  ],
+};
+function renderBridge(){
+  const b=BRIDGE;
+  const sumDisc=b.steps.reduce((s,x)=>s+x.amount,0);
+  const final=b.base-sumDisc;
+  const pctOf=x=>(x/b.base)*100;
+  let running=b.base;
+  let rows=`<div class="br-row base"><span class="brl">Precio de lista (post-incentivos Ford)</span><div class="br-bar"><i style="width:100%;background:var(--ford)"></i></div><span class="br-amt">${fmt(b.base)}</span></div>`;
+  b.steps.forEach(s=>{
+    running-=s.amount;
+    rows+=`<div class="br-row deduct"><span class="brl">−&nbsp;${s.label}</span><div class="br-bar"><i style="width:${Math.max(pctOf(s.amount),1).toFixed(1)}%;background:#e0a060"></i></div><span class="br-amt">−${fmt(s.amount)}</span></div>`;
+    if(s.subtotal){
+      rows+=`<div class="br-row sub"><span class="brl" style="color:var(--ink-3)">${s.subtotal}</span><div class="br-bar"><i style="width:${pctOf(running).toFixed(1)}%;background:var(--rival-bar)"></i></div><span class="br-amt" style="color:var(--ink-2)">${fmt(running)}</span></div>`;
+    }
+  });
+  rows+=`<div class="br-row final"><span class="brl">Precio real de transacción</span><div class="br-bar"><i style="width:${pctOf(final).toFixed(1)}%;background:linear-gradient(90deg,var(--ford),var(--ford-2))"></i></div><span class="br-amt">${fmt(final)}</span></div>`;
+  const totalDisc=b.base-final;
+  const totalPct=(totalDisc/b.base*100).toFixed(1);
+  document.getElementById('bridge').innerHTML=`<div class="bridge">
+    <div class="br-info">
+      <div><div class="k">Versión</div><div class="v" style="font-size:13.5px">${b.title}</div></div>
+      <div><div class="k">Informado por el asesor</div><div class="v">${fmt(b.informado)}</div></div>
+      <div><div class="k">Precio real de transacción</div><div class="v" style="color:var(--ford)">${fmt(final)}</div></div>
+      <div><div class="k">Descuento total</div><div class="v">${fmt(totalDisc)} · ${totalPct}%</div></div>
+    </div>
+    ${rows}
+    <div class="br-cap">La concesionaria aplica el <b>${b.capPct}%</b> de descuento (su tope máximo) y, <b>por encima de ese tope</b>, bonifica además los <b>fletes y formularios</b> y el <b>IVA del quebranto</b> al financiar con tasa 0%. El valor efectivo de venta queda en <b>${fmt(final)}</b>, un ${totalPct}% por debajo del precio de lista — referencia real de transacción para comparar contra la competencia, no contra el precio de vidriera.</div>
+  </div>`;
+}
+
+// INIT
+renderFindings();updateBaseNote();renderLegend();renderBridge();renderView();
+</script>
+</body>
+</html>
